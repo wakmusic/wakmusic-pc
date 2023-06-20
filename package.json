@@ -1,0 +1,40 @@
+{
+  "name": "wakmusic-pc",
+  "version": "0.1.0",
+  "description": "Waktaverse Music Web / Desktop App",
+  "repository": "https://github.com/wakmusic/wakmusic-pc.git",
+  "author": "wakmusic",
+  "private": true,
+  "main": "src/electron.js",
+  "scripts": {
+    "dev": "tsc src/electron.ts &&  electron .",
+    "dev:web": "vite",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format": "eslint src --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\""
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "styled-components": "^6.0.0-rc.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1",
+    "@types/react": "^18.2.12",
+    "@types/react-dom": "^18.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.59.11",
+    "@typescript-eslint/parser": "^5.59.11",
+    "@vitejs/plugin-react-swc": "^3.3.2",
+    "electron": "^25.1.0",
+    "eslint": "^8.42.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.8.8",
+    "typescript": "5.0.4",
+    "vite": "^4.3.9"
+  },
+  "packageManager": "yarn@3.6.0"
+}

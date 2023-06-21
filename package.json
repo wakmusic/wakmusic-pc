@@ -7,15 +7,19 @@
   "private": true,
   "main": "src/electron.js",
   "scripts": {
-    "dev": "tsc src/electron.ts &&  electron .",
+    "dev": "tsc src/electron.ts && electron .",
     "dev:web": "vite",
     "lint": "eslint src --ext .ts,.tsx",
     "format": "eslint src --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
+    "@tanstack/react-virtual": "^3.0.0-alpha.0",
+    "axios": "^1.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
+    "react-router-dom": "^6.13.0",
+    "recoil": "^0.7.7",
     "styled-components": "^6.0.0-rc.3"
   },
   "devDependencies": {
@@ -29,13 +33,16 @@
     "electron": "^25.1.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "prettier": "^2.8.8",
     "typescript": "5.0.4",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "vite-plugin-svgr": "^3.2.0",
+    "vite-tsconfig-paths": "^4.2.0"
   },
   "packageManager": "yarn@3.6.0"
 }

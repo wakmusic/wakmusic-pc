@@ -1,0 +1,16 @@
+{
+  "Create Component": {
+    "scope": "typescriptreact",
+    "prefix": "component",
+    "body": [
+      "import styled from \"styled-components\";\n",
+      "interface ${TM_FILENAME_BASE}Props {}\n",
+      "const ${TM_FILENAME_BASE} = ({}: ${TM_FILENAME_BASE}Props) => {",
+      "\treturn <Container></Container>;",
+      "};\n",
+      "const Container = styled.div``;\n",
+      "export default ${TM_FILENAME_BASE};\n"
+    ],
+    "description": "새 컴포넌트 생성"
+  }
+}

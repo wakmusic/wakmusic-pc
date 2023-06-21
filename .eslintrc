@@ -12,23 +12,18 @@
     "@typescript-eslint/no-empty-interface": "off",
     "no-empty-pattern": "off",
     "react/react-in-jsx-scope": "off",
-    "import/order": [
-      "error",
-      {
-        "groups": ["builtin", "external", "parent", "sibling", "index"],
-        "alphabetize": {
-          "order": "asc",
-          "caseInsensitive": true
-        },
-        "newlines-between": "never"
-      }
-    ],
     "import/export": "off",
     "import/no-named-as-default": "off"
   },
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {}
     }
   }
 }

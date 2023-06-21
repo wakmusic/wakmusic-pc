@@ -1,5 +1,19 @@
 {
   "semi": true,
   "singleQuote": false,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+
+  "importOrder": [
+    "^@apis/(.*)$",
+    "^@assets/(.*)$",
+    "^@components/(.*)$",
+    "^@constants/(.*)$",
+    "^@hooks/(.*)$",
+    "^@pages/(.*)$",
+    "^@types/(.*)$",
+    "^@utils/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }

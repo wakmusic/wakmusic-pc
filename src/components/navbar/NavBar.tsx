@@ -18,19 +18,16 @@ const NavBar = ({}: NavBarProps) => {
       <ControlBar>
         <Least
           onClick={() => {
-            console.log("least");
             ipcRenderer.send("window:least");
           }}
         />
         <Max
           onClick={() => {
-            console.log("max");
             ipcRenderer.send("window:max");
           }}
         />
         <Close
           onClick={() => {
-            console.log("close");
             ipcRenderer.send("window:close");
           }}
         />

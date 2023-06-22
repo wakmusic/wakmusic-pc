@@ -18,10 +18,10 @@ import { createServer } from "vite";
   // Initialize the Electron application
   app.whenReady().then(() => {
     const win = new BrowserWindow({
-      width: 1000,
-      height: 580,
-      minWidth: 1000,
-      minHeight: 580,
+      width: 1240,
+      height: 720,
+      minWidth: 1240,
+      minHeight: 720,
       frame: false,
       webPreferences: {
         nodeIntegration: true,

@@ -1,7 +1,49 @@
+/* Pretendard */
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 300;
+  font-display: swap;
+  src: local("Pretendard Light"),
+    url("/fonts/Pretendard-Light.subset.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Pretendard";
+  font-weight: 500;
+  font-display: swap;
+  src: local("Pretendard Medium"),
+    url("/fonts/Pretendard-Medium.subset.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "SCDream";
+  font-weight: 600;
+  font-display: swap;
+  src: local("Pretendard Bold"),
+    url("/fonts/Pretendard-Bold.subset.woff2") format("woff2");
+}
+
+/* S-Core Dream */
+
+@font-face {
+  font-family: "SCDream";
+  font-weight: 300;
+  font-display: swap;
+  src: local("SCDream Light"), url("/fonts/SCDream3.woff2") format("woff2");
+}
+
 body {
   margin: 0;
 
   user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
+}
+
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Pretendard Variable", Pretendard, Roboto, "Noto Sans KR", "Segoe UI",
+    "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    sans-serif;
 }

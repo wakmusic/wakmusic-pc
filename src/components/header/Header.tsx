@@ -24,7 +24,13 @@ const Header = ({}: HeaderProps) => {
   return (
     <Container>
       <LogoContainer>
-        <Logo width="100%" height={28} />
+        <Logo
+          width="100%"
+          height={28}
+          onClick={() => {
+            navigate("/");
+          }}
+        />
       </LogoContainer>
 
       <Navigator>

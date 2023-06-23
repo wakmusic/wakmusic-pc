@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 
-import { ReactComponent as ArrowLeftSVG } from "@assets/icons/ic_16_arrow_left.svg";
-import { ReactComponent as ArrowRightSVG } from "@assets/icons/ic_16_arrow_right.svg";
 import { ReactComponent as CloseSVG } from "@assets/icons/ic_24_close.svg";
 import { ReactComponent as LeastSVG } from "@assets/icons/ic_24_least.svg";
 import { ReactComponent as MaxSVG } from "@assets/icons/ic_24_max.svg";
 import { ReactComponent as Logo } from "@assets/svgs/logo.svg";
+
+import ArrowIcon from "@components/icons/Arrow";
 
 import colors from "@constants/colors";
 
@@ -32,13 +32,15 @@ const Header = ({}: HeaderProps) => {
       </LogoContainer>
 
       <Navigator>
-        <ArrowLeft
+        <Arrow
+          direction="left"
           disabled={window.history.state.idx === 0}
           onClick={() => {
             if (window.history.state.idx !== 0) navigate(-1);
           }}
         />
-        <ArrowRight
+        <Arrow
+          direction="right"
           disabled={window.history.length - 1 === window.history.state.idx}
           onClick={() => {
             if (window.history.length - 1 !== window.history.state.idx)
@@ -103,23 +105,7 @@ const Navigator = styled.div`
   margin-right: 16px;
 `;
 
-const ArrowLeft = styled(ArrowLeftSVG)<{ disabled: boolean }>`
-  width: 20px;
-  height: 20px;
-
-  ${({ disabled }) =>
-    disabled
-      ? css`
-          cursor: auto;
-          color: ${colors.gray500};
-        `
-      : css`
-          cursor: pointer;
-          color: ${colors.gray400};
-        `}
-`;
-
-const ArrowRight = styled(ArrowRightSVG)<{ disabled: boolean }>`
+const Arrow = styled(ArrowIcon)<{ disabled: boolean }>`
   width: 20px;
   height: 20px;
 

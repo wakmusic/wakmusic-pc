@@ -1,4 +1,8 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M11.3307 4.66699L4.66406 11.3337" stroke="#FCFCFD" stroke-width="0.999999" stroke-linecap="round"/>
-<path d="M4.66406 4.66699L11.3307 11.3337" stroke="#FCFCFD" stroke-width="0.999999" stroke-linecap="round"/>
+<g id="ic_24_close">
+<g id="ic">
+<path id="Line" d="M11.3307 4.66699L4.66406 11.3337" stroke="#FCFCFD" stroke-width="0.999999" stroke-linecap="round"/>
+<path id="Line_2" d="M4.66406 4.66699L11.3307 11.3337" stroke="#FCFCFD" stroke-width="0.999999" stroke-linecap="round"/>
+</g>
+</g>
 </svg>

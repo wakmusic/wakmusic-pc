@@ -19,8 +19,6 @@ interface HeaderProps {}
 const Header = ({}: HeaderProps) => {
   const navigate = useNavigate();
 
-  window.history.state.idx === 0;
-
   return (
     <Container>
       <LogoContainer>

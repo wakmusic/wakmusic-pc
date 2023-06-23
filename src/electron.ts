@@ -23,7 +23,7 @@ import { join } from "path";
       win.webContents.openDevTools();
       win.loadURL(`http://localhost:3000`);
     } else {
-      win.loadFile(join(__dirname, "../build/index.html"));
+      win.loadFile(join(__dirname, "../dist/index.html"));
     }
   });
 })();

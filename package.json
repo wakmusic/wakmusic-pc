@@ -7,9 +7,10 @@
   "private": true,
   "main": "src/electron.js",
   "scripts": {
-    "dev": "concurrently -k \"yarn dev:web\" \"yarn electron:start\"",
+    "dev": "concurrently -k \"yarn dev:web\" \"yarn dev:electron\"",
     "dev:web": "vite --port 3000",
-    "electron:start": "tsc src/electron.ts && electron .",
+    "dev:electron": "tsc src/electron.ts && electron .",
+    "build:web": "vite build",
     "lint": "eslint src --ext .ts,.tsx",
     "format": "eslint src --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\""
   },

@@ -8,5 +8,8 @@ export default defineConfig({
   root: "./src",
   publicDir: "../public",
   cacheDir: "../.yarn/.vite",
+  build: {
+    outDir: "./../dist",
+  },
   plugins: [react(), tsconfigPaths(), svgr()],
 });

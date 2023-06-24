@@ -1,4 +1,4 @@
-name: "Todo"
+name: "새 작업"
 description: "새로운 작업을 시작해보아요"
 body:
   - type: textarea

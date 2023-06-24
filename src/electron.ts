@@ -1,20 +1,8 @@
 import { BrowserWindow, app, ipcMain } from "electron";
-import { createServer } from "vite";
+import * as isDev from "electron-is-dev";
+import { join } from "path";
 
 (async () => {
-  // Initialize the Vite server
-  const server = await createServer({
-    server: {
-      port: 1337,
-    },
-  });
-
-  await server.listen();
-
-  const port = server.config.server.port;
-
-  console.log(`Server running at http://localhost:${port}`);
-
   // Initialize the Electron application
   app.whenReady().then(() => {
     const win = new BrowserWindow({
@@ -29,9 +17,19 @@ import { createServer } from "vite";
       },
     });
 
-    win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
-    win.loadURL(`http://localhost:${port}`);
+
+    if (isDev) {
+      win.webContents.openDevTools();
+
+      if (process.env.BUILD_TYPE === "1") {
+        win.loadFile(join(__dirname, "../dist/index.html"));
+      } else {
+        win.loadURL(`http://localhost:3000`);
+      }
+    } else {
+      win.loadFile(join(__dirname, "../dist/index.html"));
+    }
   });
 })();
 

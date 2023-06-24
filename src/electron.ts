@@ -21,7 +21,12 @@ import { join } from "path";
 
     if (isDev) {
       win.webContents.openDevTools();
-      win.loadURL(`http://localhost:3000`);
+
+      if (process.env.BUILD_TYPE === "1") {
+        win.loadFile(join(__dirname, "../dist/index.html"));
+      } else {
+        win.loadURL(`http://localhost:3000`);
+      }
     } else {
       win.loadFile(join(__dirname, "../dist/index.html"));
     }

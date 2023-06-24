@@ -6,8 +6,9 @@ import tsconfigPaths from "vite-tsconfig-paths";
 // https://vitejs.dev/config/
 export default defineConfig({
   root: "./src",
-  publicDir: "../public",
-  cacheDir: "../.yarn/.vite",
+  publicDir: "./../public",
+  cacheDir: "./../.yarn/.vite",
+  base: "./",
   build: {
     outDir: "./../dist",
   },

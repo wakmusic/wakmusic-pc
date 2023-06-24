@@ -23,8 +23,6 @@ const Header = ({}: HeaderProps) => {
     <Container>
       <LogoContainer>
         <Logo
-          width="100%"
-          height={28}
           onClick={() => {
             navigate("/");
           }}
@@ -73,7 +71,7 @@ const Header = ({}: HeaderProps) => {
 };
 
 const Container = styled.div`
-  height: 37px;
+  height: 30px;
 
   background-color: ${colors.gray900};
 
@@ -88,7 +86,7 @@ const Container = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  margin-left: 20px;
+  margin-left: 16px;
 
   display: flex;
   align-items: center;
@@ -101,14 +99,11 @@ const Navigator = styled.div`
   align-items: center;
   gap: 4px;
 
-  margin-left: 40px;
+  margin-left: 48px;
   margin-right: 16px;
 `;
 
 const Arrow = styled(ArrowIcon)<{ disabled: boolean }>`
-  width: 20px;
-  height: 20px;
-
   ${({ disabled }) =>
     disabled
       ? css`
@@ -133,23 +128,14 @@ const ControlBar = styled.div`
 
 const Least = styled(LeastSVG)`
   cursor: pointer;
-
-  width: 20px;
-  height: 20px;
 `;
 
 const Max = styled(MaxSVG)`
   cursor: pointer;
-
-  width: 20px;
-  height: 20px;
 `;
 
 const Close = styled(CloseSVG)`
   cursor: pointer;
-
-  width: 20px;
-  height: 20px;
 `;
 
 export default Header;

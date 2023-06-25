@@ -12,8 +12,6 @@ import colors from "@constants/colors";
 
 import Search from "./Search";
 
-const { ipcRenderer } = window.require("electron");
-
 interface HeaderProps {}
 
 const Header = ({}: HeaderProps) => {
@@ -51,23 +49,25 @@ const Header = ({}: HeaderProps) => {
 
       <Search />
 
-      <ControlBar>
-        <Least
-          onClick={() => {
-            ipcRenderer.send("window:least");
-          }}
-        />
-        <Max
-          onClick={() => {
-            ipcRenderer.send("window:max");
-          }}
-        />
-        <Close
-          onClick={() => {
-            ipcRenderer.send("window:close");
-          }}
-        />
-      </ControlBar>
+      {window.ipcRenderer && (
+        <ControlBar>
+          <Least
+            onClick={() => {
+              window.ipcRenderer?.send("window:least");
+            }}
+          />
+          <Max
+            onClick={() => {
+              window.ipcRenderer?.send("window:max");
+            }}
+          />
+          <Close
+            onClick={() => {
+              window.ipcRenderer?.send("window:close");
+            }}
+          />
+        </ControlBar>
+      )}
     </Container>
   );
 };

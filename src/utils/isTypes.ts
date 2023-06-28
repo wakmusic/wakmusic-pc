@@ -1,12 +1,12 @@
-export const isString = <T = any>(str: string | T): str is string => {
+export const isString = (str: any): str is string => {
   return typeof str === "string";
 };
 
-export const isNumber = <T = any>(num: number | T): num is number => {
+export const isNumber = (num: any): num is number => {
   return typeof num === "number";
 };
 
-export const isBoolean = <T = any>(bool: boolean | T): bool is boolean => {
+export const isBoolean = (bool: any): bool is boolean => {
   return typeof bool === "boolean";
 };
 

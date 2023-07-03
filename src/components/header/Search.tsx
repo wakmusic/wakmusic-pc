@@ -31,14 +31,14 @@ const Container = styled.div`
 const SearchIcon = styled(SearchIconSVG)`
   position: absolute;
   margin-left: 6px;
-
-  width: 14px;
-  height: 14px;
 `;
 
 const Input = styled.input`
-  width: 160px;
-  height: 23px;
+  width: 120px;
+  height: 18px;
+
+  font-size: 12px;
+  line-height: 18px;
 
   border-radius: 12px;
   background: ${colors.gray700};

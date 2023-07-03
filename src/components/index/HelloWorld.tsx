@@ -1,15 +1,15 @@
-import styled from "styled-components";
+import { T4Bold, T4Light, T5Bold } from "@components/Typography";
 
 interface HelloWorldProps {}
 
 const HelloWorld = ({}: HelloWorldProps) => {
-  return <Container>Hello, World!</Container>;
+  return (
+    <div>
+      <T4Bold>This is T6Bold</T4Bold>
+      <T5Bold>This is T5Bold</T5Bold>
+      <T4Light>This is T4Light</T4Light>
+    </div>
+  );
 };
-
-const Container = styled.h1`
-  margin: 0;
-
-  text-align: center;
-`;
 
 export default HelloWorld;

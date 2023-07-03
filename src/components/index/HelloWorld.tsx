@@ -1,20 +1,13 @@
-import { T6Bold, T6Medium, T10Light } from "@components/Typography";
+import { T4Bold, T4Light, T5Bold } from "@components/Typography";
 
 interface HelloWorldProps {}
 
 const HelloWorld = ({}: HelloWorldProps) => {
   return (
     <div>
-      <T6Bold>This is T6 Bold</T6Bold>
-      <T10Light>This is T10 Light</T10Light>
-      <T6Medium
-        style={{
-          position: "fixed",
-          top: "62px",
-        }}
-      >
-        This is T6 Medium
-      </T6Medium>
+      <T4Bold>This is T6Bold</T4Bold>
+      <T5Bold>This is T5Bold</T5Bold>
+      <T4Light>This is T4Light</T4Light>
     </div>
   );
 };

@@ -2,9 +2,19 @@ import styled from "styled-components";
 
 import { PretendardLight, SCDreamLight } from "./Default";
 
+export const T4Light = styled(PretendardLight)`
+  font-size: 18px;
+  line-height: 30px;
+`;
+
+export const T5Light = styled(PretendardLight)`
+  font-size: 16px;
+  line-height: 22px;
+`;
+
 export const T6Light = styled(PretendardLight)`
   font-size: 14px;
-  line-height: 24px;
+  line-height: 20px;
 `;
 
 export const T7Light = styled(PretendardLight)`
@@ -12,27 +22,17 @@ export const T7Light = styled(PretendardLight)`
   line-height: 18px;
 `;
 
+export const T7_1Light = styled(SCDreamLight)`
+  font-size: 12px;
+  line-height: 20px;
+`;
+
 export const T8Light = styled(PretendardLight)`
   font-size: 10px;
-  line-height: 16px;
-`;
-
-export const T8_1Light = styled(PretendardLight)`
-  font-size: 9px;
-  line-height: 15px;
-`;
-
-export const T8_2Light = styled(SCDreamLight)`
-  font-size: 9px;
-  line-height: 16px;
+  line-height: 18px;
 `;
 
 export const T9Light = styled(PretendardLight)`
   font-size: 8px;
-  line-height: 14px;
-`;
-
-export const T10Light = styled(PretendardLight)`
-  font-size: 6px;
-  line-height: 12px;
+  line-height: 16px;
 `;

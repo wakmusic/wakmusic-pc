@@ -6,10 +6,10 @@ import { join } from "path";
   // Initialize the Electron application
   app.whenReady().then(() => {
     const win = new BrowserWindow({
-      width: 1000,
-      height: 580,
-      minWidth: 1000,
-      minHeight: 580,
+      width: 1250,
+      height: 714,
+      minWidth: 1250,
+      minHeight: 714,
       frame: false,
       webPreferences: {
         nodeIntegration: true,

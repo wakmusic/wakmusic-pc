@@ -1,7 +1,7 @@
 import { FieldValues, useForm } from "react-hook-form";
 import styled from "styled-components";
 
-import { ReactComponent as SearchIconSVG } from "@assets/icons/ic_24_line_search_grey400.svg";
+import { ReactComponent as SearchIconSVG } from "@assets/icons/ic_16_line_search.svg";
 
 import colors from "@constants/colors";
 
@@ -34,18 +34,19 @@ const SearchIcon = styled(SearchIconSVG)`
 `;
 
 const Input = styled.input`
-  width: 120px;
-  height: 18px;
+  width: 150px;
+  height: 22px;
 
+  color: ${colors.gray400};
   font-size: 12px;
   line-height: 18px;
+  font-weight: 500;
 
   border-radius: 12px;
   background: ${colors.gray700};
 
   padding-left: 24px;
   padding-right: 8px;
-  color: white;
 
   border: none;
 

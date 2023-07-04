@@ -9,6 +9,7 @@ import Header from "@components/header/Header";
 import firebaseConfig from "@constants/firebaseConfig";
 
 import Index from "@pages/index/Index";
+import Playground from "@pages/playground/Playground";
 
 import "@utils/loadIpcRenderer";
 
@@ -22,8 +23,10 @@ createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <BrowserRouter>
       <Header />
+
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/playground" element={<Playground />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

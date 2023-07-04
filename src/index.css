@@ -39,6 +39,8 @@ body {
   user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
+
+  background-color: #f2f4f7;
 }
 
 * {

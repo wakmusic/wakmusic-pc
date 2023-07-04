@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 
-import { ReactComponent as CloseSVG } from "@assets/icons/ic_24_close.svg";
-import { ReactComponent as LeastSVG } from "@assets/icons/ic_24_least.svg";
-import { ReactComponent as MaxSVG } from "@assets/icons/ic_24_max.svg";
+import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
+import { ReactComponent as LeastSVG } from "@assets/icons/ic_20_least.svg";
+import { ReactComponent as MaxSVG } from "@assets/icons/ic_20_max.svg";
 import { ReactComponent as Logo } from "@assets/svgs/logo.svg";
 
 import ArrowIcon from "@components/icons/Arrow";
@@ -71,7 +71,7 @@ const Header = ({}: HeaderProps) => {
 };
 
 const Container = styled.div`
-  height: 30px;
+  height: 38px;
 
   background-color: ${colors.gray900};
 
@@ -99,7 +99,7 @@ const Navigator = styled.div`
   align-items: center;
   gap: 4px;
 
-  margin-left: 48px;
+  margin-left: 66px;
   margin-right: 16px;
 `;
 
@@ -118,12 +118,12 @@ const Arrow = styled(ArrowIcon)<{ disabled: boolean }>`
 
 const ControlBar = styled.div`
   margin-left: auto;
-  margin-right: 8px;
+  margin-right: 10px;
 
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: 10px;
 `;
 
 const Least = styled(LeastSVG)`

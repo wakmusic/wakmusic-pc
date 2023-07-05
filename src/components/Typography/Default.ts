@@ -1,10 +1,15 @@
 import styled from "styled-components";
 
-export const Pretendard = styled.p`
-  font-family: "Pretendard", sans-serif;
+export const Text = styled.p`
+  letter-spacing: -0.5px;
 `;
 
-export const SCDream = styled.p`
+export const Pretendard = styled(Text)`
+  font-family: "Pretendard", sans-serif;
+  letter-spacing: -0.5px;
+`;
+
+export const SCDream = styled(Text)`
   font-family: "SCDream", sans-serif;
 `;
 

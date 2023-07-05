@@ -4,7 +4,10 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import RootOverlay from "@components/RootOverlay";
+import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
+import Player from "@components/player/Player";
 
 import firebaseConfig from "@constants/firebaseConfig";
 
@@ -24,10 +27,14 @@ createRoot(document.getElementById("root") as HTMLElement).render(
     <BrowserRouter>
       <Header />
 
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/playground" element={<Playground />} />
-      </Routes>
+      <RootOverlay>
+        <GNB />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/playground" element={<Playground />} />
+        </Routes>
+        <Player />
+      </RootOverlay>
     </BrowserRouter>
   </StrictMode>
 );

@@ -1,105 +1,47 @@
-import styled from "styled-components";
+import Lottie from "lottie-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styled, { css } from "styled-components";
 
-import { ReactComponent as ArtistSVG } from "@assets/icons/ic_40_artist_disabled.svg";
-import { ReactComponent as ChartSVG } from "@assets/icons/ic_40_chart_disabled.svg";
-import { ReactComponent as HomeSVG } from "@assets/icons/ic_40_home_disabled.svg";
-import { ReactComponent as KeepSVG } from "@assets/icons/ic_40_keep_disabled.svg";
-import { ReactComponent as SearchSVG } from "@assets/icons/ic_40_search_disabled.svg";
-import artistLottie from "@assets/lotties/ic_artist.json";
-import chartLottie from "@assets/lotties/ic_chart.json";
-import homeLottie from "@assets/lotties/ic_home.json";
-import keepLottie from "@assets/lotties/ic_keep.json";
-import searchLottie from "@assets/lotties/ic_search.json";
-
-import { T5Bold } from "@components/Typography";
+import { Pretendard } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import LottiePlayer from "@utils/LottiePlayer";
-
 interface Section {
-  type: "artist" | "chart" | "home" | "keep" | "search";
-  isActived?: boolean;
-  onClick?: () => void;
+  path: string;
+  icon: React.FunctionComponent<
+    React.SVGProps<SVGSVGElement> & {
+      title?: string | undefined;
+    }
+  >;
+  lottie: object;
+  children: string;
 }
 
-const Section = ({ type, isActived, onClick }: Section) => {
+const Section = ({ path, icon: Icon, lottie, children }: Section) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <Container
       onClick={() => {
-        if (onClick) {
-          onClick();
-        }
+        navigate(path);
       }}
     >
       <IconContainer>
-        {isActived
-          ? {
-              artist: (
-                <LottiePlayer
-                  animationData={artistLottie}
-                  style={{
-                    width: 40,
-                    height: 40,
-                  }}
-                />
-              ),
-              chart: (
-                <LottiePlayer
-                  animationData={chartLottie}
-                  style={{
-                    width: 40,
-                    height: 40,
-                  }}
-                />
-              ),
-              home: (
-                <LottiePlayer
-                  animationData={homeLottie}
-                  style={{
-                    width: 40,
-                    height: 40,
-                  }}
-                />
-              ),
-              keep: (
-                <LottiePlayer
-                  animationData={keepLottie}
-                  style={{
-                    width: 40,
-                    height: 40,
-                  }}
-                />
-              ),
-              search: (
-                <LottiePlayer
-                  animationData={searchLottie}
-                  style={{
-                    width: 40,
-                    height: 40,
-                  }}
-                />
-              ),
-            }[type]
-          : {
-              artist: <ArtistSVG />,
-              chart: <ChartSVG />,
-              home: <HomeSVG />,
-              keep: <KeepSVG />,
-              search: <SearchSVG />,
-            }[type]}
+        {location.pathname === path ? (
+          <Lottie
+            animationData={lottie}
+            loop={false}
+            style={{
+              width: 40,
+              height: 40,
+            }}
+          />
+        ) : (
+          <Icon />
+        )}
       </IconContainer>
-      <Text>
-        {
-          {
-            artist: "아티스트",
-            chart: "왁뮤차트",
-            home: "홈",
-            keep: "보관함",
-            search: "최신음악",
-          }[type]
-        }
-      </Text>
+      <Text $activated={location.pathname === path}>{children}</Text>
     </Container>
   );
 };
@@ -116,7 +58,7 @@ const Container = styled.div`
   cursor: pointer;
 `;
 
-const Text = styled(T5Bold)`
+const Text = styled(Pretendard)<{ $activated: boolean }>`
   position: relative;
 
   top: 50%;
@@ -126,7 +68,22 @@ const Text = styled(T5Bold)`
 
   display: inline-block;
 
-  color: ${colors.blueGray600};
+  /* T5 */
+  font-size: 16px;
+  line-height: 22px;
+
+  ${({ $activated }) =>
+    $activated
+      ? css`
+          /* T5Bold */
+          font-weight: 700;
+          color: ${colors.blueGray600};
+        `
+      : css`
+          /* T5Medium */
+          font-weight: 500;
+          color: ${colors.blueGray400};
+        `}
 `;
 
 const IconContainer = styled.div`

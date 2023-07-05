@@ -1,5 +1,15 @@
-import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+
+import { ReactComponent as ArtistSVG } from "@assets/icons/ic_40_artist_disabled.svg";
+import { ReactComponent as ChartSVG } from "@assets/icons/ic_40_chart_disabled.svg";
+import { ReactComponent as HomeSVG } from "@assets/icons/ic_40_home_disabled.svg";
+import { ReactComponent as KeepSVG } from "@assets/icons/ic_40_keep_disabled.svg";
+import { ReactComponent as SearchSVG } from "@assets/icons/ic_40_search_disabled.svg";
+import artistLottie from "@assets/lotties/ic_artist.json";
+import chartLottie from "@assets/lotties/ic_chart.json";
+import homeLottie from "@assets/lotties/ic_home.json";
+import keepLottie from "@assets/lotties/ic_keep.json";
+import searchLottie from "@assets/lotties/ic_search.json";
 
 import { T6Medium } from "@components/Typography";
 
@@ -10,39 +20,28 @@ import Section from "./Section";
 interface GNB {}
 
 const GNB = ({}: GNB) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const navigatorToEndPoint = {
-    home: "/",
-    chart: "/chart",
-    search: "/new",
-    artist: "/artist",
-    keep: "/user/playlists",
-  };
-
   return (
     <Container>
       <Navigator>
-        {["home", "chart", "search", "artist", "keep"].map((type, index) => (
-          <Section
-            type={type as "artist" | "chart" | "home" | "keep" | "search"}
-            key={index}
-            isActived={
-              location.pathname ===
-              navigatorToEndPoint[
-                type as "artist" | "chart" | "home" | "keep" | "search"
-              ]
-            }
-            onClick={() => {
-              navigate(
-                navigatorToEndPoint[
-                  type as "artist" | "chart" | "home" | "keep" | "search"
-                ]
-              );
-            }}
-          />
-        ))}
+        <Section path="/" icon={HomeSVG} lottie={homeLottie}>
+          홈
+        </Section>
+
+        <Section path="/chart" icon={ChartSVG} lottie={chartLottie}>
+          차트
+        </Section>
+
+        <Section path="/search" icon={SearchSVG} lottie={searchLottie}>
+          검색
+        </Section>
+
+        <Section path="/artist" icon={ArtistSVG} lottie={artistLottie}>
+          아티스트
+        </Section>
+
+        <Section path="/user/playlists" icon={KeepSVG} lottie={keepLottie}>
+          보관함
+        </Section>
       </Navigator>
       <Login>
         <Text>로그인 하기</Text>

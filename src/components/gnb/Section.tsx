@@ -57,7 +57,7 @@ const Container = styled.div`
 `;
 
 const Text = styled(Pretendard)<{ $activated: boolean }>`
-  margin-left: 8px;
+  margin-left: 6px;
 
   /* T5 */
   font-size: 16px;

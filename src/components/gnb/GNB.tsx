@@ -32,7 +32,7 @@ const GNB = ({}: GNB) => {
         </Section>
 
         <Section path="/search" icon={SearchSVG} lottie={searchLottie}>
-          검색
+          최신음악
         </Section>
 
         <Section path="/artist" icon={ArtistSVG} lottie={artistLottie}>

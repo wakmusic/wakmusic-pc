@@ -1,17 +1,9 @@
-import styled from "styled-components";
-
-import HelloWorld from "@components/index/HelloWorld";
+import PageContainer from "@components/PageContainer";
 
 interface IndexProps {}
 
 const Index = ({}: IndexProps) => {
-  return (
-    <Container>
-      <HelloWorld />
-    </Container>
-  );
+  return <PageContainer></PageContainer>;
 };
-
-const Container = styled.div``;
 
 export default Index;

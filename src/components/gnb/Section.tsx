@@ -41,32 +41,23 @@ const Section = ({ path, icon: Icon, lottie, children }: Section) => {
           <Icon />
         )}
       </IconContainer>
+
       <Text $activated={location.pathname === path}>{children}</Text>
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: 118px;
   height: 40px;
 
-  margin-left: 16px;
-  margin-right: 16px;
-
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 
   cursor: pointer;
 `;
 
 const Text = styled(Pretendard)<{ $activated: boolean }>`
-  position: relative;
-
-  top: 50%;
-  transform: translateY(-50%);
-
-  margin-left: 6px;
-
-  display: inline-block;
+  margin-left: 8px;
 
   /* T5 */
   font-size: 16px;
@@ -86,9 +77,6 @@ const Text = styled(Pretendard)<{ $activated: boolean }>`
         `}
 `;
 
-const IconContainer = styled.div`
-  float: left;
-  display: flex;
-`;
+const IconContainer = styled.div``;
 
 export default Section;

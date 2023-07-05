@@ -28,7 +28,7 @@ const GNB = ({}: GNB) => {
         </Section>
 
         <Section path="/chart" icon={ChartSVG} lottie={chartLottie}>
-          차트
+          왁뮤차트
         </Section>
 
         <Section path="/search" icon={SearchSVG} lottie={searchLottie}>
@@ -43,70 +43,59 @@ const GNB = ({}: GNB) => {
           보관함
         </Section>
       </Navigator>
+
       <Login>
-        <Text>로그인 하기</Text>
+        <T6Medium
+          style={{
+            color: colors.blueGray600,
+          }}
+        >
+          로그인 하기
+        </T6Medium>
       </Login>
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: 186px;
-  height: 676px;
+  margin: 19.5px 20px 0 16px;
 
-  float: left;
+  flex-shrink: 0;
 `;
 
 const Navigator = styled.div`
   width: 150px;
-  height: 260px;
-
-  margin-top: 19.5px;
-  margin-left: 20px;
-  margin-right: 16px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-
-  flex-shrink: 0;
+  height: 300px;
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background: #ffffff66; //${colors.white}
+  background: ${colors.white}66; // 40% opacity
   backdrop-filter: blur(62.5px);
 
-  div {
-    &:not(:last-child) {
-      margin-bottom: 15px;
-    }
-  }
+  box-sizing: border-box;
+  padding: 20px 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Login = styled.div`
+  margin-top: 12px;
+
   width: 150px;
   height: 52px;
 
-  margin-top: 12px;
-  margin-left: 20px;
-  margin-right: 16px;
-
-  flex-shrink: 0;
-
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background: #ffffff66; //${colors.white}
+  background: ${colors.white}66; // 40% opacity
   backdrop-filter: blur(62.5px);
 
   cursor: pointer;
-`;
 
-const Text = styled(T6Medium)`
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-
-  text-align: center;
-
-  color: ${colors.blueGray600};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default GNB;

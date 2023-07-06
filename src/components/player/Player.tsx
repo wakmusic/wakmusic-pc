@@ -14,8 +14,6 @@ const Container = styled.div`
   width: 290px;
   height: calc(100vh - 38px);
 
-  flex-shrink: 0;
-
   background-color: ${colors.gray900};
 
   color: white;

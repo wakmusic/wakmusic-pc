@@ -32,11 +32,6 @@
 
 body {
   margin: 0;
-
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-
   background-color: #f2f4f7;
 }
 
@@ -46,6 +41,12 @@ body {
     "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     sans-serif;
 
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }

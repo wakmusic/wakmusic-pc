@@ -36,9 +36,8 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 22px;
 
-  padding: 0 20px 0 16px;
+  padding: 0 22px 0 16px;
 
   cursor: pointer;
 `;

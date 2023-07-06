@@ -13,6 +13,7 @@ import firebaseConfig from "@constants/firebaseConfig";
 
 import Index from "@pages/index/Index";
 import Playground from "@pages/playground/Playground";
+import User from "@pages/user/user";
 
 import "@utils/loadIpcRenderer";
 
@@ -32,6 +33,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/playground" element={<Playground />} />
+          <Route path="/user/*" element={<User />} />
         </Routes>
         <Player />
       </RootOverlay>

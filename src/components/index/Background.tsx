@@ -1,10 +1,32 @@
-import styled from "styled-components";
+import throttle from "lodash.throttle";
+import { useEffect, useState } from "react";
+import styled, { css } from "styled-components";
 
 interface BackgroundProps {}
 
 const Background = ({}: BackgroundProps) => {
+  const [mousePosition, setMousePosition] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  useEffect(() => {
+    const handleMouseMove = throttle((event: MouseEvent) => {
+      setMousePosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+    });
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
   return (
-    <Container>
+    <Container $mousePosition={mousePosition}>
       <Circle1 />
       <Circle2 />
       <Circle3 />
@@ -12,10 +34,22 @@ const Background = ({}: BackgroundProps) => {
   );
 };
 
-const Container = styled.div`
-  position: absolute;
-
+const Container = styled.div<{ $mousePosition: { x: number; y: number } }>`
   z-index: -1;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  ${({ $mousePosition }) => css`
+    transform: translate(
+      ${$mousePosition.x * 0.05}px,
+      ${$mousePosition.y * 0.05}px
+    );
+  `}
 `;
 
 const Circle1 = styled.div`

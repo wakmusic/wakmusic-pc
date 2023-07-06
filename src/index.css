@@ -4,24 +4,21 @@
   font-family: "Pretendard";
   font-weight: 300;
   font-display: swap;
-  src: local("Pretendard Light"),
-    url("/fonts/Pretendard-Light.subset.woff2") format("woff2");
+  src: url("/fonts/Pretendard-Light.subset.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Pretendard";
   font-weight: 500;
   font-display: swap;
-  src: local("Pretendard Medium"),
-    url("/fonts/Pretendard-Medium.subset.woff2") format("woff2");
+  src: url("/fonts/Pretendard-Medium.subset.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "SCDream";
-  font-weight: 600;
+  font-family: "Pretendard";
+  font-weight: 700;
   font-display: swap;
-  src: local("Pretendard Bold"),
-    url("/fonts/Pretendard-Bold.subset.woff2") format("woff2");
+  src: url("/fonts/Pretendard-Bold.subset.woff2") format("woff2");
 }
 
 /* S-Core Dream */

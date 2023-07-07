@@ -4,24 +4,21 @@
   font-family: "Pretendard";
   font-weight: 300;
   font-display: swap;
-  src: local("Pretendard Light"),
-    url("/fonts/Pretendard-Light.subset.woff2") format("woff2");
+  src: url("/fonts/Pretendard-Light.subset.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Pretendard";
   font-weight: 500;
   font-display: swap;
-  src: local("Pretendard Medium"),
-    url("/fonts/Pretendard-Medium.subset.woff2") format("woff2");
+  src: url("/fonts/Pretendard-Medium.subset.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "SCDream";
-  font-weight: 600;
+  font-family: "Pretendard";
+  font-weight: 700;
   font-display: swap;
-  src: local("Pretendard Bold"),
-    url("/fonts/Pretendard-Bold.subset.woff2") format("woff2");
+  src: url("/fonts/Pretendard-Bold.subset.woff2") format("woff2");
 }
 
 /* S-Core Dream */
@@ -35,11 +32,6 @@
 
 body {
   margin: 0;
-
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-user-drag: none;
-
   background-color: #f2f4f7;
 }
 
@@ -49,6 +41,12 @@ body {
     "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     sans-serif;
 
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }

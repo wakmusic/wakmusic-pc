@@ -86,7 +86,7 @@ const Container = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  margin-left: 16px;
+  margin-left: 24px;
 
   display: flex;
   align-items: center;

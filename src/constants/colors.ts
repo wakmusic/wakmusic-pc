@@ -14,6 +14,7 @@ const colors: { [color: string]: string } = {
   blueGray600: "#475467",
 
   white: "#FFFFFF",
+  yellow: "#FF8F0C",
   point: "#08DEF7",
   sub: "#2760F4",
   up: "#FA3168",

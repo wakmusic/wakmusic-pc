@@ -58,9 +58,9 @@ const GNB = ({}: GNB) => {
 };
 
 const Container = styled.div`
-  margin: 19.5px 20px 0 16px;
-
-  flex-shrink: 0;
+  margin-top: 19.5px;
+  margin-left: 20px;
+  margin-right: 4px;
 `;
 
 const Navigator = styled.div`
@@ -72,7 +72,6 @@ const Navigator = styled.div`
   background: ${colors.white}66; // 40% opacity
   backdrop-filter: blur(62.5px);
 
-  box-sizing: border-box;
   padding: 20px 16px;
 
   display: flex;

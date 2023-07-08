@@ -28,7 +28,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Thumbnail = styled.img`
+export const Thumbnail = styled.img`
   margin-right: 8px;
 
   width: 78px;

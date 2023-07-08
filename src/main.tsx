@@ -4,7 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import RootOverlay from "@components/RootOverlay";
+import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
 import Player from "@components/player/Player";

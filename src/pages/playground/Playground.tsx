@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-import PageContainer from "@components/PageContainer";
 import * as Typography from "@components/Typography";
+import PageContainer from "@components/globals/PageContainer";
 
 import colors from "@constants/colors";
 

@@ -14,30 +14,51 @@ interface RankProps {
   last: number;
 }
 
+const RankInfo = ({ now, last }: RankProps) => {
+  // 새로 올라온 곡
+  if (last === 0) {
+    return (
+      <Text color={colors.yellow} $noWidth>
+        NEW
+      </Text>
+    );
+  }
+
+  // 변동이 없는 곡
+  if (now === last) {
+    return <ZeroSVG />;
+  }
+
+  // 순위가 100위 이상 올라간 곡
+  if (last - now > 100) {
+    return <BlowupSVG />;
+  }
+
+  // 순위가 올라간 곡
+  if (now < last) {
+    return (
+      <>
+        <UpSVG />
+        <Text color={colors.up}>{last - now}</Text>
+      </>
+    );
+  }
+
+  // 순위가 내려간 곡
+  return (
+    <>
+      <DownSVG />
+      <Text color={colors.down}>{now - last}</Text>
+    </>
+  );
+};
+
 const Rank = ({ now, last }: RankProps) => {
   return (
     <Container>
       <T4Bold>{now}</T4Bold>
       <Info>
-        {last === 0 ? (
-          <Text color={colors.yellow} $noWidth>
-            NEW
-          </Text>
-        ) : now === last ? (
-          <ZeroSVG />
-        ) : last > 100 ? (
-          <BlowupSVG />
-        ) : now < last ? (
-          <>
-            <UpSVG />
-            <Text color={colors.up}>{last - now}</Text>
-          </>
-        ) : (
-          <>
-            <DownSVG />
-            <Text color={colors.down}>{now - last}</Text>
-          </>
-        )}
+        <RankInfo now={now} last={last} />
       </Info>
     </Container>
   );

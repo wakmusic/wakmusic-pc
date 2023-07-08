@@ -35,7 +35,7 @@ const GNB = ({}: GNB) => {
           최신음악
         </Section>
 
-        <Section path="/artist" icon={ArtistSVG} lottie={artistLottie}>
+        <Section path="/artists" icon={ArtistSVG} lottie={artistLottie}>
           아티스트
         </Section>
 

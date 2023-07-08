@@ -12,5 +12,18 @@
       "export default ${TM_FILENAME_BASE};\n"
     ],
     "description": "새 컴포넌트 생성"
+  },
+  "Create New Page": {
+    "scope": "typescriptreact",
+    "prefix": "page",
+    "body": [
+      "import PageContainer from \"@components/globals/PageContainer\";\n",
+      "interface ${TM_FILENAME_BASE}Props {}\n",
+      "const ${TM_FILENAME_BASE} = ({}: ${TM_FILENAME_BASE}Props) => {",
+      "\treturn <PageContainer></PageContainer>;",
+      "};\n",
+      "export default ${TM_FILENAME_BASE};\n"
+    ],
+    "description": "새 페이지 컴포넌트 생성"
   }
 }

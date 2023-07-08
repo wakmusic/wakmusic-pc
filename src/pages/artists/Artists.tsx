@@ -11,7 +11,7 @@ import { artistList } from "@constants/dummys";
 interface ArtistsProps {}
 
 const Artists = ({}: ArtistsProps) => {
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   return (
     <PageContainer>
@@ -27,8 +27,8 @@ const Artists = ({}: ArtistsProps) => {
         <ArtistsContainer>
           {artistList
             .filter((artist) => {
-              if (searchParams[0].get("type") === null) return true;
-              else return artist.group.en === searchParams[0].get("type");
+              if (searchParams.get("type") === null) return true;
+              else return artist.group.en === searchParams.get("type");
             })
             .map((artist, index) => (
               <Artist key={index} artist={artist} />

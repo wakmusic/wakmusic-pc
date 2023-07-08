@@ -13,7 +13,7 @@ import firebaseConfig from "@constants/firebaseConfig";
 
 import Index from "@pages/index/Index";
 import Playground from "@pages/playground/Playground";
-import User from "@pages/user/user";
+import User from "@pages/user/User";
 
 import "@utils/loadIpcRenderer";
 

@@ -1,9 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
-import PageContainer from "@components/PageContainer";
 import Artist from "@components/artists/Artist";
 import Tab from "@components/artists/Tab";
+import PageContainer from "@components/globals/PageContainer";
 
 import colors from "@constants/colors";
 import { artistList } from "@constants/dummys";

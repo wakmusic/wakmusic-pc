@@ -14,6 +14,7 @@ import firebaseConfig from "@constants/firebaseConfig";
 import Artists from "@pages/artists/Artists";
 import Index from "@pages/index/Index";
 import Playground from "@pages/playground/Playground";
+import Search from "@pages/search/Search";
 
 import "@utils/loadIpcRenderer";
 
@@ -34,6 +35,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <Route path="/" element={<Index />} />
           <Route path="/playground" element={<Playground />} />
           <Route path="/artists" element={<Artists />} />
+          <Route path="/search" element={<Search />} />
         </Routes>
         <Player />
       </RootOverlay>

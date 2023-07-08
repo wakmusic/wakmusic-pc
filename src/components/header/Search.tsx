@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { ReactComponent as DeleteSVG } from "@assets/icons/ic_16_close.svg";
@@ -18,12 +19,13 @@ const Search = ({}: SearchProps) => {
   const [isEmpty, setIsEmpty] = useState(true);
   const [isFocusing, setIsFocusing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
   const [items, setItems] = useState<string[]>(
     localStorage.getItem("searchHistory") === ""
       ? []
       : localStorage.getItem("searchHistory")?.split(",") || []
   );
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const sub = watch((value, { type }) => {
@@ -36,19 +38,24 @@ const Search = ({}: SearchProps) => {
     return () => sub.unsubscribe();
   }, [watch]);
 
-  // TODO: 검색 시스템 구현
   const onSubmit = (data: FieldValues) => {
     if (data.query === "") return;
 
-    if (!items.includes(data.query)) {
-      setItems((prev) => [data.query, ...prev.slice(0, 9)]);
+    if (items.includes(data.query)) {
+      setItems((prev) => prev.filter((item) => item !== data.query));
       localStorage.setItem(
         "searchHistory",
-        [data.query, ...items.slice(0, 9)].join(",")
+        items.filter((item) => item !== data.query).join(",")
       );
     }
 
-    console.log(`검색: ${data.query}`);
+    setItems((prev) => [data.query, ...prev.slice(0, 9)]);
+    localStorage.setItem(
+      "searchHistory",
+      [data.query, ...items.slice(0, 9)].join(",")
+    );
+
+    navigate(`/search?query=${data.query}`);
 
     inputRef.current?.blur();
     setValue("query", "");

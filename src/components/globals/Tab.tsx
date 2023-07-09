@@ -5,6 +5,8 @@ import { Pretendard } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { isString } from "@utils/isTypes";
+
 interface Query {
   [key: string]: string;
 }
@@ -19,17 +21,16 @@ const Tab = ({ to, children }: TabProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
 
-  const nav =
-    typeof to === "string"
-      ? () => {
-          navigate(to);
-        }
-      : () => {
-          setSearchParams(to);
-        };
+  const nav = isString(to)
+    ? () => {
+        navigate(to);
+      }
+    : () => {
+        setSearchParams(to);
+      };
 
   const isCurrent = () => {
-    if (typeof to === "string") {
+    if (isString(to)) {
       return location.pathname === to && searchParams.size === 0;
     } else {
       const key = Object.keys(to)[0];

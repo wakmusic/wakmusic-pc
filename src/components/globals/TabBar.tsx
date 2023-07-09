@@ -4,6 +4,8 @@ import styled, { css } from "styled-components";
 
 import colors from "@constants/colors";
 
+import { isObject, isString } from "@utils/isTypes";
+
 import { TabProps } from "./Tab";
 
 interface TabBarProps {
@@ -20,13 +22,13 @@ const TabBar = ({ children }: TabBarProps) => {
       const _props: TabProps = children[i].props;
 
       if (
-        typeof _props.to === "string" &&
+        isString(_props.to) &&
         searchParams.size === 0 &&
         location.pathname === _props.to
       ) {
         // 중첩 라우트인 경우
         setIndicater(i);
-      } else if (typeof _props.to === "object") {
+      } else if (isObject(_props.to)) {
         // Query Paramter인 경우
         const key = Object.keys(_props.to)[0];
         const value = Object.values(_props.to)[0];

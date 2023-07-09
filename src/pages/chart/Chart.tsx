@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 import { ReactComponent as Check } from "@assets/icons/ic_16_check.svg";
 
+import { T7Medium } from "@components/Typography";
 import { T7Light } from "@components/Typography/Light";
 import FunctionSection from "@components/chart/FunctionSection";
 import PageContainer from "@components/globals/PageContainer";
@@ -16,18 +17,25 @@ const Chart = ({}: ChartProps) => {
       <FunctionSection />
       <UpdateTimeLayout>
         <Check />
-        <T7Light>00월 00일 오전 0시 업데이트</T7Light>
+        <TimeText>00월 00일 오전 0시 업데이트</TimeText>
       </UpdateTimeLayout>
       <WhiteLine />
+      <GuideBox>
+        <GuideText></GuideText>
+      </GuideBox>
+      <BlackLine />
+      <MusicLayout></MusicLayout>
+      <MusicControllerBox></MusicControllerBox>
     </Wrapper>
   );
 };
 
 const Wrapper = styled(PageContainer)`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: auto;
+  height: 636px;
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
   background: rgba(255, 255, 255, 0.4);
@@ -42,6 +50,10 @@ const UpdateTimeLayout = styled.div`
   margin: 12px 0px 14px 20px;
 `;
 
+const TimeText = styled(T7Light)`
+  color: ${colors.blueGray500};
+`;
+
 const WhiteLine = styled.div`
   width: 734px;
   height: 1px;
@@ -53,6 +65,52 @@ const WhiteLine = styled.div`
     #fff 92.56%,
     rgba(255, 255, 255, 0) 100%
   );
+`;
+
+const BlackLine = styled.div`
+  width: 734px;
+  height: 1px;
+  border-radius: 99px;
+  background: linear-gradient(
+    117deg,
+    rgba(228, 231, 236, 0) 0%,
+    #e4e7ec 4.69%,
+    #e4e7ec 92.56%,
+    rgba(228, 231, 236, 0) 100%
+  );
+`;
+
+const GuideBox = styled.div`
+  width: 100%;
+  height: 30px;
+  padding: 0px 20px;
+  position: relative;
+`;
+
+const GuideText = styled(T7Medium)<{ width?: string }>`
+  text-align: center;
+  width: ${(props) => (props.width !== "" ? props.width : "auto")};
+`;
+
+const MusicLayout = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const MusicControllerBox = styled.div`
+  position: fixed;
+  width: 310px;
+  height: 60px;
+  border-radius: 12px;
+  background: ${colors.sub};
+  padding: 0px 20px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+  bottom: 40px;
 `;
 
 export default Chart;

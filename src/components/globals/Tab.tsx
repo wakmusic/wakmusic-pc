@@ -72,6 +72,7 @@ const Title = styled(Pretendard)<{ $activated: boolean }>`
     $activated
       ? css`
           font-weight: 700;
+          color: ${colors.gray900};
         `
       : css`
           font-weight: 500;

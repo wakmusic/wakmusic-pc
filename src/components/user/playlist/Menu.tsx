@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-import { ReactComponent as Create } from "@assets/svgs/create.svg";
-import { ReactComponent as Import } from "@assets/svgs/import.svg";
+import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
+import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
 
 import MenuItem from "./MenuItem";
 

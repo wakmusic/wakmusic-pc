@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { ReactComponent as PlayAll } from "@assets/svgs/play_all.svg";
+import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";
 
 import { T6Medium, T7Light } from "@components/Typography";
 

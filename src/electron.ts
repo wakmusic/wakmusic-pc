@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain } from "electron";
+import { BrowserWindow, app, ipcMain, nativeImage } from "electron";
 import * as isDev from "electron-is-dev";
 import { join } from "path";
 
@@ -11,6 +11,9 @@ import { join } from "path";
       minWidth: 1250,
       minHeight: 714,
       frame: false,
+      icon: nativeImage.createFromPath(
+        join(__dirname, "../public/favicon.ico")
+      ),
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,

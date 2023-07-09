@@ -18,8 +18,9 @@ const TabBar = ({ children }: TabBarProps) => {
   const location = useLocation();
 
   useEffect(() => {
-    for (let i = 0; i < children.length; i++) {
-      const _props: TabProps = children[i].props;
+    let i = 0;
+    children.forEach((child) => {
+      const _props: TabProps = child.props;
 
       if (
         isString(_props.to) &&
@@ -37,12 +38,10 @@ const TabBar = ({ children }: TabBarProps) => {
           setIndicater(i);
         }
       }
-    }
-  }, [children, searchParams, location]);
 
-  useEffect(() => {
-    console.log(indicate);
-  }, [indicate]);
+      i++;
+    });
+  }, [children, searchParams, location]);
 
   return (
     <Container>

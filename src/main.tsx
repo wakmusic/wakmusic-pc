@@ -11,6 +11,7 @@ import Player from "@components/player/Player";
 
 import firebaseConfig from "@constants/firebaseConfig";
 
+import Chart from "@pages/chart/Chart";
 import Index from "@pages/index/Index";
 import Playground from "@pages/playground/Playground";
 
@@ -26,12 +27,12 @@ createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <BrowserRouter>
       <Header />
-
       <RootOverlay>
         <GNB />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/playground" element={<Playground />} />
+          <Route path="/chart" element={<Chart />} />
         </Routes>
         <Player />
       </RootOverlay>

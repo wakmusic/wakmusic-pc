@@ -1,3 +1,4 @@
+import { useLoginModalOpener } from "@state/loginModal";
 import styled from "styled-components";
 
 import { ReactComponent as ArtistSVG } from "@assets/icons/ic_40_artist_disabled.svg";
@@ -20,6 +21,8 @@ import Section from "./Section";
 interface GNB {}
 
 const GNB = ({}: GNB) => {
+  const loginModalOpener = useLoginModalOpener();
+
   return (
     <Container>
       <Navigator>
@@ -44,7 +47,7 @@ const GNB = ({}: GNB) => {
         </Section>
       </Navigator>
 
-      <Login>
+      <Login onClick={() => loginModalOpener()}>
         <T6Medium
           style={{
             color: colors.blueGray600,

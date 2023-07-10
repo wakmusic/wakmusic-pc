@@ -5,17 +5,13 @@ import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface LoginModalButtonProps {
+interface ButtonProps {
   platform: string;
   children: ReactNode;
   onClick: (platform: string) => void;
 }
 
-const LoginModalButton = ({
-  platform,
-  children,
-  onClick,
-}: LoginModalButtonProps) => {
+const Button = ({ platform, children, onClick }: ButtonProps) => {
   return (
     <Container
       onClick={() => {
@@ -56,4 +52,4 @@ const IconContainer = styled.div`
   align-items: center;
 `;
 
-export default LoginModalButton;
+export default Button;

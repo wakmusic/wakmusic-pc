@@ -1,13 +1,12 @@
+import { loginModalState } from "@state/loginModal/atoms";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
-import { modalState } from "./atoms";
-
 export const useLoginModalState = () => {
-  return useRecoilState(modalState);
+  return useRecoilState(loginModalState);
 };
 
 export const useLoginModalOpener = () => {
-  const setIsOpen = useSetRecoilState(modalState);
+  const setIsOpen = useSetRecoilState(loginModalState);
 
   return (state?: boolean) => setIsOpen(state ?? true);
 };

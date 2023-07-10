@@ -9,4 +9,10 @@ export default styled.div`
   height: 100vh;
 
   z-index: 1000;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

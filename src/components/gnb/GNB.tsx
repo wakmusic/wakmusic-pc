@@ -1,4 +1,3 @@
-import { useLoginModalOpener } from "@state/loginModal";
 import styled from "styled-components";
 
 import { ReactComponent as ArtistSVG } from "@assets/icons/ic_40_artist_disabled.svg";
@@ -15,6 +14,8 @@ import searchLottie from "@assets/lotties/ic_search.json";
 import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
+
+import { useLoginModalOpener } from "@hooks/loginModal";
 
 import Section from "./Section";
 

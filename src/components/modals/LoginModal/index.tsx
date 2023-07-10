@@ -1,4 +1,3 @@
-import { useLoginModalState } from "@state/loginModal";
 import styled from "styled-components";
 
 import { ReactComponent as AppleIconSVG } from "@assets/icons/ic_24_apple.svg";
@@ -11,7 +10,9 @@ import ModalContainer from "@components/globals/ModalContainer";
 
 import colors from "@constants/colors";
 
-import LoginModalButton from "./LoginModalButton";
+import { useLoginModalState } from "@hooks/loginModal";
+
+import Button from "./Button";
 
 interface LoginModalProps {}
 
@@ -26,7 +27,7 @@ const LoginModal = ({}: LoginModalProps) => {
   };
 
   return (
-    <Container>
+    <ModalContainer>
       <Modal>
         <Header>
           <AppIconSVG />
@@ -38,30 +39,22 @@ const LoginModal = ({}: LoginModalProps) => {
         </Header>
 
         <Buttons>
-          <LoginModalButton platform="네이버" onClick={handleLogin}>
+          <Button platform="네이버" onClick={handleLogin}>
             <NaverIconSVG />
-          </LoginModalButton>
+          </Button>
 
-          <LoginModalButton platform="구글" onClick={handleLogin}>
+          <Button platform="구글" onClick={handleLogin}>
             <GoogleIconSVG />
-          </LoginModalButton>
+          </Button>
 
-          <LoginModalButton platform="애플" onClick={handleLogin}>
+          <Button platform="애플" onClick={handleLogin}>
             <AppleIconSVG />
-          </LoginModalButton>
+          </Button>
         </Buttons>
       </Modal>
-    </Container>
+    </ModalContainer>
   );
 };
-
-const Container = styled(ModalContainer)`
-  background: rgba(0, 0, 0, 0.4);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 const Modal = styled.div`
   width: 440px;

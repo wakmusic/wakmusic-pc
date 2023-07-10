@@ -15,26 +15,26 @@ interface SearchProps {}
 
 const Search = ({}: SearchProps) => {
   const [searchParams] = useSearchParams();
-  const [query, setQuery] = useState({ query: "" });
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const search = searchParams.get("query");
 
     if (!isNull(search)) {
-      setQuery({ query: search });
+      setQuery(search);
     }
-  }, [query, searchParams]);
+  }, [searchParams]);
 
   return (
     <PageContainer>
       <Container>
         <TabBar>
-          <Tab to={{ tab: "all", ...query }}>전체</Tab>
-          <Tab to={{ tab: "songs", ...query }}>노래</Tab>
-          <Tab to={{ tab: "artists", ...query }}>가수</Tab>
-          <Tab to={{ tab: "training", ...query }}>조교</Tab>
+          <Tab to={{ query: query, tab: "all" }}>전체</Tab>
+          <Tab to={{ query: query, tab: "songs" }}>노래</Tab>
+          <Tab to={{ query: query, tab: "artists" }}>가수</Tab>
+          <Tab to={{ query: query, tab: "training" }}>조교</Tab>
         </TabBar>
-        <T4Bold>Query: {searchParams.get("query")}</T4Bold>
+        <T4Bold>Query: {query}</T4Bold>
       </Container>
     </PageContainer>
   );

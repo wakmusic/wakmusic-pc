@@ -33,10 +33,13 @@ const Tab = ({ to, children }: TabProps) => {
     if (isString(to)) {
       return location.pathname === to && searchParams.size === 0;
     } else {
-      const key = Object.keys(to)[0];
-      const value = Object.values(to)[0];
+      for (const [key, value] of Object.entries(to)) {
+        if (searchParams.get(key) !== value) {
+          return false;
+        }
+      }
 
-      return searchParams.get(key) === value;
+      return true;
     }
   };
 

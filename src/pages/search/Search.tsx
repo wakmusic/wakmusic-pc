@@ -8,6 +8,7 @@ import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 
 import colors from "@constants/colors";
+import { searchTabs } from "@constants/tabs";
 
 import { isNull } from "@utils/isTypes";
 
@@ -29,10 +30,11 @@ const Search = ({}: SearchProps) => {
     <PageContainer>
       <Container>
         <TabBar>
-          <Tab to={{ query: query, tab: "all" }}>전체</Tab>
-          <Tab to={{ query: query, tab: "songs" }}>노래</Tab>
-          <Tab to={{ query: query, tab: "artists" }}>가수</Tab>
-          <Tab to={{ query: query, tab: "training" }}>조교</Tab>
+          {searchTabs.map((item, index) => (
+            <Tab to={{ query: query, ...item.to }} key={index}>
+              {item.text}
+            </Tab>
+          ))}
         </TabBar>
         <T4Bold>Query: {query}</T4Bold>
       </Container>

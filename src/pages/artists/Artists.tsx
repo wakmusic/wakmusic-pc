@@ -8,6 +8,7 @@ import TabBar from "@components/globals/TabBar";
 
 import colors from "@constants/colors";
 import { artistList } from "@constants/dummys";
+import { artistTabs } from "@constants/tabs";
 
 interface ArtistsProps {}
 
@@ -18,11 +19,11 @@ const Artists = ({}: ArtistsProps) => {
     <PageContainer>
       <Container>
         <TabBar>
-          <Tab to="/artists">전체</Tab>
-          <Tab to={{ type: "woowakgood" }}>우왁굳</Tab>
-          <Tab to={{ type: "isedol" }}>이세돌</Tab>
-          <Tab to={{ type: "gomem" }}>고멤</Tab>
-          <Tab to={{ type: "academy" }}>아카데미</Tab>
+          {artistTabs.map((item, index) => (
+            <Tab to={item.to} key={index}>
+              {item.text}
+            </Tab>
+          ))}
         </TabBar>
 
         <ArtistsContainer>

@@ -10,6 +10,7 @@ import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
 import LoginModal from "@components/modals/LoginModal";
+import SelectProfileModal from "@components/modals/SelectProfileModal";
 import Player from "@components/player/Player";
 
 import firebaseConfig from "@constants/firebaseConfig";
@@ -44,6 +45,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
 
         <ModalPortal>
           <LoginModal />
+          <SelectProfileModal />
         </ModalPortal>
       </BrowserRouter>
     </RecoilRoot>

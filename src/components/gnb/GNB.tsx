@@ -15,11 +15,15 @@ import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useLoginModalOpener } from "@hooks/loginModal";
+
 import Section from "./Section";
 
 interface GNB {}
 
 const GNB = ({}: GNB) => {
+  const loginModalOpener = useLoginModalOpener();
+
   return (
     <Container>
       <Navigator>
@@ -44,7 +48,7 @@ const GNB = ({}: GNB) => {
         </Section>
       </Navigator>
 
-      <Login>
+      <Login onClick={() => loginModalOpener()}>
         <T6Medium
           style={{
             color: colors.blueGray600,

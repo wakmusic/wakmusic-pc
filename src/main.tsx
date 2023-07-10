@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
 import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
@@ -26,19 +27,21 @@ const analytics = getAnalytics(app);
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
-    <BrowserRouter>
-      <Header />
+    <RecoilRoot>
+      <BrowserRouter>
+        <Header />
 
-      <RootOverlay>
-        <GNB />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/playground" element={<Playground />} />
-          <Route path="/artists" element={<Artists />} />
-          <Route path="/search" element={<Search />} />
-        </Routes>
-        <Player />
-      </RootOverlay>
-    </BrowserRouter>
+        <RootOverlay>
+          <GNB />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/playground" element={<Playground />} />
+            <Route path="/artists" element={<Artists />} />
+            <Route path="/search" element={<Search />} />
+          </Routes>
+          <Player />
+        </RootOverlay>
+      </BrowserRouter>
+    </RecoilRoot>
   </StrictMode>
 );

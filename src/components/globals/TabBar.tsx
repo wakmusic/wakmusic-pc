@@ -18,8 +18,7 @@ const TabBar = ({ children }: TabBarProps) => {
   const location = useLocation();
 
   useEffect(() => {
-    let i = 0;
-    children.forEach((child) => {
+    children.forEach((child, index) => {
       const _props: TabProps = child.props;
 
       if (
@@ -28,18 +27,16 @@ const TabBar = ({ children }: TabBarProps) => {
         location.pathname === _props.to
       ) {
         // 중첩 라우트인 경우
-        setIndicater(i);
+        setIndicater(index);
       } else if (isObject(_props.to)) {
         // Query Paramter인 경우
         const key = Object.keys(_props.to)[0];
         const value = Object.values(_props.to)[0];
 
         if (searchParams.get(key) === value) {
-          setIndicater(i);
+          setIndicater(index);
         }
       }
-
-      i++;
     });
   }, [children, searchParams, location]);
 

@@ -24,7 +24,9 @@ const Chart = ({}: ChartProps) => {
         <GuideText></GuideText>
       </GuideBox>
       <BlackLine />
-      <MusicLayout></MusicLayout>
+      <MusicSection>
+        <MusicLayout></MusicLayout>
+      </MusicSection>
       <MusicControllerBox></MusicControllerBox>
     </Wrapper>
   );
@@ -35,6 +37,7 @@ const Wrapper = styled(PageContainer)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  overflow: hidden;
   height: 636px;
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
@@ -92,12 +95,17 @@ const GuideText = styled(T7Medium)<{ width?: string }>`
   width: ${(props) => (props.width !== "" ? props.width : "auto")};
 `;
 
-const MusicLayout = styled.div`
+const MusicSection = styled.div`
   width: 100%;
-  height: 100%;
+  overflow-y: scroll;
+  flex: 1 1 0;
+`;
+
+const MusicLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 10000px;
 `;
 
 const MusicControllerBox = styled.div`

@@ -68,15 +68,6 @@ const ArtistsContainer = styled.div`
   grid-row-gap: 14px;
 
   padding-right: 5px;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: ${colors.blueGray300};
-    border-radius: 10px;
-  }
 `;
 
 export default Artists;

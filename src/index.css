@@ -50,3 +50,12 @@ body {
   box-sizing: border-box;
   flex-shrink: 0;
 }
+
+*::-webkit-scrollbar {
+  width: 5px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #d0d5dd;
+  border-radius: 10px;
+}

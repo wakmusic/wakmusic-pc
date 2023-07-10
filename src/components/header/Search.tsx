@@ -55,7 +55,7 @@ const Search = ({}: SearchProps) => {
       [data.query, ...items.slice(0, 9)].join(",")
     );
 
-    navigate(`/search?query=${data.query}`);
+    navigate(`/search?query=${data.query}&tab=all`);
 
     inputRef.current?.blur();
     setValue("query", "");

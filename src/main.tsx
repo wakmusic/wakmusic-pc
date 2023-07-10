@@ -5,12 +5,9 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
-import ModalPortal from "@components/globals/ModalPortal";
 import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
-import LoginModal from "@components/modals/LoginModal";
-import SelectProfileModal from "@components/modals/SelectProfileModal";
 import Player from "@components/player/Player";
 
 import firebaseConfig from "@constants/firebaseConfig";
@@ -18,6 +15,7 @@ import firebaseConfig from "@constants/firebaseConfig";
 import Artists from "@pages/artists/Artists";
 import Index from "@pages/index/Index";
 import Playground from "@pages/playground/Playground";
+import Search from "@pages/search/Search";
 
 import "@utils/loadIpcRenderer";
 
@@ -39,14 +37,10 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/" element={<Index />} />
             <Route path="/playground" element={<Playground />} />
             <Route path="/artists" element={<Artists />} />
+            <Route path="/search" element={<Search />} />
           </Routes>
           <Player />
         </RootOverlay>
-
-        <ModalPortal>
-          <LoginModal />
-          <SelectProfileModal />
-        </ModalPortal>
       </BrowserRouter>
     </RecoilRoot>
   </StrictMode>

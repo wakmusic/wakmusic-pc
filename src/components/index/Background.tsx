@@ -1,6 +1,6 @@
 import throttle from "lodash.throttle";
 import { useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 interface BackgroundProps {}
 
@@ -26,7 +26,13 @@ const Background = ({}: BackgroundProps) => {
   }, []);
 
   return (
-    <Container $mousePosition={mousePosition}>
+    <Container
+      style={{
+        transform: `translate(${mousePosition.x * 0.05}px, ${
+          mousePosition.y * 0.05
+        }px)`,
+      }}
+    >
       <Circle1 />
       <Circle2 />
       <Circle3 />
@@ -34,7 +40,7 @@ const Background = ({}: BackgroundProps) => {
   );
 };
 
-const Container = styled.div<{ $mousePosition: { x: number; y: number } }>`
+const Container = styled.div`
   z-index: -1;
 
   position: fixed;
@@ -43,13 +49,6 @@ const Container = styled.div<{ $mousePosition: { x: number; y: number } }>`
 
   width: 100vw;
   height: 100vh;
-
-  ${({ $mousePosition }) => css`
-    transform: translate(
-      ${$mousePosition.x * 0.05}px,
-      ${$mousePosition.y * 0.05}px
-    );
-  `}
 `;
 
 const Circle1 = styled.div`

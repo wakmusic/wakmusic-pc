@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
-import PageContainer from "@components/PageContainer";
 import { T4Medium } from "@components/Typography";
+import PageContainer from "@components/globals/PageContainer";
 import Background from "@components/index/Background";
 import Chart from "@components/index/Chart";
 import RecommandItem from "@components/index/RecommandItem";

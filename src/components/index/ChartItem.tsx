@@ -1,13 +1,9 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
-import { ReactComponent as BlowupSVG } from "@assets/icons/ic_16_blowup.svg";
-import { ReactComponent as DownSVG } from "@assets/icons/ic_16_down.svg";
-import { ReactComponent as UpSVG } from "@assets/icons/ic_16_up.svg";
-import { ReactComponent as ZeroSVG } from "@assets/icons/ic_16_zero.svg";
+import { ReactComponent as PlaySVG } from "@assets/icons/ic_30_play_point.svg";
 
-import { T4Bold, T5Medium, T6Medium } from "@components/Typography";
-
-import colors from "@constants/colors";
+import Rank from "@components/globals/Rank";
+import Track, { Thumbnail } from "@components/globals/Track";
 
 interface ChartItemProps {
   rank: number;
@@ -20,100 +16,39 @@ interface ChartItemProps {
 const ChartItem = ({ rank, item }: ChartItemProps) => {
   return (
     <Container>
-      <Rank>
-        <RankText>{rank}</RankText>
-        <RankInfo>
-          {item.hourly.last === 0 ? (
-            <RankInfoText color={colors.yellow} $noWidth>
-              NEW
-            </RankInfoText>
-          ) : rank === item.hourly.last ? (
-            <ZeroSVG />
-          ) : item.hourly.last > 100 ? (
-            <BlowupSVG />
-          ) : rank < item.hourly.last ? (
-            <>
-              <UpSVG />
-              <RankInfoText color={colors.up}>
-                {item.hourly.last - rank}
-              </RankInfoText>
-            </>
-          ) : (
-            <>
-              <DownSVG />
-              <RankInfoText color={colors.down}>
-                {rank - item.hourly.last}
-              </RankInfoText>
-            </>
-          )}
-        </RankInfo>
-      </Rank>
-      <Thumbnail src={`https://i.ytimg.com/vi/${item.songId}/hqdefault.jpg`} />
-      <TrackInfo>
-        <TrackTitle>{item.title}</TrackTitle>
-        <TrackArtist>{item.artist}</TrackArtist>
-      </TrackInfo>
+      <Rank now={rank} last={item.hourly.last} />
+      <Track item={item} />
+      <PlayIcon />
     </Container>
   );
 };
 
+const PlayIcon = styled(PlaySVG)`
+  display: none;
+`;
+
 const Container = styled.div`
+  position: relative;
+
   width: 356px;
   height: 64px;
 
   display: flex;
   align-items: center;
-`;
 
-const Rank = styled.div`
-  width: 36px;
-  height: 50px;
+  cursor: pointer;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  &:hover ${Thumbnail} {
+    filter: brightness(0.4);
+  }
 
-  margin-right: 8px;
-`;
+  &:hover ${PlayIcon} {
+    display: block;
 
-const RankText = styled(T4Bold)``;
-
-const RankInfo = styled.div`
-  width: 36px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const RankInfoText = styled(T6Medium)<{ color: string; $noWidth?: boolean }>`
-  text-align: center;
-
-  ${({ color, $noWidth }) => css`
-    width: ${$noWidth ? "auto" : "16px"};
-    color: ${color};
-  `}
-`;
-
-const Thumbnail = styled.img`
-  margin-right: 8px;
-
-  width: 78px;
-  height: 44px;
-
-  object-fit: cover;
-  border-radius: 4px;
-`;
-
-const TrackInfo = styled.div``;
-
-const TrackTitle = styled(T5Medium)`
-  color: ${colors.gray700};
-`;
-
-const TrackArtist = styled(T6Medium)`
-  color: ${colors.blueGray500};
+    position: absolute;
+    left: 63px;
+    top: 17px;
+  }
 `;
 
 export default ChartItem;

@@ -3,16 +3,19 @@ import { initializeApp } from "firebase/app";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
-import RootOverlay from "@components/RootOverlay";
+import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
 import Player from "@components/player/Player";
 
 import firebaseConfig from "@constants/firebaseConfig";
 
+import Artists from "@pages/artists/Artists";
 import Index from "@pages/index/Index";
 import Playground from "@pages/playground/Playground";
+import Search from "@pages/search/Search";
 import User from "@pages/user/User";
 
 import "@utils/loadIpcRenderer";
@@ -25,18 +28,22 @@ const analytics = getAnalytics(app);
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
-    <BrowserRouter>
-      <Header />
+    <RecoilRoot>
+      <BrowserRouter>
+        <Header />
 
-      <RootOverlay>
-        <GNB />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/playground" element={<Playground />} />
-          <Route path="/user/*" element={<User />} />
-        </Routes>
-        <Player />
-      </RootOverlay>
-    </BrowserRouter>
+        <RootOverlay>
+          <GNB />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/playground" element={<Playground />} />
+            <Route path="/artists" element={<Artists />} />
+            <Route path="/search" element={<Search />} />
+            <Route path="/user/*" element={<User />}></Route>
+          </Routes>
+          <Player />
+        </RootOverlay>
+      </BrowserRouter>
+    </RecoilRoot>
   </StrictMode>
 );

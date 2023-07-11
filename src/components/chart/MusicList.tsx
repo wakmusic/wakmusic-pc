@@ -59,6 +59,7 @@ const RankLayout = styled.div`
 const Text = styled(T7_1Light)`
   text-align: center;
   width: 70px;
+  color: ${colors.gray700};
 `;
 
 const TextLayout = styled.div`

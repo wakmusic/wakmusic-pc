@@ -6,10 +6,12 @@ import { T7Medium } from "@components/Typography";
 import { T7Light } from "@components/Typography/Light";
 import FunctionSection from "@components/chart/FunctionSection";
 import MusicList from "@components/chart/MusicList";
-import MusicController from "@components/globals/MusicController";
 import PageContainer from "@components/globals/PageContainer";
+import MusicControllerOne from "@components/globals/musicControllers/MusicControllerOne";
 
 import colors from "@constants/colors";
+
+import { isNumber } from "@utils/isTypes";
 
 interface ChartProps {}
 
@@ -23,7 +25,13 @@ const Chart = ({}: ChartProps) => {
       </UpdateTimeLayout>
       <WhiteLine />
       <GuideBox>
-        <GuideText></GuideText>
+        <GuideText>순위</GuideText>
+        <InfoText>정보</InfoText>
+        <TextLayout>
+          <GuideText width={70}>1시간 전</GuideText>
+          <GuideText width={70}>발매일</GuideText>
+          <GuideText width={70}>조회수</GuideText>
+        </TextLayout>
       </GuideBox>
       <BlackLine />
       <MusicSection>
@@ -48,7 +56,7 @@ const Chart = ({}: ChartProps) => {
           <MusicList />
         </MusicLayout>
       </MusicSection>
-      <MusicController />
+      <MusicControllerOne />
     </Wrapper>
   );
 };
@@ -108,12 +116,28 @@ const GuideBox = styled.div`
   width: 100%;
   height: 30px;
   padding: 0px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
   position: relative;
 `;
 
-const GuideText = styled(T7Medium)<{ width?: string }>`
+const GuideText = styled(T7Medium)<{ width?: number }>`
   text-align: center;
-  width: ${(props) => (props.width !== "" ? props.width : "auto")};
+  width: ${(props) => (isNumber(props.width) ? props.width + "px" : "auto")};
+  color: ${colors.blueGray400};
+`;
+
+const TextLayout = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const InfoText = styled(GuideText)`
+  position: absolute;
+  left: 150px;
 `;
 
 const MusicSection = styled.div`

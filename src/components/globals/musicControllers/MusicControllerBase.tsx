@@ -1,22 +1,29 @@
+import { ReactNode } from "react";
 import styled from "styled-components";
 
-import { T4Bold } from "@components/Typography";
+import checkOff from "@assets/icons/ic_24_Check_off.svg";
+import checkOn from "@assets/icons/ic_24_Check_on.svg";
+
+import { T4Bold, T7Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface MusicControllerProps {}
+interface MusicControllerProps {
+  children: ReactNode;
+}
 
-const MusicController = ({}: MusicControllerProps) => {
+const MusicControllerBase = ({ children }: MusicControllerProps) => {
   return (
     <Wrapper>
       <Container>
         <Count>
           <T4Bold>1</T4Bold>
         </Count>
-        <Button></Button>
-        <Button></Button>
-        <Button></Button>
-        <Button></Button>
+        <ControllerButton>
+          <img src={checkOff} />
+          <ControllText>전체선택</ControllText>
+        </ControllerButton>
+        {children}
       </Container>
     </Wrapper>
   );
@@ -24,12 +31,15 @@ const MusicController = ({}: MusicControllerProps) => {
 
 const Wrapper = styled.div`
   position: fixed;
-  width: 310px;
+  padding: 0px 20px;
+  width: max-content;
   height: 60px;
   margin: 0 auto;
   left: 0;
   right: 0;
   bottom: 40px;
+  background: ${colors.sub};
+  border-radius: 12px;
 `;
 
 const Container = styled.div`
@@ -40,8 +50,6 @@ const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 12px;
-  background: ${colors.sub};
 `;
 
 const Count = styled.div`
@@ -58,7 +66,7 @@ const Count = styled.div`
   align-items: center;
 `;
 
-const Button = styled.button`
+export const ControllerButton = styled.button`
   all: unset;
   cursor: pointer;
   display: flex;
@@ -70,4 +78,8 @@ const Button = styled.button`
   height: 52px;
 `;
 
-export default MusicController;
+const ControllText = styled(T7Medium)`
+  color: ${colors.blueGray25};
+`;
+
+export default MusicControllerBase;

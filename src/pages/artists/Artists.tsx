@@ -2,11 +2,13 @@ import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
 import Artist from "@components/artists/Artist";
-import Tab from "@components/artists/Tab";
 import PageContainer from "@components/globals/PageContainer";
+import Tab from "@components/globals/Tab";
+import TabBar from "@components/globals/TabBar";
 
 import colors from "@constants/colors";
 import { artistList } from "@constants/dummys";
+import { artistTabs } from "@constants/tabs";
 
 interface ArtistsProps {}
 
@@ -16,13 +18,13 @@ const Artists = ({}: ArtistsProps) => {
   return (
     <PageContainer>
       <Container>
-        <Header>
-          <Tab to={null}>전체</Tab>
-          <Tab to="woowakgood">우왁굳</Tab>
-          <Tab to="isedol">이세돌</Tab>
-          <Tab to="gomem">고멤</Tab>
-          <Tab to="academy">아카데미</Tab>
-        </Header>
+        <TabBar>
+          {artistTabs.map((item, index) => (
+            <Tab to={item.to} key={index}>
+              {item.text}
+            </Tab>
+          ))}
+        </TabBar>
 
         <ArtistsContainer>
           {artistList
@@ -49,11 +51,6 @@ const Container = styled.div`
   border: 1px solid ${colors.blueGray25};
   background: ${colors.white}66; // 40%
   backdrop-filter: blur(62.5px);
-`;
-
-const Header = styled.div`
-  display: flex;
-  gap: 4px;
 `;
 
 const ArtistsContainer = styled.div`

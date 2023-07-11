@@ -10,6 +10,10 @@ export const isBoolean = (bool: any): bool is boolean => {
   return typeof bool === "boolean";
 };
 
+export const isObject = (object: any): object is object => {
+  return typeof object === "object";
+};
+
 export const isNil = (item: any): boolean => {
   return typeof item === null || typeof item === undefined;
 };

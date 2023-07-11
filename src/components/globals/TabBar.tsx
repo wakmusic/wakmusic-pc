@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 import colors from "@constants/colors";
 
@@ -44,7 +44,7 @@ const TabBar = ({ children }: TabBarProps) => {
   return (
     <Container>
       <TabContainer>{children}</TabContainer>
-      <Indicater target={indicate} />
+      <Indicater style={{ marginLeft: `${indicate * 54}px` }} />
     </Container>
   );
 };
@@ -56,7 +56,7 @@ const TabContainer = styled.div`
   gap: 4px;
 `;
 
-const Indicater = styled.div<{ target: number }>`
+const Indicater = styled.div`
   width: 50px;
   height: 2px;
 
@@ -65,11 +65,6 @@ const Indicater = styled.div<{ target: number }>`
   background-color: ${colors.point};
 
   transition: margin 0.25s ease-out;
-
-  ${({ target }) =>
-    css`
-      margin-left: ${target * 54}px;
-    `}
 `;
 
 export default TabBar;

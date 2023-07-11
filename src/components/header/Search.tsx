@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -61,33 +61,36 @@ const Search = ({}: SearchProps) => {
     setValue("query", "");
   };
 
-  const arrowKeyHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    switch (e.key) {
-      case "ArrowUp":
-        setFocus((prev) => {
-          const next =
-            prev === null || prev == 0
-              ? items.length - 1
-              : (prev - 1) % items.length;
+  const arrowKeyHandler = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      switch (e.key) {
+        case "ArrowUp":
+          setFocus((prev) => {
+            const next =
+              prev === null || prev == 0
+                ? items.length - 1
+                : (prev - 1) % items.length;
 
-          setValue("query", items[next]);
+            setValue("query", items[next]);
 
-          return next;
-        });
-        break;
-      case "ArrowDown":
-        setFocus((prev) => {
-          const next = prev === null ? 0 : (prev + 1) % items.length;
+            return next;
+          });
+          break;
+        case "ArrowDown":
+          setFocus((prev) => {
+            const next = prev === null ? 0 : (prev + 1) % items.length;
 
-          setValue("query", items[next]);
+            setValue("query", items[next]);
 
-          return next;
-        });
-        break;
-    }
-  };
+            return next;
+          });
+          break;
+      }
+    },
+    [items, setValue]
+  );
 
-  const focusHandler = (e: React.FocusEvent<HTMLInputElement>) => {
+  const focusHandler = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     switch (e.type) {
       case "focus":
         setIsFocusing(true);
@@ -97,7 +100,15 @@ const Search = ({}: SearchProps) => {
           setIsFocusing(false);
         }
     }
-  };
+  }, []);
+
+  const onBlurCallback = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      onBlur(e);
+      focusHandler(e);
+    },
+    [onBlur, focusHandler]
+  );
 
   return (
     <Container>
@@ -107,10 +118,7 @@ const Search = ({}: SearchProps) => {
           onKeyDown={arrowKeyHandler}
           onFocus={focusHandler}
           onChange={onChange}
-          onBlur={(e) => {
-            onBlur(e);
-            focusHandler(e);
-          }}
+          onBlur={onBlurCallback}
           ref={(e) => {
             ref(e);
 

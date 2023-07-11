@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 import { ReactComponent as Check } from "@assets/icons/ic_16_check.svg";
 
-import { T7Medium } from "@components/Typography";
 import { T7Light } from "@components/Typography/Light";
+import { T7Medium } from "@components/Typography/Medium";
 import FunctionSection from "@components/chart/FunctionSection";
 import MusicList from "@components/chart/MusicList";
 import PageContainer from "@components/globals/PageContainer";

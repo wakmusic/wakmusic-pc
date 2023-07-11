@@ -32,14 +32,12 @@ const MusicControllerBase = ({ children }: MusicControllerProps) => {
 const Wrapper = styled.div`
   position: fixed;
   padding: 0px 20px;
-  width: max-content;
+  width: fit-content;
   height: 60px;
   margin: 0 auto;
   left: 0;
   right: 0;
   bottom: 40px;
-  background: ${colors.sub};
-  border-radius: 12px;
 `;
 
 const Container = styled.div`
@@ -48,8 +46,10 @@ const Container = styled.div`
   justify-content: center;
   gap: 10px;
   position: relative;
-  width: 100%;
+  padding: 0px 20px;
   height: 100%;
+  background: ${colors.sub};
+  border-radius: 12px;
 `;
 
 const Count = styled.div`

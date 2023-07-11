@@ -1,4 +1,4 @@
-import deletIcon from "@assets/icons/ic_24_delete.svg";
+import deleteIcon from "@assets/icons/ic_24_delete.svg";
 import musicPlay from "@assets/icons/ic_24_play_25.svg";
 import playlistAdd from "@assets/icons/ic_24_play_add.svg";
 import playAdd from "@assets/icons/ic_24_playadd_25.svg";
@@ -8,7 +8,6 @@ import {
   playAddMusic,
   playMusic,
   playlistAddMusic,
-  selectAllMusic,
 } from "@utils/musicControllerFunctions";
 
 interface controllType {
@@ -35,27 +34,15 @@ export const musicControllerDataOne: controllType[] = [
   },
 ];
 
-// const musicControllerDataTwo: controllType[] = [
-//   {
-//     name: "전체선택",
-//     selectName: "선택헤제",
-//     img: checkOff,
-//     selectImg: checkOn,
-//     method: "",
-//   },
-//   {
-//     name: "노래담기",
-//     img: playAdd,
-//     method: "",
-//   },
-//   {
-//     name: "재생목록추가",
-//     img: playlistAdd,
-//     method: "",
-//   },
-//   {
-//     name: "재생",
-//     img: musicPlay,
-//     method: "",
-//   },
-// ];
+export const musicControllerDataTwo: controllType[] = [
+  {
+    name: "재생목록추가",
+    img: playlistAdd,
+    method: playlistAddMusic,
+  },
+  {
+    name: "삭제",
+    img: deleteIcon,
+    method: deleteMusic,
+  },
+];

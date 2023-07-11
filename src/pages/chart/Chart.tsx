@@ -5,6 +5,8 @@ import { ReactComponent as Check } from "@assets/icons/ic_16_check.svg";
 import { T7Medium } from "@components/Typography";
 import { T7Light } from "@components/Typography/Light";
 import FunctionSection from "@components/chart/FunctionSection";
+import MusicList from "@components/chart/MusicList";
+import MusicController from "@components/globals/MusicController";
 import PageContainer from "@components/globals/PageContainer";
 
 import colors from "@constants/colors";
@@ -25,9 +27,28 @@ const Chart = ({}: ChartProps) => {
       </GuideBox>
       <BlackLine />
       <MusicSection>
-        <MusicLayout></MusicLayout>
+        <MusicLayout>
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+          <MusicList />
+        </MusicLayout>
       </MusicSection>
-      <MusicControllerBox></MusicControllerBox>
+      <MusicController />
     </Wrapper>
   );
 };
@@ -105,20 +126,6 @@ const MusicLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 10000px;
-`;
-
-const MusicControllerBox = styled.div`
-  position: fixed;
-  width: 310px;
-  height: 60px;
-  border-radius: 12px;
-  background: ${colors.sub};
-  padding: 0px 20px;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  bottom: 40px;
 `;
 
 export default Chart;

@@ -25,7 +25,7 @@ const Chart = ({}: ChartProps) => {
       </UpdateTimeLayout>
       <WhiteLine />
       <GuideBox>
-        <GuideText>순위</GuideText>
+        <GuideText width={36}>순위</GuideText>
         <InfoText>정보</InfoText>
         <TextLayout>
           <GuideText width={70}>1시간 전</GuideText>

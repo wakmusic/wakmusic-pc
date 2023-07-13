@@ -6,6 +6,7 @@ import Background from "@components/index/Background";
 import Chart from "@components/index/Chart";
 import RecommandItem from "@components/index/RecommandItem";
 
+import colors from "@constants/colors";
 import { recommended } from "@constants/dummys";
 
 interface IndexProps {}
@@ -18,7 +19,7 @@ const Index = ({}: IndexProps) => {
       <Chart />
 
       <RecommandContainer>
-        <T4Medium>왁뮤팀이 추천하는 리스트</T4Medium>
+        <T4Medium color={colors.primary900}>왁뮤팀이 추천하는 리스트</T4Medium>
         <RecommandItems>
           {recommended.map((item, index) => (
             <RecommandItem key={index} item={item} />

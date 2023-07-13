@@ -21,7 +21,7 @@ const Chart = ({}: ChartProps) => {
     <Container>
       <Header>
         <HeaderTexts>
-          <Title>왁뮤차트 TOP100</Title>
+          <Title color={colors.primary900}>왁뮤차트 TOP100</Title>
           <UpdatedContainer>
             <CheckSVG />
             <T7Light>

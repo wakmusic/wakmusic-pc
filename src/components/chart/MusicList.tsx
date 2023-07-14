@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { T7_1Light } from "@components/Typography";
 import Rank from "@components/globals/Rank";
@@ -10,7 +10,7 @@ interface MusicListProps {}
 
 const MusicList = ({}: MusicListProps) => {
   return (
-    <Wrapper select={false}>
+    <Wrapper $select={false}>
       <RankLayout>
         <Rank now={1} last={4} />
         <Track
@@ -40,15 +40,21 @@ const MusicList = ({}: MusicListProps) => {
   );
 };
 
-const Wrapper = styled.div<{ select: boolean }>`
+const Wrapper = styled.div<{ $select: boolean }>`
   padding: 0px 15px 0px 20px;
   width: 100%;
   height: 64px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: ${(props) =>
-    props.select ? colors.blueGray200 : "rgb(0,0,0,0)"};
+  ${(props) =>
+    props.$select
+      ? css`
+          background-color: ${colors.blueGray200};
+        `
+      : css`
+          background-color: rgb(0, 0, 0, 0);
+        `};
 `;
 
 const RankLayout = styled.div`

@@ -1,28 +1,22 @@
 import { ReactNode } from "react";
 import styled from "styled-components";
 
-import checkOff from "@assets/icons/ic_24_Check_off.svg";
-import checkOn from "@assets/icons/ic_24_Check_on.svg";
-
-import { T4Bold, T7Medium } from "@components/Typography";
+import { T4Bold } from "@components/Typography";
 
 import colors from "@constants/colors";
 
 interface MusicControllerProps {
+  count: number;
   children: ReactNode;
 }
 
-const MusicControllerBase = ({ children }: MusicControllerProps) => {
+const MusicControllerBase = ({ children, count }: MusicControllerProps) => {
   return (
     <Wrapper>
       <Container>
         <Count>
-          <T4Bold>1</T4Bold>
+          <T4Bold>{count}</T4Bold>
         </Count>
-        <ControllerButton>
-          <img src={checkOff} />
-          <ControllText>전체선택</ControllText>
-        </ControllerButton>
         {children}
       </Container>
     </Wrapper>
@@ -64,22 +58,6 @@ const Count = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-export const ControllerButton = styled.button`
-  all: unset;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  width: 60px;
-  height: 52px;
-`;
-
-const ControllText = styled(T7Medium)`
-  color: ${colors.blueGray25};
 `;
 
 export default MusicControllerBase;

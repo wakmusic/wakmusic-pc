@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { ReactComponent as Check } from "@assets/icons/ic_16_check.svg";
 
@@ -7,7 +7,11 @@ import { T7Medium } from "@components/Typography/Medium";
 import FunctionSection from "@components/chart/FunctionSection";
 import MusicList from "@components/chart/MusicList";
 import PageContainer from "@components/globals/PageContainer";
-import MusicControllerOne from "@components/globals/musicControllers/MusicControllerOne";
+import MusicControllerBase from "@components/globals/musicControllers/MusicControllerBase";
+import AddMusic from "@components/globals/musicControllers/addMusic";
+import AddPlaylist from "@components/globals/musicControllers/addPlaylist";
+import PlayMusic from "@components/globals/musicControllers/playMusic";
+import SelectAll from "@components/globals/musicControllers/selectAll";
 
 import colors from "@constants/colors";
 
@@ -56,7 +60,12 @@ const Chart = ({}: ChartProps) => {
           <MusicList />
         </MusicLayout>
       </MusicSection>
-      <MusicControllerOne />
+      <MusicControllerBase count={1}>
+        <SelectAll isSelect={true} />
+        <AddMusic />
+        <AddPlaylist />
+        <PlayMusic />
+      </MusicControllerBase>
     </Wrapper>
   );
 };
@@ -127,6 +136,15 @@ const GuideText = styled(T7Medium)<{ width?: number }>`
   text-align: center;
   width: ${(props) => (isNumber(props.width) ? props.width + "px" : "auto")};
   color: ${colors.blueGray400};
+
+  ${(props) =>
+    isNumber(props.width)
+      ? css`
+          width: ${props.width + "px"};
+        `
+      : css`
+          width: auto;
+        `};
 `;
 
 const TextLayout = styled.div`

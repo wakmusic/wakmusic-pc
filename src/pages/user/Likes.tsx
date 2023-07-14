@@ -1,18 +1,17 @@
 import styled from "styled-components";
 
 import * as Typography from "@components/Typography";
-import colors from "@constants/colors";
 
 interface LikesProps {}
 
 const Likes = ({}: LikesProps) => {
   return (
-    <div>
-      <Typography.PretendardBold>
-        Likes
-      </Typography.PretendardBold>
-    </div>
-  )
-}
+    <Container>
+      <Typography.PretendardBold>Likes</Typography.PretendardBold>
+    </Container>
+  );
+};
+
+const Container = styled.div``;
 
 export default Likes;

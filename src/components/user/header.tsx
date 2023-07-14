@@ -1,22 +1,34 @@
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { T6Medium } from "@components/Typography";
+import Tab from "@components/globals/Tab";
+import TabBar from "@components/globals/TabBar";
 
 import colors from "@constants/colors";
-
-import Nav from "./Nav";
+import { userTabs } from "@constants/tabs";
 
 interface NavProps {
   isEditMode: boolean;
 }
 
 const Header = ({}: NavProps) => {
+  const location = useLocation();
+
   return (
     <Container>
-      <Nav />
-      <Edit>
-        <T6Medium>편집</T6Medium>
-      </Edit>
+      <TabBar>
+        {userTabs.map((item, index) => (
+          <Tab to={item.to} key={index}>
+            {item.text}
+          </Tab>
+        ))}
+      </TabBar>
+      {location.pathname === "/user/playlists" ? (
+        <Edit>
+          <EditText>편집</EditText>
+        </Edit>
+      ) : null}
     </Container>
   );
 };
@@ -37,12 +49,15 @@ const Edit = styled.button`
   border: 1px solid ${colors.blueGray200};
   border-radius: 5px;
 
-  color: ${colors.blueGray400};
   background-color: rgba(0, 0, 0, 0);
 
   &:hover {
     cursor: pointer;
   }
+`;
+
+const EditText = styled(T6Medium)`
+  color: ${colors.blueGray400};
 `;
 
 export default Header;

@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 
-import * as Typography from "@components/Typography";
 import Header from "@components/user/Header";
 
 import colors from "@constants/colors";

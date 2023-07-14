@@ -12,3 +12,8 @@ export const artistTabs = [
   { text: "고맴", to: { type: "gomem" } },
   { text: "아카데미", to: { type: "academy" } },
 ];
+
+export const userTabs = [
+  { text: "내 리스트", to: "/user/playlists" },
+  { text: "좋아요", to: "/user/likes" },
+];

@@ -25,7 +25,9 @@ const Chart = ({}: ChartProps) => {
       <FunctionSection />
       <UpdateTimeLayout>
         <Check />
-        <TimeText>00월 00일 오전 0시 업데이트</TimeText>
+        <T7Light color={colors.blueGray500}>
+          00월 00일 오전 0시 업데이트
+        </T7Light>
       </UpdateTimeLayout>
       <WhiteLine />
       <GuideBox>
@@ -89,10 +91,6 @@ const UpdateTimeLayout = styled.div`
   align-items: center;
   gap: 2px;
   margin: 12px 0px 14px 20px;
-`;
-
-const TimeText = styled(T7Light)`
-  color: ${colors.blueGray500};
 `;
 
 const WhiteLine = styled.div`

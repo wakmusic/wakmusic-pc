@@ -12,7 +12,7 @@ const DeleteMusic = ({}: DeleteMusicProps) => {
   return (
     <Wrapper>
       <Delete />
-      <ControllText>재생목록추가</ControllText>
+      <T7Medium color={colors.blueGray25}>재생목록추가</T7Medium>
     </Wrapper>
   );
 };
@@ -27,10 +27,6 @@ export const Wrapper = styled.button`
   gap: 2px;
   width: 60px;
   height: 52px;
-`;
-
-const ControllText = styled(T7Medium)`
-  color: ${colors.blueGray25};
 `;
 
 export default DeleteMusic;

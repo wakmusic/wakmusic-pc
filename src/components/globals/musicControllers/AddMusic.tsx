@@ -12,7 +12,7 @@ const AddMusic = ({}: AddMusicProps) => {
   return (
     <Wrapper>
       <Add />
-      <ControllText>노래담기</ControllText>
+      <T7Medium color={colors.blueGray25}>노래담기</T7Medium>
     </Wrapper>
   );
 };
@@ -27,10 +27,6 @@ export const Wrapper = styled.button`
   gap: 2px;
   width: 60px;
   height: 52px;
-`;
-
-const ControllText = styled(T7Medium)`
-  color: ${colors.blueGray25};
 `;
 
 export default AddMusic;

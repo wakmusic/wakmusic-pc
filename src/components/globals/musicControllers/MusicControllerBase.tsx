@@ -15,7 +15,7 @@ const MusicControllerBase = ({ children, count }: MusicControllerProps) => {
     <Wrapper>
       <Container>
         <Count>
-          <T4Bold>{count}</T4Bold>
+          <T4Bold color={colors.sub}>{count}</T4Bold>
         </Count>
         {children}
       </Container>
@@ -58,10 +58,6 @@ const Count = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  p {
-    color: ${colors.sub};
-  }
 `;
 
 export default MusicControllerBase;

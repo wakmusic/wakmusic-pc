@@ -15,7 +15,9 @@ const SelectAll = ({ isSelect }: SelectAllProps) => {
   return (
     <Wrapper>
       {isSelect ? <Checkon /> : <CheckOff />}
-      <ControllText>{isSelect ? "선택취소" : "전체선택"}</ControllText>
+      <T7Medium color={colors.blueGray25}>
+        {isSelect ? "선택취소" : "전체선택"}
+      </T7Medium>
     </Wrapper>
   );
 };
@@ -30,10 +32,6 @@ export const Wrapper = styled.button`
   gap: 2px;
   width: 60px;
   height: 52px;
-`;
-
-const ControllText = styled(T7Medium)`
-  color: ${colors.blueGray25};
 `;
 
 export default SelectAll;

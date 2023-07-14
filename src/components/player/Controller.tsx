@@ -109,7 +109,7 @@ const Container = styled.div`
 
 const VolumePopover = styled.div`
   height: 12px;
-  width: 74px;
+  width: 64px;
 
   padding: 0 4px;
 
@@ -128,6 +128,9 @@ const VolumePopover = styled.div`
 
 const VolumeContainer = styled.div`
   height: 100%;
+  width: 38px;
+
+  margin-right: -18px;
 
   display: flex;
   justify-items: center;

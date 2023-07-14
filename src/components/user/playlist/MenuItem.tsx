@@ -30,7 +30,7 @@ const Container = styled.div`
   border: 1px solid ${colors.blueGray100};
   border-radius: 10px;
 
-  background-color: rgba(255, 255, 255, 40);
+  background-color: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(62.5px);
 
   svg {

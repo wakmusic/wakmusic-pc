@@ -29,23 +29,25 @@ const Controller = ({}: ControllerProps) => {
   const [isPlyaing, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(50);
 
-  function onRepeateTypeChanged() {
+  const [isVolumeHovered, setIsVolumeHovered] = useState(false);
+
+  function onRepeatButtonClicked() {
     setRepeatType((repeatType + 1) % 3);
   }
 
-  function onIsRandomChanged() {
+  function onRandomButtonClicked() {
     setIsRandomOn(!isRandomOn);
   }
 
-  function onIsLyricOnChanged() {
+  function onLyricButtonClicked() {
     setIsLyricOn(!isLyricOn);
   }
 
-  function onIsPlayingChanged() {
+  function onPlayStopButtonClicked() {
     setIsPlaying(!isPlyaing);
   }
 
-  function onVolumeChanged(e: React.ChangeEvent<HTMLInputElement>) {
+  function onVolumeInputChanged(e: React.ChangeEvent<HTMLInputElement>) {
     setVolume(parseInt(e.target.value));
   }
 
@@ -55,20 +57,18 @@ const Controller = ({}: ControllerProps) => {
 
   return (
     <Container>
-      <VolumeContainer>
-        <SoundOffIconContainer>
-          <IconButton icon={SoundOffSvg} />
-        </SoundOffIconContainer>
-        <SoundOnIconContainer>
-          <IconButton icon={SoundOnSvg} />
-        </SoundOnIconContainer>
+      <VolumeContainer
+        onMouseEnter={() => setIsVolumeHovered(true)}
+        onMouseLeave={() => setIsVolumeHovered(false)}
+      >
+        <IconButton icon={isVolumeHovered ? SoundOnSvg : SoundOffSvg} />
         <VolumePopover>
           <VolumeInput
             type="range"
             min={0}
             max={100}
             value={volume}
-            onChange={onVolumeChanged}
+            onChange={onVolumeInputChanged}
           />
         </VolumePopover>
       </VolumeContainer>
@@ -80,21 +80,21 @@ const Controller = ({}: ControllerProps) => {
             ? RepeatOn1Svg
             : RepeatOffSvg
         }
-        onClick={onRepeateTypeChanged}
+        onClick={onRepeatButtonClicked}
       />
       <IconButton icon={PrevSvg} onClick={movePrev} />
       <IconButton
         icon={isPlyaing ? StopSvg : PlaySvg}
-        onClick={onIsPlayingChanged}
+        onClick={onPlayStopButtonClicked}
       />
       <IconButton icon={NextSvg} onClick={moveNext} />
       <IconButton
         icon={isRandomOn ? RandomOnSvg : RandomOffSvg}
-        onClick={onIsRandomChanged}
+        onClick={onRandomButtonClicked}
       />
       <IconButton
         icon={isLyricOn ? DocumentOnSvg : DocumentOffSvg}
-        onClick={onIsLyricOnChanged}
+        onClick={onLyricButtonClicked}
       />
     </Container>
   );
@@ -105,12 +105,6 @@ const Container = styled.div`
   align-items: center;
 
   gap: 18px;
-`;
-
-const SoundOffIconContainer = styled.div``;
-
-const SoundOnIconContainer = styled.div`
-  display: none;
 `;
 
 const VolumePopover = styled.div`
@@ -142,14 +136,6 @@ const VolumeContainer = styled.div`
   &:hover {
     ${VolumePopover} {
       display: inherit;
-    }
-
-    ${SoundOnIconContainer} {
-      display: inherit;
-    }
-
-    ${SoundOffIconContainer} {
-      display: none;
     }
   }
 `;

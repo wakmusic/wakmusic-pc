@@ -49,8 +49,9 @@ const Container = styled.div`
   height: calc(100vh - 38px);
 
   background-color: ${colors.gray900};
-
   color: white;
+
+  overflow: hidden;
 `;
 
 const Divider = styled.div`

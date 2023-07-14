@@ -6,9 +6,9 @@ import { T7Medium } from "@components/Typography/Medium";
 
 import colors from "@constants/colors";
 
-interface playMusicProps {}
+interface PlayMusicProps {}
 
-const PlayMusic = ({}: playMusicProps) => {
+const PlayMusic = ({}: PlayMusicProps) => {
   return (
     <Wrapper>
       <Play />

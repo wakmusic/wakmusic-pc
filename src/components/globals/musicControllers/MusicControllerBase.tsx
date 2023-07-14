@@ -51,7 +51,7 @@ const Count = styled.div`
   position: absolute;
   left: 8px;
   top: -15px;
-  width: 30px;
+  padding: 0px 11px;
   height: 30px;
   background-color: ${colors.white};
   box-shadow: drop-shadow(3.75px 3.75px 3.75px rgba(8, 15, 52, 0.04));

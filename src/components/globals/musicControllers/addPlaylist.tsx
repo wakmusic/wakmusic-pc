@@ -6,9 +6,9 @@ import { T7Medium } from "@components/Typography/Medium";
 
 import colors from "@constants/colors";
 
-interface addPlaylistProps {}
+interface AddPlaylistProps {}
 
-const AddPlaylist = ({}: addPlaylistProps) => {
+const AddPlaylist = ({}: AddPlaylistProps) => {
   return (
     <Wrapper>
       <AddPL />

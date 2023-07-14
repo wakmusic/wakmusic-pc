@@ -6,9 +6,9 @@ import { T7Medium } from "@components/Typography/Medium";
 
 import colors from "@constants/colors";
 
-interface addMusicProps {}
+interface AddMusicProps {}
 
-const AddMusic = ({}: addMusicProps) => {
+const AddMusic = ({}: AddMusicProps) => {
   return (
     <Wrapper>
       <Add />

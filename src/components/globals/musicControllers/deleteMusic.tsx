@@ -6,9 +6,9 @@ import { T7Medium } from "@components/Typography/Medium";
 
 import colors from "@constants/colors";
 
-interface deleteMusicProps {}
+interface DeleteMusicProps {}
 
-const DeleteMusic = ({}: deleteMusicProps) => {
+const DeleteMusic = ({}: DeleteMusicProps) => {
   return (
     <Wrapper>
       <Delete />

@@ -7,11 +7,11 @@ import { T7Medium } from "@components/Typography/Medium";
 
 import colors from "@constants/colors";
 
-interface selectAllProps {
+interface SelectAllProps {
   isSelect: boolean;
 }
 
-const SelectAll = ({ isSelect }: selectAllProps) => {
+const SelectAll = ({ isSelect }: SelectAllProps) => {
   return (
     <Wrapper>
       {isSelect ? <Checkon /> : <CheckOff />}

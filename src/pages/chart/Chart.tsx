@@ -7,11 +7,11 @@ import { T7Medium } from "@components/Typography/Medium";
 import FunctionSection from "@components/chart/FunctionSection";
 import MusicList from "@components/chart/MusicList";
 import PageContainer from "@components/globals/PageContainer";
+import AddMusic from "@components/globals/musicControllers/AddMusic";
+import AddPlaylist from "@components/globals/musicControllers/AddPlaylist";
 import MusicControllerBase from "@components/globals/musicControllers/MusicControllerBase";
-import AddMusic from "@components/globals/musicControllers/addMusic";
-import AddPlaylist from "@components/globals/musicControllers/addPlaylist";
-import PlayMusic from "@components/globals/musicControllers/playMusic";
-import SelectAll from "@components/globals/musicControllers/selectAll";
+import PlayMusic from "@components/globals/musicControllers/PlayMusic";
+import SelectAll from "@components/globals/musicControllers/SelectAll";
 
 import colors from "@constants/colors";
 

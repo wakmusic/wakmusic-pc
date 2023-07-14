@@ -20,7 +20,7 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const changeProgressPosition = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+    (e: MouseEvent | React.MouseEvent<HTMLDivElement>) => {
       const rect = ref.current?.getBoundingClientRect();
 
       if (!rect) {
@@ -36,7 +36,7 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
   );
 
   const handleMouseState = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+    (e: MouseEvent | React.MouseEvent<HTMLDivElement>) => {
       if (e.type !== "mousedown") {
         setIsMouseDown(false);
 
@@ -50,7 +50,7 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
   );
 
   const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+    (e: MouseEvent) => {
       if (isMouseDown) {
         changeProgressPosition(e);
       }

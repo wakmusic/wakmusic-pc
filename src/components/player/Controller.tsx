@@ -143,10 +143,17 @@ const VolumeContainer = styled.div`
   }
 `;
 
-const VolumeInput = styled.input`
+const VolumeInput = styled.input<{ value: number }>`
   width: 100%;
 
   appearance: none;
+  background: linear-gradient(
+    to right,
+    ${colors.blueGray25} 0%,
+    ${colors.blueGray25} ${({ value }) => value}%,
+    rgba(255, 255, 255, 0.4) ${({ value }) => value}%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
 
   &:focus {
     outline: none;
@@ -172,7 +179,6 @@ const VolumeInput = styled.input`
     -webkit-appearance: none;
 
     cursor: pointer;
-    background: ${colors.blueGray25};
   }
 `;
 

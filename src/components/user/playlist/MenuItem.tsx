@@ -13,7 +13,7 @@ const MenuItem = ({ menu, icon: Icon }: MenuItemProps) => {
   return (
     <Container>
       <Icon />
-      <T7Medium>{menu}</T7Medium>
+      <Text>{menu}</Text>
     </Container>
   );
 };
@@ -30,10 +30,8 @@ const Container = styled.div`
   border: 1px solid ${colors.blueGray100};
   border-radius: 10px;
 
-  background-color: ${colors.white};
-  color: ${colors.blueGray600};
-
-  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 40);
+  backdrop-filter: blur(62.5px);
 
   svg {
     width: 24px;
@@ -43,6 +41,10 @@ const Container = styled.div`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const Text = styled(T7Medium)`
+  color: ${colors.blueGray600};
 `;
 
 export default MenuItem;

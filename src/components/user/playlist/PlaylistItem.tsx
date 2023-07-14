@@ -13,8 +13,6 @@ interface PlaylistItemProps {
 }
 
 const PlaylistItem = ({ item }: PlaylistItemProps) => {
-  const song_volume = item.songs.length;
-
   return (
     <Container>
       <Icon
@@ -22,7 +20,7 @@ const PlaylistItem = ({ item }: PlaylistItemProps) => {
       />
       <InfoContainer>
         <Title>{item.title}</Title>
-        <Volume>{song_volume}곡</Volume>
+        <Volume>{item.songs.length}곡</Volume>
         <PlayAll />
       </InfoContainer>
     </Container>

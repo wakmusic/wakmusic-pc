@@ -8,11 +8,11 @@ import TabBar from "@components/globals/TabBar";
 import colors from "@constants/colors";
 import { userTabs } from "@constants/tabs";
 
-interface NavProps {
+interface HeaderProps {
   isEditMode: boolean;
 }
 
-const Header = ({}: NavProps) => {
+const Header = ({}: HeaderProps) => {
   const location = useLocation();
 
   return (
@@ -24,11 +24,11 @@ const Header = ({}: NavProps) => {
           </Tab>
         ))}
       </TabBar>
-      {location.pathname === "/user/playlists" ? (
+      {location.pathname === "/user/playlists" && (
         <Edit>
           <EditText>편집</EditText>
         </Edit>
-      ) : null}
+      )}
     </Container>
   );
 };

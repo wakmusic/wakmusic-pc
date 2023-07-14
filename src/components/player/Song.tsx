@@ -9,7 +9,7 @@ import { T4Medium, T5Light, T8Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { formatViews } from "@utils/formatting";
+import { formatNumber } from "@utils/formatting";
 
 import Controller from "./Controller";
 import IconButton from "./IconButton";
@@ -44,7 +44,7 @@ const Song = ({ song }: SongProps) => {
 
         <ViewContainer>
           <ViewsPopover>
-            <ViewsText>{formatViews(song.views)}</ViewsText>
+            <ViewsText>{formatNumber(song.views)}</ViewsText>
           </ViewsPopover>
           <IconButton icon={ViewsSvg} />
         </ViewContainer>

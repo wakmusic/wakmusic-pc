@@ -58,6 +58,10 @@ const Count = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  p {
+    color: ${colors.sub};
+  }
 `;
 
 export default MusicControllerBase;

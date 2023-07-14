@@ -17,7 +17,7 @@ const PlayMusic = ({}: PlayMusicProps) => {
   );
 };
 
-export const Wrapper = styled.button`
+const Wrapper = styled.button`
   all: unset;
   cursor: pointer;
   display: flex;

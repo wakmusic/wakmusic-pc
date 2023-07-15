@@ -62,7 +62,7 @@ const GNB = ({}: GNB) => {
 };
 
 const Container = styled.div`
-  margin-top: 19.5px;
+  margin-top: 20px;
   margin-left: 20px;
   margin-right: 4px;
 `;

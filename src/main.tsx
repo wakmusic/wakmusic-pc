@@ -13,6 +13,7 @@ import Player from "@components/player/Player";
 import firebaseConfig from "@constants/firebaseConfig";
 
 import Artists from "@pages/artists/Artists";
+import Chart from "@pages/chart/Chart";
 import Index from "@pages/index/Index";
 import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
@@ -30,12 +31,12 @@ createRoot(document.getElementById("root") as HTMLElement).render(
     <RecoilRoot>
       <BrowserRouter>
         <Header />
-
         <RootOverlay>
           <GNB />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/playground" element={<Playground />} />
+            <Route path="/chart" element={<Chart />} />
             <Route path="/artists" element={<Artists />} />
             <Route path="/search" element={<Search />} />
           </Routes>

@@ -41,10 +41,20 @@ export const Thumbnail = styled.img`
 const TrackInfo = styled.div``;
 
 const TrackTitle = styled(T5Medium)`
+  max-width: 206px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
   color: ${colors.gray700};
 `;
 
 const TrackArtist = styled(T6Medium)`
+  max-width: 206px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
   color: ${colors.blueGray500};
 `;
 

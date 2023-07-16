@@ -206,6 +206,123 @@ export const recommended = [
   },
 ];
 
+export const likeList = [
+  {
+    likes: 6821,
+    song: {
+      songId: "_p_Lf3bmv5w",
+      title: "DAYBREAK FRONTLINE (Acapella Ver.)",
+      artist: "비챤",
+      remix: "",
+      reaction: "",
+      date: 220729,
+      start: 0,
+      end: 0,
+      total: {
+        views: 394560,
+        increase: null,
+        last: 287,
+      },
+    },
+  },
+  {
+    likes: 82691,
+    song: {
+      songId: "-pczFfMtWrc",
+      title: "귀여워서 미안해",
+      artist: "주르르",
+      remix: "",
+      reaction: "",
+      date: 230115,
+      start: 0,
+      end: 0,
+      total: {
+        views: 1100115,
+        increase: null,
+        last: 117,
+      },
+    },
+  },
+];
+
+export const songList = [
+  {
+    songId: "_p_Lf3bmv5w",
+    title: "이번에도비로시작하는제목",
+    artist: "테스트2",
+    remix: "",
+    reaction: "",
+    date: 220729,
+    start: 0,
+    end: 0,
+    total: {
+      views: 1,
+      increase: null,
+      last: 287,
+    },
+  },
+  {
+    songId: "_p_Lf3bmv5w",
+    title: "DAYBREAK FRONTLINE (Acapella Ver.)",
+    artist: "비챤",
+    remix: "",
+    reaction: "",
+    date: 220729,
+    start: 0,
+    end: 0,
+    total: {
+      views: 150000,
+      increase: null,
+      last: 287,
+    },
+  },
+  {
+    songId: "_p_Lf3bmv5w",
+    title: "비DAYBREAK FRONTLINE (Acapella Ver.)",
+    artist: "비챤",
+    remix: "",
+    reaction: "",
+    date: 220729,
+    start: 0,
+    end: 0,
+    total: {
+      views: 394560,
+      increase: null,
+      last: 287,
+    },
+  },
+  {
+    songId: "_p_Lf3bmv5w",
+    title: "비로시작하는제목",
+    artist: "테스트1",
+    remix: "",
+    reaction: "",
+    date: 220729,
+    start: 0,
+    end: 0,
+    total: {
+      views: 394560,
+      increase: null,
+      last: 287,
+    },
+  },
+  {
+    songId: "-pczFfMtWrc",
+    title: "비귀여워서 미안해",
+    artist: "주르르",
+    remix: "",
+    reaction: "",
+    date: 230115,
+    start: 0,
+    end: 0,
+    total: {
+      views: 1100115,
+      increase: null,
+      last: 117,
+    },
+  },
+];
+
 export const artistList = [
   {
     artistId: "woowakgood",

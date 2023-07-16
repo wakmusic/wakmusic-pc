@@ -19,10 +19,7 @@ const MusicList = ({ rank, item }: MusicListProps) => {
   const date = useMemo(() => {
     const stringDate = item.date.toString();
 
-    return `${stringDate.slice(0, 2)}.${stringDate.slice(
-      2,
-      4
-    )}.${stringDate.slice(4, 6)}`;
+    return stringDate.replace(/(.\d)(.\d)(.\d)/, "20$1.$2.$3");
   }, [item.date]);
 
   return (

@@ -67,12 +67,12 @@ const Text = styled(Pretendard)<{ $activated: boolean }>`
     $activated
       ? css`
           /* T5Bold */
-          font-weight: 700;
+          font-weight: 600;
           color: ${colors.blueGray600};
         `
       : css`
           /* T5Medium */
-          font-weight: 500;
+          font-weight: 400;
           color: ${colors.blueGray400};
         `}
 `;

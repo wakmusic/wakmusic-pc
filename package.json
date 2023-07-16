@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@tanstack/react-virtual": "^3.0.0-alpha.0",
+    "@xhayper/discord-rpc": "^1.0.21",
     "axios": "^1.4.0",
     "electron-is-dev": "^2.0.0",
     "firebase": "^9.23.0",

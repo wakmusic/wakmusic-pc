@@ -3140,6 +3140,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xhayper/discord-rpc@npm:^1.0.21":
+  version: 1.0.21
+  resolution: "@xhayper/discord-rpc@npm:1.0.21"
+  dependencies:
+    axios: ^1.4.0
+    discord-api-types: ^0.37.48
+    ws: ^8.13.0
+  checksum: 85ae62cc1b8c5bc09a6b1eb6223f6ecaf8843586b80d06df5d98ff017e2e1f67a39c1e98a2d45b03fbb1a55bf2dfd4a37b7c89ebf18547ca19a4d61c02fcb0a5
+  languageName: node
+  linkType: hard
+
 "abbrev@npm:^1.0.0":
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
@@ -3949,6 +3960,13 @@ __metadata:
   dependencies:
     path-type: ^4.0.0
   checksum: fa05e18324510d7283f55862f3161c6759a3f2f8dbce491a2fc14c8324c498286c54282c1f0e933cb930da8419b30679389499b919122952a4f8592362ef4615
+  languageName: node
+  linkType: hard
+
+"discord-api-types@npm:^0.37.48":
+  version: 0.37.48
+  resolution: "discord-api-types@npm:0.37.48"
+  checksum: aebc89f6bd123fb810f282f83a38923918f98692c23ad203f389c9b2666ea090c86dcd397ce85e1a11595a5325d4ef1a8a0e94a93c576cece897b873402d69eb
   languageName: node
   linkType: hard
 
@@ -7821,6 +7839,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.59.11
     "@typescript-eslint/parser": ^5.59.11
     "@vitejs/plugin-react-swc": ^3.3.2
+    "@xhayper/discord-rpc": ^1.0.21
     axios: ^1.4.0
     concurrently: ^8.2.0
     electron: ^25.1.0
@@ -7965,6 +7984,21 @@ __metadata:
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
   checksum: 159da4805f7e84a3d003d8841557196034155008f817172d4e986bd591f74aa82aa7db55929a54222309e01079a65a92a9e6414da5a6aa4b01ee44a511ac3ee5
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.13.0":
+  version: 8.13.0
+  resolution: "ws@npm:8.13.0"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 53e991bbf928faf5dc6efac9b8eb9ab6497c69feeb94f963d648b7a3530a720b19ec2e0ec037344257e05a4f35bd9ad04d9de6f289615ffb133282031b18c61c
   languageName: node
   linkType: hard
 

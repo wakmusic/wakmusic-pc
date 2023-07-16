@@ -4,22 +4,17 @@ import { ReactComponent as Check } from "@assets/icons/ic_16_check.svg";
 
 import { T7Light } from "@components/Typography/Light";
 import { T7Medium } from "@components/Typography/Medium";
-import FunctionSection from "@components/chart/FunctionSection";
-import MusicList from "@components/chart/MusicList";
 import PageContainer from "@components/globals/PageContainer";
-import AddMusic from "@components/globals/musicControllers/AddMusic";
-import AddPlaylist from "@components/globals/musicControllers/AddPlaylist";
-import MusicControllerBase from "@components/globals/musicControllers/MusicControllerBase";
-import PlayMusic from "@components/globals/musicControllers/PlayMusic";
-import SelectAll from "@components/globals/musicControllers/SelectAll";
+import FunctionSection from "@components/new/FunctionSection";
+import MusicList from "@components/new/MusicList";
 
 import colors from "@constants/colors";
 
 import { isNumber } from "@utils/isTypes";
 
-interface ChartProps {}
+interface NewProps {}
 
-const Chart = ({}: ChartProps) => {
+const New = ({}: NewProps) => {
   return (
     <Wrapper>
       <FunctionSection />
@@ -31,7 +26,6 @@ const Chart = ({}: ChartProps) => {
       </UpdateTimeLayout>
       <WhiteLine />
       <GuideBox>
-        <GuideText width={36}>순위</GuideText>
         <InfoText>곡 정보</InfoText>
         <TextLayout>
           <GuideText width={70}>1시간 전</GuideText>
@@ -60,14 +54,10 @@ const Chart = ({}: ChartProps) => {
           <MusicList />
           <MusicList />
           <MusicList />
+          <MusicList />
+          <MusicList />
         </MusicLayout>
       </MusicSection>
-      <MusicControllerBase count={1}>
-        <SelectAll isSelect={true} />
-        <AddMusic />
-        <AddPlaylist />
-        <PlayMusic />
-      </MusicControllerBase>
     </Wrapper>
   );
 };
@@ -124,9 +114,9 @@ const GuideBox = styled.div`
   height: 30px;
   padding: 0px 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  padding: 0px 20px;
+  padding: 0px 20px 0px 0px;
   position: relative;
 `;
 
@@ -153,7 +143,7 @@ const TextLayout = styled.div`
 
 const InfoText = styled(GuideText)`
   position: absolute;
-  left: 150px;
+  left: 106px;
 `;
 
 const MusicSection = styled.div`
@@ -168,4 +158,4 @@ const MusicLayout = styled.div`
   align-items: center;
 `;
 
-export default Chart;
+export default New;

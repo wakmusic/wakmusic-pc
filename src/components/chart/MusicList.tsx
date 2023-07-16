@@ -29,6 +29,7 @@ const MusicList = ({}: MusicListProps) => {
               last: 0,
             },
           }}
+          onClick={console.log}
         />
       </RankLayout>
       <TextLayout>

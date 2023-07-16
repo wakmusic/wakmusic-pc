@@ -155,7 +155,7 @@ const MusicLayout = styled.div`
   flex-direction: column;
   align-items: center;
 
-  height: 500px;
+  height: 502px;
 `;
 
 export default Chart;

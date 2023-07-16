@@ -4,13 +4,13 @@ import { T7Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface ButtonProps {
+interface IconButtonProps {
   icon: React.FC;
   children: string;
   onClick?: () => void;
 }
 
-const Button = ({ icon: Icon, children, onClick }: ButtonProps) => {
+const IconButton = ({ icon: Icon, children, onClick }: IconButtonProps) => {
   return (
     <Container onClick={onClick}>
       <Icon />
@@ -20,7 +20,7 @@ const Button = ({ icon: Icon, children, onClick }: ButtonProps) => {
 };
 
 const Container = styled.div`
-  width: 108px;
+  padding: 0px 20px;
   height: 40px;
 
   border-radius: 10px;
@@ -38,4 +38,4 @@ const Container = styled.div`
   cursor: pointer;
 `;
 
-export default Button;
+export default IconButton;

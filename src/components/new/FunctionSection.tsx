@@ -1,5 +1,11 @@
 import styled from "styled-components";
 
+import IconButton from "@components/globals/IconButton";
+
+import { playButtonData } from "@constants/IconButton";
+
+import iconButtonType from "../../types/iconButtonType";
+
 interface FunctionSectionProps {}
 
 const FunctionSection = ({}: FunctionSectionProps) => {
@@ -12,8 +18,13 @@ const FunctionSection = ({}: FunctionSectionProps) => {
         <TestCategory />
       </TimeLineLayout>
       <ButtonLayout>
-        <TestButton></TestButton>
-        <TestButton></TestButton>
+        {playButtonData.map((item: iconButtonType, index: number) => {
+          return (
+            <IconButton key={index} icon={item.icon}>
+              {item.text}
+            </IconButton>
+          );
+        })}
       </ButtonLayout>
     </Wrapper>
   );

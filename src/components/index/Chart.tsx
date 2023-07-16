@@ -5,11 +5,11 @@ import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";
 import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg";
 
 import { T4Medium, T7Light } from "@components/Typography";
+import Button from "@components/globals/IconButton";
 
 import colors from "@constants/colors";
 import { chartUpdated, hourlyChart } from "@constants/dummys";
 
-import Button from "./Button";
 import ChartItem from "./ChartItem";
 
 interface ChartProps {}

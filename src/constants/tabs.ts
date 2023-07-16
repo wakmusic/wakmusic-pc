@@ -12,3 +12,7 @@ export const artistTabs = [
   { text: "고맴", to: { type: "gomem" } },
   { text: "아카데미", to: { type: "academy" } },
 ];
+
+// export const newTabs = [
+  
+// ]

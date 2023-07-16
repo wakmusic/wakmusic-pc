@@ -7,6 +7,7 @@ import { T7Medium } from "@components/Typography/Medium";
 import FunctionSection from "@components/chart/FunctionSection";
 import MusicList from "@components/chart/MusicList";
 import PageContainer from "@components/globals/PageContainer";
+import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import AddMusic from "@components/globals/musicControllers/AddMusic";
 import AddPlaylist from "@components/globals/musicControllers/AddPlaylist";
 import MusicControllerBase from "@components/globals/musicControllers/MusicControllerBase";
@@ -14,6 +15,7 @@ import PlayMusic from "@components/globals/musicControllers/PlayMusic";
 import SelectAll from "@components/globals/musicControllers/SelectAll";
 
 import colors from "@constants/colors";
+import { hourlyChart } from "@constants/dummys";
 
 import { isNumber } from "@utils/isTypes";
 
@@ -41,26 +43,13 @@ const Chart = ({}: ChartProps) => {
       </GuideBox>
       <BlackLine />
       <MusicSection>
-        <MusicLayout>
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-        </MusicLayout>
+        <DefaultScroll>
+          <MusicLayout>
+            {hourlyChart.map((item, index) => (
+              <MusicList key={index} rank={index + 1} item={item} />
+            ))}
+          </MusicLayout>
+        </DefaultScroll>
       </MusicSection>
       <MusicControllerBase count={1}>
         <SelectAll isSelect={true} />
@@ -158,7 +147,6 @@ const InfoText = styled(GuideText)`
 
 const MusicSection = styled.div`
   width: 100%;
-  overflow-y: scroll;
   flex: 1 1 0;
 `;
 
@@ -166,6 +154,8 @@ const MusicLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  height: 502px;
 `;
 
 export default Chart;

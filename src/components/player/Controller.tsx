@@ -10,15 +10,12 @@ import { ReactComponent as RandomOnSvg } from "@assets/icons/ic_20_random_on.svg
 import { ReactComponent as RepeatOffSvg } from "@assets/icons/ic_20_repeat_off.svg";
 import { ReactComponent as RepeatOn1Svg } from "@assets/icons/ic_20_repeat_on_1.svg";
 import { ReactComponent as RepeatOnAllSvg } from "@assets/icons/ic_20_repeat_on_all.svg";
-import { ReactComponent as SoundOffSvg } from "@assets/icons/ic_20_sound_off.svg";
-import { ReactComponent as SoundOnSvg } from "@assets/icons/ic_20_sound_on.svg";
 import { ReactComponent as PlaySvg } from "@assets/icons/ic_30_play_25_point.svg";
 import { ReactComponent as StopSvg } from "@assets/icons/ic_30_stop.svg";
 
-import colors from "@constants/colors";
-
 import { RepeatType } from "../../types/player";
 import IconButton from "./IconButton";
+import Volume from "./Volume";
 
 interface ControllerProps {}
 
@@ -29,26 +26,24 @@ const Controller = ({}: ControllerProps) => {
   const [isPlyaing, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(50);
 
-  const [isVolumeHovered, setIsVolumeHovered] = useState(false);
-
-  function onRepeatButtonClicked() {
+  function onRepeatButtonClick() {
     setRepeatType((repeatType + 1) % 3);
   }
 
-  function onRandomButtonClicked() {
+  function onRandomStateChange() {
     setIsRandomOn(!isRandomOn);
   }
 
-  function onLyricButtonClicked() {
+  function onLyricStateChange() {
     setIsLyricOn(!isLyricOn);
   }
 
-  function onPlayStopButtonClicked() {
+  function onPlayStateChange() {
     setIsPlaying(!isPlyaing);
   }
 
-  function onVolumeInputChanged(e: React.ChangeEvent<HTMLInputElement>) {
-    setVolume(parseInt(e.target.value));
+  function onVolumeChange(value: number) {
+    setVolume(value);
   }
 
   function movePrev() {}
@@ -57,21 +52,7 @@ const Controller = ({}: ControllerProps) => {
 
   return (
     <Container>
-      <VolumeContainer
-        onMouseEnter={() => setIsVolumeHovered(true)}
-        onMouseLeave={() => setIsVolumeHovered(false)}
-      >
-        <IconButton icon={isVolumeHovered ? SoundOnSvg : SoundOffSvg} />
-        <VolumePopover>
-          <VolumeInput
-            type="range"
-            min={0}
-            max={100}
-            value={volume}
-            onChange={onVolumeInputChanged}
-          />
-        </VolumePopover>
-      </VolumeContainer>
+      <Volume volume={volume} onChange={onVolumeChange} />
       <IconButton
         icon={
           repeatType === RepeatType.All
@@ -80,21 +61,21 @@ const Controller = ({}: ControllerProps) => {
             ? RepeatOn1Svg
             : RepeatOffSvg
         }
-        onClick={onRepeatButtonClicked}
+        onClick={onRepeatButtonClick}
       />
       <IconButton icon={PrevSvg} onClick={movePrev} />
       <IconButton
         icon={isPlyaing ? StopSvg : PlaySvg}
-        onClick={onPlayStopButtonClicked}
+        onClick={onPlayStateChange}
       />
       <IconButton icon={NextSvg} onClick={moveNext} />
       <IconButton
         icon={isRandomOn ? RandomOnSvg : RandomOffSvg}
-        onClick={onRandomButtonClicked}
+        onClick={onRandomStateChange}
       />
       <IconButton
         icon={isLyricOn ? DocumentOnSvg : DocumentOffSvg}
-        onClick={onLyricButtonClicked}
+        onClick={onLyricStateChange}
       />
     </Container>
   );
@@ -105,81 +86,6 @@ const Container = styled.div`
   align-items: center;
 
   gap: 18px;
-`;
-
-const VolumePopover = styled.div`
-  height: 12px;
-  width: 64px;
-
-  padding: 0 4px;
-
-  position: absolute;
-  transform: translate(-5px, calc(-100% - 10px));
-
-  align-items: center;
-  justify-content: center;
-
-  display: none;
-
-  border-radius: 4px;
-  background-color: ${colors.gray700};
-  opacity: 0.8;
-`;
-
-const VolumeContainer = styled.div`
-  height: 100%;
-  width: 38px;
-
-  margin-right: -18px;
-
-  display: flex;
-  justify-items: center;
-  align-items: center;
-
-  &:hover {
-    ${VolumePopover} {
-      display: inherit;
-    }
-  }
-`;
-
-const VolumeInput = styled.input<{ value: number }>`
-  width: 100%;
-
-  appearance: none;
-  background: linear-gradient(
-    to right,
-    ${colors.blueGray25} 0%,
-    ${colors.blueGray25} ${({ value }) => value}%,
-    rgba(255, 255, 255, 0.4) ${({ value }) => value}%,
-    rgba(255, 255, 255, 0.4) 100%
-  );
-
-  &:focus {
-    outline: none;
-  }
-
-  &::-webkit-slider-thumb {
-    height: 5px;
-    width: 5px;
-
-    margin-top: -2px;
-    border-radius: 3px;
-
-    -webkit-appearance: none;
-
-    cursor: pointer;
-    background: ${colors.blueGray25};
-  }
-
-  &::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 1px;
-
-    -webkit-appearance: none;
-
-    cursor: pointer;
-  }
 `;
 
 export default Controller;

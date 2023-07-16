@@ -22,10 +22,7 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
   const changeProgressPosition = useCallback(
     (e: MouseEvent | React.MouseEvent<HTMLDivElement>) => {
       const rect = ref.current?.getBoundingClientRect();
-
-      if (!rect) {
-        return;
-      }
+      if (!rect) return;
 
       const x = e.clientX - rect.left;
       const newProgress = x / rect.width;
@@ -88,6 +85,7 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
 
 const HandleContainer = styled.div`
   position: relative;
+
   display: none;
 `;
 
@@ -116,7 +114,7 @@ const Container = styled.div<{ controlling: 0 | 1 }>`
 
       margin-bottom: 0;
 
-      & ${HandleContainer} {
+      ${HandleContainer} {
         display: inherit;
       }
     `}
@@ -142,11 +140,10 @@ const Handle = styled.div`
 const TimelinePopover = styled.div`
   height: 18px;
 
-  position: relative;
-  top: -40px;
-  transform: translateX(calc(-50% + 5px));
-
   padding: 4px;
+
+  position: relative;
+  transform: translate(calc(-50% + 5px), -40px);
 
   display: inline-flex;
   align-items: center;

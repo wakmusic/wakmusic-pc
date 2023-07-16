@@ -1,63 +1,70 @@
 import { ReactNode } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-import { T4Bold } from "@components/Typography";
+import { T4Bold } from "@components/Typography/Bold";
 
 import colors from "@constants/colors";
 
-interface MusicControllerProps {
-  count: number;
+interface MusicControllerBarProps {
   children: ReactNode;
+  count: number;
 }
 
-const MusicControllerBase = ({ children, count }: MusicControllerProps) => {
+const MusicControllerBar = ({ count, children }: MusicControllerBarProps) => {
   return (
     <Wrapper>
-      <Container>
-        <Count>
+      <ButtonContainer>
+        <Count isWidth={count >= 100}>
           <T4Bold color={colors.sub}>{count}</T4Bold>
         </Count>
         {children}
-      </Container>
+      </ButtonContainer>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   position: fixed;
-  padding: 0px 20px;
   width: fit-content;
-  height: 60px;
+  height: fit-content;
   margin: 0 auto;
   left: 0;
   right: 0;
-  bottom: 40px;
+  bottom: 0px;
 `;
 
-const Container = styled.div`
+const ButtonContainer = styled.div`
+  width: 290px;
+  height: 60px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  position: relative;
-  padding: 0px 20px;
   height: 100%;
   background: ${colors.sub};
-  border-radius: 12px;
 `;
 
-const Count = styled.div`
+const Count = styled.div<{ isWidth: boolean }>`
   border-radius: 100px;
   position: absolute;
-  left: 8px;
+  left: 16px;
   top: -15px;
-  padding: 0px 11px;
   height: 30px;
   background-color: ${colors.white};
   box-shadow: drop-shadow(3.75px 3.75px 3.75px rgba(8, 15, 52, 0.04));
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${(props) =>
+    props.isWidth
+      ? css`
+          width: 50px;
+        `
+      : css`
+          width: 30px;
+        `}
 `;
 
-export default MusicControllerBase;
+export default MusicControllerBar;

@@ -23,6 +23,10 @@ const ScrollWrapper = styled.div`
     --os-handle-bg-hover: ${colors.blueGray300};
     --os-handle-bg-active: ${colors.blueGray300};
   }
+
+  & .os-scrollbar-track {
+    height: calc(100% - 16px);
+  }
 `;
 
 export default DefaultScroll;

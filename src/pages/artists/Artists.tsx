@@ -19,13 +19,15 @@ const Artists = ({}: ArtistsProps) => {
   return (
     <PageContainer>
       <Container>
-        <TabBar>
-          {artistTabs.map((item, index) => (
-            <Tab to={item.to} key={index}>
-              {item.text}
-            </Tab>
-          ))}
-        </TabBar>
+        <TabBarWrapper>
+          <TabBar>
+            {artistTabs.map((item, index) => (
+              <Tab to={item.to} key={index}>
+                {item.text}
+              </Tab>
+            ))}
+          </TabBar>
+        </TabBarWrapper>
 
         <ArtistsContainer>
           <DefaultScroll>
@@ -50,12 +52,15 @@ const Container = styled.div`
   width: 754px;
   height: calc(100% - 40px);
   margin: 20px 0;
-  padding: 16px 20px;
 
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
   background: ${colors.white}66; // 40%
   backdrop-filter: blur(62.5px);
+`;
+
+const TabBarWrapper = styled.div`
+  padding: 16px 20px 0 20px;
 `;
 
 const ArtistsContainer = styled.div`
@@ -70,7 +75,9 @@ const ArtistsWrapper = styled.div`
   grid-auto-rows: 124px;
   grid-row-gap: 14px;
 
-  padding-right: 10px;
+  padding-left: 20px;
+  padding-right: 29px;
+  padding-bottom: 20px;
 `;
 
 export default Artists;

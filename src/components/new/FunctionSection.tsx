@@ -1,10 +1,14 @@
 import styled from "styled-components";
 
 import IconButton from "@components/globals/IconButton";
+import Tab from "@components/globals/Tab";
+import TabBar from "@components/globals/TabBar";
 
 import { playButtonData } from "@constants/IconButton";
+import { newTabs } from "@constants/tabs";
 
 import iconButtonType from "../../types/iconButtonType";
+import tabType from "../../types/tabType";
 
 interface FunctionSectionProps {}
 
@@ -12,10 +16,15 @@ const FunctionSection = ({}: FunctionSectionProps) => {
   return (
     <Wrapper>
       <TimeLineLayout>
-        <TestCategory />
-        <TestCategory />
-        <TestCategory />
-        <TestCategory />
+        <TabBar>
+          {newTabs.map((item: tabType, index: number) => {
+            return (
+              <Tab key={index} to={item.to}>
+                {item.text}
+              </Tab>
+            );
+          })}
+        </TabBar>
       </TimeLineLayout>
       <ButtonLayout>
         {playButtonData.map((item: iconButtonType, index: number) => {

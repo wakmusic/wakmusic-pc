@@ -8,6 +8,11 @@ import { RecoilRoot } from "recoil";
 import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
+import AlertModal from "@components/modals/AlertModal";
+import ConfirmModal from "@components/modals/ConfirmModal";
+import LoginModal from "@components/modals/LoginModal";
+import SelectProfileModal from "@components/modals/SelectProfileModal";
+import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Player";
 
 import firebaseConfig from "@constants/firebaseConfig";
@@ -45,6 +50,13 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <Player />
         </RootOverlay>
       </BrowserRouter>
+
+      <ModalPortal>
+        <LoginModal />
+        <SelectProfileModal />
+        <AlertModal />
+        <ConfirmModal />
+      </ModalPortal>
     </RecoilRoot>
   </StrictMode>
 );

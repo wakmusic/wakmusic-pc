@@ -15,7 +15,10 @@ import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useAlertModal } from "@hooks/alertModal";
+import { useConfirmModal } from "@hooks/confirmModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
+import { useSelectProfileModal } from "@hooks/profileModal";
 
 import Section from "./Section";
 
@@ -23,6 +26,9 @@ interface GNB {}
 
 const GNB = ({}: GNB) => {
   const loginModalOpener = useLoginModalOpener();
+  const selectProfileModal = useSelectProfileModal();
+  const alertModal = useAlertModal();
+  const confirmModal = useConfirmModal();
 
   return (
     <Container>
@@ -55,6 +61,62 @@ const GNB = ({}: GNB) => {
           }}
         >
           로그인 하기
+        </T6Medium>
+      </Login>
+
+      <Login
+        onClick={() => {
+          (async () => {
+            const result = await selectProfileModal();
+
+            alert(result);
+          })();
+        }}
+      >
+        <T6Medium
+          style={{
+            color: colors.blueGray600,
+          }}
+        >
+          (임시) 프로필 선택
+        </T6Medium>
+      </Login>
+
+      <Login
+        onClick={() => {
+          (async () => {
+            await alertModal("타이틀", "서브 타이틀 내용이 들어갑니다.");
+
+            alert("alert 닫힘");
+          })();
+        }}
+      >
+        <T6Medium
+          style={{
+            color: colors.blueGray600,
+          }}
+        >
+          (임시) AlertModal
+        </T6Medium>
+      </Login>
+      <Login
+        onClick={() => {
+          (async () => {
+            const result = await confirmModal(
+              "타이틀",
+              "서브 타이틀 내용이 들어갑니다."
+            );
+
+            alert(result);
+          })();
+        }}
+      >
+        <T6Medium
+          style={{
+            color: colors.blueGray600,
+          }}
+        >
+          (임시) ConfirmModal
         </T6Medium>
       </Login>
     </Container>

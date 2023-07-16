@@ -5,12 +5,15 @@ import { T4Bold } from "@components/Typography/Bold";
 
 import colors from "@constants/colors";
 
-interface MusicControllerBarProps {
+interface MusicControllerPlayerProps {
   children: ReactNode;
   count: number;
 }
 
-const MusicControllerBar = ({ count, children }: MusicControllerBarProps) => {
+const MusicControllerPlayer = ({
+  count,
+  children,
+}: MusicControllerPlayerProps) => {
   return (
     <Wrapper>
       <ButtonContainer>
@@ -67,4 +70,4 @@ const Count = styled.div<{ isWidth: boolean }>`
         `}
 `;
 
-export default MusicControllerBar;
+export default MusicControllerPlayer;

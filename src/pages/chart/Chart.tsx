@@ -11,7 +11,7 @@ import AddMusic from "@components/globals/musicControllers/AddMusic";
 import AddPlaylist from "@components/globals/musicControllers/AddPlaylist";
 import PlayMusic from "@components/globals/musicControllers/PlayMusic";
 import SelectAll from "@components/globals/musicControllers/SelectAll";
-import MusicControllerBar from "@components/globals/musicControllers/musicControllerContainers/MusicControllerBar";
+import MusicControllerPlayer from "@components/globals/musicControllers/musicControllerContainers/MusicControllerPlayer";
 
 import colors from "@constants/colors";
 
@@ -62,12 +62,12 @@ const Chart = ({}: ChartProps) => {
           <MusicList />
         </MusicLayout>
       </MusicSection>
-      <MusicControllerBar count={1}>
+      <MusicControllerPlayer count={1}>
         <SelectAll isSelect={true} />
         <AddMusic />
         <AddPlaylist />
         <PlayMusic />
-      </MusicControllerBar>
+      </MusicControllerPlayer>
     </Wrapper>
   );
 };

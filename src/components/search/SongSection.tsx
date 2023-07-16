@@ -35,7 +35,7 @@ const Container = styled.div<{
 }>`
   position: relative;
 
-  width: 754px;
+  width: 100%;
   height: 64px;
   flex-shrink: 0;
 

@@ -13,16 +13,26 @@ interface PlayerProps {}
 
 const Player = ({}: PlayerProps) => {
   // dummy
-  const playlist = [...dummy, ...dummy, ...dummy, ...dummy];
-  const playingIndex = 4;
+  const [playlist, setPlaylist] = useState<{ title: string; artist: string }[]>(
+    [...dummy, ...dummy, ...dummy, ...dummy]
+  );
+  const [playing, setPlaying] = useState(4);
 
   const song = Object.assign(dummy[4], { total: dummy[4].hourly });
   const songLength = 272;
 
-  const [currentPlaying, setCurruntPlaying] = useState(83);
+  const [currentTimeline, setCurruntTimeline] = useState(83);
 
   function onCurrentPlyaingChanged(value: number) {
-    setCurruntPlaying(value);
+    setCurruntTimeline(value);
+  }
+
+  function onPlayListChanged(playlist: { title: string; artist: string }[]) {
+    setPlaylist(playlist);
+  }
+
+  function onPlayingchanged(playing: number) {
+    setPlaying(playing);
   }
 
   return (
@@ -30,14 +40,19 @@ const Player = ({}: PlayerProps) => {
       <Visual songId={song.songId} />
       <Timeline
         length={songLength}
-        current={currentPlaying}
+        current={currentTimeline}
         onChange={onCurrentPlyaingChanged}
       />
       <Song song={{ ...song, views: song.total.views }} />
 
       <Divider />
 
-      <Playlist playlist={playlist} playing={playingIndex} />
+      <Playlist
+        playlist={playlist}
+        playing={playing}
+        onChange={onPlayListChanged}
+        onPlayingChange={onPlayingchanged}
+      />
     </Container>
   );
 };

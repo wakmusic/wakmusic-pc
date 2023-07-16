@@ -6,12 +6,18 @@ import { Button, ButtonContainer } from "./buttonStyle";
 
 interface OkButtonProps {
   onClick: () => void;
+  disabled?: boolean;
 }
 
-const OkButton = ({ onClick }: OkButtonProps) => {
+const OkButton = ({ onClick, disabled }: OkButtonProps) => {
   return (
     <ButtonContainer>
-      <Button color={colors.point} onClick={onClick} $big>
+      <Button
+        color={colors.point}
+        onClick={disabled ? undefined : onClick}
+        disabled={disabled}
+        $big
+      >
         <T4Bold color={colors.blueGray25}>확인</T4Bold>
       </Button>
     </ButtonContainer>

@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import Artist from "@components/artists/Artist";
 import PageContainer from "@components/globals/PageContainer";
+import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 
@@ -27,14 +28,18 @@ const Artists = ({}: ArtistsProps) => {
         </TabBar>
 
         <ArtistsContainer>
-          {artistList
-            .filter((artist) => {
-              if (searchParams.get("type") === null) return true;
-              else return artist.group.en === searchParams.get("type");
-            })
-            .map((artist, index) => (
-              <Artist key={index} artist={artist} />
-            ))}
+          <DefaultScroll>
+            <ArtistsWrapper>
+              {artistList
+                .filter((artist) => {
+                  if (searchParams.get("type") === null) return true;
+                  else return artist.group.en === searchParams.get("type");
+                })
+                .map((artist, index) => (
+                  <Artist key={index} artist={artist} />
+                ))}
+            </ArtistsWrapper>
+          </DefaultScroll>
         </ArtistsContainer>
       </Container>
     </PageContainer>
@@ -55,16 +60,17 @@ const Container = styled.div`
 
 const ArtistsContainer = styled.div`
   margin-top: 16px;
+`;
 
-  height: 90%;
-  overflow-y: auto;
+const ArtistsWrapper = styled.div`
+  height: 561px;
 
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: 124px;
   grid-row-gap: 14px;
 
-  padding-right: 5px;
+  padding-right: 10px;
 `;
 
 export default Artists;

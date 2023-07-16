@@ -20,7 +20,7 @@ const Track = ({ item, onClick }: TrackProps) => {
     <Container onClick={() => onClick && onClick(item)}>
       <PlayIcon />
 
-      <Thumbnail src={`https://i.ytimg.com/vi/${item.songId}/hqdefault.jpg`} />
+      <Thumbnail src={`https://i.ytimg.com/vi/${item.songId}/default.jpg`} />
 
       <TrackInfo>
         <TrackTitle>{item.title}</TrackTitle>

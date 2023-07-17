@@ -10,9 +10,9 @@ import PageContainer from "@components/globals/PageContainer";
 import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import AddMusic from "@components/globals/musicControllers/AddMusic";
 import AddPlaylist from "@components/globals/musicControllers/AddPlaylist";
-import MusicControllerBase from "@components/globals/musicControllers/MusicControllerBase";
 import PlayMusic from "@components/globals/musicControllers/PlayMusic";
 import SelectAll from "@components/globals/musicControllers/SelectAll";
+import MusicControllerPlayer from "@components/globals/musicControllers/musicControllerContainers/MusicControllerPlayer";
 
 import colors from "@constants/colors";
 import { hourlyChart } from "@constants/dummys";
@@ -51,12 +51,12 @@ const Chart = ({}: ChartProps) => {
           </MusicLayout>
         </DefaultScroll>
       </MusicSection>
-      <MusicControllerBase count={1}>
+      <MusicControllerPlayer count={1}>
         <SelectAll isSelect={true} />
         <AddMusic />
         <AddPlaylist />
         <PlayMusic />
-      </MusicControllerBase>
+      </MusicControllerPlayer>
     </Wrapper>
   );
 };

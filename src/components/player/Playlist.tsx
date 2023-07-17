@@ -61,10 +61,12 @@ const Playlist = ({
     setCursorIndex(index);
     setCursorPosition(rect.top - ref.current.scrollTop + index * 24);
 
-    if (rect.bottom - mouseY < 25) {
-      ref.current.scrollTop += 3;
-    } else if (mouseY - rect.top < 25) {
-      ref.current.scrollTop -= 3;
+    if (isMoving) {
+      if (rect.bottom - mouseY < 25) {
+        ref.current.scrollTop += 3;
+      } else if (mouseY - rect.top < 25) {
+        ref.current.scrollTop -= 3;
+      }
     }
   }
 

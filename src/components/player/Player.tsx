@@ -4,6 +4,7 @@ import styled from "styled-components";
 import colors from "@constants/colors";
 import { hourlyChart as dummy } from "@constants/dummys";
 
+import { Playlist as PlaylistType } from "../../types/player";
 import Playlist from "./Playlist";
 import Song from "./Song";
 import Timeline from "./Timeline";
@@ -13,9 +14,12 @@ interface PlayerProps {}
 
 const Player = ({}: PlayerProps) => {
   // dummy
-  const [playlist, setPlaylist] = useState<{ title: string; artist: string }[]>(
-    [...dummy, ...dummy, ...dummy, ...dummy]
-  );
+  const [playlist, setPlaylist] = useState<PlaylistType>([
+    ...dummy,
+    ...dummy,
+    ...dummy,
+    ...dummy,
+  ]);
   const [playing, setPlaying] = useState(4);
 
   const song = Object.assign(dummy[4], { total: dummy[4].hourly });
@@ -27,7 +31,7 @@ const Player = ({}: PlayerProps) => {
     setCurruntTimeline(value);
   }
 
-  function onPlayListChanged(playlist: { title: string; artist: string }[]) {
+  function onPlayListChanged(playlist: PlaylistType) {
     setPlaylist(playlist);
   }
 

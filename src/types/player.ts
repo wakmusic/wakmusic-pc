@@ -3,3 +3,5 @@ export enum RepeatType {
   All,
   One,
 }
+
+export type Playlist = { title: string; artist: string }[];

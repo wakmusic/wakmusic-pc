@@ -4,11 +4,12 @@ import styled, { css } from "styled-components";
 import { T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
+import { Playlist } from "../../types/player";
 
 interface PlaylistProps {
-  playlist: { title: string; artist: string }[];
+  playlist: Playlist;
   playing: number;
-  onChange: (playlist: { title: string; artist: string }[]) => void;
+  onChange: (playlist: Playlist) => void;
   onPlayingChange: (playing: number) => void;
 }
 

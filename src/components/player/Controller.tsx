@@ -26,7 +26,7 @@ const Controller = ({}: ControllerProps) => {
   const [isPlyaing, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(50);
 
-  function onRepeatButtonClick() {
+  function onRepeatStateChange() {
     setRepeatType((repeatType + 1) % 3);
   }
 
@@ -61,7 +61,7 @@ const Controller = ({}: ControllerProps) => {
             ? RepeatOn1Svg
             : RepeatOffSvg
         }
-        onClick={onRepeatButtonClick}
+        onClick={onRepeatStateChange}
       />
       <IconButton icon={PrevSvg} onClick={movePrev} />
       <IconButton

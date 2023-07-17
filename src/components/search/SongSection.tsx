@@ -21,14 +21,14 @@ const SongSection = ({ item, count }: SongSectionProps) => {
       background={isSelected ? colors.blueGray200 : undefined}
     >
       <Track item={item} />
-      <Text left={508}>
-        20{item.date.toString().slice(0, 2)}.{item.date.toString().slice(2, 4)}.
-        {item.date.toString().slice(4, 6)}
-      </Text>
-      <Text left={586}>
-        {(item.total.views?.toLocaleString() ?? "-") + "회"}
-      </Text>
-      <Text left={664}>{count}</Text>
+      <TextGroup>
+        <Text>
+          20{item.date.toString().slice(0, 2)}.
+          {item.date.toString().slice(2, 4)}.{item.date.toString().slice(4, 6)}
+        </Text>
+        <Text>{(item.total.views?.toLocaleString() ?? "-") + "회"}</Text>
+        <Text>{count}</Text>
+      </TextGroup>
     </Container>
   );
 };
@@ -54,12 +54,22 @@ const Container = styled.div<{
   }
 `;
 
-const Text = styled(T7Light)<{
-  left: number;
-}>`
+const TextGroup = styled.div`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  margin-left: 508px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 70px);
+  gap: 8px;
+
+  width: 226px;
+  height: 18px;
+`;
+
+const Text = styled(T7Light)`
+  position: relative;
 
   width: 70px;
   height: 18px;
@@ -67,8 +77,6 @@ const Text = styled(T7Light)<{
 
   color: ${colors.gray700};
   text-align: center;
-
-  margin-left: ${(p) => p.left}px;
 `;
 
 export default SongSection;

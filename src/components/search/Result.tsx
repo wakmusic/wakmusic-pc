@@ -12,6 +12,7 @@ import colors from "@constants/colors";
 import { formatNumber } from "@utils/formatting";
 
 import NotFound from "./NotFound";
+import SongCard from "./SongCard";
 import SongSection from "./SongSection";
 
 enum Category {
@@ -66,23 +67,7 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
                         <ArrowRightSVG />
                       </CategoryHeaderButton>
                     </CategoryHeader>
-                    {res[key]
-                      .sort((a, b) =>
-                        !a.total.views
-                          ? 1
-                          : !b.total.views
-                          ? -1
-                          : b.total.views - a.total.views
-                      )
-                      .map((item, index) =>
-                        index <= 2 ? (
-                          <SongSection
-                            item={item}
-                            key={index}
-                            count={formatNumber(likeList[item.songId])}
-                          />
-                        ) : null
-                      )}
+                    <SongCard songs={res[key]} likeList={likeList} />
                   </div>
                 ))}
             </AllSongWrapper>

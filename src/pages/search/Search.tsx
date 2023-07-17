@@ -1,3 +1,4 @@
+import { Song } from "@templates/search";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
@@ -13,23 +14,22 @@ import { searchTabs } from "@constants/tabs";
 
 import { isNull } from "@utils/isTypes";
 
-type Song = {
-  songId: string;
-  title: string;
-  artist: string;
-  remix: string;
-  reaction: string;
-  date: number;
-  start: number;
-  end: number;
-  total: {
-    views: number | null;
-    increase: number | null;
-    last: number | null;
-  };
-};
-
 interface SearchProps {}
+
+type tabsTypes = "all" | "songs" | "artists" | "training";
+
+function isTabsTypes(arg: unknown): arg is tabsTypes {
+  if (
+    arg === "all" ||
+    arg === "songs" ||
+    arg === "artists" ||
+    arg === "training"
+  ) {
+    return true;
+  }
+
+  return false;
+}
 
 const Search = ({}: SearchProps) => {
   const [searchParams] = useSearchParams();
@@ -42,17 +42,13 @@ const Search = ({}: SearchProps) => {
   const [likes, setLikes] = useState<{
     [id: string]: number;
   }>({});
-  const [tab, setTab] = useState<"all" | "songs" | "artists" | "training">(
-    "all"
-  );
+  const [tab, setTab] = useState<tabsTypes>("all");
 
   useEffect(() => {
     const search = searchParams.get("query");
-    const tab = searchParams.get("tab") as
-      | "all"
-      | "songs"
-      | "artists"
-      | "training";
+    const tab = isTabsTypes(searchParams.get("tab"))
+      ? (searchParams.get("tab") as tabsTypes)
+      : "all";
 
     if (!isNull(search)) {
       setQuery(search);

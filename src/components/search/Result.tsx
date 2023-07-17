@@ -47,7 +47,7 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
               {(Object.keys(res) as Array<"songs" | "artists" | "remix">)
                 .filter((key) => res[key].length !== 0)
                 .map((key, index) => (
-                  <div key={index}>
+                  <CategoryContainer key={index}>
                     <CategoryHeader>
                       <CategoryHeaderText color={colors.gray900}>
                         {Category[key]}
@@ -68,7 +68,7 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
                       </CategoryHeaderButton>
                     </CategoryHeader>
                     <SongCard songs={res[key]} likeList={likeList} />
-                  </div>
+                  </CategoryContainer>
                 ))}
             </AllSongWrapper>
           </DefaultScroll>
@@ -154,13 +154,15 @@ const ListHeaderText = styled(T7Medium)<{
   color: ${colors.blueGray400};
 `;
 
+const CategoryContainer = styled.div`
+  &:nth-child(1) div {
+    margin-top: 0px;
+  }
+`;
+
 const CategoryHeader = styled.div`
   height: 30px;
   margin: 16px 20px 8px 20px;
-
-  &:nth-child(1) {
-    margin-top: 0px;
-  }
 `;
 
 const CategoryHeaderText = styled(T4Medium)<{

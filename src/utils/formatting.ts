@@ -1,10 +1,22 @@
+export function formatDateTime(date: Date): string {
+  return (
+    `${(date.getMonth() + 1).toString().padStart(2, "0")}월 ` +
+    `${date.getDate().toString().padStart(2, "0")}일 ` +
+    `${
+      date.getHours() > 12
+        ? "오후 " + (date.getHours() - 12)
+        : "오전 " + date.getHours()
+    }시`
+  );
+}
+
 export function formatSecond(second: number): string {
   const hour = Math.floor(second / (60 * 60));
   const minute = Math.floor((second / 60) % 60);
   const sec = Math.floor(second % 60);
 
   return (
-    (hour > 0 ? `${hour}:` : "") +
+    (hour > 0 ? `${hour.toString().padStart(2, "0")}:` : "") +
     minute.toString().padStart(2, "0") +
     ":" +
     sec.toString().padStart(2, "0")

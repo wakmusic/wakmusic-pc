@@ -15,11 +15,15 @@ import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useLoginModalOpener } from "@hooks/loginModal";
+
 import Section from "./Section";
 
 interface GNB {}
 
 const GNB = ({}: GNB) => {
+  const loginModalOpener = useLoginModalOpener();
+
   return (
     <Container>
       <Navigator>
@@ -31,7 +35,7 @@ const GNB = ({}: GNB) => {
           왁뮤차트
         </Section>
 
-        <Section path="/search" icon={SearchSVG} lottie={searchLottie}>
+        <Section path="/new" icon={SearchSVG} lottie={searchLottie}>
           최신음악
         </Section>
 
@@ -44,7 +48,7 @@ const GNB = ({}: GNB) => {
         </Section>
       </Navigator>
 
-      <Login>
+      <Login onClick={() => loginModalOpener()}>
         <T6Medium
           style={{
             color: colors.blueGray600,
@@ -58,7 +62,7 @@ const GNB = ({}: GNB) => {
 };
 
 const Container = styled.div`
-  margin-top: 19.5px;
+  margin-top: 20px;
   margin-left: 20px;
   margin-right: 4px;
 `;

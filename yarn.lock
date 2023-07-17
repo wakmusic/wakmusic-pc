@@ -6359,6 +6359,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"overlayscrollbars-react@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "overlayscrollbars-react@npm:0.5.1"
+  peerDependencies:
+    overlayscrollbars: ^2.0.0
+    react: ">=16.8.0"
+  checksum: 114c7f19c4dba029371d99167c19d2fb67b8ef06795c0deaa581d52b6572d20a9e01b02d59185aad0a8abe61cd3f65f279dd923037f7b3057ab758152cdb8d48
+  languageName: node
+  linkType: hard
+
+"overlayscrollbars@npm:^2.2.1":
+  version: 2.2.1
+  resolution: "overlayscrollbars@npm:2.2.1"
+  checksum: b7b8fb80398f8f00c09e64f44a90a7596541f9af668c7978b2da192fad3c7b77376597916ce52b76ba993c752ea1b50fa84daa1401aa95eb7b5bcb48c13ec473
+  languageName: node
+  linkType: hard
+
 "p-cancelable@npm:^2.0.0":
   version: 2.1.1
   resolution: "p-cancelable@npm:2.1.1"
@@ -7835,6 +7852,8 @@ __metadata:
     firebase: ^9.23.0
     lodash.throttle: ^4.1.1
     lottie-react: ^2.4.0
+    overlayscrollbars: ^2.2.1
+    overlayscrollbars-react: ^0.5.1
     prettier: ^2.8.8
     react: ^18.2.0
     react-dom: ^18.2.0

@@ -56,7 +56,7 @@ const RankInfo = ({ now, last }: RankProps) => {
 const Rank = ({ now, last }: RankProps) => {
   return (
     <Container>
-      <T4Bold>{now}</T4Bold>
+      <T4Bold color={colors.gray900}>{now}</T4Bold>
       <Info>
         <RankInfo now={now} last={last} />
       </Info>

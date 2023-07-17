@@ -21,7 +21,7 @@ const Chart = ({}: ChartProps) => {
     <Container>
       <Header>
         <HeaderTexts>
-          <Title>왁뮤차트 TOP100</Title>
+          <Title color={colors.primary900}>왁뮤차트 TOP100</Title>
           <UpdatedContainer>
             <CheckSVG />
             <T7Light>
@@ -42,7 +42,7 @@ const Chart = ({}: ChartProps) => {
       </Header>
 
       <Items>
-        {hourlyChart.map((item, index) => (
+        {hourlyChart.slice(0, 8).map((item, index) => (
           <ChartItem key={index} rank={index + 1} item={item} />
         ))}
       </Items>

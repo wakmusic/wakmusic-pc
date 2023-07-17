@@ -21,9 +21,12 @@ const SongSection = ({ item, count }: SongSectionProps) => {
       background={isSelected ? colors.blueGray200 : undefined}
     >
       <Track item={item} />
-      <Text left={586}>
+      <Text left={508}>
         20{item.date.toString().slice(0, 2)}.{item.date.toString().slice(2, 4)}.
         {item.date.toString().slice(4, 6)}
+      </Text>
+      <Text left={586}>
+        {(item.total.views?.toLocaleString() ?? "-") + "회"}
       </Text>
       <Text left={664}>{count}</Text>
     </Container>

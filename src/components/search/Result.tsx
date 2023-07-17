@@ -40,59 +40,64 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
     <Container>
       {tab === "all" &&
       Object.values(res).filter((value) => value.length !== 0).length !== 0 ? (
-        <ListContainer>
-          {(Object.keys(res) as Array<"songs" | "artists" | "training">)
-            .filter((key) => res[key].length !== 0)
-            .map((key, index) => (
-              <div key={index}>
-                <CategoryHeader>
-                  <CategoryHeaderText color={colors.gray900}>
-                    {Category[key]}
-                  </CategoryHeaderText>
-                  <CategoryHeaderText color={colors.point} left={4}>
-                    {res[key].length}
-                  </CategoryHeaderText>
-                  <CategoryHeaderButton
-                    onClick={() => {
-                      setSearchParams({
-                        query: query,
-                        tab: key,
-                      });
-                    }}
-                  >
-                    <T6Medium>전체보기</T6Medium>
-                    <ArrowRightSVG />
-                  </CategoryHeaderButton>
-                </CategoryHeader>
-                {res[key]
-                  .sort((a, b) =>
-                    !a.total.views
-                      ? 1
-                      : !b.total.views
-                      ? -1
-                      : b.total.views - a.total.views
-                  )
-                  .map((item, index) =>
-                    index <= 2 ? (
-                      <SongSection
-                        item={item}
-                        key={index}
-                        count={
-                          (item.total.views?.toLocaleString() ?? "-") + "회"
-                        }
-                      />
-                    ) : null
-                  )}
-              </div>
-            ))}
+        <ListContainer top={16}>
+          <DefaultScroll>
+            <AllSongWrapper>
+              {(Object.keys(res) as Array<"songs" | "artists" | "training">)
+                .filter((key) => res[key].length !== 0)
+                .map((key, index) => (
+                  <div key={index}>
+                    <CategoryHeader>
+                      <CategoryHeaderText color={colors.gray900}>
+                        {Category[key]}
+                      </CategoryHeaderText>
+                      <CategoryHeaderText color={colors.point} left={4}>
+                        {res[key].length}
+                      </CategoryHeaderText>
+                      <CategoryHeaderButton
+                        onClick={() => {
+                          setSearchParams({
+                            query: query,
+                            tab: key,
+                          });
+                        }}
+                      >
+                        <T6Medium>전체보기</T6Medium>
+                        <ArrowRightSVG />
+                      </CategoryHeaderButton>
+                    </CategoryHeader>
+                    {res[key]
+                      .sort((a, b) =>
+                        !a.total.views
+                          ? 1
+                          : !b.total.views
+                          ? -1
+                          : b.total.views - a.total.views
+                      )
+                      .map((item, index) =>
+                        index <= 2 ? (
+                          <SongSection
+                            item={item}
+                            key={index}
+                            count={formatNumber(likeList[item.songId])}
+                          />
+                        ) : null
+                      )}
+                  </div>
+                ))}
+            </AllSongWrapper>
+          </DefaultScroll>
         </ListContainer>
       ) : tab !== "all" && res[tab].length !== 0 ? (
         <ListContainer top={14}>
           <ListHeader>
             <TopLine />
             <ListHeaderText left={106}>곡 정보</ListHeaderText>
-            <ListHeaderText left={586} fixed="true">
+            <ListHeaderText left={508} fixed="true">
               발매일
+            </ListHeaderText>
+            <ListHeaderText left={586} fixed="true">
+              조회수
             </ListHeaderText>
             <ListHeaderText left={664} fixed="true">
               좋아요
@@ -101,7 +106,7 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
           </ListHeader>
           <SongContainer>
             <DefaultScroll>
-              <SongWrapper>
+              <SpecificSongWrapper>
                 {res[tab]
                   .sort((a, b) =>
                     !a.total.views
@@ -117,7 +122,7 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
                       count={formatNumber(likeList[item.songId])}
                     />
                   ))}
-              </SongWrapper>
+              </SpecificSongWrapper>
             </DefaultScroll>
           </SongContainer>
         </ListContainer>
@@ -167,6 +172,10 @@ const ListHeaderText = styled(T7Medium)<{
 const CategoryHeader = styled.div`
   height: 30px;
   margin: 16px 20px 8px 20px;
+
+  &:nth-child(1) {
+    margin-top: 0px;
+  }
 `;
 
 const CategoryHeaderText = styled(T4Medium)<{
@@ -201,7 +210,11 @@ const CategoryHeaderButton = styled.div`
   }
 `;
 
-const SongWrapper = styled.div`
+const AllSongWrapper = styled.div`
+  height: calc(100vh - 171px);
+`;
+
+const SpecificSongWrapper = styled.div`
   height: calc(100vh - 202px);
 `;
 

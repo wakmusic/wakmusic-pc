@@ -429,8 +429,8 @@ export const songList = [
   {
     songId: "_p_Lf3bmv5w",
     title: "DAYBREAK FRONTLINE (Acapella Ver.)",
-    artist: "비챤",
-    remix: "",
+    artist: "비챤아님",
+    remix: "비챤2",
     reaction: "",
     date: 220729,
     start: 0,

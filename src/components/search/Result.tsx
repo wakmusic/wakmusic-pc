@@ -230,6 +230,18 @@ const CategoryHeaderButton = styled.div`
 
 const SongContainer = styled.div`
   margin-top: 33px;
+  height: calc(100vh - 202px);
+
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${colors.blueGray300};
+    border-radius: 10px;
+  }
 `;
 
 const TopLine = styled.div`

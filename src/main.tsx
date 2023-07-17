@@ -30,7 +30,7 @@ import "./index.css";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+getAnalytics(app);
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>

@@ -5,8 +5,11 @@ import styled from "styled-components";
 import { ReactComponent as ArrowRightSVG } from "@assets/icons/ic_16_arrow_right.svg";
 
 import { T4Medium, T6Medium, T7Medium } from "@components/Typography";
+import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 
 import colors from "@constants/colors";
+
+import { formatNumber } from "@utils/formatting";
 
 import NotFound from "./NotFound";
 import SongSection from "./SongSection";
@@ -97,55 +100,25 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
             <BottomLine />
           </ListHeader>
           <SongContainer>
-            {res[tab]
-              .sort((a, b) =>
-                !a.total.views
-                  ? 1
-                  : !b.total.views
-                  ? -1
-                  : b.total.views - a.total.views
-              )
-              .map((item, index) => (
-                <SongSection
-                  item={item}
-                  key={index}
-                  count={
-                    likeList[item.songId].toString().length >= 5
-                      ? likeList[item.songId]
-                          .toString()
-                          .slice(
-                            0,
-                            likeList[item.songId].toString().length - 4
-                          ) +
-                        "." +
-                        (likeList[item.songId]
-                          .toString()
-                          .toString()
-                          .slice(
-                            likeList[item.songId].toString().length - 4,
-                            likeList[item.songId].toString().length - 3
-                          ) +
-                          "만")
-                      : likeList[item.songId].toString().length >= 4
-                      ? likeList[item.songId]
-                          .toString()
-                          .slice(
-                            0,
-                            likeList[item.songId].toString().length - 3
-                          ) +
-                        "." +
-                        (likeList[item.songId]
-                          .toString()
-                          .toString()
-                          .slice(
-                            likeList[item.songId].toString().length - 3,
-                            likeList[item.songId].toString().length - 2
-                          ) +
-                          "천")
-                      : likeList[item.songId].toString()
-                  }
-                />
-              ))}
+            <DefaultScroll>
+              <SongWrapper>
+                {res[tab]
+                  .sort((a, b) =>
+                    !a.total.views
+                      ? 1
+                      : !b.total.views
+                      ? -1
+                      : b.total.views - a.total.views
+                  )
+                  .map((item, index) => (
+                    <SongSection
+                      item={item}
+                      key={index}
+                      count={formatNumber(likeList[item.songId])}
+                    />
+                  ))}
+              </SongWrapper>
+            </DefaultScroll>
           </SongContainer>
         </ListContainer>
       ) : (
@@ -228,20 +201,12 @@ const CategoryHeaderButton = styled.div`
   }
 `;
 
+const SongWrapper = styled.div`
+  height: calc(100vh - 202px);
+`;
+
 const SongContainer = styled.div`
   margin-top: 33px;
-  height: calc(100vh - 202px);
-
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: ${colors.blueGray300};
-    border-radius: 10px;
-  }
 `;
 
 const TopLine = styled.div`

@@ -1,3 +1,4 @@
+import { RepeatType } from "@templates/player";
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -13,7 +14,6 @@ import { ReactComponent as RepeatOnAllSvg } from "@assets/icons/ic_20_repeat_on_
 import { ReactComponent as PlaySvg } from "@assets/icons/ic_30_play_25_point.svg";
 import { ReactComponent as StopSvg } from "@assets/icons/ic_30_stop.svg";
 
-import { RepeatType } from "../../types/player";
 import IconButton from "./IconButton";
 import Volume from "./Volume";
 

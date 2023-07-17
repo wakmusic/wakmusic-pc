@@ -4,7 +4,7 @@ import styled, { css } from "styled-components";
 import { T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
-import { Playlist } from "../../types/player";
+import { Playlist } from "@templates/player";
 
 interface PlaylistProps {
   playlist: Playlist;

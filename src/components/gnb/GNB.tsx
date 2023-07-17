@@ -126,7 +126,7 @@ const GNB = ({}: GNB) => {
 const Container = styled.div`
   margin-top: 20px;
   margin-left: 20px;
-  margin-right: 4px;
+  margin-right: 16px;
 `;
 
 const Navigator = styled.div`

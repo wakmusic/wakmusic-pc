@@ -38,13 +38,15 @@ const Song = ({ song }: SongProps) => {
         />
 
         <TitleContainer>
-          <TitleText>{song.title}</TitleText>
-          <ArtistText>{song.artist}</ArtistText>
+          <T4Medium color={colors.blueGray25}>{song.title}</T4Medium>
+          <ArtistText color={colors.blueGray100}>{song.artist}</ArtistText>
         </TitleContainer>
 
         <ViewContainer>
           <ViewsPopover>
-            <ViewsText>{formatNumber(song.views)}</ViewsText>
+            <ViewsText color={colors.blueGray25}>
+              {formatNumber(song.views)}
+            </ViewsText>
           </ViewsPopover>
           <IconButton icon={ViewsSvg} />
         </ViewContainer>
@@ -80,12 +82,7 @@ const TitleContainer = styled.div`
   text-align: center;
 `;
 
-const TitleText = styled(T4Medium)`
-  color: ${colors.blueGray25};
-`;
-
 const ArtistText = styled(T5Light)`
-  color: ${colors.blueGray100};
   opacity: 0.6;
 `;
 
@@ -115,7 +112,6 @@ const ViewContainer = styled.div`
 
 const ViewsText = styled(T8Medium)`
   white-space: nowrap;
-  color: ${colors.blueGray25};
 `;
 
 export default Song;

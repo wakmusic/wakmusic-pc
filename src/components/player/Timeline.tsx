@@ -75,8 +75,12 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
       <HandleContainer style={{ left: `calc(${progress * 100}% - 3px)` }}>
         <Handle />
         <TimelinePopover>
-          <CurrentTimeText>{formatSecond(progress * length)}</CurrentTimeText>
-          <LengthText>{formatSecond(length)}</LengthText>
+          <T8Medium color={colors.point}>
+            {formatSecond(progress * length)}
+          </T8Medium>
+          <LengthText color={colors.blueGray100}>
+            {formatSecond(length)}
+          </LengthText>
         </TimelinePopover>
       </HandleContainer>
     </Container>
@@ -154,12 +158,7 @@ const TimelinePopover = styled.div`
   opacity: 0.8;
 `;
 
-const CurrentTimeText = styled(T8Medium)`
-  color: ${colors.point};
-`;
-
 const LengthText = styled(T8Medium)`
-  color: ${colors.blueGray100};
   opacity: 0.6;
 `;
 

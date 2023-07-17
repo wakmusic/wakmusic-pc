@@ -18,16 +18,16 @@ import SongSection from "./SongSection";
 enum Category {
   songs = "노래",
   artists = "가수",
-  training = "조교",
+  remix = "조교",
 }
 
 interface ResultProps {
-  tab: "all" | "songs" | "artists" | "training";
+  tab: "all" | "songs" | "artists" | "remix";
   query: string;
   res: {
     songs: Array<Song>;
     artists: Array<Song>;
-    training: Array<Song>;
+    remix: Array<Song>;
   };
   likeList: {
     [id: string]: number;
@@ -44,7 +44,7 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
         <ListContainer top={16}>
           <DefaultScroll>
             <AllSongWrapper>
-              {(Object.keys(res) as Array<"songs" | "artists" | "training">)
+              {(Object.keys(res) as Array<"songs" | "artists" | "remix">)
                 .filter((key) => res[key].length !== 0)
                 .map((key, index) => (
                   <div key={index}>

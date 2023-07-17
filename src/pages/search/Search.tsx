@@ -16,14 +16,14 @@ import { isNull } from "@utils/isTypes";
 
 interface SearchProps {}
 
-type tabsTypes = "all" | "songs" | "artists" | "training";
+type tabsTypes = "all" | "songs" | "artists" | "remix";
 
 function isTabsTypes(arg: unknown): arg is tabsTypes {
   if (
     arg === "all" ||
     arg === "songs" ||
     arg === "artists" ||
-    arg === "training"
+    arg === "remix"
   ) {
     return true;
   }
@@ -37,7 +37,7 @@ const Search = ({}: SearchProps) => {
   const [responses, setResponses] = useState<{
     songs: Array<Song>;
     artists: Array<Song>;
-    training: Array<Song>;
+    remix: Array<Song>;
   }>();
   const [likes, setLikes] = useState<{
     [id: string]: number;
@@ -62,7 +62,7 @@ const Search = ({}: SearchProps) => {
     setResponses({
       songs: songList.filter((song) => song.title.includes(query)),
       artists: songList.filter((song) => song.artist.includes(query)),
-      training: songList.filter((song) => song.remix.includes(query)),
+      remix: songList.filter((song) => song.remix.includes(query)),
     });
 
     // TODO: 여기선 좋아요 수 api

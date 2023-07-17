@@ -21,22 +21,21 @@ const Player = ({}: PlayerProps) => {
     ...dummy,
   ]);
   const [playing, setPlaying] = useState(4);
+  const [currentTimeline, setCurruntTimeline] = useState(83);
 
   const song = Object.assign(dummy[4], { total: dummy[4].hourly });
   const songLength = 272;
 
-  const [currentTimeline, setCurruntTimeline] = useState(83);
+  function onPlayingChange(playing: number) {
+    setPlaying(playing);
+  }
 
-  function onCurrentPlyaingChanged(value: number) {
+  function onCurrentTimelineChange(value: number) {
     setCurruntTimeline(value);
   }
 
-  function onPlayListChanged(playlist: PlaylistType) {
+  function onPlaylistChange(playlist: PlaylistType) {
     setPlaylist(playlist);
-  }
-
-  function onPlayingchanged(playing: number) {
-    setPlaying(playing);
   }
 
   return (
@@ -45,7 +44,7 @@ const Player = ({}: PlayerProps) => {
       <Timeline
         length={songLength}
         current={currentTimeline}
-        onChange={onCurrentPlyaingChanged}
+        onChange={onCurrentTimelineChange}
       />
       <Song song={{ ...song, views: song.total.views }} />
 
@@ -54,8 +53,8 @@ const Player = ({}: PlayerProps) => {
       <Playlist
         playlist={playlist}
         playing={playing}
-        onChange={onPlayListChanged}
-        onPlayingChange={onPlayingchanged}
+        onChange={onPlaylistChange}
+        onPlayingChange={onPlayingChange}
       />
     </Container>
   );

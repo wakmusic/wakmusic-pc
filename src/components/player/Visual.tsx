@@ -10,12 +10,10 @@ interface VisualProps {
 }
 
 const Visual = ({ songId }: VisualProps) => {
+  const img = `https://i.ytimg.com/vi/${songId}/hqdefault.jpg`;
+
   return (
-    <Container
-      style={{
-        backgroundImage: `url(https://i.ytimg.com/vi/${songId}/hqdefault.jpg)`,
-      }}
-    >
+    <Container image={img}>
       <Grid>
         <ExpansionButtonContainer>
           <IconButton icon={ExpansionSVG} />
@@ -25,16 +23,17 @@ const Visual = ({ songId }: VisualProps) => {
           <IconButton icon={PlayListSVG} />
         </PlaylistButtonContainer>
 
-        <Thumbnail src={`https://i.ytimg.com/vi/${songId}/hqdefault.jpg`} />
+        <Thumbnail src={img} />
       </Grid>
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled.div<{ image: string }>`
   width: 100%;
   height: 200px;
 
+  background-image: url(${({ image }) => image});
   background-position: center;
   background-size: cover;
 `;

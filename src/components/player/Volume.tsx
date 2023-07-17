@@ -14,7 +14,7 @@ interface VolumeProps {
 }
 
 const Volume = ({ volume, onChange }: VolumeProps) => {
-  const [isHover, setIsVolumeHovered] = useState(false);
+  const [isHover, setIsHover] = useState(false);
 
   function onValueChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChange(parseInt(e.target.value));
@@ -22,8 +22,8 @@ const Volume = ({ volume, onChange }: VolumeProps) => {
 
   return (
     <Container
-      onMouseEnter={() => setIsVolumeHovered(true)}
-      onMouseLeave={() => setIsVolumeHovered(false)}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
     >
       <IconButton icon={isHover ? SoundOnSvg : SoundOffSvg} />
       <Popover>

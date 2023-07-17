@@ -39,13 +39,12 @@ const Playlist = ({
 
   function onSongSelected(index: number) {
     const newPlaylistData = [...playlistData];
-
     newPlaylistData[index].isSelected = !newPlaylistData[index].isSelected;
 
     setPlaylisData(newPlaylistData);
   }
 
-  const updateCursorPosition = useCallback(() => {
+  function updateCursorPosition() {
     const rect = ref.current?.getBoundingClientRect();
     if (!ref.current || !rect) return;
 
@@ -60,13 +59,17 @@ const Playlist = ({
     );
 
     setCursorIndex(index);
-
     setCursorPosition(rect.top - ref.current.scrollTop + index * 24);
-  }, [mouseY, playlistData]);
+
+    if (rect.bottom - mouseY < 25) {
+      ref.current.scrollTop += 3;
+    } else if (mouseY - rect.top < 25) {
+      ref.current.scrollTop -= 3;
+    }
+  }
 
   const handleMouseDown = useCallback((index: number) => {
     setIsMouseDown(true);
-
     setTargetIndex(index);
   }, []);
 
@@ -81,9 +84,7 @@ const Playlist = ({
         target
       );
 
-      onChange(
-        playlistData.map((song) => ({ title: song.title, artist: song.artist }))
-      );
+      onChange(playlistData);
       onPlayingChange(playlistData.findIndex((song) => song.isPlaying));
     }
 
@@ -122,19 +123,6 @@ const Playlist = ({
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, [handleMouseUp, handleMouseMove]);
-
-  useEffect(() => {
-    if (!isMoving) return;
-
-    const rect = ref.current?.getBoundingClientRect();
-    if (!ref.current || !rect) return;
-
-    if (rect.bottom - mouseY < 25) {
-      ref.current.scrollTop += 5;
-    } else if (mouseY - rect.top < 25) {
-      ref.current.scrollTop -= 5;
-    }
-  }, [cursorPosition, mouseY, isMoving]);
 
   return (
     <Container>

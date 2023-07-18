@@ -9,8 +9,6 @@ import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 
 import colors from "@constants/colors";
 
-import { formatNumber } from "@utils/formatting";
-
 import NotFound from "./NotFound";
 import SongCard from "./SongCard";
 import SongSection from "./SongSection";
@@ -25,16 +23,13 @@ interface ResultProps {
   tab: "all" | "songs" | "artists" | "remix";
   query: string;
   res: {
-    songs: Array<Song>;
-    artists: Array<Song>;
-    remix: Array<Song>;
-  };
-  likeList: {
-    [id: string]: number;
+    songs: Song[];
+    artists: Song[];
+    remix: Song[];
   };
 }
 
-const Result = ({ tab, query, res, likeList }: ResultProps) => {
+const Result = ({ tab, query, res }: ResultProps) => {
   const [, setSearchParams] = useSearchParams();
 
   return (
@@ -67,7 +62,7 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
                         <ArrowRightSVG />
                       </CategoryHeaderButton>
                     </CategoryHeader>
-                    <SongCard songs={res[key]} likeList={likeList} />
+                    <SongCard songs={res[key]} />
                   </CategoryContainer>
                 ))}
             </AllSongWrapper>
@@ -92,21 +87,9 @@ const Result = ({ tab, query, res, likeList }: ResultProps) => {
           <SongContainer>
             <DefaultScroll>
               <SpecificSongWrapper>
-                {res[tab]
-                  .sort((a, b) =>
-                    !a.total.views
-                      ? 1
-                      : !b.total.views
-                      ? -1
-                      : b.total.views - a.total.views
-                  )
-                  .map((item, index) => (
-                    <SongSection
-                      item={item}
-                      key={index}
-                      count={formatNumber(likeList[item.songId])}
-                    />
-                  ))}
+                {res[tab].map((item, index) => (
+                  <SongSection item={item} key={index} />
+                ))}
               </SpecificSongWrapper>
             </DefaultScroll>
           </SongContainer>

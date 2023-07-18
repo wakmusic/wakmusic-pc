@@ -35,13 +35,10 @@ const Search = ({}: SearchProps) => {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState("");
   const [responses, setResponses] = useState<{
-    songs: Array<Song>;
-    artists: Array<Song>;
-    remix: Array<Song>;
+    songs: Song[];
+    artists: Song[];
+    remix: Song[];
   }>();
-  const [likes, setLikes] = useState<{
-    [id: string]: number;
-  }>({});
   const [tab, setTab] = useState<tabsTypes>("all");
 
   useEffect(() => {
@@ -58,27 +55,12 @@ const Search = ({}: SearchProps) => {
       setTab(tab);
     }
 
-    // TODO: 여기서 api 요청하면 됩니다.
+    // TODO: 여기서 api 요청
     setResponses({
-      songs: songList.filter((song) => song.title.includes(query)),
-      artists: songList.filter((song) => song.artist.includes(query)),
-      remix: songList.filter((song) => song.remix.includes(query)),
+      songs: songList.song,
+      artists: songList.artist,
+      remix: songList.remix,
     });
-
-    // TODO: 여기선 좋아요 수 api
-    setLikes(
-      songList
-        .filter(
-          (song) =>
-            song.title.includes(query) ||
-            song.artist.includes(query) ||
-            song.remix.includes(query)
-        )
-        .reduce((acc: { [id: string]: number }, song) => {
-          acc[song.songId] = song.like;
-          return acc;
-        }, {})
-    );
   }, [query, searchParams]);
 
   return (
@@ -91,8 +73,8 @@ const Search = ({}: SearchProps) => {
             </Tab>
           ))}
         </TabBar>
-        {responses && likes ? (
-          <Result tab={tab} query={query} res={responses} likeList={likes} />
+        {responses ? (
+          <Result tab={tab} query={query} res={responses} />
         ) : (
           <div>로딩중이에용</div>
         )}

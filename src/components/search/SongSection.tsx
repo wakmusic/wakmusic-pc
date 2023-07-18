@@ -7,12 +7,13 @@ import Track from "@components/globals/Track";
 
 import colors from "@constants/colors";
 
+import { formatNumber } from "@utils/formatting";
+
 interface SongSectionProps {
   item: Song;
-  count: string;
 }
 
-const SongSection = ({ item, count }: SongSectionProps) => {
+const SongSection = ({ item }: SongSectionProps) => {
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
   return (
@@ -27,7 +28,7 @@ const SongSection = ({ item, count }: SongSectionProps) => {
           {item.date.toString().slice(2, 4)}.{item.date.toString().slice(4, 6)}
         </Text>
         <Text>{(item.total.views?.toLocaleString() ?? "-") + "회"}</Text>
-        <Text>{count}</Text>
+        <Text>{formatNumber(item.like)}</Text>
       </TextGroup>
     </Container>
   );

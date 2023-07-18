@@ -1,4 +1,5 @@
 export type Song = {
+  id: number;
   songId: string;
   title: string;
   artist: string;
@@ -12,4 +13,5 @@ export type Song = {
     increase: number | null;
     last: number | null;
   };
+  like: number;
 };

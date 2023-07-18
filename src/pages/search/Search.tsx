@@ -9,7 +9,7 @@ import TabBar from "@components/globals/TabBar";
 import Result from "@components/search/Result";
 
 import colors from "@constants/colors";
-import { likeList, songList } from "@constants/dummys";
+import { songList } from "@constants/dummys";
 import { searchTabs } from "@constants/tabs";
 
 import { isNull } from "@utils/isTypes";
@@ -75,12 +75,7 @@ const Search = ({}: SearchProps) => {
             song.remix.includes(query)
         )
         .reduce((acc: { [id: string]: number }, song) => {
-          const likeItem = likeList.find(
-            (item) => item.song.songId === song.songId
-          );
-          if (likeItem) {
-            acc[song.songId] = likeItem.likes;
-          }
+          acc[song.songId] = song.like;
           return acc;
         }, {})
     );

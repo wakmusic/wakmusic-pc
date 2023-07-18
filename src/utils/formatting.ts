@@ -26,17 +26,19 @@ export function formatSecond(second: number): string {
 export function formatNumber(num: number): string {
   if (num < 1000) return num.toString();
 
-  if (num < 10_000) return `${(num / 1000).toFixed(2)}천`;
+  if (num < 10_000) return `${parseFloat((num / 1000).toFixed(2))}천`;
 
-  if (num < 100_000) return `${(num / 10_000).toFixed(2)}만`;
+  if (num < 100_000) return `${parseFloat((num / 10_000).toFixed(2))}만`;
 
-  if (num < 1_000_000) return `${(num / 10_000).toFixed(1)}만`;
+  if (num < 1_000_000) return `${parseFloat((num / 10_000).toFixed(1))}만`;
 
   if (num < 100_000_000) return `${Math.floor(num / 10_000)}만`;
 
-  if (num < 1_000_000_000) return `${(num / 100_000_000).toFixed(2)}억`;
+  if (num < 1_000_000_000)
+    return `${parseFloat((num / 100_000_000).toFixed(2))}억`;
 
-  if (num < 10_000_000_000) return `${(num / 100_000_000).toFixed(1)}억`;
+  if (num < 10_000_000_000)
+    return `${parseFloat((num / 100_000_000).toFixed(1))}억`;
 
   return `${Math.floor(num / 100_000_000)}억`;
 }

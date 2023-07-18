@@ -1,4 +1,4 @@
-import { SongsSearchResponse } from "@templates/search";
+import { SongsSearchResponse, tabsTypes } from "@templates/search";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
@@ -15,8 +15,6 @@ import { searchTabs } from "@constants/tabs";
 import { isNull } from "@utils/isTypes";
 
 interface SearchProps {}
-
-type tabsTypes = "all" | "song" | "artist" | "remix";
 
 function isTabsTypes(arg: unknown): arg is tabsTypes {
   return arg === "all" || arg === "song" || arg === "artist" || arg === "remix";

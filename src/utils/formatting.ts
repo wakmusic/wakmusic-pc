@@ -41,7 +41,7 @@ export function formatNumber(num: number): string {
   return `${Math.floor(num / 100_000_000)}억`;
 }
 
-export function dateToText(date: number): string {
+export function formatDate(date: number): string {
   const stringDate = date.toString();
 
   return stringDate.replace(/(.\d)(.\d)(.\d)/, "20$1.$2.$3");

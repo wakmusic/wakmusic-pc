@@ -20,3 +20,5 @@ export type SongsSearchResponse = {
   artist: Song[];
   remix: Song[];
 };
+
+export type tabsTypes = "all" | "song" | "artist" | "remix";

@@ -7,7 +7,7 @@ import Track from "@components/globals/Track";
 
 import colors from "@constants/colors";
 
-import { dateToText, formatNumber } from "@utils/formatting";
+import { formatDate, formatNumber } from "@utils/formatting";
 
 interface SongSectionProps {
   item: Song;
@@ -16,7 +16,7 @@ interface SongSectionProps {
 const SongSection = ({ item }: SongSectionProps) => {
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const date = useMemo(() => {
-    return dateToText(item.date);
+    return formatDate(item.date);
   }, [item.date]);
 
   return (

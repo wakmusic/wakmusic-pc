@@ -1,5 +1,5 @@
 import { Song } from "@templates/search";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { T7Light } from "@components/Typography";
@@ -7,7 +7,7 @@ import Track from "@components/globals/Track";
 
 import colors from "@constants/colors";
 
-import { formatNumber } from "@utils/formatting";
+import { dateToText, formatNumber } from "@utils/formatting";
 
 interface SongSectionProps {
   item: Song;
@@ -15,6 +15,9 @@ interface SongSectionProps {
 
 const SongSection = ({ item }: SongSectionProps) => {
   const [isSelected, setIsSelected] = useState<boolean>(false);
+  const date = useMemo(() => {
+    return dateToText(item.date);
+  }, [item.date]);
 
   return (
     <Container
@@ -23,10 +26,7 @@ const SongSection = ({ item }: SongSectionProps) => {
     >
       <Track item={item} />
       <TextGroup>
-        <Text>
-          20{item.date.toString().slice(0, 2)}.
-          {item.date.toString().slice(2, 4)}.{item.date.toString().slice(4, 6)}
-        </Text>
+        <Text>{date}</Text>
         <Text>{(item.total.views?.toLocaleString() ?? "-") + "회"}</Text>
         <Text>{formatNumber(item.like)}</Text>
       </TextGroup>

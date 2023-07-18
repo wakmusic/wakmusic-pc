@@ -7,6 +7,8 @@ import Track from "@components/globals/Track";
 
 import colors from "@constants/colors";
 
+import { formatDate } from "@utils/formatting";
+
 interface MusicListProps {
   rank: number;
 
@@ -17,9 +19,7 @@ interface MusicListProps {
 
 const MusicList = ({ rank, item }: MusicListProps) => {
   const date = useMemo(() => {
-    const stringDate = item.date.toString();
-
-    return stringDate.replace(/(.\d)(.\d)(.\d)/, "20$1.$2.$3");
+    return formatDate(item.date);
   }, [item.date]);
 
   return (

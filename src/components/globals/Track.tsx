@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { ReactComponent as PlaySVG } from "@assets/icons/ic_30_play_point.svg";
 
@@ -69,11 +69,20 @@ const Container = styled.div`
 
 const TrackInfo = styled.div``;
 
+const TrackStyle = css`
+  max-width: 206px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+
 const TrackTitle = styled(T5Medium)`
+  ${TrackStyle};
   color: ${colors.gray700};
 `;
 
 const TrackArtist = styled(T6Medium)`
+  ${TrackStyle};
   color: ${colors.blueGray500};
 `;
 

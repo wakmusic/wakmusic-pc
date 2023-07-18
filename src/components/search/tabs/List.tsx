@@ -32,11 +32,11 @@ const List = ({ tab, res }: ListProps) => {
       </ListHeader>
       <SongContainer>
         <DefaultScroll>
-          <SpecificSongWrapper>
+          <SongWrapper>
             {res[tab].map((item, index) => (
               <SongSection item={item} key={index} />
             ))}
-          </SpecificSongWrapper>
+          </SongWrapper>
         </DefaultScroll>
       </SongContainer>
     </Container>
@@ -75,8 +75,8 @@ const ListHeaderText = styled(T7Medium)<{
   color: ${colors.blueGray400};
 `;
 
-const SpecificSongWrapper = styled.div`
-  height: calc(100vh - 202px);
+const SongWrapper = styled.div`
+  height: calc(100vh - 181px);
 `;
 
 const SongContainer = styled.div`

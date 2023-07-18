@@ -28,7 +28,7 @@ const All = ({ query, res }: AllProps) => {
   return (
     <Container>
       <DefaultScroll>
-        <AllSongWrapper>
+        <SongWrapper>
           {(Object.keys(res) as Array<"song" | "artist" | "remix">)
             .filter((key) => res[key].length !== 0)
             .map((key, index) => (
@@ -55,7 +55,7 @@ const All = ({ query, res }: AllProps) => {
                 <SongCard songs={res[key]} />
               </CategoryContainer>
             ))}
-        </AllSongWrapper>
+        </SongWrapper>
       </DefaultScroll>
     </Container>
   );
@@ -111,8 +111,8 @@ const CategoryHeaderButton = styled.div`
   }
 `;
 
-const AllSongWrapper = styled.div`
-  height: calc(100vh - 171px);
+const SongWrapper = styled.div`
+  height: calc(100vh - 150px);
 `;
 
 export default All;

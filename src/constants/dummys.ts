@@ -1,4 +1,4 @@
-import { Song } from "@templates/search";
+import { SongsSearchResponse } from "@templates/search";
 
 export const chartUpdated = "1688630567";
 
@@ -373,11 +373,7 @@ export const recommended = [
   },
 ];
 
-export const songList: {
-  song: Song[];
-  artist: Song[];
-  remix: Song[];
-} = {
+export const songList: SongsSearchResponse = {
   song: [
     {
       songId: "08meo6qrhFc",

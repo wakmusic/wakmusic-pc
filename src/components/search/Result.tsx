@@ -14,17 +14,17 @@ import SongCard from "./SongCard";
 import SongSection from "./SongSection";
 
 enum Category {
-  songs = "노래",
-  artists = "가수",
+  song = "노래",
+  artist = "가수",
   remix = "조교",
 }
 
 interface ResultProps {
-  tab: "all" | "songs" | "artists" | "remix";
+  tab: "all" | "song" | "artist" | "remix";
   query: string;
   res: {
-    songs: Song[];
-    artists: Song[];
+    song: Song[];
+    artist: Song[];
     remix: Song[];
   };
 }
@@ -39,7 +39,7 @@ const Result = ({ tab, query, res }: ResultProps) => {
         <ListContainer top={16}>
           <DefaultScroll>
             <AllSongWrapper>
-              {(Object.keys(res) as Array<"songs" | "artists" | "remix">)
+              {(Object.keys(res) as Array<"song" | "artist" | "remix">)
                 .filter((key) => res[key].length !== 0)
                 .map((key, index) => (
                   <CategoryContainer key={index}>

@@ -14,3 +14,9 @@ export type Song = {
   };
   like: number;
 };
+
+export type SongsSearchResponse = {
+  song: Song[];
+  artist: Song[];
+  remix: Song[];
+};

@@ -1,7 +1,7 @@
 export const searchTabs = [
   { text: "전체", to: { tab: "all" } },
-  { text: "노래", to: { tab: "songs" } },
-  { text: "가수", to: { tab: "artists" } },
+  { text: "노래", to: { tab: "song" } },
+  { text: "가수", to: { tab: "artist" } },
   { text: "조교", to: { tab: "remix" } },
 ];
 

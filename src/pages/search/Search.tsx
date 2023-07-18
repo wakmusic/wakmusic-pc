@@ -1,4 +1,4 @@
-import { Song } from "@templates/search";
+import { SongsSearchResponse } from "@templates/search";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
@@ -16,29 +16,16 @@ import { isNull } from "@utils/isTypes";
 
 interface SearchProps {}
 
-type tabsTypes = "all" | "songs" | "artists" | "remix";
+type tabsTypes = "all" | "song" | "artist" | "remix";
 
 function isTabsTypes(arg: unknown): arg is tabsTypes {
-  if (
-    arg === "all" ||
-    arg === "songs" ||
-    arg === "artists" ||
-    arg === "remix"
-  ) {
-    return true;
-  }
-
-  return false;
+  return arg === "all" || arg === "song" || arg === "artist" || arg === "remix";
 }
 
 const Search = ({}: SearchProps) => {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState("");
-  const [responses, setResponses] = useState<{
-    songs: Song[];
-    artists: Song[];
-    remix: Song[];
-  }>();
+  const [responses, setResponses] = useState<SongsSearchResponse>();
   const [tab, setTab] = useState<tabsTypes>("all");
 
   useEffect(() => {
@@ -56,11 +43,7 @@ const Search = ({}: SearchProps) => {
     }
 
     // TODO: 여기서 api 요청
-    setResponses({
-      songs: songList.song,
-      artists: songList.artist,
-      remix: songList.remix,
-    });
+    setResponses(songList);
   }, [query, searchParams]);
 
   return (

@@ -46,20 +46,17 @@ const Container = styled.div<{
   background-color: ${(p) => p.background ?? null};
   cursor: pointer;
 
-  & div:nth-child(1) {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+  padding-left: 20px;
 
-    margin-left: 20px;
-  }
+  display: flex;
+  align-items: center;
 `;
 
 const TextGroup = styled.div`
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  margin-left: 508px;
+  margin-left: 488px;
 
   display: grid;
   grid-template-columns: repeat(3, 70px);

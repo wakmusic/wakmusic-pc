@@ -118,6 +118,7 @@ const Search = ({}: SearchProps) => {
           onFocus={focusHandler}
           onChange={onChange}
           onBlur={onBlurCallback}
+          autoComplete="off"
           ref={(e) => {
             ref(e);
 

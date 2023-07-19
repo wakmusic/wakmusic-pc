@@ -1,9 +1,10 @@
-import { Playlist as PlaylistType } from "@templates/player";
 import { useState } from "react";
 import styled from "styled-components";
 
 import colors from "@constants/colors";
 import { hourlyChart as dummy } from "@constants/dummys";
+
+import { PlaylistType } from "@templates/player";
 
 import Playlist from "./Playlist";
 import Song from "./Song";

@@ -4,4 +4,4 @@ export enum RepeatType {
   One,
 }
 
-export type Playlist = { title: string; artist: string }[];
+export type PlaylistType = { title: string; artist: string }[];

@@ -8,7 +8,7 @@ import { playButtonData } from "@constants/IconButton";
 import { newTabs } from "@constants/tabs";
 
 import iconButtonType from "../../types/iconButtonType";
-import tabType from "../../types/tabType";
+import tabType from "../../templates/tabType";
 
 interface FunctionSectionProps {}
 

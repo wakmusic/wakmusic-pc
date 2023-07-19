@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import styled, { css } from "styled-components";
 
 import { T7_1Light } from "@components/Typography";
@@ -6,35 +7,34 @@ import Track from "@components/globals/Track";
 
 import colors from "@constants/colors";
 
-interface MusicListProps {}
+import { formatDate } from "@utils/formatting";
 
-const MusicList = ({}: MusicListProps) => {
+interface MusicListProps {
+  rank: number;
+
+  // TODO: Interface 작업 예정
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  item: any;
+}
+
+const MusicList = ({ rank, item }: MusicListProps) => {
+  const date = useMemo(() => {
+    return formatDate(item.date);
+  }, [item.date]);
+
   return (
-    <Wrapper $select={false}>
+    <Wrapper $select={Math.random() > 0.5}>
       <RankLayout>
-        <Rank now={1} last={4} />
-        <Track
-          item={{
-            songId: "Yn2rnQsv8bE",
-            title: "울산왕감자 #Shorts",
-            artist: "징버거",
-            remix: "",
-            reaction: "",
-            date: 230706,
-            start: 0,
-            end: 0,
-            hourly: {
-              views: 18229,
-              increase: 18229,
-              last: 0,
-            },
-          }}
-        />
+        <Rank now={rank} last={item.hourly.last} />
+        <Track item={item} onClick={console.log} />
       </RankLayout>
       <TextLayout>
-        <Text>1위</Text>
-        <Text>2022.05.11</Text>
-        <Text>19,300회</Text>
+        <Text>{item.hourly.last}위</Text>
+        <Text>
+          20
+          {date}
+        </Text>
+        <Text>{item.hourly.increase.toLocaleString()}회</Text>
       </TextLayout>
     </Wrapper>
   );

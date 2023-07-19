@@ -5,29 +5,15 @@ import Track from "@components/globals/Track";
 
 import colors from "@constants/colors";
 
-interface MusicListProps {}
+interface MusicListProps {
+  item: any;
+}
 
-const MusicList = ({}: MusicListProps) => {
+const MusicList = ({ item }: MusicListProps) => {
   return (
     <Wrapper $select={false}>
       <RankLayout>
-        <Track
-          item={{
-            songId: "Yn2rnQsv8bE",
-            title: "울산왕감자 #Shorts",
-            artist: "징버거",
-            remix: "",
-            reaction: "",
-            date: 230706,
-            start: 0,
-            end: 0,
-            hourly: {
-              views: 18229,
-              increase: 18229,
-              last: 0,
-            },
-          }}
-        />
+        <Track item={item} />
       </RankLayout>
       <TextLayout>
         <Text>1위</Text>

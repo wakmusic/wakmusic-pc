@@ -42,7 +42,7 @@ const Chart = ({}: ChartProps) => {
       </Header>
 
       <Items>
-        {hourlyChart.map((item, index) => (
+        {hourlyChart.slice(0, 8).map((item, index) => (
           <ChartItem key={index} rank={index + 1} item={item} />
         ))}
       </Items>

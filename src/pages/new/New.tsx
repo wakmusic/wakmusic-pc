@@ -5,10 +5,12 @@ import { ReactComponent as Check } from "@assets/icons/ic_16_check.svg";
 import { T7Light } from "@components/Typography/Light";
 import { T7Medium } from "@components/Typography/Medium";
 import PageContainer from "@components/globals/PageContainer";
+import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import FunctionSection from "@components/new/FunctionSection";
 import MusicList from "@components/new/MusicList";
 
 import colors from "@constants/colors";
+import { hourlyChart } from "@constants/dummys";
 
 import { isNumber } from "@utils/isTypes";
 
@@ -35,28 +37,13 @@ const New = ({}: NewProps) => {
       </GuideBox>
       <BlackLine />
       <MusicSection>
-        <MusicLayout>
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-          <MusicList />
-        </MusicLayout>
+        <DefaultScroll>
+          <MusicLayout>
+            {hourlyChart.map((item, index) => (
+              <MusicList key={index} item={item} />
+            ))}
+          </MusicLayout>
+        </DefaultScroll>
       </MusicSection>
     </Wrapper>
   );
@@ -148,7 +135,6 @@ const InfoText = styled(GuideText)`
 
 const MusicSection = styled.div`
   width: 100%;
-  overflow-y: scroll;
   flex: 1 1 0;
 `;
 

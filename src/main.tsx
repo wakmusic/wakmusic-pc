@@ -1,5 +1,6 @@
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
+import "overlayscrollbars/overlayscrollbars.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -18,6 +19,7 @@ import Index from "@pages/index/Index";
 import New from "@pages/new/New";
 import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
+import User from "@pages/user/User";
 
 import "@utils/loadIpcRenderer";
 
@@ -41,6 +43,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/artists" element={<Artists />} />
             <Route path="/search" element={<Search />} />
             <Route path="/new" element={<New />} />
+            <Route path="/user/*" element={<User />}></Route>
           </Routes>
           <Player />
         </RootOverlay>

@@ -25,7 +25,7 @@ const MusicList = ({ item }: MusicListProps) => {
 };
 
 const Wrapper = styled.div<{ $select: boolean }>`
-  padding: 0px 15px 0px 20px;
+  padding: 0px 20px;
   width: 100%;
   height: 64px;
   display: flex;

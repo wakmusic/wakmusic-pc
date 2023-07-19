@@ -142,6 +142,8 @@ const MusicLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  height: 502px;
 `;
 
 export default New;

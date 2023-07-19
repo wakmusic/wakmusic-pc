@@ -1,19 +1,35 @@
+import { myListState } from "@state/user/atoms";
+import { Playlist } from "@templates/playlist";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
+import { ReactComponent as DragPlaylist } from "@assets/icons/ic_24_move.svg";
 import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";
 
 import { T6Medium, T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { XY } from "@pages/user/Playlists";
+
 interface PlaylistItemProps {
-  // api 작업후에 interface 작업하겠습니다
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  item: any;
+  item: Playlist;
+  isDragMode: boolean;
+  onDrag: (target: string, position: XY) => void;
 }
 
-const PlaylistItem = ({ item }: PlaylistItemProps) => {
-  return (
+const PlaylistItem = ({ item, isDragMode, onDrag }: PlaylistItemProps) => {
+  const [isEditMode] = useRecoilState(myListState);
+  const [isSelected, setSelected] = useState(false);
+
+  useEffect(() => {
+    if (!isDragMode) {
+      setSelected(false);
+    }
+  }, [isDragMode]);
+
+  return !isSelected || !isDragMode ? (
     <Container>
       <Icon
         src={`https://static.wakmusic.xyz/static/playlist/${item.image.version}.png`}
@@ -21,9 +37,20 @@ const PlaylistItem = ({ item }: PlaylistItemProps) => {
       <InfoContainer>
         <Title>{item.title}</Title>
         <Volume>{item.songs.length}곡</Volume>
-        <PlayAll />
+        {isEditMode ? (
+          <DragPlaylist
+            onMouseDown={(e) => {
+              onDrag(item.key, { x: e.clientX, y: e.clientY });
+              setSelected(true);
+            }}
+          ></DragPlaylist>
+        ) : (
+          <PlayAll></PlayAll>
+        )}
       </InfoContainer>
     </Container>
+  ) : (
+    <Container></Container>
   );
 };
 

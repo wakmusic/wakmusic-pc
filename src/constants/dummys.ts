@@ -13175,7 +13175,7 @@ export const profileList = [
 
 export const myList = [
   {
-    key: "H4JhibqjHd",
+    key: "key1",
     title: "리스트제목열두글자자자자",
     createAt: 1684622625731,
     user: {
@@ -13208,7 +13208,7 @@ export const myList = [
     ],
   },
   {
-    key: "H4JhibqjHd",
+    key: "key2",
     title: "리스트제목열두글자자자자",
     createAt: 1684622625731,
     user: {
@@ -13241,7 +13241,7 @@ export const myList = [
     ],
   },
   {
-    key: "H4JhibqjHd",
+    key: "key3",
     title: "리스트제목열두글자자자자",
     createAt: 1684622625731,
     user: {
@@ -13274,7 +13274,7 @@ export const myList = [
     ],
   },
   {
-    key: "H4JhibqjHd",
+    key: "key4",
     title: "리스트제목열두글자자자자",
     createAt: 1684622625731,
     user: {

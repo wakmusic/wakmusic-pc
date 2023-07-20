@@ -172,10 +172,10 @@ const Playlist = ({
                 <MovementCursor />
               )}
               <SongContainer
-                playing={playlistData[i].isPlaying ? 1 : 0}
-                selected={playlistData[i].isSelected ? 1 : 0}
-                ismoving={isMoving ? 1 : 0}
-                istarget={isMoving && targetIndex === i ? 1 : 0}
+                $playing={playlistData[i].isPlaying}
+                $selected={playlistData[i].isSelected}
+                $ismoving={isMoving}
+                $istarget={isMoving && targetIndex === i}
                 onClick={() => onSongSelected(i)}
                 onMouseDown={() => handleMouseDown(i)}
               >
@@ -203,10 +203,10 @@ const PlaylistContainer = styled.div<{ height: number }>`
 `;
 
 const SongContainer = styled.div<{
-  playing: 1 | 0;
-  selected: 1 | 0;
-  ismoving: 1 | 0;
-  istarget: 1 | 0;
+  $playing: boolean;
+  $selected: boolean;
+  $ismoving: boolean;
+  $istarget: boolean;
 }>`
   width: 100%;
   height: 24px;
@@ -217,17 +217,17 @@ const SongContainer = styled.div<{
   align-items: center;
 
   cursor: pointer;
-  color: ${({ playing }) => (playing ? colors.point : colors.gray500)};
+  color: ${({ $playing }) => ($playing ? colors.point : colors.gray500)};
 
-  ${({ selected, istarget }) =>
-    (selected || istarget) &&
+  ${({ $selected, $istarget }) =>
+    ($selected || $istarget) &&
     css`
       background-color: ${colors.gray700};
     `}
 
   &:hover {
-    ${({ ismoving }) =>
-      !ismoving &&
+    ${({ $ismoving }) =>
+      !$ismoving &&
       css`
         background-color: ${colors.gray700};
       `}

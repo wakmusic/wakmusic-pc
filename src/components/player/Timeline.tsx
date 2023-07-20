@@ -69,7 +69,7 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
     <Container
       ref={ref}
       onMouseDown={handleMouseState}
-      controlling={isMouseDown ? 1 : 0}
+      $controlling={isMouseDown}
     >
       <Line progress={progress * 100} />
       <HandleContainer progress={progress * 100}>
@@ -94,7 +94,7 @@ const HandleContainer = styled.div<{ progress: number }>`
   display: none;
 `;
 
-const Container = styled.div<{ controlling: 0 | 1 }>`
+const Container = styled.div<{ $controlling: boolean }>`
   width: 100%;
   height: 2px;
 
@@ -112,8 +112,8 @@ const Container = styled.div<{ controlling: 0 | 1 }>`
     }
   }
 
-  ${({ controlling }) =>
-    controlling &&
+  ${({ $controlling }) =>
+    $controlling &&
     css`
       height: 4px;
 

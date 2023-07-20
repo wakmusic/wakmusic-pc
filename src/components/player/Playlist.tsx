@@ -42,16 +42,20 @@ const Playlist = ({
   const [scrollbar, setScrollbar] = useState<HTMLElement | null>(null);
   const [mouseY, setMouseY] = useState(0);
 
-  function onScroll(scroll: HTMLElement) {
+  function onScrollbarInitialized(scroll: HTMLElement) {
     setScrollbar(scroll);
-    setIsScrollEnabled(true);
+  }
+
+  function onScroll() {
+    if (!isScrollEnabled) {
+      setIsScrollEnabled(true);
+    }
   }
 
   function onSongSelected(index: number) {
-    const newPlaylistData = [...playlistData];
-    newPlaylistData[index].isSelected = !newPlaylistData[index].isSelected;
+    playlistData[index].isSelected = !playlistData[index].isSelected;
 
-    setPlaylisData(newPlaylistData);
+    setPlaylisData([...playlistData]);
   }
 
   const updatePlaylist = useCallback(() => {
@@ -128,15 +132,17 @@ const Playlist = ({
   }, [handleMouseUp, handleMouseMove]);
 
   useInterval(() => {
+    if (!isMoving) return;
+
     const rect = scrollbar?.getBoundingClientRect();
-    if (!isMoving || !scrollbar || !rect) return;
+    if (!scrollbar || !rect) return;
 
     const range = 25;
     const scale = 0.5;
-    const maxScroll = scrollbar.scrollHeight - scrollbar.clientHeight;
 
     const topOffset = mouseY - rect.top;
     const bottomOffset = rect.bottom - mouseY;
+    const maxScroll = scrollbar.scrollHeight - scrollbar.clientHeight;
 
     if (bottomOffset < range && scrollbar.scrollTop < maxScroll) {
       scrollbar.scrollTo(
@@ -158,7 +164,7 @@ const Playlist = ({
 
   return (
     <Container>
-      <PlayerScroll scroll={onScroll}>
+      <PlayerScroll initialize={onScrollbarInitialized} scroll={onScroll}>
         <PlaylistContainer height={playlistData.length * 24}>
           {playlistData.map((song, i) => (
             <Fragment key={i}>
@@ -213,6 +219,12 @@ const SongContainer = styled.div<{
   cursor: pointer;
   color: ${({ playing }) => (playing ? colors.point : colors.gray500)};
 
+  ${({ selected, istarget }) =>
+    (selected || istarget) &&
+    css`
+      background-color: ${colors.gray700};
+    `}
+
   &:hover {
     ${({ ismoving }) =>
       !ismoving &&
@@ -220,12 +232,6 @@ const SongContainer = styled.div<{
         background-color: ${colors.gray700};
       `}
   }
-
-  ${({ selected, istarget }) =>
-    (selected || istarget) &&
-    css`
-      background-color: ${colors.gray700};
-    `}
 `;
 
 const TitleText = styled(T7Light)`

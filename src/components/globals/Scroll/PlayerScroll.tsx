@@ -1,4 +1,3 @@
-import { OverlayScrollbars } from "overlayscrollbars";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import styled from "styled-components";
 
@@ -6,23 +5,25 @@ import colors from "@constants/colors";
 
 interface PlayerScrollProps {
   children: React.ReactNode;
-  scroll?: (scrollbar: HTMLElement) => void;
-  ref?: React.RefObject<HTMLDivElement>;
+  initialize?: (scrollbar: HTMLElement) => void;
+  scroll?: () => void;
 }
 
-const PlayerScroll = ({ children, scroll }: PlayerScrollProps) => {
-  function update(instance: OverlayScrollbars) {
-    if (!scroll) return;
-
-    scroll(instance.elements().scrollOffsetElement);
-  }
-
+const PlayerScroll = ({ children, initialize, scroll }: PlayerScrollProps) => {
   return (
     <ScrollWrapper>
       <OverlayScrollbarsComponent
         events={{
-          initialized: update,
-          scroll: update,
+          initialized: (instance) => {
+            if (!initialize) return;
+
+            initialize(instance.elements().scrollOffsetElement);
+          },
+          scroll: () => {
+            if (!scroll) return;
+
+            scroll();
+          },
         }}
       >
         {children}

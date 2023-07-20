@@ -71,8 +71,8 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
       onMouseDown={handleMouseState}
       controlling={isMouseDown ? 1 : 0}
     >
-      <Line style={{ width: `${progress * 100}%` }} />
-      <HandleContainer style={{ left: `calc(${progress * 100}% - 3px)` }}>
+      <Line progress={progress * 100} />
+      <HandleContainer progress={progress * 100}>
         <Handle />
         <TimelinePopover>
           <T8Medium color={colors.point}>
@@ -87,8 +87,9 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
   );
 };
 
-const HandleContainer = styled.div`
+const HandleContainer = styled.div<{ progress: number }>`
   position: relative;
+  left: calc(${({ progress }) => progress}% - 3px);
 
   display: none;
 `;
@@ -124,8 +125,9 @@ const Container = styled.div<{ controlling: 0 | 1 }>`
     `}
 `;
 
-const Line = styled.div`
+const Line = styled.div<{ progress: number }>`
   height: 100%;
+  width: ${({ progress }) => progress}%;
 
   background-color: ${colors.point};
 `;

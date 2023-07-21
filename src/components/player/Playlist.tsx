@@ -41,14 +41,10 @@ const Playlist = ({
     isScrolling: false,
   });
 
-  const [movingIndex, setMovingIndex] = useState({ target: 0, cursor: 0 });
+  const [targetIndex, setTargetIndex] = useState(0);
 
   const [scrollbar, setScrollbar] = useState<HTMLElement | null>(null);
   const [mouseY, setMouseY] = useState(0);
-
-  function onScrollbarInitialized(scroll: HTMLElement) {
-    setScrollbar(scroll);
-  }
 
   function onScroll() {
     if (!scrollState.isScrollEnabled) {
@@ -62,48 +58,45 @@ const Playlist = ({
     setPlaylisData([...playlistData]);
   }
 
-  const updatePlaylist = useCallback(() => {
-    const target = playlistData[movingIndex.target];
-
-    playlistData.splice(movingIndex.target, 1);
-    playlistData.splice(
-      movingIndex.target < movingIndex.cursor
-        ? movingIndex.cursor - 1
-        : movingIndex.cursor,
-      0,
-      target
-    );
-
-    onChange(playlistData);
-    onPlayingChange(playlistData.findIndex((song) => song.isPlaying));
-  }, [playlistData, movingIndex, onChange, onPlayingChange]);
-
-  const updateCursorPosition = useCallback(() => {
+  const getCursorIndex = useCallback(() => {
     const rect = scrollbar?.getBoundingClientRect();
-    if (!scrollbar || !rect) return;
+    if (!scrollbar || !rect) return 0;
 
     const y =
       Math.max(rect.top, Math.min(rect.bottom, mouseY)) +
       (scrollbar.scrollTop ?? 0) -
       rect.top;
 
-    const index = Math.max(
+    return Math.max(0, Math.min(playlistData.length, Math.round(y / 24)));
+  }, [mouseY, playlistData, scrollbar]);
+
+  const updatePlaylist = useCallback(() => {
+    const target = playlistData[targetIndex];
+
+    const cursorIndex = getCursorIndex();
+
+    playlistData.splice(targetIndex, 1);
+    playlistData.splice(
+      targetIndex < cursorIndex ? cursorIndex - 1 : cursorIndex,
       0,
-      Math.min(playlistData.length, Math.round(y / 24))
+      target
     );
 
-    setMovingIndex({ ...movingIndex, cursor: index });
-  }, [mouseY, playlistData, scrollbar, movingIndex]);
+    onChange(playlistData);
+    onPlayingChange(playlistData.findIndex((song) => song.isPlaying));
+  }, [playlistData, targetIndex, onChange, onPlayingChange, getCursorIndex]);
 
   const handleMouseDown = useCallback(
     (index: number) => {
       setMouseState({ ...mouseState, isMouseDown: true });
-      setMovingIndex({ ...movingIndex, target: index });
+      setTargetIndex(index);
     },
-    [movingIndex, mouseState]
+    [mouseState]
   );
 
   const handleMouseUp = useCallback(() => {
+    if (!mouseState.isMouseDown) return;
+
     if (mouseState.isMoving && !scrollState.isScrollEnabled) {
       updatePlaylist();
     }
@@ -113,9 +106,9 @@ const Playlist = ({
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      setMouseY(e.clientY);
-
       if (mouseState.isMouseDown) {
+        setMouseY(e.clientY);
+
         if (!mouseState.isMoving) {
           setMouseState({ ...mouseState, isMoving: true });
         }
@@ -123,11 +116,9 @@ const Playlist = ({
         if (!scrollState.isScrolling) {
           setScrollState({ ...scrollState, isScrollEnabled: false });
         }
-
-        updateCursorPosition();
       }
     },
-    [mouseState, scrollState, updateCursorPosition]
+    [mouseState, scrollState]
   );
 
   useEffect(() => {
@@ -172,18 +163,18 @@ const Playlist = ({
 
   return (
     <Container>
-      <PlayerScroll initialize={onScrollbarInitialized} scroll={onScroll}>
+      <PlayerScroll initialize={setScrollbar} scroll={onScroll}>
         <PlaylistContainer height={playlistData.length * 24}>
           {playlistData.map((song, i) => (
             <Fragment key={i}>
               {mouseState.isMoving &&
                 !scrollState.isScrollEnabled &&
-                i === movingIndex.cursor && <MovementCursor />}
+                i === getCursorIndex() && <MovementCursor />}
               <SongContainer
                 $playing={playlistData[i].isPlaying}
                 $selected={playlistData[i].isSelected}
                 $ismoving={mouseState.isMoving}
-                $istarget={mouseState.isMoving && movingIndex.target === i}
+                $istarget={mouseState.isMoving && targetIndex === i}
                 onClick={() => onSongSelected(i)}
                 onMouseDown={() => handleMouseDown(i)}
               >
@@ -194,7 +185,7 @@ const Playlist = ({
           ))}
           {mouseState.isMoving &&
             !scrollState.isScrollEnabled &&
-            movingIndex.cursor === playlistData.length && <MovementCursor />}
+            getCursorIndex() === playlistData.length && <MovementCursor />}
         </PlaylistContainer>
       </PlayerScroll>
     </Container>

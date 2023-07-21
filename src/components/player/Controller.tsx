@@ -13,6 +13,8 @@ import { ReactComponent as RepeatOnAllSvg } from "@assets/icons/ic_20_repeat_on_
 import { ReactComponent as PlaySvg } from "@assets/icons/ic_30_play_25_point.svg";
 import { ReactComponent as StopSvg } from "@assets/icons/ic_30_stop.svg";
 
+import { useLyricsState } from "@hooks/player";
+
 import { RepeatType } from "@templates/player";
 
 import IconButton from "./IconButton";
@@ -23,7 +25,7 @@ interface ControllerProps {}
 const Controller = ({}: ControllerProps) => {
   const [repeatType, setRepeatType] = useState(RepeatType.Off);
   const [isRandomOn, setIsRandomOn] = useState(false);
-  const [isLyricOn, setIsLyricOn] = useState(false);
+  const [isLyricOn, setIsLyricOn] = useLyricsState();
   const [isPlyaing, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(50);
 

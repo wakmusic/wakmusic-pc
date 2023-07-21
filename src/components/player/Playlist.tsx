@@ -145,15 +145,16 @@ const Playlist = ({
     const maxScroll = scrollbar.scrollHeight - scrollbar.clientHeight;
 
     if (bottomOffset < range && scrollbar.scrollTop < maxScroll) {
-      scrollbar.scrollTo(
-        0,
-        scrollbar.scrollTop + Math.abs(bottomOffset - range) * scale
-      );
+      scrollbar.scrollTo({
+        top: scrollbar.scrollTop + Math.abs(bottomOffset - range) * scale,
+      });
 
       setIsScrollEnabled(true);
       setIsScrolling(true);
     } else if (topOffset < range && scrollbar.scrollTop !== 0) {
-      scrollbar.scrollTo(0, scrollbar.scrollTop + (topOffset - range) * scale);
+      scrollbar.scrollTo({
+        top: scrollbar.scrollTop + (topOffset - range) * scale,
+      });
 
       setIsScrollEnabled(true);
       setIsScrolling(true);

@@ -3,13 +3,18 @@ import styled from "styled-components";
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
 import { ReactComponent as PlayListSVG } from "@assets/icons/ic_20_play_list.svg";
 
+import { useLyricsState } from "@hooks/player";
+
 import IconButton from "./IconButton";
+import Lyrics from "./Lyrics";
 
 interface VisualProps {
   songId: string;
 }
 
 const Visual = ({ songId }: VisualProps) => {
+  const [isLyricOn] = useLyricsState();
+
   const img = `https://i.ytimg.com/vi/${songId}/hqdefault.jpg`;
 
   return (
@@ -23,7 +28,9 @@ const Visual = ({ songId }: VisualProps) => {
           <IconButton icon={PlayListSVG} />
         </PlaylistButtonContainer>
 
-        <Thumbnail src={img} />
+        <CenterWrapper>
+          {isLyricOn ? <Lyrics /> : <Thumbnail src={img} />}
+        </CenterWrapper>
       </Grid>
     </Container>
   );
@@ -46,7 +53,7 @@ const Grid = styled.div`
 
   grid-template:
     " exp .     ply" 1fr
-    " .   tmb   .  " 123px
+    " .   cnt   .  " 123px
     " .   .     .  " 1fr
     / 1fr 220px 1fr;
 
@@ -70,13 +77,15 @@ const PlaylistButtonContainer = styled.div`
 `;
 
 const Thumbnail = styled.img`
-  grid-area: tmb;
-
-  width: 220px;
-  height: 123px;
+  width: 100%;
+  height: 100%;
 
   object-fit: cover;
   border-radius: 10px;
+`;
+
+const CenterWrapper = styled.div`
+  grid-area: cnt;
 `;
 
 export default Visual;

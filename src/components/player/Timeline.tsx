@@ -5,16 +5,16 @@ import { T8Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useCurrentPlayingState } from "@hooks/player";
+
 import { formatSecond } from "@utils/formatting";
 
 interface TimelineProps {
   length: number;
-  current: number;
-  onChange: (time: number) => void;
 }
 
-const Timeline = ({ length, current, onChange }: TimelineProps) => {
-  const progress = current / length;
+const Timeline = ({ length }: TimelineProps) => {
+  const [current, setCurrent] = useCurrentPlayingState();
 
   const [isMouseDown, setIsMouseDown] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -27,9 +27,9 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
       const x = e.clientX - rect.left;
       const newProgress = x / rect.width;
 
-      onChange(Math.min(1, Math.max(0, newProgress)) * length);
+      setCurrent(Math.min(1, Math.max(0, newProgress)) * length);
     },
-    [length, onChange]
+    [length, setCurrent]
   );
 
   const handleMouseState = useCallback(
@@ -71,13 +71,11 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
       onMouseDown={handleMouseState}
       $controlling={isMouseDown}
     >
-      <Line progress={progress * 100} />
-      <HandleContainer progress={progress * 100}>
+      <Line progress={(current / length) * 100} />
+      <HandleContainer progress={(current / length) * 100}>
         <Handle />
         <TimelinePopover>
-          <T8Medium color={colors.point}>
-            {formatSecond(progress * length)}
-          </T8Medium>
+          <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
           <LengthText color={colors.blueGray100}>
             {formatSecond(length)}
           </LengthText>
@@ -87,9 +85,14 @@ const Timeline = ({ length, current, onChange }: TimelineProps) => {
   );
 };
 
-const HandleContainer = styled.div<{ progress: number }>`
+const HandleContainer = styled.div.attrs<{ progress: number }>(
+  ({ progress }) => ({
+    style: {
+      left: `calc(${progress}% - 3px)`,
+    },
+  })
+)`
   position: relative;
-  left: calc(${({ progress }) => progress}% - 3px);
 
   display: none;
 `;
@@ -125,9 +128,12 @@ const Container = styled.div<{ $controlling: boolean }>`
     `}
 `;
 
-const Line = styled.div<{ progress: number }>`
+const Line = styled.div.attrs<{ progress: number }>(({ progress }) => ({
+  style: {
+    width: `${progress}%`,
+  },
+}))`
   height: 100%;
-  width: ${({ progress }) => progress}%;
 
   background-color: ${colors.point};
 `;

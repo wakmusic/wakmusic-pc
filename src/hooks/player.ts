@@ -1,22 +1,40 @@
-import { currentPlaying, lyricsState } from "@state/player/atoms";
-import { useRecoilState, useSetRecoilState } from "recoil";
-
-export const useLyricsState = () => {
-  return useRecoilState(lyricsState);
-};
-
-export const useSetIsLyricsOn = () => {
-  const setIsLyricsOn = useSetRecoilState(lyricsState);
-
-  return (state?: boolean) => setIsLyricsOn(state ?? true);
-};
+import { controlState, currentPlaying } from "@state/player/atoms";
+import { useRecoilState } from "recoil";
 
 export const useCurrentPlayingState = () => {
   return useRecoilState(currentPlaying);
 };
 
-export const useSetCurrentPlaying = () => {
-  const setCurrentPlaying = useSetRecoilState(currentPlaying);
+export const useControlState = () => {
+  return useRecoilState(controlState);
+};
 
-  return (current?: number) => setCurrentPlaying(current ?? 0);
+export const useSetVolumeState = () => {
+  const [state, setState] = useRecoilState(controlState);
+
+  return (value: number) => setState({ ...state, volume: value });
+};
+
+export const useToggleRepeatTypeState = () => {
+  const [state, setState] = useRecoilState(controlState);
+
+  return () => setState({ ...state, repeatType: (state.repeatType + 1) % 3 });
+};
+
+export const useToggleIsPlayingState = () => {
+  const [state, setState] = useRecoilState(controlState);
+
+  return () => setState({ ...state, isPlaying: !state.isPlaying });
+};
+
+export const useToggleIsRandomState = () => {
+  const [state, setState] = useRecoilState(controlState);
+
+  return () => setState({ ...state, isRandom: !state.isRandom });
+};
+
+export const useToggleIsLyricsOnState = () => {
+  const [state, setState] = useRecoilState(controlState);
+
+  return () => setState({ ...state, isLyricsOn: !state.isLyricsOn });
 };

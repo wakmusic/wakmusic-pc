@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
 import { ReactComponent as PlayListSVG } from "@assets/icons/ic_20_play_list.svg";
 
-import { useLyricsState } from "@hooks/player";
+import { useControlState } from "@hooks/player";
 
 import IconButton from "./IconButton";
 import Lyrics from "./Lyrics";
@@ -13,7 +13,7 @@ interface VisualProps {
 }
 
 const Visual = ({ songId }: VisualProps) => {
-  const [isLyricOn] = useLyricsState();
+  const [controlState] = useControlState();
 
   const img = `https://i.ytimg.com/vi/${songId}/hqdefault.jpg`;
 
@@ -29,7 +29,10 @@ const Visual = ({ songId }: VisualProps) => {
         </PlaylistButtonContainer>
 
         <CenterWrapper>
-          {isLyricOn ? <Lyrics /> : <Thumbnail src={img} />}
+          <LyricsWrapper $on={controlState.isLyricsOn}>
+            <Lyrics />
+          </LyricsWrapper>
+          <Thumbnail src={img} $off={controlState.isLyricsOn} />
         </CenterWrapper>
       </Grid>
     </Container>
@@ -76,12 +79,33 @@ const PlaylistButtonContainer = styled.div`
   justify-self: end;
 `;
 
-const Thumbnail = styled.img`
+const LyricsWrapper = styled.div<{ $on: boolean }>`
+  width: 220px;
+  height: 123px;
+
+  position: absolute;
+
+  ${({ $on }) =>
+    $on &&
+    css`
+      visibility: visible;
+    `}
+`;
+
+const Thumbnail = styled.img<{ $off: boolean }>`
   width: 100%;
   height: 100%;
 
   object-fit: cover;
   border-radius: 10px;
+
+  position: relative;
+
+  ${({ $off }) =>
+    $off &&
+    css`
+      visibility: hidden;
+    `}
 `;
 
 const CenterWrapper = styled.div`

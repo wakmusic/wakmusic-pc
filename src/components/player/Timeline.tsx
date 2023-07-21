@@ -74,13 +74,13 @@ const Timeline = ({ length }: TimelineProps) => {
       <Line progress={(current / length) * 100} />
       <HandleContainer progress={(current / length) * 100}>
         <Handle />
-        <TimelinePopover>
-          <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
-          <LengthText color={colors.blueGray100}>
-            {formatSecond(length)}
-          </LengthText>
-        </TimelinePopover>
       </HandleContainer>
+      <TimelinePopover progress={(current / length) * 100}>
+        <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
+        <LengthText color={colors.blueGray100}>
+          {formatSecond(length)}
+        </LengthText>
+      </TimelinePopover>
     </Container>
   );
 };
@@ -95,6 +95,29 @@ const HandleContainer = styled.div.attrs<{ progress: number }>(
   position: relative;
 
   display: none;
+`;
+
+const TimelinePopover = styled.div.attrs<{ progress: number }>(
+  ({ progress }) => ({
+    style: {
+      left: `min(calc(100% - 35px), max(35px, calc(${progress}% - 3px)))`,
+    },
+  })
+)`
+  height: 18px;
+
+  padding: 4px;
+
+  position: relative;
+  transform: translate(-50%, -40px);
+
+  display: none;
+  align-items: center;
+  gap: 3px;
+
+  border-radius: 4px;
+  background-color: ${colors.gray900};
+  opacity: 0.8;
 `;
 
 const Container = styled.div<{ $controlling: boolean }>`
@@ -113,6 +136,10 @@ const Container = styled.div<{ $controlling: boolean }>`
     ${HandleContainer} {
       display: inherit;
     }
+
+    ${TimelinePopover} {
+      display: inline-flex;
+    }
   }
 
   ${({ $controlling }) =>
@@ -124,6 +151,10 @@ const Container = styled.div<{ $controlling: boolean }>`
 
       ${HandleContainer} {
         display: inherit;
+      }
+
+      ${TimelinePopover} {
+        display: inline-flex;
       }
     `}
 `;
@@ -147,23 +178,6 @@ const Handle = styled.div`
 
   border-radius: 50%;
   background-color: ${colors.point};
-`;
-
-const TimelinePopover = styled.div`
-  height: 18px;
-
-  padding: 4px;
-
-  position: relative;
-  transform: translate(calc(-50% + 5px), -40px);
-
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-
-  border-radius: 4px;
-  background-color: ${colors.gray900};
-  opacity: 0.8;
 `;
 
 const LengthText = styled(T8Medium)`

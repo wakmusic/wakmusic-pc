@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 
 import { ReactComponent as DocumentOffSvg } from "@assets/icons/ic_20_document_off.svg";
@@ -13,7 +12,14 @@ import { ReactComponent as RepeatOnAllSvg } from "@assets/icons/ic_20_repeat_on_
 import { ReactComponent as PlaySvg } from "@assets/icons/ic_30_play_25_point.svg";
 import { ReactComponent as StopSvg } from "@assets/icons/ic_30_stop.svg";
 
-import { useLyricsState } from "@hooks/player";
+import {
+  useControlState,
+  useSetVolumeState,
+  useToggleIsLyricsOnState,
+  useToggleIsPlayingState,
+  useToggleIsRandomState,
+  useToggleRepeatTypeState,
+} from "@hooks/player";
 
 import { RepeatType } from "@templates/player";
 
@@ -23,62 +29,50 @@ import Volume from "./Volume";
 interface ControllerProps {}
 
 const Controller = ({}: ControllerProps) => {
-  const [repeatType, setRepeatType] = useState(RepeatType.Off);
-  const [isRandomOn, setIsRandomOn] = useState(false);
-  const [isLyricOn, setIsLyricOn] = useLyricsState();
-  const [isPlyaing, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(50);
+  const [controlState] = useControlState();
 
-  function onRepeatStateChange() {
-    setRepeatType((repeatType + 1) % 3);
-  }
-
-  function onRandomStateChange() {
-    setIsRandomOn(!isRandomOn);
-  }
-
-  function onLyricStateChange() {
-    setIsLyricOn(!isLyricOn);
-  }
-
-  function onPlayStateChange() {
-    setIsPlaying(!isPlyaing);
-  }
+  const setVolumeState = useSetVolumeState();
+  const toggleRepeatTypeState = useToggleRepeatTypeState();
+  const toggleIsPlayingState = useToggleIsPlayingState();
+  const toggleIsRandomState = useToggleIsRandomState();
+  const toggleIsLyricsOnState = useToggleIsLyricsOnState();
 
   function onVolumeChange(value: number) {
-    setVolume(value);
+    setVolumeState(value);
   }
 
   function movePrev() {}
 
   function moveNext() {}
 
+  function getRepeatIcon() {
+    switch (controlState.repeatType) {
+      case RepeatType.All:
+        return RepeatOnAllSvg;
+      case RepeatType.One:
+        return RepeatOn1Svg;
+      default:
+        return RepeatOffSvg;
+    }
+  }
+
   return (
     <Container>
-      <Volume volume={volume} onChange={onVolumeChange} />
-      <IconButton
-        icon={
-          repeatType === RepeatType.All
-            ? RepeatOnAllSvg
-            : repeatType === RepeatType.One
-            ? RepeatOn1Svg
-            : RepeatOffSvg
-        }
-        onClick={onRepeatStateChange}
-      />
+      <Volume volume={controlState.volume} onChange={onVolumeChange} />
+      <IconButton icon={getRepeatIcon()} onClick={toggleRepeatTypeState} />
       <IconButton icon={PrevSvg} onClick={movePrev} />
       <IconButton
-        icon={isPlyaing ? StopSvg : PlaySvg}
-        onClick={onPlayStateChange}
+        icon={controlState.isPlaying ? StopSvg : PlaySvg}
+        onClick={toggleIsPlayingState}
       />
       <IconButton icon={NextSvg} onClick={moveNext} />
       <IconButton
-        icon={isRandomOn ? RandomOnSvg : RandomOffSvg}
-        onClick={onRandomStateChange}
+        icon={controlState.isRandom ? RandomOnSvg : RandomOffSvg}
+        onClick={toggleIsRandomState}
       />
       <IconButton
-        icon={isLyricOn ? DocumentOnSvg : DocumentOffSvg}
-        onClick={onLyricStateChange}
+        icon={controlState.isLyricsOn ? DocumentOnSvg : DocumentOffSvg}
+        onClick={toggleIsLyricsOnState}
       />
     </Container>
   );

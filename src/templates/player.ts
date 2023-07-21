@@ -13,3 +13,11 @@ export type Lyrics = {
   text: string;
   style: string;
 }[];
+
+export type ControlStateType = {
+  volume: number;
+  repeatType: RepeatType;
+  isPlaying: boolean;
+  isRandom: boolean;
+  isLyricsOn: boolean;
+};

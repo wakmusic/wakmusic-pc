@@ -23,11 +23,15 @@ const Lyrics = ({}: LyricsProps) => {
   }
 
   const getIndex = useCallback(() => {
-    return current < lyrics[0].start
-      ? 0
-      : current >= lyrics[lyrics.length - 1].start
-      ? lyrics.length - 1
-      : lyrics.findIndex((line) => current < line.start) - 1;
+    if (current < lyrics[0].start) {
+      return 0;
+    }
+
+    if (current >= lyrics[lyrics.length - 1].start) {
+      return lyrics.length - 1;
+    }
+
+    return lyrics.findIndex((line) => current < line.start) - 1;
   }, [current, lyrics]);
 
   useEffect(() => {
@@ -41,7 +45,7 @@ const Lyrics = ({}: LyricsProps) => {
     const top = target.offsetTop - ref.current.offsetTop - padding;
 
     ref.current.scrollTo({ top, behavior: "smooth" });
-  }, [current, lyrics, padding, getIndex]);
+  }, [getIndex, padding]);
 
   useEffect(() => {
     setPadding((ref.current?.offsetHeight ?? 0) / 2 - 9);

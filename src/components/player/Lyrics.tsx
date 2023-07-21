@@ -54,25 +54,19 @@ const Lyrics = ({}: LyricsProps) => {
   return (
     <Container>
       <LyricsWrapper ref={ref} padding={padding}>
-        {lyrics.map((line, i) =>
-          i === getIndex() ? (
-            <CurrentLine
+        {lyrics.map((line, i) => {
+          const Line = i === getIndex() ? CurrentLine : DefaultLine;
+
+          return (
+            <Line
               key={i}
               color={colors.blueGray25}
               onClick={() => onLineClick(i)}
             >
               {line.text}
-            </CurrentLine>
-          ) : (
-            <DefaultLine
-              key={i}
-              color={colors.blueGray25}
-              onClick={() => onLineClick(i)}
-            >
-              {line.text}
-            </DefaultLine>
-          )
-        )}
+            </Line>
+          );
+        })}
       </LyricsWrapper>
     </Container>
   );

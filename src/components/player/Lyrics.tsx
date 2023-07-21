@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import { T7Medium, T8Medium } from "@components/Typography";
 
@@ -64,13 +64,13 @@ const Lyrics = ({}: LyricsProps) => {
               {line.text}
             </CurrentLine>
           ) : (
-            <Line
+            <DefaultLine
               key={i}
               color={colors.blueGray25}
               onClick={() => onLineClick(i)}
             >
               {line.text}
-            </Line>
+            </DefaultLine>
           )
         )}
       </LyricsWrapper>
@@ -105,16 +105,20 @@ const LyricsWrapper = styled.div<{ padding: number }>`
   }
 `;
 
-const CurrentLine = styled(T7Medium)`
+const Line = css`
   text-align: center;
 
   cursor: pointer;
+  white-space: pre-wrap;
 `;
 
-const Line = styled(T8Medium)`
-  text-align: center;
+const CurrentLine = styled(T7Medium)`
+  ${Line}
+`;
 
-  cursor: pointer;
+const DefaultLine = styled(T8Medium)`
+  ${Line}
+
   opacity: 0.6;
 `;
 

@@ -9,7 +9,8 @@ import { RecoilRoot } from "recoil";
 import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
-import Player from "@components/player/Player";
+import Player from "@components/player/Default/Player";
+import Visual from "@components/player/Visual/Visual";
 
 import firebaseConfig from "@constants/firebaseConfig";
 
@@ -46,6 +47,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <Player />
         </RootOverlay>
       </BrowserRouter>
+      <Visual />
     </RecoilRoot>
   </StrictMode>
 );

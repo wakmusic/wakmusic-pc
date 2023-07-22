@@ -46,7 +46,7 @@ const Popover = styled.div`
   padding: 0 4px;
 
   position: absolute;
-  transform: translate(-5px, calc(-100% - 10px));
+  transform: translate(-5px, calc(-100% - 8px));
 
   align-items: center;
   justify-content: center;

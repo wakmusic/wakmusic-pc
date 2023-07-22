@@ -1,22 +1,32 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 
-import { T7Medium, T8Medium } from "@components/Typography";
+import { T5Medium, T7Medium, T8Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 import { lyrics as dummy } from "@constants/dummys";
 
-import { useCurrentPlayingState } from "@hooks/player";
+import { usePlayingProgressState } from "@hooks/player";
 
-interface LyricsProps {}
+interface LyricsProps {
+  size: "large" | "medium" | "small";
+}
 
-const Lyrics = ({}: LyricsProps) => {
+const Lyrics = ({ size }: LyricsProps) => {
   const lyrics = dummy;
 
-  const [current, setCurrent] = useCurrentPlayingState();
+  const [current, setCurrent] = usePlayingProgressState();
   const [padding, setPadding] = useState(0);
 
   const ref = useRef<HTMLDivElement>(null);
+
+  function getLineComponent(isHighlight: boolean) {
+    if (size === "large") {
+      return isHighlight ? CurrentLineT5 : DefaultLineT7;
+    }
+
+    return isHighlight ? CurrentLineT7 : DefaultLineT8;
+  }
 
   function onLineClick(index: number) {
     setCurrent(lyrics[index].start);
@@ -42,44 +52,35 @@ const Lyrics = ({}: LyricsProps) => {
     const target = ref.current.children[index] as HTMLDivElement;
     if (!target) return;
 
-    const top = target.offsetTop - ref.current.offsetTop - padding;
+    const top = target.offsetTop - ref.current.offsetTop - padding + 9;
 
     ref.current.scrollTo({ top, behavior: "smooth" });
   }, [getIndex, padding]);
 
   useEffect(() => {
-    setPadding((ref.current?.offsetHeight ?? 0) / 2 - 9);
+    setPadding((ref.current?.offsetHeight ?? 0) / 2);
   }, [ref]);
 
   return (
-    <Container>
-      <LyricsWrapper ref={ref} padding={padding}>
-        {lyrics.map((line, i) => {
-          const Line = i === getIndex() ? CurrentLine : DefaultLine;
+    <Container ref={ref} padding={padding} $noGap={size === "small"}>
+      {lyrics.map((line, i) => {
+        const Line = getLineComponent(i === getIndex());
 
-          return (
-            <Line
-              key={i}
-              color={colors.blueGray25}
-              onClick={() => onLineClick(i)}
-            >
-              {line.text}
-            </Line>
-          );
-        })}
-      </LyricsWrapper>
+        return (
+          <Line
+            key={i}
+            color={colors.blueGray25}
+            onClick={() => onLineClick(i)}
+          >
+            {line.text}
+          </Line>
+        );
+      })}
     </Container>
   );
 };
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-
-  padding: 5px 0;
-`;
-
-const LyricsWrapper = styled.div<{ padding: number }>`
+const Container = styled.div<{ padding: number; $noGap: boolean }>`
   width: 100%;
   height: 100%;
 
@@ -89,7 +90,7 @@ const LyricsWrapper = styled.div<{ padding: number }>`
 
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: ${({ $noGap }) => ($noGap ? 0 : "4px")};
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -106,13 +107,26 @@ const Line = css`
   white-space: pre-wrap;
 `;
 
-const CurrentLine = styled(T7Medium)`
+const CurrentLineT7 = styled(T7Medium)`
   ${Line}
 `;
 
-const DefaultLine = styled(T8Medium)`
+const DefaultLineT8 = styled(T8Medium)`
   ${Line}
 
+  opacity: 0.6;
+`;
+
+const CurrentLineT5 = styled(T5Medium)`
+  ${Line}
+
+  height: 23px;
+`;
+
+const DefaultLineT7 = styled(T7Medium)`
+  ${Line}
+
+  height: 20px;
   opacity: 0.6;
 `;
 

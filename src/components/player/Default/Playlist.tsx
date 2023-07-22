@@ -7,29 +7,19 @@ import PlayerScroll from "@components/globals/Scroll/PlayerScroll";
 import colors from "@constants/colors";
 
 import { useInterval } from "@hooks/interval";
+import { usePlayingInfoState } from "@hooks/player";
 
-import { PlaylistType } from "@templates/player";
+interface PlaylistProps {}
 
-interface PlaylistProps {
-  playlist: PlaylistType;
-  playing: number;
-  onChange: (playlist: PlaylistType) => void;
-  onPlayingChange: (playing: number) => void;
-}
-
-const Playlist = ({
-  playlist,
-  playing,
-  onChange,
-  onPlayingChange,
-}: PlaylistProps) => {
-  const [playlistData, setPlaylisData] = useState(() =>
-    playlist.map((song, i) => ({
+const Playlist = ({}: PlaylistProps) => {
+  const [playingInfo, setPlayingInfo] = usePlayingInfoState();
+  const [playlistData, setPlaylisData] = useState(() => [
+    ...playingInfo.playlist.map((song, i) => ({
       ...song,
-      isPlaying: i === playing,
+      isPlaying: i === playingInfo.current,
       isSelected: false,
-    }))
-  );
+    })),
+  ]);
 
   const [mouseState, setMouseState] = useState({
     isMouseDown: false,
@@ -82,9 +72,16 @@ const Playlist = ({
       target
     );
 
-    onChange(playlistData);
-    onPlayingChange(playlistData.findIndex((song) => song.isPlaying));
-  }, [playlistData, targetIndex, onChange, onPlayingChange, getCursorIndex]);
+    setPlayingInfo({
+      playlist: playlistData.map((song) => ({
+        songId: song.songId,
+        title: song.title,
+        artist: song.artist,
+        views: song.views,
+      })),
+      current: playlistData.findIndex((song) => song.isPlaying),
+    });
+  }, [playlistData, targetIndex, getCursorIndex, setPlayingInfo]);
 
   const handleMouseDown = useCallback(
     (index: number) => {

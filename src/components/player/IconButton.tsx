@@ -15,6 +15,9 @@ const IconButton = ({ icon: Icon, onClick }: IconButtonProps) => {
 
 const Container = styled.div`
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
 `;
 
 export default IconButton;

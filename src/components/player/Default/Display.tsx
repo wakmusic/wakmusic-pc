@@ -3,25 +3,29 @@ import styled, { css } from "styled-components";
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
 import { ReactComponent as PlayListSVG } from "@assets/icons/ic_20_play_list.svg";
 
-import { useControlState } from "@hooks/player";
+import {
+  useControlState,
+  useCurrentSongState,
+  useToggleVisualModeState,
+} from "@hooks/player";
 
-import IconButton from "./IconButton";
-import Lyrics from "./Lyrics";
+import IconButton from "../IconButton";
+import Lyrics from "../Lyrics";
 
-interface VisualProps {
-  songId: string;
-}
+interface DisplayProps {}
 
-const Visual = ({ songId }: VisualProps) => {
+const Display = ({}: DisplayProps) => {
   const [controlState] = useControlState();
+  const toggleVisualModeState = useToggleVisualModeState();
 
-  const img = `https://i.ytimg.com/vi/${songId}/hqdefault.jpg`;
+  const song = useCurrentSongState();
+  const img = `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`;
 
   return (
     <Container image={img}>
       <Grid>
         <ExpansionButtonContainer>
-          <IconButton icon={ExpansionSVG} />
+          <IconButton icon={ExpansionSVG} onClick={toggleVisualModeState} />
         </ExpansionButtonContainer>
 
         <PlaylistButtonContainer>
@@ -30,7 +34,7 @@ const Visual = ({ songId }: VisualProps) => {
 
         <CenterWrapper>
           <LyricsWrapper $on={controlState.isLyricsOn}>
-            <Lyrics />
+            <Lyrics size="medium" />
           </LyricsWrapper>
           <Thumbnail src={img} $off={controlState.isLyricsOn} />
         </CenterWrapper>
@@ -45,7 +49,7 @@ const Container = styled.div<{ image: string }>`
 
   background-image: url(${({ image }) => image});
   background-position: center;
-  background-size: cover;
+  background-size: 150%;
 `;
 
 const Grid = styled.div`
@@ -60,7 +64,8 @@ const Grid = styled.div`
     " .   .     .  " 1fr
     / 1fr 220px 1fr;
 
-  backdrop-filter: blur(50px);
+  background-color: rgba(25, 26, 28, 0.6);
+  backdrop-filter: blur(35px);
 `;
 
 const ExpansionButtonContainer = styled.div`
@@ -81,9 +86,11 @@ const PlaylistButtonContainer = styled.div`
 
 const LyricsWrapper = styled.div<{ $on: boolean }>`
   width: 220px;
-  height: 123px;
+  height: 106px;
 
   position: absolute;
+
+  visibility: hidden;
 
   ${({ $on }) =>
     $on &&
@@ -110,6 +117,9 @@ const Thumbnail = styled.img<{ $off: boolean }>`
 
 const CenterWrapper = styled.div`
   grid-area: cnt;
+
+  display: flex;
+  align-items: center;
 `;
 
-export default Visual;
+export default Display;

@@ -1,8 +1,13 @@
-import { controlState, currentPlaying } from "@state/player/atoms";
+import {
+  controlState,
+  playingInfoState,
+  playingProgress,
+  visualModeState,
+} from "@state/player/atoms";
 import { useRecoilState } from "recoil";
 
-export const useCurrentPlayingState = () => {
-  return useRecoilState(currentPlaying);
+export const usePlayingProgressState = () => {
+  return useRecoilState(playingProgress);
 };
 
 export const useControlState = () => {
@@ -37,4 +42,24 @@ export const useToggleIsLyricsOnState = () => {
   const [state, setState] = useRecoilState(controlState);
 
   return () => setState({ ...state, isLyricsOn: !state.isLyricsOn });
+};
+
+export const useVisualModeState = () => {
+  return useRecoilState(visualModeState);
+};
+
+export const useToggleVisualModeState = () => {
+  const [state, setState] = useRecoilState(visualModeState);
+
+  return () => setState(!state);
+};
+
+export const usePlayingInfoState = () => {
+  return useRecoilState(playingInfoState);
+};
+
+export const useCurrentSongState = () => {
+  const [state] = useRecoilState(playingInfoState);
+
+  return state.playlist[state.current];
 };

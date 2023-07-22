@@ -4,7 +4,12 @@ export enum RepeatType {
   One,
 }
 
-export type PlaylistType = { title: string; artist: string }[];
+export type SongInfo = {
+  songId: string;
+  title: string;
+  artist: string;
+  views: number;
+};
 
 export type Lyrics = {
   identifier: string;
@@ -20,4 +25,9 @@ export type ControlStateType = {
   isPlaying: boolean;
   isRandom: boolean;
   isLyricsOn: boolean;
+};
+
+export type PlayingInfoStateType = {
+  playlist: SongInfo[];
+  current: number;
 };

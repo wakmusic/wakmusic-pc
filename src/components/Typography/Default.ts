@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Text = styled.p<{ color?: string }>`
   letter-spacing: -0.5px;
 
-  color: ${({ color }) => color || "#000000"};
+  color: ${({ color }) => color || "inherit"};
 `;
 
 export const Pretendard = styled(Text)`

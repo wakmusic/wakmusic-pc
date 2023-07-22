@@ -1,3 +1,5 @@
+import iconButtonType from "@templates/iconButtonType";
+import tabType from "@templates/tabType";
 import styled from "styled-components";
 
 import IconButton from "@components/globals/IconButton";
@@ -6,9 +8,6 @@ import TabBar from "@components/globals/TabBar";
 
 import { playButtonData } from "@constants/IconButton";
 import { newTabs } from "@constants/tabs";
-
-import iconButtonType from "../../types/iconButtonType";
-import tabType from "../../templates/tabType";
 
 interface FunctionSectionProps {}
 
@@ -54,22 +53,10 @@ const TimeLineLayout = styled.div`
   gap: 4px;
 `;
 
-const TestCategory = styled.div`
-  width: 50px;
-  height: 40px;
-  background-color: gray;
-`;
-
 const ButtonLayout = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-`;
-
-const TestButton = styled.div`
-  width: 108px;
-  height: 40px;
-  background-color: gray;
 `;
 
 export default FunctionSection;

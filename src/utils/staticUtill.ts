@@ -15,11 +15,10 @@ type artistImgType = "card" | "big" | "group" | "full" | "round" | "square";
 type documentType = "privacy" | "terms";
 
 export const getArtistImg = (type: artistImgType, id: string) => {
-  let URL = `${staticURL}/artist/${type}/${id}.png`;
   if (type == "big") {
-    URL = `${staticURL}/artist/${type}/${id}.jpg`;
+    return `${staticURL}/artist/${type}/${id}.jpg`;
   }
-  return URL;
+  return `${staticURL}/artist/${type}/${id}.png`;
 };
 
 export const getLyrics = (id: string) => {

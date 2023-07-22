@@ -30,8 +30,12 @@ export const getProfileImg = (name: profileImgType) => {
   return `${staticURL}/profile/${name}.png`;
 };
 
-export const getYoutubeThumbnail = (id: string) => {
+export const getYoutubeHQThumbnail = (id: string) => {
   return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+};
+
+export const getYoutubeThumbnail = (id: string) => {
+  return `https://i.ytimg.com/vi/${id}/default.jpg`;
 };
 
 export const getAudio = (id: string) => {

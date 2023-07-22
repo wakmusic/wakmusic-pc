@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 import "overlayscrollbars/overlayscrollbars.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
@@ -27,25 +29,37 @@ import "./index.css";
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      staleTime: 5000,
+    },
+  },
+});
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <RecoilRoot>
-      <BrowserRouter>
-        <Header />
-        <RootOverlay>
-          <GNB />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/playground" element={<Playground />} />
-            <Route path="/chart" element={<Chart />} />
-            <Route path="/artists" element={<Artists />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/user/*" element={<User />}></Route>
-          </Routes>
-          <Player />
-        </RootOverlay>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+          <Header />
+          <RootOverlay>
+            <GNB />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/playground" element={<Playground />} />
+              <Route path="/chart" element={<Chart />} />
+              <Route path="/artists" element={<Artists />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/user/*" element={<User />}></Route>
+            </Routes>
+            <Player />
+          </RootOverlay>
+        </BrowserRouter>
+      </QueryClientProvider>
     </RecoilRoot>
   </StrictMode>
 );

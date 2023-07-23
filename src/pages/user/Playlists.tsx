@@ -143,9 +143,8 @@ const Playlists = ({}: PlaylistsProps) => {
               });
               // API에 내 리스트 수정 요청 보내기
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={() => {
               setMouseDown(false);
-              console.log(e);
             }}
           >
             {!isEditMode

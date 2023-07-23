@@ -23,7 +23,7 @@ import {
 
 import { RepeatType } from "@templates/player";
 
-import IconButton from "./IconButton";
+import IconButton from "../globals/IconButton";
 import Volume from "./Volume";
 
 interface ControllerProps {}

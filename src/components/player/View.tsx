@@ -11,7 +11,7 @@ import { useCurrentSongState } from "@hooks/player";
 
 import { formatNumber } from "@utils/formatting";
 
-import IconButton from "./IconButton";
+import IconButton from "../globals/IconButton";
 
 interface ViewProps {
   isBright?: boolean;

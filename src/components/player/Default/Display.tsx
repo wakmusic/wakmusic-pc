@@ -9,7 +9,7 @@ import {
   useToggleVisualModeState,
 } from "@hooks/player";
 
-import IconButton from "../IconButton";
+import IconButton from "../../globals/IconButton";
 import Lyrics from "../Lyrics";
 
 interface DisplayProps {}

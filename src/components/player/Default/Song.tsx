@@ -10,8 +10,8 @@ import colors from "@constants/colors";
 
 import { useCurrentSongState } from "@hooks/player";
 
+import IconButton from "../../globals/IconButton";
 import Controller from "../Controller";
-import IconButton from "../IconButton";
 import View from "../View";
 
 interface SongProps {}

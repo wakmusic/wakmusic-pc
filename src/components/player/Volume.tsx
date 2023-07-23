@@ -6,7 +6,7 @@ import { ReactComponent as SoundOnSvg } from "@assets/icons/ic_20_sound_on.svg";
 
 import colors from "@constants/colors";
 
-import IconButton from "./IconButton";
+import IconButton from "../globals/IconButton";
 
 interface VolumeProps {
   volume: number;

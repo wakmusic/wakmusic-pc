@@ -1,13 +1,12 @@
 import styled from "styled-components";
 
-import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
-import { ReactComponent as LeastSVG } from "@assets/icons/ic_20_least.svg";
-import { ReactComponent as MaxSVG } from "@assets/icons/ic_20_max.svg";
 import { ReactComponent as ReduceSVG } from "@assets/icons/ic_20_reduce.svg";
+
+import ControlBar from "@components/globals/ControlBar";
 
 import { useToggleVisualModeState } from "@hooks/player";
 
-import IconButton from "../IconButton";
+import IconButton from "../../globals/IconButton";
 
 interface HeaderProps {}
 
@@ -20,28 +19,7 @@ const Header = ({}: HeaderProps) => {
         <IconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
       </ReduceContainer>
 
-      {window.ipcRenderer && (
-        <ControlBar>
-          <IconButton
-            icon={LeastSVG}
-            onClick={() => {
-              window.ipcRenderer?.send("window:least");
-            }}
-          />
-          <IconButton
-            icon={MaxSVG}
-            onClick={() => {
-              window.ipcRenderer?.send("window:max");
-            }}
-          />
-          <IconButton
-            icon={CloseSVG}
-            onClick={() => {
-              window.ipcRenderer?.send("window:close");
-            }}
-          />
-        </ControlBar>
-      )}
+      {window.ipcRenderer && <ControlBar />}
     </Container>
   );
 };
@@ -64,16 +42,6 @@ const ReduceContainer = styled.div`
 
   display: flex;
   align-items: center;
-`;
-
-const ControlBar = styled.div`
-  margin-left: auto;
-  margin-right: 10px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
 `;
 
 export default Header;

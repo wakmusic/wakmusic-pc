@@ -6,8 +6,8 @@ import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";
 
 import { useControlState, useCurrentSongState } from "@hooks/player";
 
+import IconButton from "../../globals/IconButton";
 import Controller from "../Controller";
-import IconButton from "../IconButton";
 import Lyrics from "../Lyrics";
 import Timeline from "../Timeline";
 import View from "../View";

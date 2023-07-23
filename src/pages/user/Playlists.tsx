@@ -10,13 +10,15 @@ import PlaylistItem from "@components/user/playlist/PlaylistItem";
 import colors from "@constants/colors";
 import { myList } from "@constants/dummys";
 
+import { isUndefined } from "@utils/isTypes";
+
 interface XY {
   x: number;
   y: number;
 }
 
 enum ShuffleActionType {
-  relocation,
+  relocate,
   insert,
   delete,
 }
@@ -24,6 +26,7 @@ enum ShuffleActionType {
 interface ShuffleAction {
   type: ShuffleActionType;
   target: number;
+  to?: number;
 }
 
 interface PlaylistsProps {}
@@ -32,7 +35,11 @@ const shuffleMyList = (state: Playlist[], action: ShuffleAction) => {
   const newList = state.slice();
 
   switch (action.type) {
-    case ShuffleActionType.relocation:
+    case ShuffleActionType.relocate:
+      if (isUndefined(action.to)) break;
+
+      newList.splice(action.target, 1);
+      newList.splice(action.to, 0, state[action.target]);
       break;
     case ShuffleActionType.insert:
       // 재생목록 추가
@@ -46,7 +53,10 @@ const shuffleMyList = (state: Playlist[], action: ShuffleAction) => {
 };
 
 const getPlaylistInitialPosition = (targetIndex: number): XY => {
-  return { x: (targetIndex % 3) * 238, y: Math.floor(targetIndex / 3) * 90 };
+  return {
+    x: (targetIndex % 3) * 238 - 9,
+    y: Math.floor(targetIndex / 3) * 90 - 9,
+  };
 };
 
 const Playlists = ({}: PlaylistsProps) => {
@@ -107,7 +117,7 @@ const Playlists = ({}: PlaylistsProps) => {
       const movementY = event.clientY - mouseDownPosition.y;
 
       setDragPostion({
-        x: playlistInitialPosition.x + movementX, // 마우스가 움직인 만큼 초기위치에서 옮겨줍니다
+        x: playlistInitialPosition.x + movementX,
         y: playlistInitialPosition.y + movementY,
       });
     },
@@ -121,6 +131,14 @@ const Playlists = ({}: PlaylistsProps) => {
         onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
         onMouseUp={() => {
           setMouseDown(false);
+          if (!mouseDown) return;
+
+          dispatchMyList({
+            type: ShuffleActionType.relocate,
+            target: dragAndDropTarget.drag.index,
+            to: dragAndDropTarget.drop,
+          });
+          // API에 내 리스트 수정 요청 보내기
         }}
         onMouseLeave={() => {
           setMouseDown(false);
@@ -182,6 +200,7 @@ const PlayLists = styled.div`
   padding-right: 2px;
 
   overflow-y: scroll;
+  overflow-x: hidden;
 
   &::-webkit-scrollbar {
     width: 3px;
@@ -211,6 +230,15 @@ const PlayLists = styled.div`
 const DragedPlaylist = styled.div`
   position: absolute;
   z-index: 2;
+
+  background-color: ${colors.white}66;
+  /* backdrop-filter: blur(100px); */
+
+  padding: 8px;
+  border-radius: 6px;
+
+  border: 1px solid ${colors.blueGray25};
+  border-radius: 16px;
 `;
 
 export default Playlists;

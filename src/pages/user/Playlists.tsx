@@ -1,6 +1,6 @@
-import { myListState } from "@state/user/atoms";
-import { Playlist } from "@templates/playlist";
-import { useState } from "react";
+import { dragAndDropState, myListState } from "@state/user/atoms";
+import { Playlist, myListItem } from "@templates/playlist";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
@@ -15,125 +15,147 @@ interface XY {
   y: number;
 }
 
+enum ShuffleActionType {
+  relocation,
+  insert,
+  delete,
+}
+
+interface ShuffleAction {
+  type: ShuffleActionType;
+  target: number;
+}
+
 interface PlaylistsProps {}
+
+const shuffleMyList = (state: Playlist[], action: ShuffleAction) => {
+  const newList = state.slice();
+
+  switch (action.type) {
+    case ShuffleActionType.relocation:
+      break;
+    case ShuffleActionType.insert:
+      // 재생목록 추가
+      break;
+    case ShuffleActionType.delete:
+      // 삭제
+      break;
+  }
+
+  return newList;
+};
+
+const getPlaylistInitialPosition = (targetIndex: number): XY => {
+  return { x: (targetIndex % 3) * 238, y: Math.floor(targetIndex / 3) * 90 };
+};
 
 const Playlists = ({}: PlaylistsProps) => {
   const [isEditMode] = useRecoilState(myListState);
-  const [myPlayLists, setMyPlayList] = useState<Playlist[]>(myList);
-  const [isDragMode, setDragMode] = useState(false);
-  const [dragStart, setDragStart] = useState<XY>({ x: 0, y: 0 });
-  const [dragTarget, setDragTarget] = useState<Playlist>(myList[0]);
+  const [shuffledList, dispatchMyList] = useReducer(shuffleMyList, myList);
+  const [mouseDown, setMouseDown] = useState(false);
+  const [mouseDownPosition, setmouseDownPosition] = useState<XY>({
+    x: 0,
+    y: 0,
+  });
+  const [dragAndDropTarget, setDragAndDropTarget] =
+    useRecoilState(dragAndDropState);
   const [playlistInitialPosition, setPlayListInitialPosition] = useState<XY>({
     x: 0,
     y: 0,
   });
-  const [DragPosition, setDragPostion] = useState<XY>({ x: 0, y: 0 });
+  const [dragPosition, setDragPostion] = useState<XY>({ x: 0, y: 0 });
 
-  const getPlaylistIndex = (target: string): number => {
-    let targetIndex = 0;
-    myPlayLists.forEach((playlist, index) => {
-      if (playlist.key === target) {
-        targetIndex = index;
-      }
+  useEffect(() => {
+    let dropTarget =
+      Math.floor((dragPosition.x + 94) / 238) +
+      Math.floor((dragPosition.y + 58) / 90) * 3;
+
+    if (dropTarget < 0) dropTarget = 0;
+    else if (dropTarget > shuffledList.length)
+      dropTarget = shuffledList.length - 1;
+
+    if (dropTarget === dragAndDropTarget.drop) return;
+
+    setDragAndDropTarget({
+      ...dragAndDropTarget,
+      drop: dropTarget,
     });
+  }, [
+    dragPosition,
+    dragAndDropTarget,
+    setDragAndDropTarget,
+    shuffledList.length,
+  ]);
 
-    return targetIndex;
-  };
+  const initializeDragTarget = (target: myListItem, position: XY) => {
+    setMouseDown(true);
 
-  const getPlaylistInitialPosition = (target: string): XY => {
-    const targetIndex = getPlaylistIndex(target);
-
-    return { x: (targetIndex % 3) * 238, y: Math.floor(targetIndex / 3) * 90 };
-  };
-
-  const initializeDragTarget = (target: string, position: XY) => {
-    if (!isEditMode) {
-      return;
-    }
-
-    setDragMode(true);
-    setDragTarget(myPlayLists[getPlaylistIndex(target)]);
-
-    const initialPosition = getPlaylistInitialPosition(target);
-    setDragPostion(initialPosition);
-    setPlayListInitialPosition(initialPosition);
-
-    setDragStart(position);
-  };
-
-  const movePlayList = (event: React.MouseEvent) => {
-    if (!isEditMode || !isDragMode) {
-      return;
-    }
-
-    const movementX = event.clientX - dragStart.x;
-    const movementY = event.clientY - dragStart.y;
-
-    setDragPostion({
-      x: playlistInitialPosition.x + movementX,
-      y: playlistInitialPosition.y + movementY,
+    setDragAndDropTarget({
+      drag: target,
+      drop: target.index,
     });
+    const initialPosition = getPlaylistInitialPosition(target.index); // 선택된 플레이리스트의 초기 위치
+    setDragPostion(initialPosition); // 드래그된 플레이리스트의 위치를 선택된 플레이리스트의 초기 위치로 설정
+    setPlayListInitialPosition(initialPosition); // 선택된 플레이리스트의 초기 위치 저장
 
-    const dragPlaylistIndex = getPlaylistIndex(dragTarget.key);
-    let dropTargetPlaylist = dragPlaylistIndex;
-    // console.log(Math.floor(movementX / 238), Math.floor(movementY / 50));
-    const indexX = Math.floor(movementX / 238);
-    const indexY = Math.floor(movementY / 50);
-
-    if (indexY < 0 && dragPlaylistIndex < 3) {
-      dropTargetPlaylist += 0;
-    } else {
-      dropTargetPlaylist += indexY * 3;
-    }
-
-    if (indexX <= 0 && dragPlaylistIndex % 3 === 0) {
-      dropTargetPlaylist += 0;
-    } else {
-      dropTargetPlaylist += indexX;
-    }
-
-    // console.log(indexX * 3 + indexY + getPlaylistIndex(dragTarget.key));
-    if (dropTargetPlaylist >= myPlayLists.length) {
-      dropTargetPlaylist = myPlayLists.length - 1;
-    }
-
-    console.log(dropTargetPlaylist);
-
-    const editedMyList = myPlayLists.slice();
-    const switchTarget = myPlayLists[dropTargetPlaylist];
-
-    editedMyList[dropTargetPlaylist] = myPlayLists[dragPlaylistIndex];
-    editedMyList[dragPlaylistIndex] = switchTarget;
-
-    setMyPlayList(editedMyList);
+    setmouseDownPosition(position); // 마우스가 움직인 거리를 구하기 위해 마우스가 클릭된 위치 저장
   };
+
+  const movePlayList = useCallback(
+    (event: React.MouseEvent) => {
+      const movementX = event.clientX - mouseDownPosition.x; // 마우스가 움직인 거리 = 현재 마우스의 위치 - 마우스가 클릭된 위치
+      const movementY = event.clientY - mouseDownPosition.y;
+
+      setDragPostion({
+        x: playlistInitialPosition.x + movementX, // 마우스가 움직인 만큼 초기위치에서 옮겨줍니다
+        y: playlistInitialPosition.y + movementY,
+      });
+    },
+    [mouseDownPosition, setDragPostion, playlistInitialPosition]
+  );
 
   return (
-    <Container
-      onMouseMove={movePlayList}
-      onMouseUp={() => {
-        setDragMode(false);
-      }}
-      onMouseLeave={() => {
-        setDragMode(false);
-      }}
-    >
+    <Container>
       <Menu />
-      <PlayLists>
-        {myPlayLists.map((item, index) => (
-          <PlaylistItem
-            key={index}
-            item={item}
-            isDragMode={isDragMode}
-            onDrag={initializeDragTarget}
-          />
-        ))}
-        <DragedPlaylist $hide={!isDragMode} position={DragPosition}>
-          <PlaylistItem
-            item={dragTarget}
-            isDragMode={isDragMode}
-            onDrag={initializeDragTarget}
-          />
+      <PlayLists
+        onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
+        onMouseUp={() => {
+          setMouseDown(false);
+        }}
+        onMouseLeave={() => {
+          setMouseDown(false);
+        }}
+      >
+        {!isEditMode
+          ? myList.map((item, index) => (
+              <PlaylistItem
+                key={index}
+                item={{
+                  ...item,
+                  index: index,
+                }}
+              />
+            ))
+          : shuffledList.map((item, index) => (
+              <PlaylistItem
+                key={index}
+                item={{
+                  ...item,
+                  index: index,
+                }}
+                hide={index === dragAndDropTarget.drag.index && mouseDown}
+                mouseDown={mouseDown}
+                onSelect={initializeDragTarget}
+              />
+            ))}
+        <DragedPlaylist
+          style={{
+            top: `${dragPosition.y}px`,
+            left: `${dragPosition.x}px`,
+            display: mouseDown ? "block" : "none",
+          }}
+        >
+          <PlaylistItem item={dragAndDropTarget.drag} />
         </DragedPlaylist>
       </PlayLists>
     </Container>
@@ -151,6 +173,7 @@ const PlayLists = styled.div`
   display: flex;
   flex-flow: wrap;
   align-content: flex-start;
+  gap: 16px;
 
   width: 100%;
   height: calc(100vh - 222px);
@@ -185,20 +208,7 @@ const PlayLists = styled.div`
   }
 `;
 
-interface DragedPlaylistProps {
-  $hide: boolean;
-  position: XY;
-}
-
-const DragedPlaylist = styled.div.attrs<DragedPlaylistProps>(
-  ({ $hide, position }) => ({
-    style: {
-      top: `${position.y}px`,
-      left: `${position.x}px`,
-      display: $hide ? "none" : "block",
-    },
-  })
-)`
+const DragedPlaylist = styled.div`
   position: absolute;
   z-index: 2;
 `;

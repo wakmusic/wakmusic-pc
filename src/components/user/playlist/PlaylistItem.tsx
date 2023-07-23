@@ -1,7 +1,7 @@
-import { myListState } from "@state/user/atoms";
-import { Playlist } from "@templates/playlist";
-import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { dragAndDropState, myListState } from "@state/user/atoms";
+import { myListItem } from "@templates/playlist";
+import { useMemo } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
 import { ReactComponent as DragPlaylist } from "@assets/icons/ic_24_move.svg";
@@ -14,54 +14,122 @@ import colors from "@constants/colors";
 import { XY } from "@pages/user/Playlists";
 
 interface PlaylistItemProps {
-  item: Playlist;
-  isDragMode: boolean;
-  onDrag: (target: string, position: XY) => void;
+  item: myListItem;
+  hide?: boolean;
+  mouseDown?: boolean;
+  onSelect?: (target: myListItem, position: XY) => void;
+  onMouseEnter?: () => void;
 }
 
-const PlaylistItem = ({ item, isDragMode, onDrag }: PlaylistItemProps) => {
-  const [isEditMode] = useRecoilState(myListState);
-  const [isSelected, setSelected] = useState(false);
+const PlaylistItem = ({
+  item,
+  hide = false,
+  mouseDown = false,
+  onSelect,
+  onMouseEnter,
+}: PlaylistItemProps) => {
+  const isEditMode = useRecoilValue(myListState);
+  const dragAndDropTarget = useRecoilValue(dragAndDropState);
 
-  useEffect(() => {
-    if (!isDragMode) {
-      setSelected(false);
+  const marginLeft = useMemo(() => {
+    if (!mouseDown) return 0;
+
+    const dropTargetRow = dragAndDropTarget.drop % 3;
+
+    if (
+      item.index === 0 &&
+      dragAndDropTarget.drop === 0 &&
+      dragAndDropTarget.drag.index > dragAndDropTarget.drop
+    ) {
+      return 238;
     }
-  }, [isDragMode]);
 
-  return !isSelected || !isDragMode ? (
-    <Container>
-      <Icon
-        src={`https://static.wakmusic.xyz/static/playlist/${item.image.version}.png`}
-      />
-      <InfoContainer>
-        <Title>{item.title}</Title>
-        <Volume>{item.songs.length}곡</Volume>
-        {isEditMode ? (
-          <DragPlaylist
-            onMouseDown={(e) => {
-              onDrag(item.key, { x: e.clientX, y: e.clientY });
-              setSelected(true);
-            }}
-          ></DragPlaylist>
-        ) : (
-          <PlayAll></PlayAll>
-        )}
-      </InfoContainer>
+    if (dragAndDropTarget.drop !== item.index - 1) return 0;
+
+    if (dragAndDropTarget.drag.index >= dragAndDropTarget.drop) {
+      if (dropTargetRow === 0 && dragAndDropTarget.drop !== 0) return 238;
+      else return 0;
+    } else if (dragAndDropTarget.drag.index < dragAndDropTarget.drop) {
+      if (dropTargetRow === 2) return 0;
+      else return 238;
+    }
+  }, [
+    mouseDown,
+    dragAndDropTarget.drop,
+    dragAndDropTarget.drag.index,
+    item.index,
+  ]);
+
+  const marginRight = useMemo(() => {
+    if (!mouseDown) return 0;
+
+    const dropTargetRow = dragAndDropTarget.drop % 3;
+
+    if (
+      dragAndDropTarget.drop === item.index &&
+      dragAndDropTarget.drag.index < dragAndDropTarget.drop &&
+      dropTargetRow === 2
+    ) {
+      return 238;
+    }
+
+    if (dragAndDropTarget.drop !== item.index + 1) return 0;
+
+    if (dragAndDropTarget.drag.index >= dragAndDropTarget.drop) {
+      if (dropTargetRow === 0) return 0;
+      else return 238;
+    } else if (dragAndDropTarget.drag.index < dragAndDropTarget.drop) {
+      return 0;
+    }
+  }, [
+    mouseDown,
+    dragAndDropTarget.drop,
+    dragAndDropTarget.drag.index,
+    item.index,
+  ]);
+
+  return (
+    <Container
+      style={{
+        display: hide ? "none" : "flex",
+        marginLeft: `${marginLeft}px`,
+        marginRight: `${marginRight}px`,
+      }}
+      onMouseEnter={onMouseEnter}
+    >
+      <ShiftContainer>
+        <Icon
+          src={`https://static.wakmusic.xyz/static/playlist/${item.image.version}.png`}
+        />
+        <InfoContainer>
+          <Title>{item.title}</Title>
+          <Volume>{item.songs.length}곡</Volume>
+          {isEditMode ? (
+            <DragPlaylist
+              onMouseDown={(e) => {
+                if (onSelect && isEditMode)
+                  onSelect(item, { x: e.clientX, y: e.clientY });
+              }}
+            ></DragPlaylist>
+          ) : (
+            <PlayAll></PlayAll>
+          )}
+        </InfoContainer>
+      </ShiftContainer>
     </Container>
-  ) : (
-    <Container></Container>
   );
 };
 
 const Container = styled.div`
-  display: flex;
-  align-items: center;
-
   width: 222px;
   height: 74px;
 
-  margin: 0px 16px 16px 0px;
+  /* transition: margin 0.5s; */
+`;
+
+const ShiftContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Icon = styled.img`

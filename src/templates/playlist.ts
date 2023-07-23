@@ -12,3 +12,7 @@ export type Playlist = {
   };
   songs: Song[];
 };
+
+export interface myListItem extends Playlist {
+  readonly index: number;
+}

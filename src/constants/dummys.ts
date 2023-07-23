@@ -13288,11 +13288,6 @@ export const myList = [
       name: "1",
       version: 3,
     },
-    },
-    image: {
-      name: "1",
-      version: 10,
-    },
     songs: [
       {
         songId: "kHpvUymXXEg",

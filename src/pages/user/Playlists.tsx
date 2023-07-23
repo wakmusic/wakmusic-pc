@@ -1,5 +1,4 @@
 import { dragAndDropState, myListState } from "@state/user/atoms";
-import { Playlist, myListItem } from "@templates/playlist";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
@@ -10,6 +9,8 @@ import PlaylistItem from "@components/user/playlist/PlaylistItem";
 
 import colors from "@constants/colors";
 import { myList } from "@constants/dummys";
+
+import { Playlist, myListItem } from "@templates/playlist";
 
 import { isUndefined } from "@utils/isTypes";
 
@@ -200,12 +201,11 @@ const PlayLists = styled.div`
 
   width: 100%;
 
-  margin-top: 16px;
   padding-right: 2px;
 `;
 
 const ScrollWrapper = styled.div`
-  height: calc(100vh - 222px);
+  height: calc(100vh - 206px);
 `;
 
 const DragedPlaylist = styled.div`

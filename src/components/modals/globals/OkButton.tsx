@@ -7,9 +7,11 @@ import { Button, ButtonContainer } from "./buttonStyle";
 interface OkButtonProps {
   onClick: () => void;
   disabled?: boolean;
+
+  text?: string;
 }
 
-const OkButton = ({ onClick, disabled }: OkButtonProps) => {
+const OkButton = ({ onClick, disabled, text = "확인" }: OkButtonProps) => {
   return (
     <ButtonContainer>
       <Button
@@ -18,7 +20,7 @@ const OkButton = ({ onClick, disabled }: OkButtonProps) => {
         disabled={disabled}
         $big
       >
-        <T4Bold color={colors.blueGray25}>확인</T4Bold>
+        <T4Bold color={colors.blueGray25}>{text}</T4Bold>
       </Button>
     </ButtonContainer>
   );

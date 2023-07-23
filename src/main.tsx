@@ -10,6 +10,7 @@ import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
 import AlertModal from "@components/modals/AlertModal";
 import ConfirmModal from "@components/modals/ConfirmModal";
+import CreateListModal from "@components/modals/CreateListModal";
 import LoginModal from "@components/modals/LoginModal";
 import SelectProfileModal from "@components/modals/SelectProfileModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
@@ -56,6 +57,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
         <SelectProfileModal />
         <AlertModal />
         <ConfirmModal />
+        <CreateListModal />
       </ModalPortal>
     </RecoilRoot>
   </StrictMode>

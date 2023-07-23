@@ -17,6 +17,7 @@ import colors from "@constants/colors";
 
 import { useAlertModal } from "@hooks/alertModal";
 import { useConfirmModal } from "@hooks/confirmModal";
+import { useCreateListModal } from "@hooks/createListModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
 import { useSelectProfileModal } from "@hooks/profileModal";
 
@@ -29,6 +30,7 @@ const GNB = ({}: GNB) => {
   const selectProfileModal = useSelectProfileModal();
   const alertModal = useAlertModal();
   const confirmModal = useConfirmModal();
+  const createListModal = useCreateListModal();
 
   return (
     <Container>
@@ -117,6 +119,23 @@ const GNB = ({}: GNB) => {
           }}
         >
           (임시) ConfirmModal
+        </T6Medium>
+      </Login>
+      <Login
+        onClick={() => {
+          (async () => {
+            const result = await createListModal();
+
+            alert(result);
+          })();
+        }}
+      >
+        <T6Medium
+          style={{
+            color: colors.blueGray600,
+          }}
+        >
+          (임시) CreateListModal
         </T6Medium>
       </Login>
     </Container>

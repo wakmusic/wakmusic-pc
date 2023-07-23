@@ -9,6 +9,10 @@ import IconButton from "./IconButton";
 interface ControlBarProps {}
 
 const ControlBar = ({}: ControlBarProps) => {
+  if (!window.ipcRenderer) {
+    return null;
+  }
+
   return (
     <Container>
       <IconButton

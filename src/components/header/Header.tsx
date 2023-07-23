@@ -45,7 +45,7 @@ const Header = ({}: HeaderProps) => {
 
       <Search />
 
-      {window.ipcRenderer && <ControlBar />}
+      <ControlBar />
     </Container>
   );
 };

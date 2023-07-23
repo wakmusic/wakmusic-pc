@@ -19,7 +19,7 @@ const Header = ({}: HeaderProps) => {
         <IconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
       </ReduceContainer>
 
-      {window.ipcRenderer && <ControlBar />}
+      <ControlBar />
     </Container>
   );
 };

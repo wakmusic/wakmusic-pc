@@ -13553,7 +13553,7 @@ export const dumyListItem = {
   },
   image: {
     name: "1",
-    version: 12,
+    version: 11,
   },
   songs: [
     {

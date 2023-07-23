@@ -4,6 +4,7 @@ import { useCallback, useEffect, useReducer, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
+import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import Menu from "@components/user/playlist/Menu";
 import PlaylistItem from "@components/user/playlist/PlaylistItem";
 
@@ -127,55 +128,60 @@ const Playlists = ({}: PlaylistsProps) => {
   return (
     <Container>
       <Menu />
-      <PlayLists
-        onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
-        onMouseUp={() => {
-          setMouseDown(false);
-          if (!mouseDown) return;
+      <DefaultScroll>
+        <ScrollWrapper>
+          <PlayLists
+            onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
+            onMouseUp={() => {
+              setMouseDown(false);
+              if (!mouseDown) return;
 
-          dispatchMyList({
-            type: ShuffleActionType.relocate,
-            target: dragAndDropTarget.drag.index,
-            to: dragAndDropTarget.drop,
-          });
-          // API에 내 리스트 수정 요청 보내기
-        }}
-        onMouseLeave={() => {
-          setMouseDown(false);
-        }}
-      >
-        {!isEditMode
-          ? myList.map((item, index) => (
-              <PlaylistItem
-                key={index}
-                item={{
-                  ...item,
-                  index: index,
-                }}
-              />
-            ))
-          : shuffledList.map((item, index) => (
-              <PlaylistItem
-                key={index}
-                item={{
-                  ...item,
-                  index: index,
-                }}
-                hide={index === dragAndDropTarget.drag.index && mouseDown}
-                mouseDown={mouseDown}
-                onSelect={initializeDragTarget}
-              />
-            ))}
-        <DragedPlaylist
-          style={{
-            top: `${dragPosition.y}px`,
-            left: `${dragPosition.x}px`,
-            display: mouseDown ? "block" : "none",
-          }}
-        >
-          <PlaylistItem item={dragAndDropTarget.drag} />
-        </DragedPlaylist>
-      </PlayLists>
+              dispatchMyList({
+                type: ShuffleActionType.relocate,
+                target: dragAndDropTarget.drag.index,
+                to: dragAndDropTarget.drop,
+              });
+              // API에 내 리스트 수정 요청 보내기
+            }}
+            onMouseLeave={(e) => {
+              setMouseDown(false);
+              console.log(e);
+            }}
+          >
+            {!isEditMode
+              ? myList.map((item, index) => (
+                  <PlaylistItem
+                    key={index}
+                    item={{
+                      ...item,
+                      index: index,
+                    }}
+                  />
+                ))
+              : shuffledList.map((item, index) => (
+                  <PlaylistItem
+                    key={index}
+                    item={{
+                      ...item,
+                      index: index,
+                    }}
+                    hide={index === dragAndDropTarget.drag.index && mouseDown}
+                    mouseDown={mouseDown}
+                    onSelect={initializeDragTarget}
+                  />
+                ))}
+            <DragedPlaylist
+              style={{
+                top: `${dragPosition.y}px`,
+                left: `${dragPosition.x}px`,
+                display: mouseDown ? "block" : "none",
+              }}
+            >
+              <PlaylistItem item={dragAndDropTarget.drag} />
+            </DragedPlaylist>
+          </PlayLists>
+        </ScrollWrapper>
+      </DefaultScroll>
     </Container>
   );
 };
@@ -194,37 +200,13 @@ const PlayLists = styled.div`
   gap: 16px;
 
   width: 100%;
-  height: calc(100vh - 222px);
 
   margin-top: 16px;
   padding-right: 2px;
+`;
 
-  overflow-y: scroll;
-  overflow-x: hidden;
-
-  &::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
-  }
-
-  &::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: transparent;
-    background-clip: padding-box;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 99px;
-    background-color: ${colors.blueGray300};
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    cursor: pointer;
-  }
+const ScrollWrapper = styled.div`
+  height: calc(100vh - 222px);
 `;
 
 const DragedPlaylist = styled.div`
@@ -232,7 +214,6 @@ const DragedPlaylist = styled.div`
   z-index: 2;
 
   background-color: ${colors.white}66;
-  /* backdrop-filter: blur(100px); */
 
   padding: 8px;
   border-radius: 6px;

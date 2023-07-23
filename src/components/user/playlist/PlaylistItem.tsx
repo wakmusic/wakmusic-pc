@@ -37,8 +37,8 @@ const PlaylistItem = ({
     const dropTargetRow = dragAndDropTarget.drop % 3;
 
     if (
-      item.index === 0 &&
-      dragAndDropTarget.drop === 0 &&
+      item.index === dragAndDropTarget.drop &&
+      dropTargetRow === 0 &&
       dragAndDropTarget.drag.index > dragAndDropTarget.drop
     ) {
       return 238;
@@ -46,12 +46,20 @@ const PlaylistItem = ({
 
     if (dragAndDropTarget.drop !== item.index - 1) return 0;
 
-    if (dragAndDropTarget.drag.index >= dragAndDropTarget.drop) {
-      if (dropTargetRow === 0 && dragAndDropTarget.drop !== 0) return 238;
+    if (dragAndDropTarget.drag.index > dragAndDropTarget.drop) {
+      if (
+        dropTargetRow === 0 &&
+        dragAndDropTarget.drag.index - dragAndDropTarget.drop < 3 &&
+        dragAndDropTarget.drag.index % 3 !== 2
+      )
+        return 238;
       else return 0;
     } else if (dragAndDropTarget.drag.index < dragAndDropTarget.drop) {
       if (dropTargetRow === 2) return 0;
       else return 238;
+    } else if (dragAndDropTarget.drag.index === dragAndDropTarget.drop) {
+      if (dropTargetRow === 0) return 238;
+      else return 0;
     }
   }, [
     mouseDown,
@@ -123,8 +131,6 @@ const PlaylistItem = ({
 const Container = styled.div`
   width: 222px;
   height: 74px;
-
-  /* transition: margin 0.5s; */
 `;
 
 const ShiftContainer = styled.div`

@@ -13220,7 +13220,40 @@ export const myList = [
     },
     image: {
       name: "1",
-      version: 2,
+      version: 7,
+    },
+    songs: [
+      {
+        songId: "kHpvUymXXEg",
+        title: "KICK BACK #Shorts",
+        artist: "왁컬로이두",
+        remix: "왁톡",
+        reaction: "WsO3ikDyk8A",
+        date: 230216,
+        start: 0,
+        end: 0,
+        total: {
+          views: 3409580,
+          increase: null,
+          last: 24,
+        },
+      },
+    ],
+  },
+  {
+    key: "key8",
+    title: "플레이리스트 8",
+    createAt: 1684622625731,
+    user: {
+      displayName: "이름",
+      profile: {
+        type: "gorani",
+        version: 2,
+      },
+    },
+    image: {
+      name: "1",
+      version: 8,
     },
     songs: [
       {
@@ -13255,6 +13288,11 @@ export const myList = [
       name: "1",
       version: 3,
     },
+    },
+    image: {
+      name: "1",
+      version: 10,
+    },
     songs: [
       {
         songId: "kHpvUymXXEg",
@@ -13286,7 +13324,7 @@ export const myList = [
     },
     image: {
       name: "1",
-      version: 4,
+      version: 11,
     },
     songs: [
       {

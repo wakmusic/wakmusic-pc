@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import Artist from "@components/artists/Artist";
 import PageContainer from "@components/globals/PageContainer";
+import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 
@@ -18,23 +19,29 @@ const Artists = ({}: ArtistsProps) => {
   return (
     <PageContainer>
       <Container>
-        <TabBar>
-          {artistTabs.map((item, index) => (
-            <Tab to={item.to} key={index}>
-              {item.text}
-            </Tab>
-          ))}
-        </TabBar>
+        <TabBarWrapper>
+          <TabBar>
+            {artistTabs.map((item, index) => (
+              <Tab to={item.to} key={index}>
+                {item.text}
+              </Tab>
+            ))}
+          </TabBar>
+        </TabBarWrapper>
 
         <ArtistsContainer>
-          {artistList
-            .filter((artist) => {
-              if (searchParams.get("type") === null) return true;
-              else return artist.group.en === searchParams.get("type");
-            })
-            .map((artist, index) => (
-              <Artist key={index} artist={artist} />
-            ))}
+          <DefaultScroll>
+            <ArtistsWrapper>
+              {artistList
+                .filter((artist) => {
+                  if (searchParams.get("type") === null) return true;
+                  else return artist.group.en === searchParams.get("type");
+                })
+                .map((artist, index) => (
+                  <Artist key={index} artist={artist} />
+                ))}
+            </ArtistsWrapper>
+          </DefaultScroll>
         </ArtistsContainer>
       </Container>
     </PageContainer>
@@ -45,7 +52,6 @@ const Container = styled.div`
   width: 754px;
   height: calc(100% - 40px);
   margin: 20px 0;
-  padding: 16px 20px;
 
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
@@ -53,18 +59,25 @@ const Container = styled.div`
   backdrop-filter: blur(62.5px);
 `;
 
+const TabBarWrapper = styled.div`
+  padding: 16px 20px 0 20px;
+`;
+
 const ArtistsContainer = styled.div`
   margin-top: 16px;
+`;
 
-  height: 90%;
-  overflow-y: auto;
+const ArtistsWrapper = styled.div`
+  height: 561px;
 
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: 124px;
   grid-row-gap: 14px;
 
-  padding-right: 5px;
+  padding-left: 20px;
+  padding-right: 29px;
+  padding-bottom: 20px;
 `;
 
 export default Artists;

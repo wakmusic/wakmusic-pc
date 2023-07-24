@@ -30,7 +30,7 @@
       "@constants/*": ["src/constants/*"],
       "@hooks/*": ["src/hooks/*"],
       "@pages/*": ["src/pages/*"],
-      "@types/*": ["src/types/*"],
+      "@templates/*": ["src/templates/*"],
       "@utils/*": ["src/utils/*"],
       "@state/*": ["src/state/*"]
     }

@@ -58,7 +58,6 @@ const Search = ({}: SearchProps) => {
     navigate(`/search?query=${data.query}&tab=all`);
 
     inputRef.current?.blur();
-    setValue("query", "");
   };
 
   const arrowKeyHandler = useCallback(
@@ -119,6 +118,7 @@ const Search = ({}: SearchProps) => {
           onFocus={focusHandler}
           onChange={onChange}
           onBlur={onBlurCallback}
+          autoComplete="off"
           ref={(e) => {
             ref(e);
 

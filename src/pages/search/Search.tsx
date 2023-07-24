@@ -1,30 +1,48 @@
+import { SongsSearchResponse, tabsTypes } from "@templates/search";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 
-import { T4Bold } from "@components/Typography";
 import PageContainer from "@components/globals/PageContainer";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
+import Result from "@components/search/Result";
 
 import colors from "@constants/colors";
+import { songList } from "@constants/dummys";
 import { searchTabs } from "@constants/tabs";
 
 import { isNull } from "@utils/isTypes";
 
 interface SearchProps {}
 
+function isTabsTypes(arg: unknown): arg is tabsTypes {
+  return arg === "all" || arg === "song" || arg === "artist" || arg === "remix";
+}
+
 const Search = ({}: SearchProps) => {
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState("");
+  const [responses, setResponses] = useState<SongsSearchResponse>();
+  const [tab, setTab] = useState<tabsTypes>("all");
 
   useEffect(() => {
     const search = searchParams.get("query");
+    const tab = isTabsTypes(searchParams.get("tab"))
+      ? (searchParams.get("tab") as tabsTypes)
+      : "all";
 
     if (!isNull(search)) {
       setQuery(search);
     }
-  }, [searchParams]);
+
+    if (!isNull(tab)) {
+      setTab(tab);
+    }
+
+    // TODO: 여기서 api 요청
+    setResponses(songList);
+  }, [query, searchParams]);
 
   return (
     <PageContainer>
@@ -36,7 +54,11 @@ const Search = ({}: SearchProps) => {
             </Tab>
           ))}
         </TabBar>
-        <T4Bold>Query: {query}</T4Bold>
+        {responses ? (
+          <Result tab={tab} query={query} res={responses} />
+        ) : (
+          <div>로딩중이에용</div>
+        )}
       </Container>
     </PageContainer>
   );

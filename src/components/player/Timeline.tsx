@@ -112,8 +112,8 @@ const TimelinePopover = styled.div.attrs<{
 }>(({ progress, $isSeparated }) => ({
   style: {
     left: $isSeparated
-      ? `calc(${progress}% - 3px)`
-      : `min(calc(100% - 35px), max(35px, calc(${progress}% - 3px)))`,
+      ? `calc(${progress}%)`
+      : `min(calc(100% - 38px), max(32px, calc(${progress}%)))`,
   },
 }))`
   height: 18px;
@@ -121,7 +121,7 @@ const TimelinePopover = styled.div.attrs<{
   padding: 4px;
 
   position: relative;
-  transform: translate(-50%, -40px);
+  transform: translate(calc(-50% + 3px), -45px);
 
   display: none;
   align-items: center;
@@ -195,11 +195,11 @@ const Line = styled.div.attrs<{ progress: number }>(({ progress }) => ({
 `;
 
 const Handle = styled.div`
-  height: 8px;
-  width: 8px;
+  height: 12px;
+  width: 12px;
 
   position: relative;
-  top: -6px;
+  top: -8px;
 
   border-radius: 50%;
   background-color: ${colors.point};

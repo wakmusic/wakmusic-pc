@@ -11,8 +11,10 @@ import Header from "@components/header/Header";
 import AlertModal from "@components/modals/AlertModal";
 import ConfirmModal from "@components/modals/ConfirmModal";
 import CreateListModal from "@components/modals/CreateListModal";
+import LoadListModal from "@components/modals/LoadListModal";
 import LoginModal from "@components/modals/LoginModal";
 import SelectProfileModal from "@components/modals/SelectProfileModal";
+import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Player";
 
@@ -58,6 +60,8 @@ createRoot(document.getElementById("root") as HTMLElement).render(
         <AlertModal />
         <ConfirmModal />
         <CreateListModal />
+        <LoadListModal />
+        <ShareListModal />
       </ModalPortal>
     </RecoilRoot>
   </StrictMode>

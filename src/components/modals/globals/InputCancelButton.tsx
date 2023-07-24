@@ -17,6 +17,11 @@ const InputCancelButton = ({ onClick }: InputCancelButtonProps) => {
 };
 
 const Container = styled.div`
+  position: absolute;
+
+  top: 14px;
+  right: 0;
+
   display: flex;
   width: 52px;
   height: 28px;

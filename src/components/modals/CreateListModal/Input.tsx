@@ -5,7 +5,8 @@ import { T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import InputCancelButton from "./InputCancelButton";
+import BaseInput from "../globals/BaseInput";
+import InputCancelButton from "../globals/InputCancelButton";
 
 interface InputProps {
   value: string;
@@ -39,24 +40,19 @@ const Input = ({ value, onChange }: InputProps) => {
 
   return (
     <Container>
-      <FormInput
-        type="text"
-        placeholder="리스트 명을 입력해주세요."
+      <BaseInput
         value={value}
-        onChange={(e) => {
-          onChange(e.target.value);
-        }}
-        $color={color}
+        onChange={onChange}
+        borderColor={color}
+        placeholder="리스트 명을 입력해주세요."
       />
 
       {value && (
-        <ButtonWrapper>
-          <InputCancelButton
-            onClick={() => {
-              onChange("");
-            }}
-          />
-        </ButtonWrapper>
+        <InputCancelButton
+          onClick={() => {
+            onChange("");
+          }}
+        />
       )}
 
       <Texts>
@@ -74,36 +70,6 @@ const Container = styled.div`
   width: 380px;
 
   position: relative;
-`;
-
-const FormInput = styled.input<{ $color: string }>`
-  width: 100%;
-
-  border: none;
-  outline: none;
-
-  padding: 12px 0;
-  padding-right: 58px;
-
-  border-bottom: 1px solid ${({ $color }) => $color};
-
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 32px;
-
-  color: ${colors.gray700};
-
-  &::placeholder {
-    color: ${colors.blueGray400};
-  }
-`;
-
-const ButtonWrapper = styled.div`
-  position: absolute;
-
-  top: 14px;
-  right: 0;
 `;
 
 const Texts = styled.div`

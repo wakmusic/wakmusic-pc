@@ -18,8 +18,10 @@ import colors from "@constants/colors";
 import { useAlertModal } from "@hooks/alertModal";
 import { useConfirmModal } from "@hooks/confirmModal";
 import { useCreateListModal } from "@hooks/createListModal";
+import { useLoadListModal } from "@hooks/loadListModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
 import { useSelectProfileModal } from "@hooks/profileModal";
+import { useShareListModal } from "@hooks/shareListModal";
 
 import Section from "./Section";
 
@@ -31,6 +33,8 @@ const GNB = ({}: GNB) => {
   const alertModal = useAlertModal();
   const confirmModal = useConfirmModal();
   const createListModal = useCreateListModal();
+  const loadListModal = useLoadListModal();
+  const shareListModal = useShareListModal();
 
   return (
     <Container>
@@ -136,6 +140,40 @@ const GNB = ({}: GNB) => {
           }}
         >
           (임시) CreateListModal
+        </T6Medium>
+      </Login>
+      <Login
+        onClick={() => {
+          (async () => {
+            const result = await loadListModal();
+
+            alert(result);
+          })();
+        }}
+      >
+        <T6Medium
+          style={{
+            color: colors.blueGray600,
+          }}
+        >
+          (임시) LoadListModal
+        </T6Medium>
+      </Login>
+      <Login
+        onClick={() => {
+          (async () => {
+            await shareListModal("WOOWAKGOOD");
+
+            alert("닫힘");
+          })();
+        }}
+      >
+        <T6Medium
+          style={{
+            color: colors.blueGray600,
+          }}
+        >
+          (임시) ShareListModal
         </T6Medium>
       </Login>
     </Container>

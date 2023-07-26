@@ -100,7 +100,7 @@ const Container = styled.div`
   gap: 16px;
 
   width: 754px;
-  height: 410px;
+  height: 376px;
 
   margin-top: 20px;
 `;
@@ -213,6 +213,8 @@ const Buanebi = styled.div`
 
   display: flex;
   align-items: center;
+
+  margin-top: 16px;
 
   & svg {
     float: left;

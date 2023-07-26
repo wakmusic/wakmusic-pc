@@ -41,7 +41,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/chart" element={<Chart />} />
             <Route path="/artists" element={<Artists />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/user/*" element={<User />}></Route>
+            <Route path="/user/*" element={<User />} />
           </Routes>
           <Player />
         </RootOverlay>

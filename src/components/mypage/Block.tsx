@@ -34,7 +34,7 @@ const Container = styled.div`
   & svg {
     position: absolute;
     bottom: 20px;
-    right: 24px;
+    right: 22px;
   }
 `;
 

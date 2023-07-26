@@ -35,13 +35,13 @@ const MyPage = ({}: MyPageProps) => {
               <Setting />
             </ImageContainer>
             <InfoContainer>
-              <Username>
-                {userInfo.username}
-                <T4Medium>님</T4Medium>
+              <UserContainer>
+                <Username>{userInfo.username}</Username>
+                <Designation>님</Designation>
                 <IconCotainer>
                   <EditSVG />
                 </IconCotainer>
-              </Username>
+              </UserContainer>
               <Via>{userInfo.via}으로 로그인 중</Via>
             </InfoContainer>
           </FlexDiv>
@@ -154,15 +154,19 @@ const InfoContainer = styled.div`
   flex-direction: column;
 `;
 
+const UserContainer = styled.div`
+  display: flex;
+`;
+
 const Username = styled(T4Bold)`
   color: ${colors.gray900};
 
   display: flex;
+`;
 
-  & ${T4Medium} {
-    margin-left: 2px;
-    color: ${colors.blueGray400};
-  }
+const Designation = styled(T4Medium)`
+  margin-left: 2px;
+  color: ${colors.blueGray400};
 `;
 
 const IconCotainer = styled.div`

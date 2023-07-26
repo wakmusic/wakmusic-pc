@@ -16,7 +16,6 @@ import firebaseConfig from "@constants/firebaseConfig";
 import Artists from "@pages/artists/Artists";
 import Chart from "@pages/chart/Chart";
 import Index from "@pages/index/Index";
-import MyPage from "@pages/mypage/MyPage";
 import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
 import User from "@pages/user/User";
@@ -42,7 +41,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/chart" element={<Chart />} />
             <Route path="/artists" element={<Artists />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/mypage" element={<MyPage />} />
             <Route path="/user/*" element={<User />}></Route>
           </Routes>
           <Player />

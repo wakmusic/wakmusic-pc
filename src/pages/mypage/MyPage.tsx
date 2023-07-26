@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-import Panchi from "@assets/dummy/panchi.png";
 import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
 import { ReactComponent as EditSVG } from "@assets/icons/ic_24_edit.svg";
 import { ReactComponent as SetSVG } from "@assets/icons/ic_30_set.svg";
@@ -31,7 +30,7 @@ const MyPage = ({}: MyPageProps) => {
         <ProfileBlock>
           <FlexDiv>
             <ImageContainer>
-              <ProfileImage src={Panchi}></ProfileImage>
+              <ProfileImage src="https://static.wakmusic.xyz/static/profile/bat.png"></ProfileImage>
               <Setting />
             </ImageContainer>
             <InfoContainer>

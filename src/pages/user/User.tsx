@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 
-import Header from "@components/user/header";
+import Header from "@components/user/Header";
 
 import colors from "@constants/colors";
 

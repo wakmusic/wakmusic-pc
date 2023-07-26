@@ -47,6 +47,7 @@ const FormInput = styled.input<{ $borderColor: string | undefined }>`
   line-height: 32px;
 
   color: ${colors.gray700};
+  background: transparent;
 
   &::placeholder {
     color: ${colors.blueGray400};

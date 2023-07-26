@@ -22,13 +22,22 @@ const TwoButton = ({
 }: TwoButtonProps) => {
   return (
     <ButtonContainer>
-      <Button color={colors.blueGray400} onClick={cancel}>
+      <Button
+        color={colors.blueGray400}
+        onClick={cancel}
+        style={{
+          borderEndStartRadius: "24px",
+        }}
+      >
         <T4Bold color={colors.blueGray25}>{cancelText}</T4Bold>
       </Button>
       <Button
         color={colors.point}
         onClick={disabled ? undefined : ok}
         disabled={disabled}
+        style={{
+          borderEndEndRadius: "24px",
+        }}
       >
         <T4Bold color={colors.blueGray25}>{okText}</T4Bold>
       </Button>

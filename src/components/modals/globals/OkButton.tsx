@@ -19,6 +19,10 @@ const OkButton = ({ onClick, disabled, text = "확인" }: OkButtonProps) => {
         onClick={disabled ? undefined : onClick}
         disabled={disabled}
         $big
+        style={{
+          borderEndStartRadius: "24px",
+          borderEndEndRadius: "24px",
+        }}
       >
         <T4Bold color={colors.blueGray25}>{text}</T4Bold>
       </Button>

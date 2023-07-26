@@ -1,7 +1,5 @@
 import styled, { css } from "styled-components";
 
-import colors from "@constants/colors";
-
 export const ButtonContainer = styled.div`
   margin-top: auto;
 
@@ -29,8 +27,7 @@ export const Button = styled.div<{
   ${({ disabled }) =>
     disabled &&
     css`
-      background: ${colors.blueGray300};
-      opacity: 0.8;
+      background: #d8dce4;
       cursor: not-allowed;
     `}
 `;

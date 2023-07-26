@@ -20,9 +20,12 @@ export const ModalOverlay = styled.div`
 export const ModalContainer = styled.div`
   width: 440px;
 
-  overflow: hidden;
+  /* 크롬 혐그 회피용 꼼수 */
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  border-end-start-radius: 30px;
+  border-end-end-radius: 30px;
 
-  border-radius: 24px;
   backdrop-filter: blur(12.5px);
 
   display: flex;

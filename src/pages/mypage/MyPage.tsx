@@ -50,7 +50,8 @@ const MyPage = ({}: MyPageProps) => {
         </ProfileBlock>
         <Block
           title="공지사항"
-          description={"최신 업데이트 및" + "\n" + "중요한 정보를 안내합니다."}
+          description={`최신 업데이트 및
+                        중요한 정보를 안내합니다.`}
           svg={<NotiSVG />}
         />
         <Block

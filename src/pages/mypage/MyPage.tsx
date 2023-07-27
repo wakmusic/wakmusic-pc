@@ -135,6 +135,7 @@ const ImageContainer = styled.div`
 const ProfileImage = styled.img`
   width: 90px;
   height: 90px;
+  border-radius: 100%;
 `;
 
 const Setting = styled(SetSVG)`

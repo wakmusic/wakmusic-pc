@@ -55,29 +55,20 @@ const MyPage = ({}: MyPageProps) => {
         />
         <Block
           title="문의하기"
-          description={
-            "이용 관련 문의를 등록하시면" +
-            "\n" +
-            "빠른 시일 내에 처리하겠습니다."
-          }
+          description={`이용 관련 문의를 등록하신다면
+                        빠른 시일 내에 처리하겠습니다.`}
           svg={<QuestionSVG />}
         />
         <Block
           title="자주 묻는 질문"
-          description={
-            "왁뮤를 이용하시는 회원님들의" +
-            "\n" +
-            "자주 묻는 질문을 모았습니다."
-          }
+          description={`왁뮤를 이용하시는 회원님들의
+                        자주 묻는 질문을 모았습니다.`}
           svg={<QnaSVG />}
         />
         <Block
           title="서비스 정보"
-          description={
-            "개인정보 처리방침 및" +
-            "\n" +
-            "서비스 내 이용 정보를 확인 가능합니다."
-          }
+          description={`개인정보 처리방침 및
+                        서비스 내 이용 정보를 확인 가능합니다.`}
           svg={<DocumentSVG />}
         />
       </Container>

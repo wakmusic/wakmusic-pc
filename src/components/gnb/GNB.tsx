@@ -72,11 +72,7 @@ const GNB = ({}: GNB) => {
 
       <Login
         onClick={() => {
-          (async () => {
-            const result = await selectProfileModal();
-
-            alert(result);
-          })();
+          selectProfileModal();
         }}
       >
         <T6Medium
@@ -90,11 +86,7 @@ const GNB = ({}: GNB) => {
 
       <Login
         onClick={() => {
-          (async () => {
-            await alertModal("타이틀", "서브 타이틀 내용이 들어갑니다.");
-
-            alert("alert 닫힘");
-          })();
+          alertModal("타이틀", "서브 타이틀 내용이 들어갑니다.");
         }}
       >
         <T6Medium
@@ -107,14 +99,7 @@ const GNB = ({}: GNB) => {
       </Login>
       <Login
         onClick={() => {
-          (async () => {
-            const result = await confirmModal(
-              "타이틀",
-              "서브 타이틀 내용이 들어갑니다."
-            );
-
-            alert(result);
-          })();
+          confirmModal("타이틀", "서브 타이틀 내용이 들어갑니다.");
         }}
       >
         <T6Medium
@@ -127,11 +112,7 @@ const GNB = ({}: GNB) => {
       </Login>
       <Login
         onClick={() => {
-          (async () => {
-            const result = await createListModal();
-
-            alert(result);
-          })();
+          createListModal();
         }}
       >
         <T6Medium
@@ -144,11 +125,7 @@ const GNB = ({}: GNB) => {
       </Login>
       <Login
         onClick={() => {
-          (async () => {
-            const result = await loadListModal();
-
-            alert(result);
-          })();
+          loadListModal();
         }}
       >
         <T6Medium
@@ -161,11 +138,7 @@ const GNB = ({}: GNB) => {
       </Login>
       <Login
         onClick={() => {
-          (async () => {
-            await shareListModal("WOOWAKGOOD");
-
-            alert("닫힘");
-          })();
+          shareListModal("WOOWAKGOOD");
         }}
       >
         <T6Medium

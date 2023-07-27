@@ -9,6 +9,14 @@ import { RecoilRoot } from "recoil";
 import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
+import AlertModal from "@components/modals/AlertModal";
+import ConfirmModal from "@components/modals/ConfirmModal";
+import CreateListModal from "@components/modals/CreateListModal";
+import LoadListModal from "@components/modals/LoadListModal";
+import LoginModal from "@components/modals/LoginModal";
+import SelectProfileModal from "@components/modals/SelectProfileModal";
+import ShareListModal from "@components/modals/ShareListModal";
+import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Player";
 
 import firebaseConfig from "@constants/firebaseConfig";
@@ -26,7 +34,7 @@ import "./index.css";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+getAnalytics(app);
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
@@ -46,6 +54,16 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <Player />
         </RootOverlay>
       </BrowserRouter>
+
+      <ModalPortal>
+        <LoginModal />
+        <SelectProfileModal />
+        <AlertModal />
+        <ConfirmModal />
+        <CreateListModal />
+        <LoadListModal />
+        <ShareListModal />
+      </ModalPortal>
     </RecoilRoot>
   </StrictMode>
 );

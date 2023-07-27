@@ -6,12 +6,12 @@ import { ReactComponent as NaverIconSVG } from "@assets/icons/ic_24_naver.svg";
 import { ReactComponent as AppIconSVG } from "@assets/svgs/AppIcon.svg";
 
 import { T4Bold, T5Light } from "@components/Typography";
-import ModalContainer from "@components/globals/ModalContainer";
 
 import colors from "@constants/colors";
 
 import { useLoginModalState } from "@hooks/loginModal";
 
+import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
 import Button from "./Button";
 
 interface LoginModalProps {}
@@ -27,7 +27,7 @@ const LoginModal = ({}: LoginModalProps) => {
   };
 
   return (
-    <ModalContainer>
+    <ModalOverlay>
       <Modal>
         <Header>
           <AppIconSVG />
@@ -52,24 +52,17 @@ const LoginModal = ({}: LoginModalProps) => {
           </Button>
         </Buttons>
       </Modal>
-    </ModalContainer>
+    </ModalOverlay>
   );
 };
 
-const Modal = styled.div`
-  width: 440px;
+const Modal = styled(ModalContainer)`
   height: 538px;
-
-  border-radius: 24px;
-  background: ${colors.blueGray100}CC; // 80% opacity
-  backdrop-filter: blur(12.5px);
-
   padding: 72px 50px;
 
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+
+  background: ${colors.blueGray100}CC; // 80% opacity
 `;
 
 const Header = styled.div`

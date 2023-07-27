@@ -11,6 +11,7 @@ import { join } from "path";
       minWidth: 1250,
       minHeight: 714,
       frame: false,
+      backgroundColor: "#FFF",
       icon: nativeImage.createFromPath(
         join(__dirname, "../public/favicon.ico")
       ),

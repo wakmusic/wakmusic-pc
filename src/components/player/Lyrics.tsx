@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 
-import { T5Medium, T7Medium, T8Medium } from "@components/Typography";
+import { T4Medium, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 import { lyrics as dummy } from "@constants/dummys";
@@ -19,14 +19,6 @@ const Lyrics = ({ size }: LyricsProps) => {
   const [padding, setPadding] = useState(0);
 
   const ref = useRef<HTMLDivElement>(null);
-
-  function getLineComponent(isHighlight: boolean) {
-    if (size === "large") {
-      return isHighlight ? CurrentLineT5 : DefaultLineT7;
-    }
-
-    return isHighlight ? CurrentLineT7 : DefaultLineT8;
-  }
 
   function onLineClick(index: number) {
     setCurrent(lyrics[index].start);
@@ -52,7 +44,7 @@ const Lyrics = ({ size }: LyricsProps) => {
     const target = ref.current.children[index] as HTMLDivElement;
     if (!target) return;
 
-    const top = target.offsetTop - ref.current.offsetTop - padding + 9;
+    const top = target.offsetTop - ref.current.offsetTop - padding + 12;
 
     ref.current.scrollTo({ top, behavior: "smooth" });
   }, [getIndex, padding]);
@@ -62,9 +54,9 @@ const Lyrics = ({ size }: LyricsProps) => {
   }, [ref]);
 
   return (
-    <Container ref={ref} padding={padding} $noGap={size === "small"}>
+    <Container ref={ref} padding={padding} $noGap={size === "medium"}>
       {lyrics.map((line, i) => {
-        const Line = getLineComponent(i === getIndex());
+        const Line = i === getIndex() ? CurrentLine : DefaultLine;
 
         return (
           <Line
@@ -90,7 +82,7 @@ const Container = styled.div<{ padding: number; $noGap: boolean }>`
 
   display: flex;
   flex-direction: column;
-  gap: ${({ $noGap }) => ($noGap ? 0 : "4px")};
+  gap: ${({ $noGap }) => ($noGap ? "4px" : "6px")};
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -107,26 +99,17 @@ const Line = css`
   white-space: pre-wrap;
 `;
 
-const CurrentLineT7 = styled(T7Medium)`
+const CurrentLine = styled(T4Medium)`
+  line-height: 23px;
+
   ${Line}
 `;
 
-const DefaultLineT8 = styled(T8Medium)`
+const DefaultLine = styled(T6Medium)`
+  line-height: 20px;
+
   ${Line}
 
-  opacity: 0.6;
-`;
-
-const CurrentLineT5 = styled(T5Medium)`
-  ${Line}
-
-  height: 23px;
-`;
-
-const DefaultLineT7 = styled(T7Medium)`
-  ${Line}
-
-  height: 20px;
   opacity: 0.6;
 `;
 

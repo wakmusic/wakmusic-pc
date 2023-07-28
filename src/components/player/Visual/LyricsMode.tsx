@@ -65,22 +65,22 @@ const TitleContainer = styled.div`
 
 const LyricsContainer = styled.div`
   width: 100%;
-  height: 263px;
+  height: 243px;
 
-  margin: 24px 0;
+  margin-top: 24px;
 `;
 
 const TimelineContainer = styled.div`
   width: 100%;
 
-  margin: 20px 0;
+  margin: 76px 0 20px 0;
 `;
 
 const ControllerContainer = styled.div`
   display: flex;
   justify-content: center;
 
-  margin: 42px 0 80px 0;
+  margin: 19px 0 72px 0;
 `;
 
 export default LyricsMode;

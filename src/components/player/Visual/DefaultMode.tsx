@@ -38,13 +38,13 @@ const DefaultMode = ({}: DefaultModeProps) => {
       <MainContainer>
         <Thumbnail src={img} />
 
-        <TimelineContainer>
-          <Timeline isSeparated={true} />
-        </TimelineContainer>
-
         <LyricsContainer>
           <Lyrics size="small" />
         </LyricsContainer>
+
+        <TimelineContainer>
+          <Timeline isSeparated={true} />
+        </TimelineContainer>
 
         <ControllerContainer>
           <Controller />
@@ -94,22 +94,22 @@ const Thumbnail = styled.img`
   border-radius: 10px;
 `;
 
-const TimelineContainer = styled.div`
-  width: 100%;
-
-  margin: 24px 0 32px 0;
-`;
-
 const LyricsContainer = styled.div`
   width: 100%;
-  height: 54px;
+  height: 88px;
+
+  margin: 25px 0 49px 0;
+`;
+
+const TimelineContainer = styled.div`
+  width: 100%;
 `;
 
 const ControllerContainer = styled.div`
   display: flex;
   justify-content: center;
 
-  margin: 93px 0 72px 0;
+  margin: 40px 0 73px 0;
 `;
 
 export default DefaultMode;

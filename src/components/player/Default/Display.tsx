@@ -86,7 +86,7 @@ const PlaylistButtonContainer = styled.div`
 
 const LyricsWrapper = styled.div<{ $on: boolean }>`
   width: 220px;
-  height: 106px;
+  height: 130px;
 
   position: absolute;
 

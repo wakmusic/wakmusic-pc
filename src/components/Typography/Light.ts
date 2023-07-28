@@ -2,6 +2,16 @@ import styled from "styled-components";
 
 import { PretendardLight, SCDreamLight } from "./Default";
 
+export const T1Light = styled(PretendardLight)`
+  font-size: 24px;
+  line-height: 36px;
+`;
+
+export const T3Light = styled(PretendardLight)`
+  font-size: 20px;
+  line-height: 32px;
+`;
+
 export const T4Light = styled(PretendardLight)`
   font-size: 18px;
   line-height: 30px;

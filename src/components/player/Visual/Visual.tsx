@@ -43,7 +43,8 @@ const Container = styled.div<{ $image: string; $on: boolean }>`
 
   background-image: url(${({ $image }) => $image});
   background-position: center;
-  background-size: 150%;
+  background-size: max(200vh, 150vw);
+  background-repeat: no-repeat;
 
   visibility: hidden;
 

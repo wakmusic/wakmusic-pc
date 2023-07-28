@@ -1,5 +1,7 @@
+import { myListState } from "@state/user/atoms";
 import { useLocation } from "react-router-dom";
-import styled from "styled-components";
+import { useRecoilState } from "recoil";
+import styled, { css } from "styled-components";
 
 import { T6Medium } from "@components/Typography";
 import Tab from "@components/globals/Tab";
@@ -8,12 +10,15 @@ import TabBar from "@components/globals/TabBar";
 import colors from "@constants/colors";
 import { userTabs } from "@constants/tabs";
 
-interface HeaderProps {
-  isEditMode: boolean;
-}
+interface HeaderProps {}
 
 const Header = ({}: HeaderProps) => {
   const location = useLocation();
+  const [isEditMode, setEditMode] = useRecoilState(myListState);
+
+  const toggleEditMode = () => {
+    setEditMode(!isEditMode);
+  };
 
   return (
     <Container>
@@ -25,8 +30,12 @@ const Header = ({}: HeaderProps) => {
         ))}
       </TabBar>
       {location.pathname === "/user/playlists" && (
-        <Edit>
-          <EditText>편집</EditText>
+        <Edit $activated={isEditMode} onClick={toggleEditMode}>
+          <T6Medium
+            style={{ color: isEditMode ? colors.point : colors.blueGray400 }}
+          >
+            {isEditMode ? "완료" : "편집"}
+          </T6Medium>
         </Edit>
       )}
     </Container>
@@ -43,7 +52,7 @@ const Container = styled.div`
   margin: auto;
 `;
 
-const Edit = styled.button`
+const Edit = styled.button<{ $activated: boolean }>`
   padding: 4px 14px;
 
   border: 1px solid ${colors.blueGray200};
@@ -54,10 +63,15 @@ const Edit = styled.button`
   &:hover {
     cursor: pointer;
   }
-`;
 
-const EditText = styled(T6Medium)`
-  color: ${colors.blueGray400};
+  ${({ $activated }) =>
+    $activated
+      ? css`
+          border-color: ${colors.point};
+        `
+      : css`
+          border-color: ${colors.blueGray200};
+        `}
 `;
 
 export default Header;

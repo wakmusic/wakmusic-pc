@@ -6,16 +6,16 @@ import Header from "@components/user/Header";
 import colors from "@constants/colors";
 
 import Likes from "./Likes";
-import Playlist from "./Playlist";
+import Playlists from "./Playlists";
 
 interface UserProps {}
 
 const User = ({}: UserProps) => {
   return (
     <Container>
-      <Header isEditMode={false} />
+      <Header />
       <Routes>
-        <Route path="/playlists" element={<Playlist />} />
+        <Route path="/playlists" element={<Playlists />} />
         <Route path="/likes" element={<Likes />} />
       </Routes>
     </Container>

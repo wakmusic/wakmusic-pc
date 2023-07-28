@@ -117,8 +117,6 @@ const CurrentLine = styled(T4Medium)`
 `;
 
 const DefaultLine = styled(T6Medium)`
-  line-height: 20px;
-
   ${Line}
 
   opacity: 0.6;

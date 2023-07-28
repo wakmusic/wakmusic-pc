@@ -10,9 +10,10 @@ import { usePlayingProgressState } from "@hooks/player";
 
 interface LyricsProps {
   size: "large" | "medium" | "small";
+  extraPadding?: number;
 }
 
-const Lyrics = ({ size }: LyricsProps) => {
+const Lyrics = ({ size, extraPadding }: LyricsProps) => {
   const lyrics = dummy;
 
   const [current, setCurrent] = usePlayingProgressState();
@@ -54,7 +55,12 @@ const Lyrics = ({ size }: LyricsProps) => {
   }, [ref]);
 
   return (
-    <Container ref={ref} padding={padding} $noGap={size === "medium"}>
+    <Container
+      ref={ref}
+      padding={padding}
+      $extraPadding={extraPadding ?? 0}
+      $noGap={size === "medium"}
+    >
       {lyrics.map((line, i) => {
         const Line = i === getIndex() ? CurrentLine : DefaultLine;
 
@@ -72,11 +78,16 @@ const Lyrics = ({ size }: LyricsProps) => {
   );
 };
 
-const Container = styled.div<{ padding: number; $noGap: boolean }>`
+const Container = styled.div<{
+  padding: number;
+  $extraPadding: number;
+  $noGap: boolean;
+}>`
   width: 100%;
   height: 100%;
 
-  padding: ${({ padding }) => padding}px 0;
+  padding: ${({ padding }) => padding}px 0
+    ${({ padding, $extraPadding }) => padding + $extraPadding}px 0;
 
   overflow-y: scroll;
 

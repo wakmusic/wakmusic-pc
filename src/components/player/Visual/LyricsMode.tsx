@@ -25,7 +25,7 @@ const LyricsMode = ({}: LyricsModeProps) => {
       </TitleContainer>
 
       <LyricsContainer>
-        <Lyrics size="large" />
+        <Lyrics size="large" extraPadding={26} />
       </LyricsContainer>
 
       <TimelineContainer>

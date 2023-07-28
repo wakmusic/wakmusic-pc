@@ -96,9 +96,9 @@ const Thumbnail = styled.img`
 
 const LyricsContainer = styled.div`
   width: 100%;
-  height: 88px;
+  height: 90px;
 
-  margin: 25px 0 49px 0;
+  margin: 24px 0 48px 0;
 `;
 
 const TimelineContainer = styled.div`

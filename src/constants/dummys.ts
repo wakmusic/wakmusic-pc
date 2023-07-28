@@ -2,6 +2,11 @@ import { SongsSearchResponse } from "@templates/search";
 
 export const chartUpdated = "1688630567";
 
+export const userInfo = {
+  username: "왁타버스 뮤직",
+  via: "카카오톡",
+};
+
 export const hourlyChart = [
   {
     songId: "crvPldgKJIo",

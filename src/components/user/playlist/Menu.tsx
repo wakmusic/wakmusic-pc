@@ -19,6 +19,7 @@ const Menu = ({}: MenuProps) => {
 const Container = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 16px;
 `;
 
 export default Menu;

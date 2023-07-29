@@ -24,7 +24,7 @@ const Container = styled.div`
   height: 40px;
 
   border-radius: 10px;
-  border: 1.25px solid ${colors.blueGray100};
+  border: 1px solid ${colors.blueGray100};
   background-color: ${colors.white}66; // 40%
   backdrop-filter: blur(62.5px);
 

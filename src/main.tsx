@@ -9,6 +9,14 @@ import { RecoilRoot } from "recoil";
 import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
+import AlertModal from "@components/modals/AlertModal";
+import ConfirmModal from "@components/modals/ConfirmModal";
+import CreateListModal from "@components/modals/CreateListModal";
+import LoadListModal from "@components/modals/LoadListModal";
+import LoginModal from "@components/modals/LoginModal";
+import SelectProfileModal from "@components/modals/SelectProfileModal";
+import ShareListModal from "@components/modals/ShareListModal";
+import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Player";
 
 import firebaseConfig from "@constants/firebaseConfig";
@@ -17,6 +25,7 @@ import Artists from "@pages/artists/Artists";
 import Chart from "@pages/chart/Chart";
 import Index from "@pages/index/Index";
 import New from "@pages/new/New";
+import MyPage from "@pages/mypage/MyPage";
 import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
 import User from "@pages/user/User";
@@ -27,7 +36,7 @@ import "./index.css";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+getAnalytics(app);
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
@@ -44,10 +53,22 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/search" element={<Search />} />
             <Route path="/new" element={<New />} />
             <Route path="/user/*" element={<User />}></Route>
+            <Route path="/user/*" element={<User />} />
+            <Route path="/mypage" element={<MyPage />} />
           </Routes>
           <Player />
         </RootOverlay>
       </BrowserRouter>
+
+      <ModalPortal>
+        <LoginModal />
+        <SelectProfileModal />
+        <AlertModal />
+        <ConfirmModal />
+        <CreateListModal />
+        <LoadListModal />
+        <ShareListModal />
+      </ModalPortal>
     </RecoilRoot>
   </StrictMode>
 );

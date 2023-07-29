@@ -1,11 +1,12 @@
 import { myListState } from "@state/user/atoms";
+import { useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled, { css } from "styled-components";
 
-import { T6Medium } from "@components/Typography";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
+import TextButton from "@components/globals/TextButton";
 
 import colors from "@constants/colors";
 import { userTabs } from "@constants/tabs";
@@ -16,9 +17,9 @@ const Header = ({}: HeaderProps) => {
   const location = useLocation();
   const [isEditMode, setEditMode] = useRecoilState(myListState);
 
-  const toggleEditMode = () => {
+  const toggleEditMode = useCallback(() => {
     setEditMode(!isEditMode);
-  };
+  }, [setEditMode, isEditMode]);
 
   return (
     <Container>
@@ -30,13 +31,14 @@ const Header = ({}: HeaderProps) => {
         ))}
       </TabBar>
       {location.pathname === "/user/playlists" && (
-        <Edit $activated={isEditMode} onClick={toggleEditMode}>
-          <T6Medium
-            style={{ color: isEditMode ? colors.point : colors.blueGray400 }}
-          >
-            {isEditMode ? "완료" : "편집"}
-          </T6Medium>
-        </Edit>
+        <TextButton
+          text={{
+            default: "편집",
+            activated: "완료",
+          }}
+          activated={isEditMode}
+          onClick={toggleEditMode}
+        />
       )}
     </Container>
   );

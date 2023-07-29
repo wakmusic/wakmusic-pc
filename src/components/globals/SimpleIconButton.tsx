@@ -5,7 +5,7 @@ interface IconButtonProps {
   onClick?: () => void;
 }
 
-const IconButton = ({ icon: Icon, onClick }: IconButtonProps) => {
+const SimpleIconButton = ({ icon: Icon, onClick }: IconButtonProps) => {
   return (
     <Container onClick={onClick}>
       <Icon />
@@ -15,6 +15,9 @@ const IconButton = ({ icon: Icon, onClick }: IconButtonProps) => {
 
 const Container = styled.div`
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
 `;
 
-export default IconButton;
+export default SimpleIconButton;

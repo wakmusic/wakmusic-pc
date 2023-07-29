@@ -17,7 +17,8 @@ import LoginModal from "@components/modals/LoginModal";
 import SelectProfileModal from "@components/modals/SelectProfileModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
-import Player from "@components/player/Player";
+import Player from "@components/player/Default/Player";
+import Visual from "@components/player/Visual/Visual";
 
 import firebaseConfig from "@constants/firebaseConfig";
 
@@ -58,6 +59,8 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <Player />
         </RootOverlay>
       </BrowserRouter>
+
+      <Visual />
 
       <ModalPortal>
         <LoginModal />

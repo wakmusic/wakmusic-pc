@@ -31,7 +31,7 @@ interface ShuffleAction {
   to?: number;
 }
 
-interface PlaylistsProps {}
+interface MylistProps {}
 
 const shuffleMyList = (state: Playlist[], action: ShuffleAction) => {
   const newList = state.slice();
@@ -61,7 +61,7 @@ const getPlaylistInitialPosition = (targetIndex: number): XY => {
   };
 };
 
-const Playlists = ({}: PlaylistsProps) => {
+const Mylist = ({}: MylistProps) => {
   const [isEditMode] = useRecoilState(myListState);
   const [shuffledList, dispatchMyList] = useReducer(shuffleMyList, myList);
   const [mouseDown, setMouseDown] = useState(false);
@@ -221,5 +221,5 @@ const DragedPlaylist = styled.div`
   border-radius: 16px;
 `;
 
-export default Playlists;
+export default Mylist;
 export type { XY };

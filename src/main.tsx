@@ -52,7 +52,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/artists" element={<Artists />} />
             <Route path="/search" element={<Search />} />
             <Route path="/new" element={<New />} />
-            <Route path="/user/*" element={<User />}></Route>
             <Route path="/user/*" element={<User />} />
             <Route path="/mypage" element={<MyPage />} />
           </Routes>

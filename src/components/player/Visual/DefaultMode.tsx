@@ -4,9 +4,10 @@ import styled, { css } from "styled-components";
 import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off_bright.svg";
 import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";
 
+import SimpleIconButton from "@components/globals/SimpleIconButton";
+
 import { useControlState, useCurrentSongState } from "@hooks/player";
 
-import IconButton from "../../globals/IconButton";
 import Controller from "../Controller";
 import Lyrics from "../Lyrics";
 import Timeline from "../Timeline";
@@ -28,7 +29,7 @@ const DefaultMode = ({}: DefaultModeProps) => {
   return (
     <Container $off={controlState.isLyricsOn}>
       <SongContainer>
-        <IconButton
+        <SimpleIconButton
           icon={isLiked ? HeartOnSvg : HeartOffSvg}
           onClick={changeIsLikeState}
         />

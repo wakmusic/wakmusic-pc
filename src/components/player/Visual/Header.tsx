@@ -3,10 +3,9 @@ import styled from "styled-components";
 import { ReactComponent as ReduceSVG } from "@assets/icons/ic_20_reduce.svg";
 
 import ControlBar from "@components/globals/ControlBar";
+import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import { useToggleVisualModeState } from "@hooks/player";
-
-import IconButton from "../../globals/IconButton";
 
 interface HeaderProps {}
 
@@ -16,7 +15,7 @@ const Header = ({}: HeaderProps) => {
   return (
     <Container>
       <ReduceContainer>
-        <IconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
+        <SimpleIconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
       </ReduceContainer>
 
       <ControlBar />

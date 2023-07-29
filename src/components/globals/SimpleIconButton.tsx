@@ -5,7 +5,7 @@ interface IconButtonProps {
   onClick?: () => void;
 }
 
-const IconButton = ({ icon: Icon, onClick }: IconButtonProps) => {
+const SimpleIconButton = ({ icon: Icon, onClick }: IconButtonProps) => {
   return (
     <Container onClick={onClick}>
       <Icon />
@@ -20,4 +20,4 @@ const Container = styled.div`
   align-items: center;
 `;
 
-export default IconButton;
+export default SimpleIconButton;

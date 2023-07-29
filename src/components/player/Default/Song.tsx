@@ -5,12 +5,12 @@ import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off.svg
 import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";
 
 import { T4Medium, T5Light } from "@components/Typography";
+import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import colors from "@constants/colors";
 
 import { useCurrentSongState } from "@hooks/player";
 
-import IconButton from "../../globals/IconButton";
 import Controller from "../Controller";
 import View from "../View";
 
@@ -28,7 +28,7 @@ const Song = ({}: SongProps) => {
   return (
     <Container>
       <UpperContainer>
-        <IconButton
+        <SimpleIconButton
           icon={isLiked ? HeartOnSvg : HeartOffSvg}
           onClick={changeIsLikeState}
         />

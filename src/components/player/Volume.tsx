@@ -5,9 +5,9 @@ import { ReactComponent as SoundOffSvg } from "@assets/icons/ic_20_sound_off.svg
 import { ReactComponent as SoundOnSvg } from "@assets/icons/ic_20_sound_on.svg";
 import { ReactComponent as VolumeSvg } from "@assets/svgs/volume.svg";
 
-import colors from "@constants/colors";
+import SimpleIconButton from "@components/globals/SimpleIconButton";
 
-import IconButton from "../globals/IconButton";
+import colors from "@constants/colors";
 
 interface VolumeProps {
   volume: number;
@@ -26,7 +26,7 @@ const Volume = ({ volume, onChange }: VolumeProps) => {
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
     >
-      <IconButton icon={isHover ? SoundOnSvg : SoundOffSvg} />
+      <SimpleIconButton icon={isHover ? SoundOnSvg : SoundOffSvg} />
       <Popover>
         <VolumeSvg />
         <Input

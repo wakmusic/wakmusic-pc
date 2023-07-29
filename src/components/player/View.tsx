@@ -4,14 +4,13 @@ import { ReactComponent as ViewsSvg } from "@assets/icons/ic_20_views.svg";
 import { ReactComponent as ViewsBrightSvg } from "@assets/icons/ic_20_views_bright.svg";
 
 import { T8Medium } from "@components/Typography";
+import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import colors from "@constants/colors";
 
 import { useCurrentSongState } from "@hooks/player";
 
 import { formatNumber } from "@utils/formatting";
-
-import IconButton from "../globals/IconButton";
 
 interface ViewProps {
   isBright?: boolean;
@@ -27,7 +26,7 @@ const View = ({ isBright }: ViewProps) => {
           {formatNumber(song.views)}
         </ViewsText>
       </ViewsPopover>
-      <IconButton icon={isBright ?? false ? ViewsBrightSvg : ViewsSvg} />
+      <SimpleIconButton icon={isBright ?? false ? ViewsBrightSvg : ViewsSvg} />
     </Container>
   );
 };

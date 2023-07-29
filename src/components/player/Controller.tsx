@@ -12,6 +12,8 @@ import { ReactComponent as RepeatOnAllSvg } from "@assets/icons/ic_20_repeat_on_
 import { ReactComponent as PlaySvg } from "@assets/icons/ic_30_play_25_point.svg";
 import { ReactComponent as StopSvg } from "@assets/icons/ic_30_stop.svg";
 
+import SimpleIconButton from "@components/globals/SimpleIconButton";
+
 import {
   useControlState,
   useSetVolumeState,
@@ -23,7 +25,6 @@ import {
 
 import { RepeatType } from "@templates/player";
 
-import IconButton from "../globals/IconButton";
 import Volume from "./Volume";
 
 interface ControllerProps {}
@@ -59,18 +60,21 @@ const Controller = ({}: ControllerProps) => {
   return (
     <Container>
       <Volume volume={controlState.volume} onChange={onVolumeChange} />
-      <IconButton icon={getRepeatIcon()} onClick={toggleRepeatTypeState} />
-      <IconButton icon={PrevSvg} onClick={movePrev} />
-      <IconButton
+      <SimpleIconButton
+        icon={getRepeatIcon()}
+        onClick={toggleRepeatTypeState}
+      />
+      <SimpleIconButton icon={PrevSvg} onClick={movePrev} />
+      <SimpleIconButton
         icon={controlState.isPlaying ? StopSvg : PlaySvg}
         onClick={toggleIsPlayingState}
       />
-      <IconButton icon={NextSvg} onClick={moveNext} />
-      <IconButton
+      <SimpleIconButton icon={NextSvg} onClick={moveNext} />
+      <SimpleIconButton
         icon={controlState.isRandom ? RandomOnSvg : RandomOffSvg}
         onClick={toggleIsRandomState}
       />
-      <IconButton
+      <SimpleIconButton
         icon={controlState.isLyricsOn ? DocumentOnSvg : DocumentOffSvg}
         onClick={toggleIsLyricsOnState}
       />

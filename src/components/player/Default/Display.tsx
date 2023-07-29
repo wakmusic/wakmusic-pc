@@ -3,13 +3,14 @@ import styled, { css } from "styled-components";
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
 import { ReactComponent as PlayListSVG } from "@assets/icons/ic_20_play_list.svg";
 
+import SimpleIconButton from "@components/globals/SimpleIconButton";
+
 import {
   useControlState,
   useCurrentSongState,
   useToggleVisualModeState,
 } from "@hooks/player";
 
-import IconButton from "../../globals/IconButton";
 import Lyrics from "../Lyrics";
 
 interface DisplayProps {}
@@ -25,11 +26,14 @@ const Display = ({}: DisplayProps) => {
     <Container image={img}>
       <Grid>
         <ExpansionButtonContainer>
-          <IconButton icon={ExpansionSVG} onClick={toggleVisualModeState} />
+          <SimpleIconButton
+            icon={ExpansionSVG}
+            onClick={toggleVisualModeState}
+          />
         </ExpansionButtonContainer>
 
         <PlaylistButtonContainer>
-          <IconButton icon={PlayListSVG} />
+          <SimpleIconButton icon={PlayListSVG} />
         </PlaylistButtonContainer>
 
         <CenterWrapper>

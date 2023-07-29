@@ -4,7 +4,7 @@ import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
 import { ReactComponent as LeastSVG } from "@assets/icons/ic_20_least.svg";
 import { ReactComponent as MaxSVG } from "@assets/icons/ic_20_max.svg";
 
-import IconButton from "./IconButton";
+import SimpleIconButton from "./SimpleIconButton";
 
 interface ControlBarProps {}
 
@@ -15,19 +15,19 @@ const ControlBar = ({}: ControlBarProps) => {
 
   return (
     <Container>
-      <IconButton
+      <SimpleIconButton
         icon={LeastSVG}
         onClick={() => {
           window.ipcRenderer?.send("window:least");
         }}
       />
-      <IconButton
+      <SimpleIconButton
         icon={MaxSVG}
         onClick={() => {
           window.ipcRenderer?.send("window:max");
         }}
       />
-      <IconButton
+      <SimpleIconButton
         icon={CloseSVG}
         onClick={() => {
           window.ipcRenderer?.send("window:close");

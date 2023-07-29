@@ -21,9 +21,9 @@ const Player = ({}: PlayerProps) => {
     ...dummy,
     ...dummy,
   ]);
-  const [currentSong, setCurrentSong] = useState(11);
+  const [currentSong, setCurrentSong] = useState(16);
 
-  const song = Object.assign(dummy[11], { total: dummy[11].hourly });
+  const song = Object.assign(dummy[16], { total: dummy[16].hourly });
   const songLength = 272;
 
   function onPlayingChange(playing: number) {

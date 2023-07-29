@@ -13,9 +13,11 @@ interface TrackProps {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: (item: any) => void;
+
+  maxWidth?: number;
 }
 
-const Track = ({ item, onClick }: TrackProps) => {
+const Track = ({ item, onClick, maxWidth }: TrackProps) => {
   const onClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
 
@@ -29,8 +31,8 @@ const Track = ({ item, onClick }: TrackProps) => {
       <Thumbnail src={`https://i.ytimg.com/vi/${item.songId}/default.jpg`} />
 
       <TrackInfo>
-        <TrackTitle>{item.title}</TrackTitle>
-        <TrackArtist>{item.artist}</TrackArtist>
+        <TrackTitle $maxWidth={maxWidth}>{item.title}</TrackTitle>
+        <TrackArtist $maxWidth={maxWidth}>{item.artist}</TrackArtist>
       </TrackInfo>
     </Container>
   );
@@ -75,19 +77,20 @@ const Container = styled.div`
 
 const TrackInfo = styled.div``;
 
-const TrackStyle = css`
-  max-width: 206px;
+const TrackStyle = css<{ $maxWidth?: number }>`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+
+  max-width: ${({ $maxWidth }) => $maxWidth ?? 206}px;
 `;
 
-const TrackTitle = styled(T5Medium)`
+const TrackTitle = styled(T5Medium)<{ $maxWidth?: number }>`
   ${TrackStyle};
   color: ${colors.gray700};
 `;
 
-const TrackArtist = styled(T6Medium)`
+const TrackArtist = styled(T6Medium)<{ $maxWidth?: number }>`
   ${TrackStyle};
   color: ${colors.blueGray500};
 `;

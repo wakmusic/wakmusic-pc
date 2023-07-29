@@ -234,11 +234,20 @@ const SongContainer = styled.div<{
 `;
 
 const TitleText = styled(T7Light)`
-  width: 176px;
+  width: 170px;
+  margin-right: 6px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 const ArtistText = styled(T7Light)`
   width: 82px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 const MovementCursor = styled.div`

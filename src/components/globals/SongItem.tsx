@@ -85,6 +85,13 @@ const SongItem = ({
     [song, chartData, features]
   );
 
+  const width = useMemo(() => {
+    if (rank) return 436;
+    if (editMode) return 440;
+
+    return 480;
+  }, [rank, editMode]);
+
   return (
     <Container
       onClick={() => onClick && onClick(song)}
@@ -94,16 +101,8 @@ const SongItem = ({
       {rank && <Rank now={rank} last={chartData.last} />}
       {editMode && <MoveButton />}
 
-      <TrackWrapper
-        $width={
-          rank
-            ? 436 // 랭크 있을 때
-            : editMode
-            ? 440 // 수정 모드일 때
-            : 480 // 기본
-        }
-      >
-        <Track item={song} onClick={onPlayClick} />
+      <TrackWrapper $width={width}>
+        <Track item={song} onClick={onPlayClick} maxWidth={width - 80} />
       </TrackWrapper>
 
       {featureTexts.map((text, index) => (

@@ -28,7 +28,7 @@ const Section = ({ path, icon: Icon, lottie, children }: Section) => {
       }}
     >
       <IconContainer>
-        {location.pathname === path ? (
+        {location.pathname.split("/")[1] === path.split("/")[1] ? (
           <Lottie
             animationData={lottie}
             loop={false}
@@ -42,7 +42,9 @@ const Section = ({ path, icon: Icon, lottie, children }: Section) => {
         )}
       </IconContainer>
 
-      <Text $activated={location.pathname === path}>{children}</Text>
+      <Text $activated={location.pathname.split("/")[1] === path.split("/")[1]}>
+        {children}
+      </Text>
     </Container>
   );
 };

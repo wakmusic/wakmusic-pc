@@ -1,6 +1,6 @@
 import { dragAndDropState, myListState } from "@state/user/atoms";
-import { myListItem } from "@templates/playlist";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 
@@ -11,7 +11,9 @@ import { T6Medium, T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { XY } from "@pages/user/Playlists";
+import { XY } from "@pages/user/Mylist";
+
+import { myListItem } from "@templates/playlist";
 
 interface PlaylistItemProps {
   item: myListItem;
@@ -28,6 +30,7 @@ const PlaylistItem = ({
   onSelect,
   onMouseEnter,
 }: PlaylistItemProps) => {
+  const navigate = useNavigate();
   const isEditMode = useRecoilValue(myListState);
   const dragAndDropTarget = useRecoilValue(dragAndDropState);
 
@@ -116,6 +119,9 @@ const PlaylistItem = ({
         marginRight: `${marginRight}px`,
       }}
       onMouseEnter={onMouseEnter}
+      onClick={() => {
+        navigate(`/user/playlists/${item.key}`, { state: item });
+      }}
     >
       <ShiftContainer>
         <Icon
@@ -143,6 +149,10 @@ const PlaylistItem = ({
 const Container = styled.div`
   width: 222px;
   height: 74px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ShiftContainer = styled.div`

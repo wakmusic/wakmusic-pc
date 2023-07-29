@@ -6,7 +6,7 @@ import Header from "@components/user/Header";
 import colors from "@constants/colors";
 
 import Likes from "./Likes";
-import Playlists from "./Playlists";
+import Mylist from "./Mylist";
 
 interface UserProps {}
 
@@ -15,7 +15,7 @@ const User = ({}: UserProps) => {
     <Container>
       <Header />
       <Routes>
-        <Route path="/playlists" element={<Playlists />} />
+        <Route path="/playlists" element={<Mylist />} />
         <Route path="/likes" element={<Likes />} />
       </Routes>
     </Container>
@@ -27,6 +27,7 @@ const Container = styled.div`
   height: calc(100vh - 78px);
 
   margin: auto;
+  margin-top: 20px;
 
   padding-top: 16px;
 

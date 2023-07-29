@@ -1,7 +1,7 @@
 import { Song } from "./song";
 import { User } from "./user";
 
-export type Playlist = {
+export type PlaylistType = {
   key: string;
   title: string;
   createAt: number;
@@ -13,6 +13,6 @@ export type Playlist = {
   songs: Song[];
 };
 
-export interface myListItem extends Playlist {
+export interface myListItemType extends PlaylistType {
   readonly index: number;
 }

@@ -3,14 +3,17 @@ import { useCallback, useEffect, useReducer, useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
+import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
+import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
+
+import IconButton from "@components/globals/IconButton";
 import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
-import Menu from "@components/user/playlist/Menu";
-import PlaylistItem from "@components/user/playlist/PlaylistItem";
+import MylistItem from "@components/user/mylist/MylistItem";
 
 import colors from "@constants/colors";
 import { myList } from "@constants/dummys";
 
-import { Playlist, myListItem } from "@templates/playlist";
+import { PlaylistType, myListItemType } from "@templates/playlist";
 
 import { isUndefined } from "@utils/isTypes";
 
@@ -33,7 +36,7 @@ interface ShuffleAction {
 
 interface MylistProps {}
 
-const shuffleMyList = (state: Playlist[], action: ShuffleAction) => {
+const shuffleMyList = (state: PlaylistType[], action: ShuffleAction) => {
   const newList = state.slice();
 
   switch (action.type) {
@@ -99,7 +102,7 @@ const Mylist = ({}: MylistProps) => {
     shuffledList.length,
   ]);
 
-  const initializeDragTarget = (target: myListItem, position: XY) => {
+  const initializeDragTarget = (target: myListItemType, position: XY) => {
     setMouseDown(true);
 
     setDragAndDropTarget({
@@ -128,7 +131,10 @@ const Mylist = ({}: MylistProps) => {
 
   return (
     <Container>
-      <Menu />
+      <Menu>
+        <IconButton icon={Create}>리스트 만들기</IconButton>
+        <IconButton icon={Import}>리스트 가져오기</IconButton>
+      </Menu>
       <DefaultScroll>
         <ScrollWrapper>
           <PlayLists
@@ -150,7 +156,7 @@ const Mylist = ({}: MylistProps) => {
           >
             {!isEditMode
               ? myList.map((item, index) => (
-                  <PlaylistItem
+                  <MylistItem
                     key={index}
                     item={{
                       ...item,
@@ -159,7 +165,7 @@ const Mylist = ({}: MylistProps) => {
                   />
                 ))
               : shuffledList.map((item, index) => (
-                  <PlaylistItem
+                  <MylistItem
                     key={index}
                     item={{
                       ...item,
@@ -177,7 +183,7 @@ const Mylist = ({}: MylistProps) => {
                 display: mouseDown ? "block" : "none",
               }}
             >
-              <PlaylistItem item={dragAndDropTarget.drag} />
+              <MylistItem item={dragAndDropTarget.drag} />
             </DragedPlaylist>
           </PlayLists>
         </ScrollWrapper>
@@ -188,6 +194,14 @@ const Mylist = ({}: MylistProps) => {
 
 const Container = styled.div`
   margin: 16px 0px 0px 20px;
+`;
+
+const Menu = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  margin-bottom: 16px;
 `;
 
 const PlayLists = styled.div`

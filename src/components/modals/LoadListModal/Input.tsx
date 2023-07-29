@@ -37,12 +37,4 @@ const Container = styled.div`
   position: relative;
 `;
 
-const Texts = styled.div`
-  margin-top: 4px;
-
-  display: flex;
-
-  height: 18px;
-`;
-
 export default Input;

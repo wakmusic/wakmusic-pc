@@ -17,7 +17,7 @@ const MusicControllerPlayer = ({
   return (
     <Wrapper>
       <ButtonContainer>
-        <Count isWidth={count >= 100}>
+        <Count $isWidth={count >= 100}>
           <T4Bold color={colors.sub}>{count}</T4Bold>
         </Count>
         {children}
@@ -47,7 +47,7 @@ const ButtonContainer = styled.div`
   background: ${colors.sub};
 `;
 
-const Count = styled.div<{ isWidth: boolean }>`
+const Count = styled.div<{ $isWidth: boolean }>`
   border-radius: 100px;
   position: absolute;
   left: 16px;
@@ -60,7 +60,7 @@ const Count = styled.div<{ isWidth: boolean }>`
   align-items: center;
 
   ${(props) =>
-    props.isWidth
+    props.$isWidth
       ? css`
           width: 50px;
         `

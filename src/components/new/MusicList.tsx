@@ -6,7 +6,7 @@ import Track from "@components/globals/Track";
 import colors from "@constants/colors";
 
 interface MusicListProps {
-  item: any;
+  item: unknown;
 }
 
 const MusicList = ({ item }: MusicListProps) => {

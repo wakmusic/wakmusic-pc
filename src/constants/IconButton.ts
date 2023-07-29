@@ -1,7 +1,7 @@
-import iconButtonType from "@templates/iconButtonType";
-
 import { ReactComponent as playAll } from "@assets/icons/ic_24_play_all.svg";
 import { ReactComponent as palyRandom } from "@assets/icons/ic_24_random_900.svg";
+
+import iconButtonType from "@templates/iconButtonType";
 
 export const playButtonData: iconButtonType[] = [
   {

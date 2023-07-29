@@ -41,8 +41,12 @@ const Controller = ({}: ControllerProps) => {
     setVolumeState(value);
   }
 
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   function movePrev() {}
 
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   function moveNext() {}
 
   function getRepeatIcon() {

@@ -1,27 +1,27 @@
-export const isString = (str: any): str is string => {
+export const isString = (str: unknown): str is string => {
   return typeof str === "string";
 };
 
-export const isNumber = (num: any): num is number => {
+export const isNumber = (num: unknown): num is number => {
   return typeof num === "number";
 };
 
-export const isBoolean = (bool: any): bool is boolean => {
+export const isBoolean = (bool: unknown): bool is boolean => {
   return typeof bool === "boolean";
 };
 
-export const isObject = (object: any): object is object => {
+export const isObject = (object: unknown): object is object => {
   return typeof object === "object";
 };
 
-export const isNil = (item: any): boolean => {
+export const isNil = (item: unknown): boolean => {
   return typeof item === null || typeof item === undefined;
 };
 
-export const isUndefined = (item: any): item is undefined => {
+export const isUndefined = (item: unknown): item is undefined => {
   return typeof item === undefined;
 };
 
-export const isNull = (item: any): item is null => {
+export const isNull = (item: unknown): item is null => {
   return typeof item === null;
 };

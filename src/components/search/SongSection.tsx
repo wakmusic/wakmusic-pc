@@ -1,4 +1,3 @@
-import { Song } from "@templates/search";
 import { useMemo, useState } from "react";
 import styled from "styled-components";
 
@@ -6,6 +5,8 @@ import { T7Light } from "@components/Typography";
 import Track from "@components/globals/Track";
 
 import colors from "@constants/colors";
+
+import { Song } from "@templates/song";
 
 import { formatDate, formatNumber } from "@utils/formatting";
 

@@ -1,6 +1,6 @@
 interface tabType {
   text: string;
-  to: string | any;
+  to: string | object;
 }
 
 export default tabType;

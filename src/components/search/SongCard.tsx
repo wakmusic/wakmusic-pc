@@ -1,5 +1,6 @@
-import { Song } from "@templates/search";
 import styled from "styled-components";
+
+import { Song } from "@templates/song";
 
 import SongSection from "./SongSection";
 

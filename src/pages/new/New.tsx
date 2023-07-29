@@ -4,10 +4,12 @@ import { ReactComponent as Check } from "@assets/icons/ic_16_check.svg";
 
 import { T7Light } from "@components/Typography/Light";
 import { T7Medium } from "@components/Typography/Medium";
-import PageContainer from "@components/globals/PageContainer";
 import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import FunctionSection from "@components/new/FunctionSection";
 import MusicList from "@components/new/MusicList";
+
+import PageContainer from "@layouts/PageContainer";
+import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
 import { hourlyChart } from "@constants/dummys";
@@ -18,51 +20,38 @@ interface NewProps {}
 
 const New = ({}: NewProps) => {
   return (
-    <Wrapper>
-      <FunctionSection />
-      <UpdateTimeLayout>
-        <Check />
-        <T7Light color={colors.blueGray500}>
-          00월 00일 오전 0시 업데이트
-        </T7Light>
-      </UpdateTimeLayout>
-      <WhiteLine />
-      <GuideBox>
-        <InfoText>곡 정보</InfoText>
-        <TextLayout>
-          <GuideText width={70}>1시간 전</GuideText>
-          <GuideText width={70}>발매일</GuideText>
-          <GuideText width={70}>조회수</GuideText>
-        </TextLayout>
-      </GuideBox>
-      <BlackLine />
-      <MusicSection>
-        <DefaultScroll>
-          <MusicLayout>
-            {hourlyChart.map((item, index) => (
-              <MusicList key={index} item={item} />
-            ))}
-          </MusicLayout>
-        </DefaultScroll>
-      </MusicSection>
-    </Wrapper>
+    <PageLayout>
+      <PageContainer>
+        <FunctionSection />
+        <UpdateTimeLayout>
+          <Check />
+          <T7Light color={colors.blueGray500}>
+            00월 00일 오전 0시 업데이트
+          </T7Light>
+        </UpdateTimeLayout>
+        <WhiteLine />
+        <GuideBox>
+          <InfoText>곡 정보</InfoText>
+          <TextLayout>
+            <GuideText width={70}>1시간 전</GuideText>
+            <GuideText width={70}>발매일</GuideText>
+            <GuideText width={70}>조회수</GuideText>
+          </TextLayout>
+        </GuideBox>
+        <BlackLine />
+        <MusicSection>
+          <DefaultScroll>
+            <MusicLayout>
+              {hourlyChart.map((item, index) => (
+                <MusicList key={index} item={item} />
+              ))}
+            </MusicLayout>
+          </DefaultScroll>
+        </MusicSection>
+      </PageContainer>
+    </PageLayout>
   );
 };
-
-const Wrapper = styled(PageContainer)`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  overflow: hidden;
-  height: 636px;
-  border-radius: 15px;
-  border: 1px solid ${colors.blueGray25};
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(62.5px);
-  margin-top: 20px;
-`;
-
 const UpdateTimeLayout = styled.div`
   display: flex;
   align-items: center;

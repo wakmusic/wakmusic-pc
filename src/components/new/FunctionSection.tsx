@@ -1,5 +1,3 @@
-import iconButtonType from "@templates/iconButtonType";
-import tabType from "@templates/tabType";
 import styled from "styled-components";
 
 import IconButton from "@components/globals/IconButton";
@@ -8,6 +6,9 @@ import TabBar from "@components/globals/TabBar";
 
 import { playButtonData } from "@constants/IconButton";
 import { newTabs } from "@constants/tabs";
+
+import iconButtonType from "@templates/iconButtonType";
+import tabType from "@templates/tabType";
 
 interface FunctionSectionProps {}
 

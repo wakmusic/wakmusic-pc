@@ -8,7 +8,6 @@ import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 import TextButton from "@components/globals/TextButton";
 
-import colors from "@constants/colors";
 import { userTabs } from "@constants/tabs";
 
 interface HeaderProps {}

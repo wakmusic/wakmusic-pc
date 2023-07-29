@@ -1,10 +1,11 @@
-import { SongsSearchResponse } from "@templates/search.ts";
 import styled from "styled-components";
 
 import { T7Medium } from "@components/Typography";
 import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 
 import colors from "@constants/colors";
+
+import { SongsSearchResponse } from "@templates/search.ts";
 
 import SongSection from "../SongSection";
 

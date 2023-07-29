@@ -6,7 +6,6 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
-import RootOverlay from "@components/globals/RootOverlay";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
 import AlertModal from "@components/modals/AlertModal";
@@ -18,6 +17,8 @@ import SelectProfileModal from "@components/modals/SelectProfileModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Player";
+
+import RootOverlay from "@layouts/RootOverlay";
 
 import firebaseConfig from "@constants/firebaseConfig";
 

@@ -6,13 +6,14 @@ import { T7Light } from "@components/Typography/Light";
 import { T7Medium } from "@components/Typography/Medium";
 import FunctionSection from "@components/chart/FunctionSection";
 import MusicList from "@components/chart/MusicList";
-import PageContainer from "@components/globals/PageContainer";
 import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import AddMusic from "@components/globals/musicControllers/AddMusic";
 import AddPlaylist from "@components/globals/musicControllers/AddPlaylist";
 import PlayMusic from "@components/globals/musicControllers/PlayMusic";
 import SelectAll from "@components/globals/musicControllers/SelectAll";
 import MusicControllerPlayer from "@components/globals/musicControllers/musicControllerContainers/MusicControllerPlayer";
+
+import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
 import { hourlyChart } from "@constants/dummys";
@@ -61,7 +62,7 @@ const Chart = ({}: ChartProps) => {
   );
 };
 
-const Wrapper = styled(PageContainer)`
+const Wrapper = styled(PageLayout)`
   position: relative;
   display: flex;
   flex-direction: column;

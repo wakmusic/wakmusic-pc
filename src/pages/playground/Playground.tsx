@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 import * as Typography from "@components/Typography";
-import PageContainer from "@components/globals/PageContainer";
+
+import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
 
@@ -9,7 +10,7 @@ interface PlaygroundProps {}
 
 const Playground = ({}: PlaygroundProps) => {
   return (
-    <PageContainer>
+    <PageLayout>
       <Typography.T4Bold>This is T4Bold</Typography.T4Bold>
       <Typography.T4Medium>This is T4Medium</Typography.T4Medium>
       <Typography.T4Light>This is T4Light</Typography.T4Light>
@@ -55,7 +56,7 @@ const Playground = ({}: PlaygroundProps) => {
           </ColorItem>
         ))}
       </ColorContainer>
-    </PageContainer>
+    </PageLayout>
   );
 };
 

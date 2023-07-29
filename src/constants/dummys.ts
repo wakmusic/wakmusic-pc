@@ -13178,376 +13178,10 @@ export const profileList = [
   },
 ];
 
-export const myList = [
-  {
-    key: "key1",
-    title: "플레이리스트 1",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 1,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key2",
-    title: "플레이리스트 2",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 7,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key3",
-    title: "플레이리스트 3",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 3,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key4",
-    title: "플레이리스트 4",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 11,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key5",
-    title: "플레이리스트 5",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 5,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key6",
-    title: "플레이리스트 6",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 6,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key7",
-    title: "플레이리스트 7",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 7,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key8",
-    title: "플레이리스트 8",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 8,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key9",
-    title: "플레이리스트 9",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 9,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key10",
-    title: "플레이리스트 10",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 10,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-  {
-    key: "key11",
-    title: "플레이리스트 11",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 11,
-    },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
-  },
-];
-
 export const dumyListItem = {
   key: "key1",
   index: -1,
-  title: "플레이리스트 제목열두글자자자자",
+  title: "리스트제목열두글자자자자",
   createAt: 1684622625731,
   user: {
     displayName: "이름",
@@ -13578,6 +13212,53 @@ export const dumyListItem = {
     },
   ],
 };
+
+export const myList = [
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+  dumyListItem,
+];
 
 export const lyrics = [
   {

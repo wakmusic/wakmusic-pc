@@ -32,7 +32,8 @@
       "@pages/*": ["src/pages/*"],
       "@templates/*": ["src/templates/*"],
       "@utils/*": ["src/utils/*"],
-      "@state/*": ["src/state/*"]
+      "@state/*": ["src/state/*"],
+      "@layouts/*": ["src/layouts/*"]
     }
   },
   "include": ["src"],

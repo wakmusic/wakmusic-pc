@@ -1,10 +1,11 @@
 import styled from "styled-components";
 
 import { T4Medium } from "@components/Typography";
-import PageContainer from "@components/globals/PageContainer";
 import Background from "@components/index/Background";
 import Chart from "@components/index/Chart";
 import RecommandItem from "@components/index/RecommandItem";
+
+import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
 import { recommended } from "@constants/dummys";
@@ -30,7 +31,7 @@ const Index = ({}: IndexProps) => {
   );
 };
 
-const Container = styled(PageContainer)`
+const Container = styled(PageLayout)`
   display: flex;
 
   flex-direction: column;

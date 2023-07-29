@@ -2834,7 +2834,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-virtual@npm:^3.0.0-alpha.0":
+"@tanstack/react-virtual@npm:beta":
   version: 3.0.0-beta.54
   resolution: "@tanstack/react-virtual@npm:3.0.0-beta.54"
   dependencies:
@@ -7873,7 +7873,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "wakmusic-pc@workspace:."
   dependencies:
-    "@tanstack/react-virtual": ^3.0.0-alpha.0
+    "@tanstack/react-virtual": beta
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
     "@types/lodash.throttle": ^4.1.7
     "@types/node": ^20.3.1

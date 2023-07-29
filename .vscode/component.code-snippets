@@ -17,10 +17,10 @@
     "scope": "typescriptreact",
     "prefix": "page",
     "body": [
-      "import PageContainer from \"@components/globals/PageContainer\";\n",
+      "import PageLayout from \"@layout/PageLayout\";\n",
       "interface ${TM_FILENAME_BASE}Props {}\n",
       "const ${TM_FILENAME_BASE} = ({}: ${TM_FILENAME_BASE}Props) => {",
-      "\treturn <PageContainer></PageContainer>;",
+      "\treturn <PageLayout></PageLayout>;",
       "};\n",
       "export default ${TM_FILENAME_BASE};\n"
     ],

@@ -15,8 +15,9 @@ import {
   T6Medium,
   T7Medium,
 } from "@components/Typography";
-import PageContainer from "@components/globals/PageContainer";
 import Block from "@components/mypage/Block";
+
+import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
 import { userInfo } from "@constants/dummys";
@@ -25,7 +26,7 @@ interface MyPageProps {}
 
 const MyPage = ({}: MyPageProps) => {
   return (
-    <PageContainer>
+    <PageLayout>
       <Container>
         <ProfileBlock>
           <FlexDiv>
@@ -80,7 +81,7 @@ const MyPage = ({}: MyPageProps) => {
           내가 비빈 거다)라는 모토를 가슴에 새기고 일하고 있습니다.
         </T7Medium>
       </Buanebi>
-    </PageContainer>
+    </PageLayout>
   );
 };
 

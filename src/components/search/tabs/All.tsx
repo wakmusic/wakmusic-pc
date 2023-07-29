@@ -3,8 +3,9 @@ import styled from "styled-components/macro";
 
 import { ReactComponent as ArrowRightSVG } from "@assets/icons/ic_16_arrow_right.svg";
 
-import { T4Medium, T6Medium } from "@components/Typography";
-import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
+import { T5Medium, T7Medium } from "@components/Typography";
+
+import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 
@@ -27,93 +28,59 @@ const All = ({ query, res }: AllProps) => {
   const [, setSearchParams] = useSearchParams();
 
   return (
-    <Container>
-      <DefaultScroll>
-        <SongWrapper>
-          {(Object.keys(res) as Array<"song" | "artist" | "remix">)
-            .filter((key) => res[key].length !== 0)
-            .map((key, index) => (
-              <CategoryContainer key={index}>
-                <CategoryHeader>
-                  <CategoryHeaderText color={colors.gray900}>
-                    {Category[key]}
-                  </CategoryHeaderText>
-                  <CategoryHeaderText color={colors.point} left={4}>
-                    {res[key].length}
-                  </CategoryHeaderText>
-                  <CategoryHeaderButton
-                    onClick={() => {
-                      setSearchParams({
-                        query: query,
-                        tab: key,
-                      });
-                    }}
-                  >
-                    <T6Medium>전체보기</T6Medium>
-                    <ArrowRightSVG />
-                  </CategoryHeaderButton>
-                </CategoryHeader>
-                <SongCard songs={res[key]} />
-              </CategoryContainer>
-            ))}
-        </SongWrapper>
-      </DefaultScroll>
-    </Container>
+    <PageItemContainer>
+      <Wrapper>
+        {(Object.keys(res) as Array<"song" | "artist" | "remix">)
+          .filter((key) => res[key].length !== 0)
+          .map((key, index) => (
+            <CategoryContainer key={index}>
+              <CategoryHeader>
+                <T5Medium color={colors.gray900}>{Category[key]}</T5Medium>
+                <T5Medium color={colors.point}>{res[key].length}</T5Medium>
+
+                <CategoryHeaderButton
+                  onClick={() => {
+                    setSearchParams({
+                      query: query,
+                      tab: key,
+                    });
+                  }}
+                >
+                  <T7Medium color={colors.gray500}>전체보기</T7Medium>
+                  <ArrowRightSVG />
+                </CategoryHeaderButton>
+              </CategoryHeader>
+
+              <SongCard songs={res[key]} />
+            </CategoryContainer>
+          ))}
+      </Wrapper>
+    </PageItemContainer>
   );
 };
 
-const Container = styled.div`
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin-top: 16px;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;
 
-const CategoryContainer = styled.div`
-  &:nth-child(1) div {
-    margin-top: 0px;
-  }
-`;
+const CategoryContainer = styled.div``;
 
 const CategoryHeader = styled.div`
-  height: 30px;
-  margin: 16px 20px 8px 20px;
-`;
+  display: flex;
+  align-items: center;
 
-const CategoryHeaderText = styled(T4Medium)<{
-  color: string;
-  left?: number;
-}>`
-  color: ${(p) => p.color};
-  margin-left: ${(p) => p.left ?? 0}px;
-  float: left;
+  gap: 4px;
 `;
 
 const CategoryHeaderButton = styled.div`
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-
-  height: 20px;
-  flex-shrink: 0;
-  float: right;
-
   display: flex;
+
+  margin-left: auto;
+  margin-right: 30px;
+
   cursor: pointer;
-
-  & * {
-    color: ${colors.gray500};
-  }
-
-  & svg {
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-`;
-
-const SongWrapper = styled.div`
-  height: calc(100vh - 150px);
 `;
 
 export default All;

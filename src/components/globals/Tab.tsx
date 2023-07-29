@@ -5,11 +5,9 @@ import { Pretendard } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { isString } from "@utils/isTypes";
+import { Query } from "@templates/tabType";
 
-interface Query {
-  [key: string]: string;
-}
+import { isString } from "@utils/isTypes";
 
 interface TabProps {
   to: string | Query; // 라우트 또는 쿼리 파라미터

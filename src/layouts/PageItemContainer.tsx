@@ -3,15 +3,15 @@ import styled from "styled-components/macro";
 import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 
 interface PageItemContainerProps {
-  hasButton?: boolean;
+  height?: number;
   children: React.ReactNode;
 }
 
-const PageItemContainer = ({ hasButton, children }: PageItemContainerProps) => {
+const PageItemContainer = ({ height, children }: PageItemContainerProps) => {
   return (
     <Container>
       <DefaultScroll>
-        <ItemsWrapper $hasButton={Boolean(hasButton)}>{children}</ItemsWrapper>
+        <ItemsWrapper $height={height}>{children}</ItemsWrapper>
       </DefaultScroll>
     </Container>
   );
@@ -21,8 +21,8 @@ const Container = styled.div`
   margin-top: 16px;
 `;
 
-const ItemsWrapper = styled.div<{ $hasButton: boolean }>`
-  height: calc(100vh - ${({ $hasButton }) => ($hasButton ? 206 : 152)}px);
+const ItemsWrapper = styled.div<{ $height?: number }>`
+  height: calc(100vh - ${({ $height }) => $height ?? 152}px);
 `;
 
 export default PageItemContainer;

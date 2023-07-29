@@ -16,8 +16,14 @@ interface TrackProps {
 }
 
 const Track = ({ item, onClick }: TrackProps) => {
+  const onClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
+    onClick && onClick(item);
+  };
+
   return (
-    <Container onClick={() => onClick && onClick(item)}>
+    <Container onClick={onClickHandler}>
       <PlayIcon />
 
       <Thumbnail src={`https://i.ytimg.com/vi/${item.songId}/default.jpg`} />

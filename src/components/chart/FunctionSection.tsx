@@ -1,19 +1,39 @@
 import styled from "styled-components/macro";
 
+import IconButton from "@components/globals/IconButton";
+import Tab from "@components/globals/Tab";
+import TabBar from "@components/globals/TabBar";
+
+import { playButtonData } from "@constants/IconButton";
+import { chartTabs } from "@constants/tabs";
+
+import iconButtonType from "@templates/iconButtonType";
+import tabType from "@templates/tabType";
+
 interface FunctionSectionProps {}
 
 const FunctionSection = ({}: FunctionSectionProps) => {
   return (
     <Wrapper>
       <TimeLineLayout>
-        <TestCategory />
-        <TestCategory />
-        <TestCategory />
-        <TestCategory />
+        <TabBar>
+          {chartTabs.map((item: tabType, index: number) => {
+            return (
+              <Tab key={index} to={item.to}>
+                {item.text}
+              </Tab>
+            );
+          })}
+        </TabBar>
       </TimeLineLayout>
       <ButtonLayout>
-        <TestButton></TestButton>
-        <TestButton></TestButton>
+        {playButtonData.map((item: iconButtonType, index: number) => {
+          return (
+            <IconButton key={index} icon={item.icon}>
+              {item.text}
+            </IconButton>
+          );
+        })}
       </ButtonLayout>
     </Wrapper>
   );
@@ -34,22 +54,10 @@ const TimeLineLayout = styled.div`
   gap: 4px;
 `;
 
-const TestCategory = styled.div`
-  width: 50px;
-  height: 40px;
-  background-color: gray;
-`;
-
 const ButtonLayout = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-`;
-
-const TestButton = styled.div`
-  width: 108px;
-  height: 40px;
-  background-color: gray;
 `;
 
 export default FunctionSection;

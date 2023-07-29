@@ -131,7 +131,7 @@ const Playlists = ({}: PlaylistsProps) => {
     <Container>
       <Menu />
 
-      <PageItemContainer hasButton>
+      <PageItemContainer height={206}>
         <PlayLists
           onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
           onMouseUp={() => {

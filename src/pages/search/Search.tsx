@@ -13,6 +13,7 @@ import { songList } from "@constants/dummys";
 import { searchTabs } from "@constants/tabs";
 
 import { SongsSearchResponse, tabsTypes } from "@templates/search";
+import { Query } from "@templates/tabType";
 
 import { isNull } from "@utils/isTypes";
 
@@ -51,14 +52,16 @@ const Search = ({}: SearchProps) => {
       <Container>
         <TabBar>
           {searchTabs.map((item, index) => (
-            <Tab to={{ query: query, ...item.to }} key={index}>
+            <Tab to={{ query: query, tab: (item.to as Query).tab }} key={index}>
               {item.text}
             </Tab>
           ))}
         </TabBar>
+
         {responses ? (
           <Result tab={tab} query={query} res={responses} />
         ) : (
+          // TODO
           <div>로딩중이에용</div>
         )}
       </Container>
@@ -67,7 +70,8 @@ const Search = ({}: SearchProps) => {
 };
 
 const Container = styled(PageContainer)`
-  padding: 16px 20px;
+  padding-top: 16px;
+  padding-left: 20px;
 `;
 
 export default Search;

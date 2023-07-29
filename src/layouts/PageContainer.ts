@@ -11,4 +11,6 @@ export default styled.div`
   border: 1px solid ${colors.blueGray25};
   background: ${colors.white}66; // 40%
   backdrop-filter: blur(62.5px);
+
+  overflow: hidden;
 `;

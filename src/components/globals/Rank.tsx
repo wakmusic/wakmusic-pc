@@ -72,8 +72,6 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  margin-right: 8px;
 `;
 
 const Info = styled.div`

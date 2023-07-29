@@ -1,8 +1,8 @@
 import styled from "styled-components/macro";
 
-import { Song } from "@templates/song";
+import SongItem from "@components/globals/SongItem";
 
-import SongSection from "./SongSection";
+import { Song } from "@templates/song";
 
 interface SongCardProps {
   songs: Array<Song>;
@@ -12,7 +12,7 @@ const SongCard = ({ songs }: SongCardProps) => {
   return (
     <Container>
       {songs.map((item, index) =>
-        index <= 2 ? <SongSection item={item} key={index} /> : null
+        index <= 2 ? <SongItem key={index} song={item} noPadding /> : null
       )}
     </Container>
   );

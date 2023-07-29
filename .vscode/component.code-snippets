@@ -3,7 +3,7 @@
     "scope": "typescriptreact",
     "prefix": "component",
     "body": [
-      "import styled from \"styled-components\";\n",
+      "import styled from \"styled-components/macro\";\n",
       "interface ${TM_FILENAME_BASE}Props {}\n",
       "const ${TM_FILENAME_BASE} = ({}: ${TM_FILENAME_BASE}Props) => {",
       "\treturn <Container></Container>;",
@@ -17,7 +17,7 @@
     "scope": "typescriptreact",
     "prefix": "page",
     "body": [
-      "import PageLayout from \"@layout/PageLayout\";\n",
+      "import PageLayout from \"@layouts/PageLayout\";\n",
       "interface ${TM_FILENAME_BASE}Props {}\n",
       "const ${TM_FILENAME_BASE} = ({}: ${TM_FILENAME_BASE}Props) => {",
       "\treturn <PageLayout></PageLayout>;",

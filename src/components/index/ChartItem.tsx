@@ -28,6 +28,7 @@ const Container = styled.div`
 
   display: flex;
   align-items: center;
+  gap: 8px;
 `;
 
 export default ChartItem;

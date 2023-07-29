@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off.svg";
 import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";

@@ -41,6 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
     "@vitejs/plugin-react-swc": "^3.3.2",
+    "babel-plugin-styled-components": "^2.1.4",
     "concurrently": "^8.2.0",
     "electron": "^25.1.0",
     "eslint": "^8.42.0",
@@ -53,6 +54,7 @@
     "prettier": "^2.8.8",
     "typescript": "5.0.4",
     "vite": "^4.3.9",
+    "vite-plugin-babel-macros": "^1.0.6",
     "vite-plugin-svgr": "^3.2.0",
     "vite-tsconfig-paths": "^4.2.0"
   },

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import IconButton from "@components/globals/IconButton";
 import Tab from "@components/globals/Tab";

@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as BlowupSVG } from "@assets/icons/ic_16_blowup.svg";
 import { ReactComponent as DownSVG } from "@assets/icons/ic_16_down.svg";

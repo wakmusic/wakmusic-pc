@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { Pretendard } from "@components/Typography";
 

@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as ArrowRightSVG } from "@assets/icons/ic_16_arrow_right.svg";
 

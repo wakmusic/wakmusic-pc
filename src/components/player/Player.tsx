@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import colors from "@constants/colors";
 import { hourlyChart as dummy } from "@constants/dummys";

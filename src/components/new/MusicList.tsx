@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { T7_1Light } from "@components/Typography";
 import Track from "@components/globals/Track";

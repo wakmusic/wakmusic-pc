@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import BaseInput from "../globals/BaseInput";
 import HelpText from "../globals/HelpText";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";

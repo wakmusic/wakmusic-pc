@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as CheckOff } from "@assets/icons/ic_24_Check_off.svg";
 import { ReactComponent as Checkon } from "@assets/icons/ic_24_Check_on.svg";

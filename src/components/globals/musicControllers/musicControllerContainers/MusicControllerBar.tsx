@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { T4Bold } from "@components/Typography/Bold";
 

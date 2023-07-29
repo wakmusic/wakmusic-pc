@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { T7_1Light } from "@components/Typography";
 import Rank from "@components/globals/Rank";

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as ArtistSVG } from "@assets/icons/ic_40_artist_disabled.svg";
 import { ReactComponent as ChartSVG } from "@assets/icons/ic_40_chart_disabled.svg";

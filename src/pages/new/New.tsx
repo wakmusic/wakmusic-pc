@@ -1,14 +1,14 @@
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as Check } from "@assets/icons/ic_16_check.svg";
 
 import { T7Light } from "@components/Typography/Light";
 import { T7Medium } from "@components/Typography/Medium";
-import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import FunctionSection from "@components/new/FunctionSection";
 import MusicList from "@components/new/MusicList";
 
 import PageContainer from "@layouts/PageContainer";
+import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
@@ -39,15 +39,11 @@ const New = ({}: NewProps) => {
           </TextLayout>
         </GuideBox>
         <BlackLine />
-        <MusicSection>
-          <DefaultScroll>
-            <MusicLayout>
-              {hourlyChart.map((item, index) => (
-                <MusicList key={index} item={item} />
-              ))}
-            </MusicLayout>
-          </DefaultScroll>
-        </MusicSection>
+        <PageItemContainer hasButton={false}>
+          {hourlyChart.map((item, index) => (
+            <MusicList key={index} item={item} />
+          ))}
+        </PageItemContainer>
       </PageContainer>
     </PageLayout>
   );
@@ -120,19 +116,6 @@ const TextLayout = styled.div`
 const InfoText = styled(GuideText)`
   position: absolute;
   left: 106px;
-`;
-
-const MusicSection = styled.div`
-  width: 100%;
-  flex: 1 1 0;
-`;
-
-const MusicLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  height: 502px;
 `;
 
 export default New;

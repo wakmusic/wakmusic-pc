@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { T4Medium } from "@components/Typography";
 import Background from "@components/index/Background";

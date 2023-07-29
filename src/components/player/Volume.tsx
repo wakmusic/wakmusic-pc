@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as SoundOffSvg } from "@assets/icons/ic_20_sound_off.svg";
 import { ReactComponent as SoundOnSvg } from "@assets/icons/ic_20_sound_on.svg";

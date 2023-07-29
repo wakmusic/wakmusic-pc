@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as AppleIconSVG } from "@assets/icons/ic_24_apple.svg";
 import { ReactComponent as GoogleIconSVG } from "@assets/icons/ic_24_google.svg";

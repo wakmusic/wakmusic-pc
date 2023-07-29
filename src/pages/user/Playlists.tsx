@@ -1,7 +1,7 @@
 import { dragAndDropState, myListState } from "@state/user/atoms";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { useRecoilState } from "recoil";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import Menu from "@components/user/playlist/Menu";
 import PlaylistItem from "@components/user/playlist/PlaylistItem";

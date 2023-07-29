@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
 import { ReactComponent as EditSVG } from "@assets/icons/ic_24_edit.svg";

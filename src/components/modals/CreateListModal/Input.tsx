@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { T7Light } from "@components/Typography";
 

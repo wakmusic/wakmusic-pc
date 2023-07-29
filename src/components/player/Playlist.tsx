@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { T7Light } from "@components/Typography";
 import PlayerScroll from "@components/globals/Scroll/PlayerScroll";

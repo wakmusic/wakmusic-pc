@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { T6Medium } from "@components/Typography";
 

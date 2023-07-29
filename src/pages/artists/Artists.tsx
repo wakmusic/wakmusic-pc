@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import Artist from "@components/artists/Artist";
 import Tab from "@components/globals/Tab";

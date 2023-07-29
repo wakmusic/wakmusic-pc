@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as DocumentOffSvg } from "@assets/icons/ic_20_document_off.svg";
 import { ReactComponent as DocumentOnSvg } from "@assets/icons/ic_20_document_on.svg";

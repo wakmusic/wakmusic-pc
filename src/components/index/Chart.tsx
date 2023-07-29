@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as CheckSVG } from "@assets/icons/ic_16_check.svg";
 import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";

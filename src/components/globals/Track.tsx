@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as PlaySVG } from "@assets/icons/ic_30_play_point.svg";
 

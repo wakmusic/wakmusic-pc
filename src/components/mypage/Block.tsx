@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { T4Bold, T6Medium } from "@components/Typography";
 

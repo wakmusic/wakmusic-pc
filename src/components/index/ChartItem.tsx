@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import Rank from "@components/globals/Rank";
 import Track from "@components/globals/Track";

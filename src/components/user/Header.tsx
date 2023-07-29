@@ -54,26 +54,4 @@ const Container = styled.div`
   margin: auto;
 `;
 
-const Edit = styled.button<{ $activated: boolean }>`
-  padding: 4px 14px;
-
-  border: 1px solid ${colors.blueGray200};
-  border-radius: 5px;
-
-  background-color: rgba(0, 0, 0, 0);
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  ${({ $activated }) =>
-    $activated
-      ? css`
-          border-color: ${colors.point};
-        `
-      : css`
-          border-color: ${colors.blueGray200};
-        `}
-`;
-
 export default Header;

@@ -1,5 +1,7 @@
 import styled, { css } from "styled-components";
 
+import { T6Medium } from "@components/Typography";
+
 import colors from "@constants/colors";
 
 type TextType = {
@@ -16,7 +18,9 @@ interface TextButtonProps {
 const TextButton = ({ text, activated, onClick }: TextButtonProps) => {
   return (
     <Container $activated={activated} onClick={onClick}>
-      {activated ? text.activated : text.default}
+      <T6Medium color={colors.blueGray400}>
+        {activated ? text.activated : text.default}
+      </T6Medium>
     </Container>
   );
 };
@@ -26,6 +30,8 @@ const Container = styled.button<{ $activated: boolean }>`
 
   border: 1px solid ${colors.blueGray200};
   border-radius: 5px;
+
+  height: 28px;
 
   background-color: rgba(0, 0, 0, 0);
 

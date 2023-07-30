@@ -11,17 +11,24 @@ import { ReactComponent as RandomPlay } from "@assets/icons/ic_24_random_900.svg
 
 import { T3Medium, T6Light } from "@components/Typography";
 import IconButton from "@components/globals/IconButton";
+import TextButton from "@components/globals/TextButton";
 
 import colors from "@constants/colors";
 
 import { PlaylistType } from "@templates/playlist";
+
+import { isNull } from "@utils/isTypes";
 
 interface PlaylistProps {}
 
 const Playlist = ({}: PlaylistProps) => {
   const isEditmode = useRecoilValue(playlistState);
   const { state } = useLocation();
-  const playlist = useMemo<PlaylistType>(() => state, [state]);
+  const playlist = useMemo<PlaylistType>(() => {
+    if (isNull(state)) return; // param 기반으로 플레이리스트 정보 불러오기
+
+    return state;
+  }, [state]);
 
   return (
     <Container>
@@ -45,6 +52,10 @@ const Playlist = ({}: PlaylistProps) => {
             </Functions>
           </Details>
         </Info>
+        <TextButton
+          text={{ default: "편집", activated: "완료" }}
+          activated={isEditmode}
+        />
       </Header>
     </Container>
   );
@@ -70,12 +81,16 @@ const Container = styled.div`
 
 const Header = styled.div`
   display: flex;
+  justify-content: space-between;
+
+  padding-left: 20px;
+  padding-right: 28px;
+
+  width: 100%;
 `;
 
 const Info = styled.div`
   display: flex;
-  padding-left: 20px;
-  padding-right: 28px;
 `;
 
 const Details = styled.div`

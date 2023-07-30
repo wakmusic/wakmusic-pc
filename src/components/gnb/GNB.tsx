@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { ReactComponent as ArtistSVG } from "@assets/icons/ic_40_artist_disabled.svg";
@@ -28,6 +29,8 @@ import Section from "./Section";
 interface GNB {}
 
 const GNB = ({}: GNB) => {
+  const location = useLocation();
+
   const loginModalOpener = useLoginModalOpener();
   const selectProfileModal = useSelectProfileModal();
   const alertModal = useAlertModal();
@@ -35,6 +38,8 @@ const GNB = ({}: GNB) => {
   const createListModal = useCreateListModal();
   const loadListModal = useLoadListModal();
   const shareListModal = useShareListModal();
+
+  if (location.pathname === "/player") return null;
 
   return (
     <Container>

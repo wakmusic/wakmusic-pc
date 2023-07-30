@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
@@ -22,17 +23,39 @@ const Display = ({}: DisplayProps) => {
   const song = useCurrentSongState();
   const img = `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`;
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <Container image={img}>
       <Grid>
         <ExpansionButtonContainer>
           <SimpleIconButton
             icon={ExpansionSVG}
-            onClick={toggleVisualModeState}
+            onClick={() => {
+              if (window.ipcRenderer && location.pathname == "/player") {
+                navigate(-1);
+                window.ipcRenderer.send("mode:default");
+              }
+
+              toggleVisualModeState();
+            }}
           />
         </ExpansionButtonContainer>
 
-        <PlaylistButtonContainer>
+        <PlaylistButtonContainer
+          onClick={() => {
+            if (!window.ipcRenderer) return;
+
+            if (location.pathname !== "/player") {
+              navigate("/player");
+              window.ipcRenderer.send("mode:separate");
+            } else {
+              navigate(-1);
+              window.ipcRenderer.send("mode:default");
+            }
+          }}
+        >
           <SimpleIconButton icon={PlayListSVG} />
         </PlaylistButtonContainer>
 

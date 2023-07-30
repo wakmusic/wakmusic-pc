@@ -25,8 +25,8 @@ import firebaseConfig from "@constants/firebaseConfig";
 import Artists from "@pages/artists/Artists";
 import Chart from "@pages/chart/Chart";
 import Index from "@pages/index/Index";
-import New from "@pages/new/New";
 import MyPage from "@pages/mypage/MyPage";
+import New from "@pages/new/New";
 import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
 import User from "@pages/user/User";
@@ -55,6 +55,8 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/new" element={<New />} />
             <Route path="/user/*" element={<User />} />
             <Route path="/mypage" element={<MyPage />} />
+
+            <Route path="/player" element={null} />
           </Routes>
           <Player />
         </RootOverlay>

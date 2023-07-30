@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 import { ReactComponent as Logo } from "@assets/svgs/logo.svg";
@@ -14,6 +14,7 @@ interface HeaderProps {}
 
 const Header = ({}: HeaderProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <Container>
@@ -25,25 +26,29 @@ const Header = ({}: HeaderProps) => {
         />
       </LogoContainer>
 
-      <Navigator>
-        <Arrow
-          direction="left"
-          disabled={window.history.state.idx === 0}
-          onClick={() => {
-            if (window.history.state.idx !== 0) navigate(-1);
-          }}
-        />
-        <Arrow
-          direction="right"
-          disabled={window.history.length - 1 === window.history.state.idx}
-          onClick={() => {
-            if (window.history.length - 1 !== window.history.state.idx)
-              navigate(1);
-          }}
-        />
-      </Navigator>
+      {location.pathname !== "/player" && (
+        <>
+          <Navigator>
+            <Arrow
+              direction="left"
+              disabled={window.history.state.idx === 0}
+              onClick={() => {
+                if (window.history.state.idx !== 0) navigate(-1);
+              }}
+            />
+            <Arrow
+              direction="right"
+              disabled={window.history.length - 1 === window.history.state.idx}
+              onClick={() => {
+                if (window.history.length - 1 !== window.history.state.idx)
+                  navigate(1);
+              }}
+            />
+          </Navigator>
 
-      <Search />
+          <Search />
+        </>
+      )}
 
       <ControlBar />
     </Container>

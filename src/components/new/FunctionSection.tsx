@@ -27,13 +27,11 @@ const FunctionSection = ({}: FunctionSectionProps) => {
         </TabBar>
       </TimeLineLayout>
       <ButtonLayout>
-        {playButtonData.map((item: iconButtonType, index: number) => {
-          return (
-            <IconButton key={index} icon={item.icon}>
-              {item.text}
-            </IconButton>
-          );
-        })}
+        {playButtonData.map((item: iconButtonType, index: number) => (
+          <IconButton key={index} icon={item.icon}>
+            {item.text}
+          </IconButton>
+        ))}
       </ButtonLayout>
     </Wrapper>
   );

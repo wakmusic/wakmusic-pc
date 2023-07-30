@@ -126,7 +126,7 @@ const Container = styled.div<{ $selected?: boolean; $noPadding?: boolean }>`
     `}
 
   background-color: ${({ $selected }) =>
-    $selected ? colors.blueGray200 : "none"};
+    $selected ? colors.blueGray200 : "transparent"};
 
   cursor: pointer;
 `;
@@ -138,6 +138,8 @@ const MoveButton = styled(MoveSVG)`
 
 const TrackWrapper = styled.div<{ $width: number }>`
   width: ${({ $width }) => $width}px;
+
+  margin-left: -1px;
 
   display: flex;
 `;

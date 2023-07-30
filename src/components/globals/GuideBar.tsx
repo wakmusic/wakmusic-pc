@@ -24,7 +24,7 @@ export enum GuideBarFeature {
 
 const GuideBar = ({ features, editMode, lastText }: GuideBarProps) => {
   const infoTextLeft = useMemo(() => {
-    if (features.includes(GuideBarFeature.rank)) return 100;
+    if (features.includes(GuideBarFeature.rank)) return 99;
     if (editMode) return 132;
 
     return 80;

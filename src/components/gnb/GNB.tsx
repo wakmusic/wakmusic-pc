@@ -15,13 +15,7 @@ import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useAlertModal } from "@hooks/alertModal";
-import { useConfirmModal } from "@hooks/confirmModal";
-import { useCreateListModal } from "@hooks/createListModal";
-import { useLoadListModal } from "@hooks/loadListModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
-import { useSelectProfileModal } from "@hooks/profileModal";
-import { useShareListModal } from "@hooks/shareListModal";
 
 import Section from "./Section";
 
@@ -29,12 +23,6 @@ interface GNB {}
 
 const GNB = ({}: GNB) => {
   const loginModalOpener = useLoginModalOpener();
-  const selectProfileModal = useSelectProfileModal();
-  const alertModal = useAlertModal();
-  const confirmModal = useConfirmModal();
-  const createListModal = useCreateListModal();
-  const loadListModal = useLoadListModal();
-  const shareListModal = useShareListModal();
 
   return (
     <Container>
@@ -67,86 +55,6 @@ const GNB = ({}: GNB) => {
           }}
         >
           로그인 하기
-        </T6Medium>
-      </Login>
-
-      <Login
-        onClick={() => {
-          selectProfileModal();
-        }}
-      >
-        <T6Medium
-          style={{
-            color: colors.blueGray600,
-          }}
-        >
-          (임시) 프로필 선택
-        </T6Medium>
-      </Login>
-
-      <Login
-        onClick={() => {
-          alertModal("타이틀", "서브 타이틀 내용이 들어갑니다.");
-        }}
-      >
-        <T6Medium
-          style={{
-            color: colors.blueGray600,
-          }}
-        >
-          (임시) AlertModal
-        </T6Medium>
-      </Login>
-      <Login
-        onClick={() => {
-          confirmModal("타이틀", "서브 타이틀 내용이 들어갑니다.");
-        }}
-      >
-        <T6Medium
-          style={{
-            color: colors.blueGray600,
-          }}
-        >
-          (임시) ConfirmModal
-        </T6Medium>
-      </Login>
-      <Login
-        onClick={() => {
-          createListModal();
-        }}
-      >
-        <T6Medium
-          style={{
-            color: colors.blueGray600,
-          }}
-        >
-          (임시) CreateListModal
-        </T6Medium>
-      </Login>
-      <Login
-        onClick={() => {
-          loadListModal();
-        }}
-      >
-        <T6Medium
-          style={{
-            color: colors.blueGray600,
-          }}
-        >
-          (임시) LoadListModal
-        </T6Medium>
-      </Login>
-      <Login
-        onClick={() => {
-          shareListModal("WOOWAKGOOD");
-        }}
-      >
-        <T6Medium
-          style={{
-            color: colors.blueGray600,
-          }}
-        >
-          (임시) ShareListModal
         </T6Medium>
       </Login>
     </Container>

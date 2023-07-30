@@ -10,8 +10,12 @@ import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";
 import { ReactComponent as RandomPlay } from "@assets/icons/ic_24_random_900.svg";
 
 import { T3Medium, T6Light } from "@components/Typography";
+import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import IconButton from "@components/globals/IconButton";
+import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import TextButton from "@components/globals/TextButton";
+
+import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 
@@ -57,6 +61,28 @@ const Playlist = ({}: PlaylistProps) => {
           activated={isEditmode}
         />
       </Header>
+      <GuideBar
+        features={[
+          GuideBarFeature.info,
+          GuideBarFeature.date,
+          GuideBarFeature.views,
+          GuideBarFeature.like,
+        ]}
+      />
+      <PageItemContainer height={281}>
+        {playlist.songs.map((item, index) => (
+          <SongItem
+            key={index}
+            song={item}
+            selected={false}
+            features={[
+              SongItemFeature.date,
+              SongItemFeature.views,
+              SongItemFeature.like,
+            ]}
+          />
+        ))}
+      </PageItemContainer>
     </Container>
   );
 };

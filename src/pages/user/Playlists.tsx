@@ -208,7 +208,7 @@ const DragedPlaylist = styled.div`
   position: absolute;
   z-index: 2;
 
-  background-color: ${colors.white}66;
+  background-color: ${colors.whiteAlpha40};
 
   padding: 8px;
   border-radius: 6px;

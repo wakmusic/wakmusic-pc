@@ -100,7 +100,7 @@ const Container = styled.div`
 const ProfileBlock = styled.div`
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66;
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   grid-column: 1/3;

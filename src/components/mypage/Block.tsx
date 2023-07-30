@@ -24,7 +24,7 @@ const Block = ({ title, description, svg }: BlockProps) => {
 const Container = styled.div`
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66;
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   padding: 20px 24px;

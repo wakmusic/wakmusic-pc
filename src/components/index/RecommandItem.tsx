@@ -30,7 +30,7 @@ const Container = styled.div`
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66; // 40%
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   display: flex;

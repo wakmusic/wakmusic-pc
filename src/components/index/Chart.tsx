@@ -47,7 +47,7 @@ const Container = styled.div`
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background-color: ${colors.white}66; // 40%
+  background-color: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 `;
 

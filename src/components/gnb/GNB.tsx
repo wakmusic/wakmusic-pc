@@ -73,7 +73,7 @@ const Navigator = styled.div`
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66; // 40% opacity
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   padding: 20px 16px;
@@ -91,7 +91,7 @@ const Login = styled.div`
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66; // 40% opacity
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   cursor: pointer;

@@ -9,7 +9,7 @@ export default styled.div`
 
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66; // 40%
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   overflow: hidden;

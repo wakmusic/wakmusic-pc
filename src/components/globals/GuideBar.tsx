@@ -75,8 +75,8 @@ const WhiteLine = styled.div`
   background: linear-gradient(
     117deg,
     rgba(255, 255, 255, 0) 0%,
-    #fff 4.69%,
-    #fff 92.56%,
+    ${colors.white} 4.69%,
+    ${colors.white} 92.56%,
     rgba(255, 255, 255, 0) 100%
   );
 `;
@@ -88,8 +88,8 @@ const BlackLine = styled.div`
   background: linear-gradient(
     117deg,
     rgba(228, 231, 236, 0) 0%,
-    #e4e7ec 4.69%,
-    #e4e7ec 92.56%,
+    ${colors.blueGray200} 4.69%,
+    ${colors.blueGray200} 92.56%,
     rgba(228, 231, 236, 0) 100%
   );
 `;

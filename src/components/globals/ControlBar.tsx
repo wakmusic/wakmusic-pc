@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
 import { ReactComponent as LeastSVG } from "@assets/icons/ic_20_least.svg";

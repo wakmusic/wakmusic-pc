@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as DocumentOffSvg } from "@assets/icons/ic_20_document_off.svg";
 import { ReactComponent as DocumentOnSvg } from "@assets/icons/ic_20_document_on.svg";
@@ -42,8 +42,12 @@ const Controller = ({}: ControllerProps) => {
     setVolumeState(value);
   }
 
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   function movePrev() {}
 
+  // TODO
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   function moveNext() {}
 
   function getRepeatIcon() {

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { T1Bold, T5Medium } from "@components/Typography";
 

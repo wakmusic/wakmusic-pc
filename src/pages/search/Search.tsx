@@ -1,16 +1,19 @@
-import { SongsSearchResponse, tabsTypes } from "@templates/search";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
-import PageContainer from "@components/globals/PageContainer";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 import Result from "@components/search/Result";
 
-import colors from "@constants/colors";
+import PageContainer from "@layouts/PageContainer";
+import PageLayout from "@layouts/PageLayout";
+
 import { songList } from "@constants/dummys";
 import { searchTabs } from "@constants/tabs";
+
+import { SongsSearchResponse, tabsTypes } from "@templates/search";
+import { Query } from "@templates/tabType";
 
 import { isNull } from "@utils/isTypes";
 
@@ -45,35 +48,30 @@ const Search = ({}: SearchProps) => {
   }, [query, searchParams]);
 
   return (
-    <PageContainer>
+    <PageLayout>
       <Container>
         <TabBar>
           {searchTabs.map((item, index) => (
-            <Tab to={{ query: query, ...item.to }} key={index}>
+            <Tab to={{ query: query, tab: (item.to as Query).tab }} key={index}>
               {item.text}
             </Tab>
           ))}
         </TabBar>
+
         {responses ? (
           <Result tab={tab} query={query} res={responses} />
         ) : (
+          // TODO
           <div>로딩중이에용</div>
         )}
       </Container>
-    </PageContainer>
+    </PageLayout>
   );
 };
 
-const Container = styled.div`
-  width: 754px;
-  height: calc(100% - 40px);
-  margin: 20px 0;
-  padding: 16px 20px;
-
-  border-radius: 15px;
-  border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66; // 40%
-  backdrop-filter: blur(62.5px);
+const Container = styled(PageContainer)`
+  padding-top: 16px;
+  padding-left: 20px;
 `;
 
 export default Search;

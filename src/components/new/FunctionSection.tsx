@@ -1,6 +1,4 @@
-import iconButtonType from "@templates/iconButtonType";
-import tabType from "@templates/tabType";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import IconButton from "@components/globals/IconButton";
 import Tab from "@components/globals/Tab";
@@ -8,6 +6,9 @@ import TabBar from "@components/globals/TabBar";
 
 import { playButtonData } from "@constants/IconButton";
 import { newTabs } from "@constants/tabs";
+
+import iconButtonType from "@templates/iconButtonType";
+import tabType from "@templates/tabType";
 
 interface FunctionSectionProps {}
 
@@ -26,13 +27,11 @@ const FunctionSection = ({}: FunctionSectionProps) => {
         </TabBar>
       </TimeLineLayout>
       <ButtonLayout>
-        {playButtonData.map((item: iconButtonType, index: number) => {
-          return (
-            <IconButton key={index} icon={item.icon}>
-              {item.text}
-            </IconButton>
-          );
-        })}
+        {playButtonData.map((item: iconButtonType, index: number) => (
+          <IconButton key={index} icon={item.icon}>
+            {item.text}
+          </IconButton>
+        ))}
       </ButtonLayout>
     </Wrapper>
   );

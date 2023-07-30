@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off.svg";
 import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";
@@ -34,8 +34,8 @@ const Song = ({}: SongProps) => {
         />
 
         <TitleContainer>
-          <T4Medium color={colors.blueGray25}>{song.title}</T4Medium>
-          <ArtistText color={colors.blueGray100}>{song.artist}</ArtistText>
+          <TitleText>{song.title}</TitleText>
+          <ArtistText>{song.artist}</ArtistText>
         </TitleContainer>
 
         <View />
@@ -71,8 +71,21 @@ const TitleContainer = styled.div`
   text-align: center;
 `;
 
+const TitleText = styled(T4Medium)`
+  color: ${colors.blueGray25};
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
 const ArtistText = styled(T5Light)`
+  color: ${colors.blueGray100};
   opacity: 0.6;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 export default Song;

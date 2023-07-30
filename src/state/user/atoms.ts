@@ -1,7 +1,8 @@
-import { myListItem } from "@templates/playlist";
 import { atom } from "recoil";
 
 import { dumyListItem } from "@constants/dummys";
+
+import { myListItem } from "@templates/playlist";
 
 interface dragAndDropStatetype {
   drag: myListItem;

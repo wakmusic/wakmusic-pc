@@ -1,13 +1,14 @@
 import { useSearchParams } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import Artist from "@components/artists/Artist";
-import PageContainer from "@components/globals/PageContainer";
-import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 
-import colors from "@constants/colors";
+import PageContainer from "@layouts/PageContainer";
+import PageItemContainer from "@layouts/PageItemContainer";
+import PageLayout from "@layouts/PageLayout";
+
 import { artistList } from "@constants/dummys";
 import { artistTabs } from "@constants/tabs";
 
@@ -17,8 +18,8 @@ const Artists = ({}: ArtistsProps) => {
   const [searchParams] = useSearchParams();
 
   return (
-    <PageContainer>
-      <Container>
+    <PageLayout>
+      <PageContainer>
         <TabBarWrapper>
           <TabBar>
             {artistTabs.map((item, index) => (
@@ -29,47 +30,30 @@ const Artists = ({}: ArtistsProps) => {
           </TabBar>
         </TabBarWrapper>
 
-        <ArtistsContainer>
-          <DefaultScroll>
-            <ArtistsWrapper>
-              {artistList
-                .filter((artist) => {
-                  if (searchParams.get("type") === null) return true;
-                  else return artist.group.en === searchParams.get("type");
-                })
-                .map((artist, index) => (
-                  <Artist key={index} artist={artist} />
-                ))}
-            </ArtistsWrapper>
-          </DefaultScroll>
-        </ArtistsContainer>
-      </Container>
-    </PageContainer>
+        <PageItemContainer>
+          <ArtistsContainer>
+            {artistList
+              .filter((artist) => {
+                if (searchParams.get("type") === null) return true;
+                else return artist.group.en === searchParams.get("type");
+              })
+              .map((artist, index) => (
+                <Artist key={index} artist={artist} />
+              ))}
+          </ArtistsContainer>
+        </PageItemContainer>
+      </PageContainer>
+    </PageLayout>
   );
 };
 
-const Container = styled.div`
-  width: 754px;
-  height: calc(100% - 40px);
-  margin: 20px 0;
-
-  border-radius: 15px;
-  border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66; // 40%
-  backdrop-filter: blur(62.5px);
-`;
-
 const TabBarWrapper = styled.div`
   padding: 16px 20px 0 20px;
+
+  margin-bottom: 16px;
 `;
 
 const ArtistsContainer = styled.div`
-  margin-top: 16px;
-`;
-
-const ArtistsWrapper = styled.div`
-  height: 561px;
-
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-auto-rows: 124px;

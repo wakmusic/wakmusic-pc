@@ -1,5 +1,5 @@
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import colors from "@constants/colors";
 

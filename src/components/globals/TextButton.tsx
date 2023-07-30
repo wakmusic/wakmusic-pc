@@ -18,7 +18,7 @@ interface TextButtonProps {
 const TextButton = ({ text, activated, onClick }: TextButtonProps) => {
   return (
     <Container $activated={activated} onClick={onClick}>
-      <T6Medium color={colors.blueGray400}>
+      <T6Medium color={activated ? colors.point : colors.blueGray400}>
         {activated ? text.activated : text.default}
       </T6Medium>
     </Container>
@@ -26,7 +26,10 @@ const TextButton = ({ text, activated, onClick }: TextButtonProps) => {
 };
 
 const Container = styled.button<{ $activated: boolean }>`
-  padding: 4px 14px;
+  display: flex;
+  align-items: center;
+
+  padding: 0px 14px;
 
   border: 1px solid ${colors.blueGray200};
   border-radius: 5px;

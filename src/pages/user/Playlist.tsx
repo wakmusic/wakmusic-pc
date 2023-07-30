@@ -2,7 +2,7 @@ import { playlistState } from "@state/playlist/atoms";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { styled } from "styled-components";
+import { styled } from "styled-components/macro";
 
 import { ReactComponent as EditTitle } from "@assets/icons/ic_24_edit_filled.svg";
 import { ReactComponent as Share } from "@assets/icons/ic_24_export.svg";
@@ -108,6 +108,8 @@ const Container = styled.div`
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
+
+  margin-bottom: 1px;
 
   padding-left: 20px;
   padding-right: 28px;

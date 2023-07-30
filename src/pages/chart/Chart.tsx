@@ -43,7 +43,7 @@ const Chart = ({}: ChartProps) => {
           ]}
         />
 
-        <PageItemContainer height={225}>
+        <PageItemContainer height={209}>
           {hourlyChart.map((item, index) => (
             <SongItem
               key={index}

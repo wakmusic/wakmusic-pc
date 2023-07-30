@@ -17,12 +17,10 @@ const PageItemContainer = ({ height, children }: PageItemContainerProps) => {
   );
 };
 
-const Container = styled.div`
-  margin-top: 16px;
-`;
+const Container = styled.div``;
 
 const ItemsWrapper = styled.div<{ $height?: number }>`
-  height: calc(100vh - ${({ $height }) => $height ?? 152}px);
+  height: calc(100vh - ${({ $height }) => $height ?? 150}px);
 `;
 
 export default PageItemContainer;

@@ -49,6 +49,8 @@ const Artists = ({}: ArtistsProps) => {
 
 const TabBarWrapper = styled.div`
   padding: 16px 20px 0 20px;
+
+  margin-bottom: 16px;
 `;
 
 const ArtistsContainer = styled.div`

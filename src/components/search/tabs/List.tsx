@@ -24,7 +24,7 @@ const List = ({ tab, res }: ListProps) => {
         ]}
       />
 
-      <PageItemContainer height={196}>
+      <PageItemContainer height={181}>
         {res[tab].map((item, index) => (
           <SongItem
             key={index}

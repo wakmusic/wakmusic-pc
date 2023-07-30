@@ -33,7 +33,7 @@ const New = ({}: NewProps) => {
           ]}
         />
 
-        <PageItemContainer height={225}>
+        <PageItemContainer height={209}>
           {hourlyChart.map((item, index) => (
             <SongItem
               key={index}

@@ -86,7 +86,7 @@ ipcMain.on("mode:separate", () => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
-  win.setMaximumSize(290, 0);
+  win.setMaximumSize(290, 10000);
   win.setMinimumSize(290, 714);
 
   const beforeBounds = win.getBounds();

@@ -1,3 +1,6 @@
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
+import { visualVariants } from "src/animations/toggleVisualMode";
 import styled, { css } from "styled-components";
 
 import { useCurrentSongState, useVisualModeState } from "@hooks/player";
@@ -14,8 +17,27 @@ const Visual = ({}: VisualProps) => {
 
   const img = `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`;
 
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (!visualMode) {
+      controls.set("initial");
+      return;
+    }
+
+    (async () => {
+      await controls.start("active");
+    })();
+  }, [controls, visualMode]);
+
   return (
-    <Container $image={img} $on={visualMode}>
+    <Container
+      $image={img}
+      $on={visualMode}
+      animate={controls}
+      variants={visualVariants}
+      initial="initial"
+    >
       <Wrapper>
         <Header />
         <InnerContainer>
@@ -27,7 +49,7 @@ const Visual = ({}: VisualProps) => {
   );
 };
 
-const Container = styled.div<{ $image: string; $on: boolean }>`
+const Container = styled(motion.div)<{ $image: string; $on: boolean }>`
   width: 100vw;
   height: 100vh;
 

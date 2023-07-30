@@ -40,7 +40,7 @@ const DefaultMode = ({}: DefaultModeProps) => {
         <Thumbnail src={img} />
 
         <LyricsContainer>
-          <Lyrics size="small" />
+          <Lyrics size="large" />
         </LyricsContainer>
 
         <TimelineContainer>

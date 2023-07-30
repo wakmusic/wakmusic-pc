@@ -1,4 +1,11 @@
+import { motion, useAnimation } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import {
+  lyricsVariants,
+  thumbnailVariants,
+  toggleVariants,
+} from "src/animations/toggleVisualMode";
 import styled, { css } from "styled-components";
 
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
@@ -9,7 +16,7 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 import {
   useControlState,
   useCurrentSongState,
-  useToggleVisualModeState,
+  useVisualModeState,
 } from "@hooks/player";
 
 import Lyrics from "../Lyrics";
@@ -18,7 +25,9 @@ interface DisplayProps {}
 
 const Display = ({}: DisplayProps) => {
   const [controlState] = useControlState();
-  const toggleVisualModeState = useToggleVisualModeState();
+
+  const [animationState, setAnimationState] = useState(false);
+  const [visualModeState, setVisualModeState] = useVisualModeState();
 
   const song = useCurrentSongState();
   const img = `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`;
@@ -26,45 +35,98 @@ const Display = ({}: DisplayProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (visualModeState || !animationState) return;
+
+    (async () => {
+      await controls.start("close");
+      controls.set("initial");
+
+      setAnimationState(false);
+    })();
+  }, [controls, visualModeState, animationState]);
+
   return (
-    <Container image={img}>
-      <Grid>
-        <ExpansionButtonContainer>
-          <SimpleIconButton
-            icon={ExpansionSVG}
-            onClick={() => {
-              if (window.ipcRenderer && location.pathname == "/player") {
-                navigate(-1);
-                window.ipcRenderer.send("mode:default");
-              }
+    <div
+      style={{
+        height: "200px",
+      }}
+    >
+      <Container
+        $image={img}
+        animate={controls}
+        variants={toggleVariants}
+        initial="initial"
+      >
+        <Grid>
+          <ExpansionButtonContainer>
+            <SimpleIconButton
+              icon={ExpansionSVG}
+              onClick={() => {
+                const animate = async () => {
+                  controls.set("close");
+                  await controls.start("open");
 
-              toggleVisualModeState();
-            }}
-          />
-        </ExpansionButtonContainer>
+                  setAnimationState(true);
+                  setVisualModeState(true);
+                };
 
-        <PlaylistButtonContainer>
-          <SimpleIconButton icon={PlayListSVG} />
-        </PlaylistButtonContainer>
+                if (window.ipcRenderer && location.pathname == "/player") {
+                  navigate(-1);
+                  window.ipcRenderer.send("mode:default");
 
-        <CenterWrapper>
-          <LyricsWrapper $on={controlState.isLyricsOn}>
-            <Lyrics size="medium" />
-          </LyricsWrapper>
-          <Thumbnail src={img} $off={controlState.isLyricsOn} />
-        </CenterWrapper>
-      </Grid>
-    </Container>
+                  setTimeout(() => {
+                    animate();
+                  }, 200);
+
+                  return;
+                }
+
+                animate();
+              }}
+            />
+          </ExpansionButtonContainer>
+
+          {!animationState && (
+            <PlaylistButtonContainer>
+              <SimpleIconButton icon={PlayListSVG} />
+            </PlaylistButtonContainer>
+          )}
+
+          <CenterWrapper>
+            <LyricsWrapper
+              $on={controlState.isLyricsOn}
+              animate={controls}
+              variants={lyricsVariants}
+              initial="initial"
+            >
+              <Lyrics size="small" />
+            </LyricsWrapper>
+            <Thumbnail
+              src={img}
+              $off={controlState.isLyricsOn}
+              animate={controls}
+              variants={thumbnailVariants}
+              initial="initial"
+            />
+          </CenterWrapper>
+        </Grid>
+      </Container>
+    </div>
   );
 };
 
-const Container = styled.div<{ image: string }>`
+const Container = styled(motion.div)<{ $image: string }>`
   width: 100%;
   height: 200px;
 
-  background-image: url(${({ image }) => image});
+  background-image: url(${({ $image }) => $image});
   background-position: center;
   background-size: 150%;
+
+  z-index: 100;
 `;
 
 const Grid = styled.div`
@@ -99,7 +161,7 @@ const PlaylistButtonContainer = styled.div`
   justify-self: end;
 `;
 
-const LyricsWrapper = styled.div<{ $on: boolean }>`
+const LyricsWrapper = styled(motion.div)<{ $on: boolean }>`
   width: 220px;
   height: 130px;
 
@@ -114,14 +176,12 @@ const LyricsWrapper = styled.div<{ $on: boolean }>`
     `}
 `;
 
-const Thumbnail = styled.img<{ $off: boolean }>`
+const Thumbnail = styled(motion.img)<{ $off: boolean }>`
   width: 100%;
   height: 100%;
 
   object-fit: cover;
   border-radius: 10px;
-
-  position: relative;
 
   ${({ $off }) =>
     $off &&

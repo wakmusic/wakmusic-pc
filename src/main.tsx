@@ -60,9 +60,9 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           </Routes>
           <Player />
         </RootOverlay>
-      </BrowserRouter>
 
-      <Visual />
+        <Visual />
+      </BrowserRouter>
 
       <ModalPortal>
         <LoginModal />

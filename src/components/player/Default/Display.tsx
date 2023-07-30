@@ -43,19 +43,7 @@ const Display = ({}: DisplayProps) => {
           />
         </ExpansionButtonContainer>
 
-        <PlaylistButtonContainer
-          onClick={() => {
-            if (!window.ipcRenderer) return;
-
-            if (location.pathname !== "/player") {
-              navigate("/player");
-              window.ipcRenderer.send("mode:separate");
-            } else {
-              navigate(-1);
-              window.ipcRenderer.send("mode:default");
-            }
-          }}
-        >
+        <PlaylistButtonContainer>
           <SimpleIconButton icon={PlayListSVG} />
         </PlaylistButtonContainer>
 

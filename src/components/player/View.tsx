@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as ViewsSvg } from "@assets/icons/ic_20_views.svg";
 import { ReactComponent as ViewsBrightSvg } from "@assets/icons/ic_20_views_bright.svg";

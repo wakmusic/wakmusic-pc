@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as Logo } from "@assets/svgs/logo.svg";
 

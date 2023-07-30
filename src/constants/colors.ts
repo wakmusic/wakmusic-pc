@@ -21,6 +21,8 @@ const colors: { [color: string]: string } = {
   sub: "#2760F4",
   up: "#FA3168",
   down: "#00A3FF",
+
+  whiteAlpha40: "rgba(255, 255, 255, 0.4)",
 };
 
 export default colors;

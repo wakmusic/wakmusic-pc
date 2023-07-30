@@ -1,8 +1,7 @@
 import { dragAndDropState, myListState } from "@state/user/atoms";
-import { myListItem } from "@templates/playlist";
 import { useMemo } from "react";
 import { useRecoilValue } from "recoil";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as DragPlaylist } from "@assets/icons/ic_24_move.svg";
 import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";
@@ -12,6 +11,8 @@ import { T6Medium, T7Light } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { XY } from "@pages/user/Playlists";
+
+import { myListItem } from "@templates/playlist";
 
 interface PlaylistItemProps {
   item: myListItem;

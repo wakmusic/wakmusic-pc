@@ -1,7 +1,7 @@
 import { myListState } from "@state/user/atoms";
 import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { T6Medium } from "@components/Typography";
 import Tab from "@components/globals/Tab";

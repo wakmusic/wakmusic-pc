@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { T8Medium } from "@components/Typography";
 

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
 import { ReactComponent as EditSVG } from "@assets/icons/ic_24_edit.svg";
@@ -15,8 +15,9 @@ import {
   T6Medium,
   T7Medium,
 } from "@components/Typography";
-import PageContainer from "@components/globals/PageContainer";
 import Block from "@components/mypage/Block";
+
+import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
 import { userInfo } from "@constants/dummys";
@@ -25,7 +26,7 @@ interface MyPageProps {}
 
 const MyPage = ({}: MyPageProps) => {
   return (
-    <PageContainer>
+    <PageLayout>
       <Container>
         <ProfileBlock>
           <FlexDiv>
@@ -80,7 +81,7 @@ const MyPage = ({}: MyPageProps) => {
           내가 비빈 거다)라는 모토를 가슴에 새기고 일하고 있습니다.
         </T7Medium>
       </Buanebi>
-    </PageContainer>
+    </PageLayout>
   );
 };
 
@@ -99,7 +100,7 @@ const Container = styled.div`
 const ProfileBlock = styled.div`
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66;
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   grid-column: 1/3;

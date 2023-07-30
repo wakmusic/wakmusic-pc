@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
 import { ReactComponent as DivideSVG } from "@assets/icons/ic_20_divide.svg";

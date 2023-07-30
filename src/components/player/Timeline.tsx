@@ -1,20 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { T8Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useCurrentPlayingState } from "@hooks/player";
+import { usePlayingProgressState } from "@hooks/player";
 
 import { formatSecond } from "@utils/formatting";
 
 interface TimelineProps {
-  length: number;
+  isSeparated?: boolean;
 }
 
-const Timeline = ({ length }: TimelineProps) => {
-  const [current, setCurrent] = useCurrentPlayingState();
+const Timeline = ({ isSeparated }: TimelineProps) => {
+  const length = 272;
+
+  const [current, setCurrent] = usePlayingProgressState();
 
   const [isMouseDown, setIsMouseDown] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -29,7 +31,7 @@ const Timeline = ({ length }: TimelineProps) => {
 
       setCurrent(Math.min(1, Math.max(0, newProgress)) * length);
     },
-    [length, setCurrent]
+    [setCurrent]
   );
 
   const handleMouseState = useCallback(
@@ -70,12 +72,19 @@ const Timeline = ({ length }: TimelineProps) => {
       ref={ref}
       onMouseDown={handleMouseState}
       $controlling={isMouseDown}
+      $isSeparated={isSeparated ?? false}
     >
-      <Line progress={(current / length) * 100} />
+      <Line
+        progress={(current / length) * 100}
+        $isSeparated={isSeparated ?? false}
+      />
       <HandleContainer progress={(current / length) * 100}>
         <Handle />
       </HandleContainer>
-      <TimelinePopover progress={(current / length) * 100}>
+      <TimelinePopover
+        progress={(current / length) * 100}
+        $isSeparated={isSeparated}
+      >
         <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
         <LengthText color={colors.blueGray100}>
           {formatSecond(length)}
@@ -85,31 +94,34 @@ const Timeline = ({ length }: TimelineProps) => {
   );
 };
 
-const HandleContainer = styled.div.attrs<{ progress: number }>(
-  ({ progress }) => ({
-    style: {
-      left: `calc(${progress}% - 3px)`,
-    },
-  })
-)`
+const HandleContainer = styled.div.attrs<{
+  progress: number;
+}>(({ progress }) => ({
+  style: {
+    left: `calc(${progress}% - 3px)`,
+  },
+}))`
   position: relative;
 
   display: none;
 `;
 
-const TimelinePopover = styled.div.attrs<{ progress: number }>(
-  ({ progress }) => ({
-    style: {
-      left: `min(calc(100% - 35px), max(35px, calc(${progress}% - 3px)))`,
-    },
-  })
-)`
+const TimelinePopover = styled.div.attrs<{
+  progress: number;
+  $isSeparated: boolean;
+}>(({ progress, $isSeparated }) => ({
+  style: {
+    left: $isSeparated
+      ? `calc(${progress}%)`
+      : `min(calc(100% - 38px), max(32px, calc(${progress}%)))`,
+  },
+}))`
   height: 18px;
 
   padding: 4px;
 
   position: relative;
-  transform: translate(-50%, -40px);
+  transform: translate(calc(-50% + 3px), -45px);
 
   display: none;
   align-items: center;
@@ -120,13 +132,20 @@ const TimelinePopover = styled.div.attrs<{ progress: number }>(
   opacity: 0.8;
 `;
 
-const Container = styled.div<{ $controlling: boolean }>`
+const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
   width: 100%;
   height: 2px;
 
   margin-bottom: 2px;
 
   cursor: pointer;
+
+  ${({ $isSeparated }) =>
+    $isSeparated &&
+    css`
+      border-radius: 2px;
+      background-color: rgba(255, 255, 255, 0.1);
+    `}
 
   &:hover {
     height: 4px;
@@ -163,18 +182,24 @@ const Line = styled.div.attrs<{ progress: number }>(({ progress }) => ({
   style: {
     width: `${progress}%`,
   },
-}))`
+}))<{ $isSeparated: boolean }>`
   height: 100%;
 
   background-color: ${colors.point};
+
+  ${({ $isSeparated }) =>
+    $isSeparated &&
+    css`
+      border-radius: 2px;
+    `}
 `;
 
 const Handle = styled.div`
-  height: 8px;
-  width: 8px;
+  height: 12px;
+  width: 12px;
 
   position: relative;
-  top: -6px;
+  top: -8px;
 
   border-radius: 50%;
   background-color: ${colors.point};

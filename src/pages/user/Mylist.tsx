@@ -1,7 +1,7 @@
 import { dragAndDropState, myListState } from "@state/user/atoms";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { useRecoilState } from "recoil";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
 import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
@@ -9,6 +9,8 @@ import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
 import IconButton from "@components/globals/IconButton";
 import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import MylistItem from "@components/user/mylist/MylistItem";
+
+import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 import { myList } from "@constants/dummys";
@@ -135,59 +137,58 @@ const Mylist = ({}: MylistProps) => {
         <IconButton icon={Create}>리스트 만들기</IconButton>
         <IconButton icon={Import}>리스트 가져오기</IconButton>
       </Menu>
-      <DefaultScroll>
-        <ScrollWrapper>
-          <PlayLists
-            onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
-            onMouseUp={() => {
-              setMouseDown(false);
-              if (!mouseDown) return;
 
-              dispatchMyList({
-                type: ShuffleActionType.relocate,
-                target: dragAndDropTarget.drag.index,
-                to: dragAndDropTarget.drop,
-              });
-              // API에 내 리스트 수정 요청 보내기
-            }}
-            onMouseLeave={() => {
-              setMouseDown(false);
+      <PageItemContainer height={206}>
+        <PlayLists
+          onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
+          onMouseUp={() => {
+            setMouseDown(false);
+            if (!mouseDown) return;
+
+            dispatchMyList({
+              type: ShuffleActionType.relocate,
+              target: dragAndDropTarget.drag.index,
+              to: dragAndDropTarget.drop,
+            });
+            // API에 내 리스트 수정 요청 보내기
+          }}
+          onMouseLeave={() => {
+            setMouseDown(false);
+          }}
+        >
+          {!isEditMode
+            ? myList.map((item, index) => (
+                <MylistItem
+                  key={index}
+                  item={{
+                    ...item,
+                    index: index,
+                  }}
+                />
+              ))
+            : shuffledList.map((item, index) => (
+                <MylistItem
+                  key={index}
+                  item={{
+                    ...item,
+                    index: index,
+                  }}
+                  hide={index === dragAndDropTarget.drag.index && mouseDown}
+                  mouseDown={mouseDown}
+                  onSelect={initializeDragTarget}
+                />
+              ))}
+          <DragedPlaylist
+            style={{
+              top: `${dragPosition.y}px`,
+              left: `${dragPosition.x}px`,
+              display: mouseDown ? "block" : "none",
             }}
           >
-            {!isEditMode
-              ? myList.map((item, index) => (
-                  <MylistItem
-                    key={index}
-                    item={{
-                      ...item,
-                      index: index,
-                    }}
-                  />
-                ))
-              : shuffledList.map((item, index) => (
-                  <MylistItem
-                    key={index}
-                    item={{
-                      ...item,
-                      index: index,
-                    }}
-                    hide={index === dragAndDropTarget.drag.index && mouseDown}
-                    mouseDown={mouseDown}
-                    onSelect={initializeDragTarget}
-                  />
-                ))}
-            <DragedPlaylist
-              style={{
-                top: `${dragPosition.y}px`,
-                left: `${dragPosition.x}px`,
-                display: mouseDown ? "block" : "none",
-              }}
-            >
-              <MylistItem item={dragAndDropTarget.drag} />
-            </DragedPlaylist>
-          </PlayLists>
-        </ScrollWrapper>
-      </DefaultScroll>
+            <MylistItem item={dragAndDropTarget.drag} />
+          </DragedPlaylist>
+        </PlayLists>
+      </PageItemContainer>
     </Container>
   );
 };
@@ -213,20 +214,16 @@ const PlayLists = styled.div`
   align-content: flex-start;
   gap: 16px;
 
-  width: 100%;
+  /* width: 100%; */
 
   padding-right: 2px;
-`;
-
-const ScrollWrapper = styled.div`
-  height: calc(100vh - 206px);
 `;
 
 const DragedPlaylist = styled.div`
   position: absolute;
   z-index: 2;
 
-  background-color: ${colors.white}66;
+  background-color: ${colors.whiteAlpha40};
 
   padding: 8px;
   border-radius: 6px;

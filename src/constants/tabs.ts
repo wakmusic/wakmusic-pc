@@ -15,6 +15,14 @@ export const artistTabs: tabType[] = [
   { text: "아카데미", to: { type: "academy" } },
 ];
 
+export const chartTabs: tabType[] = [
+  { text: "시간순", to: { type: "hourly" } },
+  { text: "일간순", to: { type: "daily" } },
+  { text: "주간순", to: { type: "weekly" } },
+  { text: "월간순", to: { type: "monthly" } },
+  { text: "누적순", to: { type: "total" } },
+];
+
 export const newTabs: tabType[] = [
   { text: "전체", to: "/new" },
   { text: "우왁굳", to: { type: "woowakgood" } },

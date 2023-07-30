@@ -2,7 +2,7 @@ import { dragAndDropState, myListState } from "@state/user/atoms";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as DragPlaylist } from "@assets/icons/ic_24_move.svg";
 import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as CopySVG } from "@assets/icons/ic_24_copy.svg";
 

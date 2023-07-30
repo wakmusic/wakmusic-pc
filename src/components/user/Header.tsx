@@ -2,7 +2,7 @@ import { myListState } from "@state/user/atoms";
 import { useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import styled from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";

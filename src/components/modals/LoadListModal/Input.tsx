@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import BaseInput from "../globals/BaseInput";
 import HelpText from "../globals/HelpText";
@@ -35,14 +35,6 @@ const Container = styled.div`
   width: 380px;
 
   position: relative;
-`;
-
-const Texts = styled.div`
-  margin-top: 4px;
-
-  display: flex;
-
-  height: 18px;
 `;
 
 export default Input;

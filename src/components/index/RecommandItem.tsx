@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { T6Medium } from "@components/Typography";
 
@@ -30,7 +30,7 @@ const Container = styled.div`
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66; // 40%
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   display: flex;

@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
-import styled, { css } from "styled-components";
+import styled, { css } from "styled-components/macro";
 
 import { T7Light } from "@components/Typography";
 import PlayerScroll from "@components/globals/Scroll/PlayerScroll";
@@ -7,29 +7,20 @@ import PlayerScroll from "@components/globals/Scroll/PlayerScroll";
 import colors from "@constants/colors";
 
 import { useInterval } from "@hooks/interval";
+import { usePlayingInfoState } from "@hooks/player";
 
-import { PlaylistType } from "@templates/player";
+import { SongInfo } from "@templates/player";
 
-interface PlaylistProps {
-  playlist: PlaylistType;
-  playing: number;
-  onChange: (playlist: PlaylistType) => void;
-  onPlayingChange: (playing: number) => void;
-}
+interface PlaylistProps {}
 
-const Playlist = ({
-  playlist,
-  playing,
-  onChange,
-  onPlayingChange,
-}: PlaylistProps) => {
-  const [playlistData, setPlaylisData] = useState(() =>
-    playlist.map((song, i) => ({
-      ...song,
-      isPlaying: i === playing,
-      isSelected: false,
-    }))
-  );
+const Playlist = ({}: PlaylistProps) => {
+  const [playingInfo, setPlayingInfo] = usePlayingInfoState();
+  const [playlistData, setPlaylisData] = useState<
+    (SongInfo & {
+      isPlaying: boolean;
+      isSelected: boolean;
+    })[]
+  >([]);
 
   const [mouseState, setMouseState] = useState({
     isMouseDown: false,
@@ -46,16 +37,44 @@ const Playlist = ({
   const [scrollbar, setScrollbar] = useState<HTMLElement | null>(null);
   const [mouseY, setMouseY] = useState(0);
 
+  const [lastSelected, setLastSelected] = useState<number | null>(null);
+
+  const createPlaylistData = useCallback(() => {
+    return [
+      ...playingInfo.playlist.map((song, i) => ({
+        ...song,
+        isPlaying: i === playingInfo.current,
+        isSelected: false,
+      })),
+    ];
+  }, [playingInfo]);
+
   function onScroll() {
     if (!scrollState.isScrollEnabled) {
       setScrollState({ ...scrollState, isScrollEnabled: true });
     }
   }
 
-  function onSongSelected(index: number) {
-    playlistData[index].isSelected = !playlistData[index].isSelected;
+  function onSongSelected(index: number, multiSelect: boolean) {
+    if (multiSelect && lastSelected !== null && lastSelected !== index) {
+      const start = Math.min(index, lastSelected);
+      const end = Math.max(index, lastSelected);
 
-    setPlaylisData([...playlistData]);
+      setPlaylisData(
+        playlistData.map((song, i) =>
+          start <= i && i <= end ? { ...song, isSelected: true } : song
+        )
+      );
+    } else {
+      playlistData[index].isSelected = !playlistData[index].isSelected;
+
+      setPlaylisData([...playlistData]);
+      setLastSelected(index);
+    }
+  }
+
+  function onSongDoubleClicked(index: number) {
+    setPlayingInfo({ ...playingInfo, current: index });
   }
 
   const getCursorIndex = useCallback(() => {
@@ -82,9 +101,17 @@ const Playlist = ({
       target
     );
 
-    onChange(playlistData);
-    onPlayingChange(playlistData.findIndex((song) => song.isPlaying));
-  }, [playlistData, targetIndex, onChange, onPlayingChange, getCursorIndex]);
+    setPlayingInfo({
+      playlist: playlistData.map((song) => ({
+        songId: song.songId,
+        title: song.title,
+        artist: song.artist,
+        views: song.views,
+      })),
+      current: playlistData.findIndex((song) => song.isPlaying),
+    });
+    setLastSelected(null);
+  }, [playlistData, targetIndex, getCursorIndex, setPlayingInfo]);
 
   const handleMouseDown = useCallback(
     (index: number) => {
@@ -120,6 +147,10 @@ const Playlist = ({
     },
     [mouseState, scrollState]
   );
+
+  useEffect(() => {
+    setPlaylisData(createPlaylistData());
+  }, [playingInfo, createPlaylistData]);
 
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
@@ -175,7 +206,8 @@ const Playlist = ({
                 $selected={playlistData[i].isSelected}
                 $ismoving={mouseState.isMoving}
                 $istarget={mouseState.isMoving && targetIndex === i}
-                onClick={() => onSongSelected(i)}
+                onClick={(e) => onSongSelected(i, e.shiftKey)}
+                onDoubleClick={() => onSongDoubleClicked(i)}
                 onMouseDown={() => handleMouseDown(i)}
               >
                 <TitleText>{song.title}</TitleText>
@@ -234,11 +266,20 @@ const SongContainer = styled.div<{
 `;
 
 const TitleText = styled(T7Light)`
-  width: 176px;
+  width: 170px;
+  margin-right: 6px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 const ArtistText = styled(T7Light)`
   width: 82px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 const MovementCursor = styled.div`

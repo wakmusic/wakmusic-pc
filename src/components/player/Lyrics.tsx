@@ -1,19 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
-import { T7Medium, T8Medium } from "@components/Typography";
+import { T4Medium, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 import { lyrics as dummy } from "@constants/dummys";
 
-import { useCurrentPlayingState } from "@hooks/player";
+import { usePlayingProgressState } from "@hooks/player";
 
-interface LyricsProps {}
+interface LyricsProps {
+  size: "large" | "medium" | "small";
+  extraPadding?: number;
+}
 
-const Lyrics = ({}: LyricsProps) => {
+const Lyrics = ({ size, extraPadding }: LyricsProps) => {
   const lyrics = dummy;
 
-  const [current, setCurrent] = useCurrentPlayingState();
+  const [current, setCurrent] = usePlayingProgressState();
   const [padding, setPadding] = useState(0);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -42,54 +45,55 @@ const Lyrics = ({}: LyricsProps) => {
     const target = ref.current.children[index] as HTMLDivElement;
     if (!target) return;
 
-    const top = target.offsetTop - ref.current.offsetTop - padding;
+    const top = target.offsetTop - ref.current.offsetTop - padding + 12;
 
     ref.current.scrollTo({ top, behavior: "smooth" });
   }, [getIndex, padding]);
 
   useEffect(() => {
-    setPadding((ref.current?.offsetHeight ?? 0) / 2 - 9);
+    setPadding((ref.current?.offsetHeight ?? 0) / 2);
   }, [ref]);
 
   return (
-    <Container>
-      <LyricsWrapper ref={ref} padding={padding}>
-        {lyrics.map((line, i) => {
-          const Line = i === getIndex() ? CurrentLine : DefaultLine;
+    <Container
+      ref={ref}
+      padding={padding}
+      $extraPadding={extraPadding ?? 0}
+      $noGap={size === "medium"}
+    >
+      {lyrics.map((line, i) => {
+        const Line = i === getIndex() ? CurrentLine : DefaultLine;
 
-          return (
-            <Line
-              key={i}
-              color={colors.blueGray25}
-              onClick={() => onLineClick(i)}
-            >
-              {line.text}
-            </Line>
-          );
-        })}
-      </LyricsWrapper>
+        return (
+          <Line
+            key={i}
+            color={colors.blueGray25}
+            onClick={() => onLineClick(i)}
+          >
+            {line.text}
+          </Line>
+        );
+      })}
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled.div<{
+  padding: number;
+  $extraPadding: number;
+  $noGap: boolean;
+}>`
   width: 100%;
   height: 100%;
 
-  padding: 5px 0;
-`;
-
-const LyricsWrapper = styled.div<{ padding: number }>`
-  width: 100%;
-  height: 100%;
-
-  padding: ${({ padding }) => padding}px 0;
+  padding: ${({ padding }) => padding}px 0
+    ${({ padding, $extraPadding }) => padding + $extraPadding}px 0;
 
   overflow-y: scroll;
 
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: ${({ $noGap }) => ($noGap ? "4px" : "6px")};
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -106,11 +110,13 @@ const Line = css`
   white-space: pre-wrap;
 `;
 
-const CurrentLine = styled(T7Medium)`
+const CurrentLine = styled(T4Medium)`
+  line-height: 23px;
+
   ${Line}
 `;
 
-const DefaultLine = styled(T8Medium)`
+const DefaultLine = styled(T6Medium)`
   ${Line}
 
   opacity: 0.6;

@@ -3,26 +3,22 @@ import styled from "styled-components/macro";
 
 import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off.svg";
 import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";
-import { ReactComponent as ViewsSvg } from "@assets/icons/ic_20_views.svg";
 
-import { T4Medium, T5Light, T8Medium } from "@components/Typography";
+import { T4Medium, T5Light } from "@components/Typography";
+import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import colors from "@constants/colors";
 
-import { formatNumber } from "@utils/formatting";
+import { useCurrentSongState } from "@hooks/player";
 
-import Controller from "./Controller";
-import IconButton from "./IconButton";
+import Controller from "../Controller";
+import View from "../View";
 
-interface SongProps {
-  song: {
-    title: string;
-    artist: string;
-    views: number;
-  };
-}
+interface SongProps {}
 
-const Song = ({ song }: SongProps) => {
+const Song = ({}: SongProps) => {
+  const song = useCurrentSongState();
+
   const [isLiked, setIsLiked] = useState(false);
 
   function changeIsLikeState() {
@@ -32,7 +28,7 @@ const Song = ({ song }: SongProps) => {
   return (
     <Container>
       <UpperContainer>
-        <IconButton
+        <SimpleIconButton
           icon={isLiked ? HeartOnSvg : HeartOffSvg}
           onClick={changeIsLikeState}
         />
@@ -42,14 +38,7 @@ const Song = ({ song }: SongProps) => {
           <ArtistText>{song.artist}</ArtistText>
         </TitleContainer>
 
-        <ViewContainer>
-          <ViewsPopover>
-            <ViewsText color={colors.blueGray25}>
-              {formatNumber(song.views)}
-            </ViewsText>
-          </ViewsPopover>
-          <IconButton icon={ViewsSvg} />
-        </ViewContainer>
+        <View />
       </UpperContainer>
 
       <Controller />
@@ -97,34 +86,6 @@ const ArtistText = styled(T5Light)`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-`;
-
-const ViewsPopover = styled.div`
-  height: 18px;
-
-  padding: 0 4px;
-
-  position: absolute;
-  transform: translate(calc(-50% + 10px), calc(-100% - 2px));
-
-  align-items: center;
-  justify-content: center;
-
-  display: none;
-
-  border-radius: 4px;
-  background-color: ${colors.gray700};
-  opacity: 0.8;
-`;
-
-const ViewContainer = styled.div`
-  &:hover ${ViewsPopover} {
-    display: inherit;
-  }
-`;
-
-const ViewsText = styled(T8Medium)`
-  white-space: nowrap;
 `;
 
 export default Song;

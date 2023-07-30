@@ -1,11 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components/macro";
 
-import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
-import { ReactComponent as LeastSVG } from "@assets/icons/ic_20_least.svg";
-import { ReactComponent as MaxSVG } from "@assets/icons/ic_20_max.svg";
 import { ReactComponent as Logo } from "@assets/svgs/logo.svg";
 
+import ControlBar from "@components/globals/ControlBar";
 import ArrowIcon from "@components/icons/Arrow";
 
 import colors from "@constants/colors";
@@ -47,25 +45,7 @@ const Header = ({}: HeaderProps) => {
 
       <Search />
 
-      {window.ipcRenderer && (
-        <ControlBar>
-          <Least
-            onClick={() => {
-              window.ipcRenderer?.send("window:least");
-            }}
-          />
-          <Max
-            onClick={() => {
-              window.ipcRenderer?.send("window:max");
-            }}
-          />
-          <Close
-            onClick={() => {
-              window.ipcRenderer?.send("window:close");
-            }}
-          />
-        </ControlBar>
-      )}
+      <ControlBar />
     </Container>
   );
 };
@@ -114,28 +94,6 @@ const Arrow = styled(ArrowIcon)<{ disabled: boolean }>`
           cursor: pointer;
           color: ${colors.gray400};
         `}
-`;
-
-const ControlBar = styled.div`
-  margin-left: auto;
-  margin-right: 10px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-`;
-
-const Least = styled(LeastSVG)`
-  cursor: pointer;
-`;
-
-const Max = styled(MaxSVG)`
-  cursor: pointer;
-`;
-
-const Close = styled(CloseSVG)`
-  cursor: pointer;
 `;
 
 export default Header;

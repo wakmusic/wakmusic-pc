@@ -49,12 +49,8 @@ const Display = ({}: DisplayProps) => {
   }, [controls, visualModeState, animationState]);
 
   return (
-    <div
-      style={{
-        height: "200px",
-      }}
-    >
-      <Container
+    <Container>
+      <InnerContainer
         $image={img}
         animate={controls}
         variants={toggleVariants}
@@ -113,12 +109,16 @@ const Display = ({}: DisplayProps) => {
             />
           </CenterWrapper>
         </Grid>
-      </Container>
-    </div>
+      </InnerContainer>
+    </Container>
   );
 };
 
-const Container = styled(motion.div)<{ $image: string }>`
+const Container = styled.div`
+  height: 200px;
+`;
+
+const InnerContainer = styled(motion.div)<{ $image: string }>`
   width: 100%;
   height: 200px;
 

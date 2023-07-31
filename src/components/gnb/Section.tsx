@@ -1,10 +1,12 @@
 import Lottie from "lottie-react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components/macro";
 
 import { Pretendard } from "@components/Typography";
 
 import colors from "@constants/colors";
+import { SectionData } from "@constants/gnb";
 
 interface Section {
   path: string;
@@ -20,6 +22,28 @@ interface Section {
 const Section = ({ path, icon: Icon, lottie, children }: Section) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isCurrent, setIsCurrent] = useState(false);
+
+  const comparePath = useCallback(
+    (pathname: string) => {
+      return pathname.split("/")[1] === location.pathname.split("/")[1];
+    },
+    [location.pathname]
+  );
+
+  useEffect(() => {
+    const _isCurrent = comparePath(path);
+    if (_isCurrent === isCurrent) return; // 필요없는 연산 방지
+
+    let isExternalPage = true;
+
+    for (const sectionData of SectionData) {
+      if (comparePath(sectionData.path)) isExternalPage = false;
+    }
+
+    if (isExternalPage && isCurrent) return;
+    else if (_isCurrent !== isCurrent) setIsCurrent(_isCurrent);
+  }, [path, isCurrent, comparePath]);
 
   return (
     <Container
@@ -28,7 +52,7 @@ const Section = ({ path, icon: Icon, lottie, children }: Section) => {
       }}
     >
       <IconContainer>
-        {location.pathname.split("/")[1] === path.split("/")[1] ? (
+        {isCurrent ? (
           <Lottie
             animationData={lottie}
             loop={false}
@@ -42,9 +66,7 @@ const Section = ({ path, icon: Icon, lottie, children }: Section) => {
         )}
       </IconContainer>
 
-      <Text $activated={location.pathname.split("/")[1] === path.split("/")[1]}>
-        {children}
-      </Text>
+      <Text $activated={isCurrent}>{children}</Text>
     </Container>
   );
 };

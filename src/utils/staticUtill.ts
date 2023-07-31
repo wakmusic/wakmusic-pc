@@ -1,4 +1,4 @@
-const staticURL = "https://static.wakmusic.xyz/static/";
+const staticURL = "https://static.wakmusic.xyz/static";
 
 type profileImgType =
   | "bat"

@@ -1,18 +1,32 @@
 import { SongTotal } from "./song";
 import { User } from "./user";
 
-export type PlaylistType = {
+type basePlaylist = {
   key: string;
   title: string;
   createAt: number;
-  user: User;
-  image: {
-    name: string;
-    version: number;
-  };
+  user?: User;
   songs: SongTotal[];
 };
 
-export interface myListItemType extends PlaylistType {
-  readonly index: number;
-}
+type defaultImage = {
+  name: string;
+  version: number;
+};
+
+type recommendImage = {
+  round: boolean;
+  square: boolean;
+};
+
+export type PlaylistType = basePlaylist & {
+  image: defaultImage;
+};
+
+export type RecommendlistType = basePlaylist & {
+  image: recommendImage;
+};
+
+export type myListItemType = PlaylistType & {
+  index: number;
+};

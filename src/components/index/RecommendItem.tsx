@@ -5,13 +5,13 @@ import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface RecommandItemProps {
+interface RecommendItemProps {
   // TODO: Interface 작업 예정
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
 }
 
-const RecommandItem = ({ item }: RecommandItemProps) => {
+const RecommendItem = ({ item }: RecommendItemProps) => {
   const navigate = useNavigate();
 
   return (
@@ -53,4 +53,4 @@ const Icon = styled.img`
   height: 48px;
 `;
 
-export default RecommandItem;
+export default RecommendItem;

@@ -21,6 +21,10 @@ const Header = ({}: HeaderProps) => {
       <LogoContainer>
         <Logo
           onClick={() => {
+            if (window.ipcRenderer && location.pathname == "/player") {
+              window.ipcRenderer.send("mode:default");
+            }
+
             navigate("/");
           }}
         />

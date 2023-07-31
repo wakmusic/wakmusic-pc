@@ -17,6 +17,7 @@ import SelectProfileModal from "@components/modals/SelectProfileModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
+import PlayerFallback from "@components/player/PlayerFallback";
 import Visual from "@components/player/Visual/Visual";
 
 import RootOverlay from "@layouts/RootOverlay";
@@ -57,7 +58,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/user/*" element={<User />} />
             <Route path="/mypage" element={<MyPage />} />
 
-            <Route path="/player" element={null} />
+            <Route path="/player" element={<PlayerFallback />} />
           </Routes>
           <Player />
         </RootOverlay>

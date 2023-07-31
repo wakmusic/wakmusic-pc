@@ -47,3 +47,15 @@ export const visualVariants: Variants = {
     opacity: 1,
   },
 };
+
+export const buttonVariants: Variants = {
+  close: {
+    opacity: 1,
+  },
+  open: {
+    opacity: 0,
+    transition: {
+      duration: 0.25,
+    },
+  },
+};

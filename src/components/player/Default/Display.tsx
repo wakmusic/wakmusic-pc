@@ -1,8 +1,8 @@
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  lyricsVariants,
+  buttonVariants,
   thumbnailVariants,
   toggleVariants,
 } from "src/animations/toggleVisualMode";
@@ -25,8 +25,6 @@ interface DisplayProps {}
 
 const Display = ({}: DisplayProps) => {
   const [controlState] = useControlState();
-
-  const [animationState, setAnimationState] = useState(false);
   const [visualModeState, setVisualModeState] = useVisualModeState();
 
   const song = useCurrentSongState();
@@ -38,15 +36,13 @@ const Display = ({}: DisplayProps) => {
   const controls = useAnimation();
 
   useEffect(() => {
-    if (visualModeState || !animationState) return;
+    if (visualModeState) return;
 
     (async () => {
       await controls.start("close");
       controls.set("initial");
-
-      setAnimationState(false);
     })();
-  }, [controls, visualModeState, animationState]);
+  }, [controls, visualModeState]);
 
   return (
     <Container>
@@ -57,7 +53,11 @@ const Display = ({}: DisplayProps) => {
         initial="initial"
       >
         <Grid>
-          <ExpansionButtonContainer>
+          <ExpansionButtonContainer
+            animate={controls}
+            variants={buttonVariants}
+            initial="close"
+          >
             <SimpleIconButton
               icon={ExpansionSVG}
               onClick={() => {
@@ -65,7 +65,6 @@ const Display = ({}: DisplayProps) => {
                   controls.set("close");
                   await controls.start("open");
 
-                  setAnimationState(true);
                   setVisualModeState(true);
                 };
 
@@ -85,18 +84,20 @@ const Display = ({}: DisplayProps) => {
             />
           </ExpansionButtonContainer>
 
-          {!animationState && (
-            <PlaylistButtonContainer>
-              <SimpleIconButton icon={PlayListSVG} />
-            </PlaylistButtonContainer>
-          )}
+          <PlaylistButtonContainer
+            animate={controls}
+            variants={buttonVariants}
+            initial="close"
+          >
+            <SimpleIconButton icon={PlayListSVG} />
+          </PlaylistButtonContainer>
 
           <CenterWrapper>
             <LyricsWrapper
               $on={controlState.isLyricsOn}
               animate={controls}
-              variants={lyricsVariants}
-              initial="initial"
+              variants={buttonVariants}
+              initial="close"
             >
               <Lyrics size="small" />
             </LyricsWrapper>
@@ -145,14 +146,14 @@ const Grid = styled.div`
   backdrop-filter: blur(35px);
 `;
 
-const ExpansionButtonContainer = styled.div`
+const ExpansionButtonContainer = styled(motion.div)`
   grid-area: exp;
 
   padding-top: 10px;
   padding-left: 10px;
 `;
 
-const PlaylistButtonContainer = styled.div`
+const PlaylistButtonContainer = styled(motion.div)`
   grid-area: ply;
 
   padding-top: 10px;

@@ -2,8 +2,9 @@ import { useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as ArrowDownSVG } from "@assets/icons/ic_20_arrow_down.svg";
+import { ReactComponent as ArrowUpSVG } from "@assets/icons/ic_20_arrow_up.svg";
 
-import { T6Medium } from "@components/Typography";
+import { T6Bold, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
@@ -20,8 +21,12 @@ const Section = ({ article }: SectionProps) => {
     <Container>
       <Grid open={isOpened} onClick={() => setIsOpened(!isOpened)}>
         <Category>{article.category.category}</Category>
-        <Question>{article.question}</Question>
-        <SVG />
+        {isOpened ? (
+          <HighlightedQuestion>{article.question}</HighlightedQuestion>
+        ) : (
+          <Question>{article.question}</Question>
+        )}
+        {isOpened ? <UpSVG /> : <DownSVG />}
       </Grid>
       <DescriptionContainer
         open={isOpened}
@@ -79,7 +84,23 @@ const Question = styled(T6Medium)`
   color: ${colors.blueGray600};
 `;
 
-const SVG = styled(ArrowDownSVG)`
+const HighlightedQuestion = styled(T6Bold)`
+  width: 568px;
+  height: 20px;
+
+  margin-left: 16px;
+
+  color: ${colors.blueGray600};
+`;
+
+const UpSVG = styled(ArrowUpSVG)`
+  margin-left: auto;
+
+  color: ${colors.gray600};
+`;
+UpSVG;
+
+const DownSVG = styled(ArrowDownSVG)`
   margin-left: auto;
 
   color: ${colors.gray500};

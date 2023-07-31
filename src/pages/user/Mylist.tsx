@@ -14,6 +14,9 @@ import PageItemContainer from "@layouts/PageItemContainer";
 import colors from "@constants/colors";
 import { myList } from "@constants/dummys";
 
+import { useCreateListModal } from "@hooks/createListModal";
+import { useLoadListModal } from "@hooks/loadListModal";
+
 import { PlaylistType, myListItemType } from "@templates/playlist";
 
 import { isUndefined } from "@utils/isTypes";
@@ -81,6 +84,9 @@ const Mylist = ({}: MylistProps) => {
   });
   const [dragPosition, setDragPostion] = useState<XY>({ x: 0, y: 0 });
 
+  const createListModal = useCreateListModal();
+  const loadListModal = useLoadListModal();
+
   useEffect(() => {
     let dropTarget =
       Math.floor((dragPosition.x + 94) / 238) +
@@ -133,8 +139,12 @@ const Mylist = ({}: MylistProps) => {
   return (
     <Container>
       <Menu>
-        <IconButton icon={Create}>리스트 만들기</IconButton>
-        <IconButton icon={Import}>리스트 가져오기</IconButton>
+        <IconButton icon={Create} onClick={createListModal}>
+          리스트 만들기
+        </IconButton>
+        <IconButton icon={Import} onClick={loadListModal}>
+          리스트 가져오기
+        </IconButton>
       </Menu>
 
       <PageItemContainer height={206}>

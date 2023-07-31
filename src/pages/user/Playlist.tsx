@@ -19,17 +19,23 @@ import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 
-import { PlaylistType } from "@templates/playlist";
+import { PlaylistType, RecommendlistType } from "@templates/playlist";
 
 import { isNull } from "@utils/isTypes";
 
 interface PlaylistProps {}
 
+const isDefaultImage = (
+  target: PlaylistType | RecommendlistType
+): target is PlaylistType => {
+  return "name" in target && "version" in target;
+};
+
 const Playlist = ({}: PlaylistProps) => {
   const isEditmode = useRecoilValue(playlistState);
   const { state } = useLocation();
-  const playlist = useMemo<PlaylistType>(() => {
-    if (isNull(state)) return; // param 기반으로 플레이리스트 정보 불러오기
+  const playlist = useMemo<PlaylistType | RecommendlistType>(() => {
+    if (isNull(state)) return; // param 기반으로 플레이리스트 정보 불러오기, 추천 플레이리스트 정보 불러오기
 
     return state;
   }, [state]);
@@ -39,7 +45,11 @@ const Playlist = ({}: PlaylistProps) => {
       <Header>
         <Info>
           <Icon
-            src={`https://static.wakmusic.xyz/static/playlist/${playlist.image.version}.png`}
+            src={
+              isDefaultImage(playlist)
+                ? `https://static.wakmusic.xyz/static/playlist/${playlist.image.version}.png`
+                : `https://static.wakmusic.xyz/static/playlist/icon/square/${playlist.key}.png?v=${playlist.image.square}`
+            }
           />
           <Details>
             <Title>
@@ -61,6 +71,7 @@ const Playlist = ({}: PlaylistProps) => {
           activated={isEditmode}
         />
       </Header>
+
       <GuideBar
         features={[
           GuideBarFeature.info,
@@ -69,6 +80,7 @@ const Playlist = ({}: PlaylistProps) => {
           GuideBarFeature.like,
         ]}
       />
+
       <PageItemContainer height={281}>
         {playlist.songs.map((item, index) => (
           <SongItem

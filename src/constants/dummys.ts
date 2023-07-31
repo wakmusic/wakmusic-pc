@@ -1221,6 +1221,7 @@ export const recommended = [
       round: 1,
       square: 1,
     },
+    songs: [],
   },
   {
     key: "official",
@@ -1231,6 +1232,7 @@ export const recommended = [
       round: 1,
       square: 1,
     },
+    songs: [],
   },
   {
     key: "gomemsong",
@@ -1241,6 +1243,7 @@ export const recommended = [
       round: 2,
       square: 2,
     },
+    songs: [],
   },
   {
     key: "competition",
@@ -1251,6 +1254,7 @@ export const recommended = [
       round: 2,
       square: 2,
     },
+    songs: [],
   },
   {
     key: "carol",
@@ -1261,6 +1265,7 @@ export const recommended = [
       round: 2,
       square: 2,
     },
+    songs: [],
   },
   {
     key: "hiphop",
@@ -1271,6 +1276,7 @@ export const recommended = [
       round: 2,
       square: 2,
     },
+    songs: [],
   },
   {
     key: "worksong",
@@ -1281,6 +1287,7 @@ export const recommended = [
       round: 2,
       square: 2,
     },
+    songs: [],
   },
   {
     key: "confidence",
@@ -1291,6 +1298,7 @@ export const recommended = [
       round: 1,
       square: 1,
     },
+    songs: [],
   },
 ];
 

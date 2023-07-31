@@ -15,7 +15,9 @@ const RecommandItem = ({ item }: RecommandItemProps) => {
   const navigate = useNavigate();
 
   return (
-    <Container onClick={() => navigate(`/recommand/${item.key}`)}>
+    <Container
+      onClick={() => navigate(`/playlist/${item.key}`, { state: item })} // api 작업 후에 state 제거
+    >
       <Title>{item.title}</Title>
       <Icon
         src={`https://static.wakmusic.xyz/static/playlist/icon/round/${item.key}.png?v=${item.image.round}`}

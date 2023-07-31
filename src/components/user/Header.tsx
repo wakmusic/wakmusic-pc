@@ -1,5 +1,6 @@
+import { likesState } from "@state/likes/atoms";
 import { myListState } from "@state/user/atoms";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components/macro";
@@ -14,11 +15,25 @@ interface HeaderProps {}
 
 const Header = ({}: HeaderProps) => {
   const location = useLocation();
-  const [isEditMode, setEditMode] = useRecoilState(myListState);
+  const [isMylistEditMode, setMylistEditMode] = useRecoilState(myListState);
+  const [isLikesEditMode, setLikesEditMode] = useRecoilState(likesState);
 
   const toggleEditMode = useCallback(() => {
-    setEditMode(!isEditMode);
-  }, [setEditMode, isEditMode]);
+    if (location.pathname === "/user/playlists")
+      setMylistEditMode(!isMylistEditMode);
+    else setLikesEditMode(!isLikesEditMode);
+  }, [
+    location.pathname,
+    setMylistEditMode,
+    isMylistEditMode,
+    setLikesEditMode,
+    isLikesEditMode,
+  ]);
+
+  const isEditMode = useMemo(() => {
+    if (location.pathname === "/user/playlists") return isMylistEditMode;
+    else return isLikesEditMode;
+  }, [location, isMylistEditMode, isLikesEditMode]);
 
   return (
     <Container>
@@ -29,16 +44,14 @@ const Header = ({}: HeaderProps) => {
           </Tab>
         ))}
       </TabBar>
-      {location.pathname === "/user/playlists" && (
-        <TextButton
-          text={{
-            default: "편집",
-            activated: "완료",
-          }}
-          activated={isEditMode}
-          onClick={toggleEditMode}
-        />
-      )}
+      <TextButton
+        text={{
+          default: "편집",
+          activated: "완료",
+        }}
+        activated={isEditMode}
+        onClick={toggleEditMode}
+      />
     </Container>
   );
 };

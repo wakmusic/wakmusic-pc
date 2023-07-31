@@ -1,6 +1,6 @@
 import { likesState } from "@state/likes/atoms";
 import { myListState } from "@state/user/atoms";
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components/macro";
@@ -18,17 +18,11 @@ const Header = ({}: HeaderProps) => {
   const [isMylistEditMode, setMylistEditMode] = useRecoilState(myListState);
   const [isLikesEditMode, setLikesEditMode] = useRecoilState(likesState);
 
-  const toggleEditMode = useCallback(() => {
+  const toggleEditMode = () => {
     if (location.pathname === "/user/playlists")
       setMylistEditMode(!isMylistEditMode);
     else setLikesEditMode(!isLikesEditMode);
-  }, [
-    location.pathname,
-    setMylistEditMode,
-    isMylistEditMode,
-    setLikesEditMode,
-    isLikesEditMode,
-  ]);
+  };
 
   const isEditMode = useMemo(() => {
     if (location.pathname === "/user/playlists") return isMylistEditMode;

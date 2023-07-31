@@ -150,9 +150,7 @@ const Container = styled.div`
   width: 222px;
   height: 74px;
 
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `;
 
 const ShiftContainer = styled.div`

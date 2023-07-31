@@ -38,9 +38,7 @@ const Container = styled.button<{ $activated: boolean }>`
 
   background-color: rgba(0, 0, 0, 0);
 
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 
   ${({ $activated }) =>
     $activated

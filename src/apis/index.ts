@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 
 export const instance = axios.create({
-  baseURL: "https://dev.wakmusic.xyz/api",
+  baseURL: process.env.REACT_APP_API_URL,
   timeout: 10000,
 });
 

@@ -1,4 +1,4 @@
-const staticURL = "https://static.wakmusic.xyz/static";
+const staticURL = process.env.REACT_APP_STATIC_URL;
 
 type profileImgType =
   | "bat"

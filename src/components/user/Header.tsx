@@ -19,14 +19,19 @@ const Header = ({}: HeaderProps) => {
   const [isLikesEditMode, setLikesEditMode] = useRecoilState(likesState);
 
   const toggleEditMode = () => {
-    if (location.pathname === "/user/playlists")
+    if (location.pathname === "/user/playlists") {
       setMylistEditMode(!isMylistEditMode);
-    else setLikesEditMode(!isLikesEditMode);
+    } else {
+      setLikesEditMode(!isLikesEditMode);
+    }
   };
 
   const isEditMode = useMemo(() => {
-    if (location.pathname === "/user/playlists") return isMylistEditMode;
-    else return isLikesEditMode;
+    if (location.pathname === "/user/playlists") {
+      return isMylistEditMode;
+    } else {
+      return isLikesEditMode;
+    }
   }, [location, isMylistEditMode, isLikesEditMode]);
 
   return (

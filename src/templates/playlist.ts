@@ -1,4 +1,4 @@
-import { Song } from "./song";
+import { SongTotal } from "./song";
 import { User } from "./user";
 
 export type PlaylistType = {
@@ -10,7 +10,7 @@ export type PlaylistType = {
     name: string;
     version: number;
   };
-  songs: Song[];
+  songs: SongTotal[];
 };
 
 export interface myListItemType extends PlaylistType {

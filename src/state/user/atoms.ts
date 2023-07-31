@@ -2,15 +2,15 @@ import { atom } from "recoil";
 
 import { dumyListItem } from "@constants/dummys";
 
-import { myListItem } from "@templates/playlist";
+import { myListItemType } from "@templates/playlist";
 
 interface dragAndDropStatetype {
-  drag: myListItem;
+  drag: myListItemType;
   drop: number;
 }
 
 export const myListState = atom({
-  key: "isEditMode",
+  key: "isMyListEditMode",
   default: false,
 });
 

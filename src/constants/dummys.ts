@@ -2563,41 +2563,6 @@ export const profileList = [
   },
 ];
 
-export const dumyListItem = {
-  key: "key1",
-  index: -1,
-  title: "리스트제목열두글자자자자",
-  createAt: 1684622625731,
-  user: {
-    displayName: "이름",
-    profile: {
-      type: "gorani",
-      version: 2,
-    },
-  },
-  image: {
-    name: "1",
-    version: 11,
-  },
-  songs: [
-    {
-      songId: "kHpvUymXXEg",
-      title: "KICK BACK #Shorts",
-      artist: "왁컬로이두",
-      remix: "왁톡",
-      reaction: "WsO3ikDyk8A",
-      date: 230216,
-      start: 0,
-      end: 0,
-      total: {
-        views: 3409580,
-        increase: null,
-        last: 24,
-      },
-    },
-  ],
-};
-
 const myListSongs = [
   {
     songId: "QgMFpuos4Rg",
@@ -2842,6 +2807,25 @@ const myListSongs = [
   },
 ];
 
+export const dumyListItem = {
+  key: "key1",
+  index: -1,
+  title: "리스트제목열두글자자자자",
+  createAt: 1684622625731,
+  user: {
+    displayName: "이름",
+    profile: {
+      type: "gorani",
+      version: 2,
+    },
+  },
+  image: {
+    name: "1",
+    version: 11,
+  },
+  songs: myListSongs,
+};
+
 export const myList = [
   {
     key: "key1",
@@ -2926,81 +2910,7 @@ export const myList = [
       name: "1",
       version: 5,
     },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "큐컴버",
-        reaction: "beBJf_eifnY",
-        date: 230702,
-        start: 0,
-        end: 0,
-        like: 0,
-        total: { views: 132930, increase: 422, last: 27 },
-      },
-      {
-        songId: "p9TFQ9ySJLs",
-        title: "봄도둑",
-        artist: "징버거",
-        remix: "",
-        reaction: "",
-        date: 230430,
-        start: 0,
-        end: 288,
-        like: 0,
-        total: { views: 1084810, increase: 402, last: 18 },
-      },
-      {
-        songId: "lLIpFxWtqCQ",
-        title:
-          "사랑하긴 했었나요 스쳐가는 인연이었나요 짧지않은 우리 함께했던 시간들이 자꾸 내 마음을 가둬두네 (Baby I need you)",
-        artist: "비챤",
-        remix: "",
-        reaction: "",
-        date: 221216,
-        start: 0,
-        end: 0,
-        like: 0,
-        total: { views: 3307240, increase: 371, last: 12 },
-      },
-      {
-        songId: "KjySNSxgg3U",
-        title: "저곳으로",
-        artist: "징버거",
-        remix: "",
-        reaction: "GZDoPjRpAoQ",
-        date: 230531,
-        start: 0,
-        end: 0,
-        like: 0,
-        total: { views: 1632994, increase: 335, last: 11 },
-      },
-      {
-        songId: "eWaBljLkd08",
-        title: "Ballin'",
-        artist: "징버거",
-        remix: "",
-        reaction: "",
-        date: 230525,
-        start: 0,
-        end: 0,
-        like: 0,
-        total: { views: 580998, increase: 333, last: 21 },
-      },
-      {
-        songId: "K8WC6uWyC9I",
-        title: "그냥 살아! (ft. 비챤)",
-        artist: "김피탕앤짬뽕",
-        remix: "",
-        reaction: "",
-        date: 220918,
-        start: 16,
-        end: 0,
-        like: 0,
-        total: { views: 7952476, increase: 319, last: 23 },
-      },
-    ],
+    songs: myListSongs,
   },
   {
     key: "key6",
@@ -3017,24 +2927,7 @@ export const myList = [
       name: "1",
       version: 6,
     },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        like: 123123,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
+    songs: myListSongs,
   },
   {
     key: "key7",
@@ -3051,24 +2944,7 @@ export const myList = [
       name: "1",
       version: 7,
     },
-    songs: [
-      {
-        songId: "kHpvUymXXEg",
-        title: "KICK BACK #Shorts",
-        artist: "왁컬로이두",
-        remix: "왁톡",
-        reaction: "WsO3ikDyk8A",
-        date: 230216,
-        start: 0,
-        end: 0,
-        like: 123123,
-        total: {
-          views: 3409580,
-          increase: null,
-          last: 24,
-        },
-      },
-    ],
+    songs: myListSongs,
   },
   {
     key: "key8",

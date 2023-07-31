@@ -7,7 +7,6 @@ import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
 import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
 
 import IconButton from "@components/globals/IconButton";
-import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import MylistItem from "@components/user/mylist/MylistItem";
 
 import PageItemContainer from "@layouts/PageItemContainer";

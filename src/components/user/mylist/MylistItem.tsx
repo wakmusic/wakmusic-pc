@@ -120,7 +120,7 @@ const MylistItem = ({
       }}
       onMouseEnter={onMouseEnter}
       onClick={() => {
-        navigate(`/user/playlists/${item.key}`, { state: item });
+        navigate(`/playlist/${item.key}`, { state: item });
       }}
     >
       <ShiftContainer>

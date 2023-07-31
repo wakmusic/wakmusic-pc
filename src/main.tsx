@@ -56,7 +56,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/search" element={<Search />} />
             <Route path="/new" element={<New />} />
             <Route path="/user/*" element={<User />} />
-            <Route path="/user/playlists/:playlist" element={<Playlist />} />
+            <Route path="/playlist/:playlistid" element={<Playlist />} />
             <Route path="/mypage" element={<MyPage />} />
           </Routes>
           <Player />

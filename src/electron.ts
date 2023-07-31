@@ -67,7 +67,7 @@ ipcMain.on("mode:default", () => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
-  win.setMaximumSize(0, 0);
+  win.setMaximumSize(10000, 10000);
   win.setMinimumSize(1250, 714);
 
   const beforeBounds = win.getBounds();
@@ -99,4 +99,13 @@ ipcMain.on("mode:separate", () => {
     beforeBounds.x + (beforeBounds.width - afterBounds.width),
     beforeBounds.y
   );
+});
+
+ipcMain.on("query:isSeparate", (event) => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  const bounds = win.getBounds();
+
+  event.returnValue = bounds.width === 290;
 });

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as ContentsInfoSVG } from "@assets/icons/ic_56_contents_info.svg";
 

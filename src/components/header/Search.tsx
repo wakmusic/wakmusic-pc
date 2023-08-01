@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as DeleteSVG } from "@assets/icons/ic_16_close.svg";
 import { ReactComponent as SearchIconSVG } from "@assets/icons/ic_16_line_search.svg";

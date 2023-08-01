@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as ArtistSVG } from "@assets/icons/ic_40_artist_disabled.svg";
 import { ReactComponent as ChartSVG } from "@assets/icons/ic_40_chart_disabled.svg";
@@ -64,7 +64,7 @@ const GNB = ({}: GNB) => {
 const Container = styled.div`
   margin-top: 20px;
   margin-left: 20px;
-  margin-right: 4px;
+  margin-right: 16px;
 `;
 
 const Navigator = styled.div`
@@ -73,7 +73,7 @@ const Navigator = styled.div`
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66; // 40% opacity
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   padding: 20px 16px;
@@ -91,7 +91,7 @@ const Login = styled.div`
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background: ${colors.white}66; // 40% opacity
+  background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 
   cursor: pointer;

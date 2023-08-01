@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { ReactComponent as DeleteSVG } from "@assets/icons/ic_16_close.svg";
 

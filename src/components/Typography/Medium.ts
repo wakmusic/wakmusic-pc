@@ -1,6 +1,16 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 import { PretendardMedium } from "./Default";
+
+export const T1Medium = styled(PretendardMedium)`
+  font-size: 24px;
+  line-height: 36px;
+`;
+
+export const T3Medium = styled(PretendardMedium)`
+  font-size: 20px;
+  line-height: 32px;
+`;
 
 export const T4Medium = styled(PretendardMedium)`
   font-size: 18px;

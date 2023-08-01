@@ -1,38 +1,26 @@
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
-import { ReactComponent as CheckSVG } from "@assets/icons/ic_16_check.svg";
 import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";
 import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg";
 
-import { T4Medium, T7Light } from "@components/Typography";
+import { T4Medium } from "@components/Typography";
+import Button from "@components/globals/IconButton";
+import UpdatedText from "@components/globals/UpdatedText";
 
 import colors from "@constants/colors";
 import { chartUpdated, hourlyChart } from "@constants/dummys";
 
-import Button from "./Button";
 import ChartItem from "./ChartItem";
 
 interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
-  const updated = new Date(Number(chartUpdated) * 1000);
-
   return (
     <Container>
       <Header>
         <HeaderTexts>
           <Title color={colors.primary900}>왁뮤차트 TOP100</Title>
-          <UpdatedContainer>
-            <CheckSVG />
-            <T7Light>
-              {String(updated.getMonth() + 1).padStart(2, "0")}월{" "}
-              {String(updated.getDate() + 1).padStart(2, "0")}일{" "}
-              {updated.getHours() > 12
-                ? "오후 " + (updated.getHours() - 12)
-                : "오전 " + updated.getHours()}
-              시 업데이트
-            </T7Light>
-          </UpdatedContainer>
+          <UpdatedText updated={chartUpdated} marginTop={9} />
         </HeaderTexts>
 
         <HeaderButtons>
@@ -59,7 +47,7 @@ const Container = styled.div`
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
-  background-color: ${colors.white}66; // 40%
+  background-color: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
 `;
 
@@ -81,16 +69,6 @@ const HeaderButtons = styled.div`
 
 const Title = styled(T4Medium)`
   margin-top: -4px;
-`;
-
-const UpdatedContainer = styled.div`
-  margin-top: 9px;
-
-  display: flex;
-  align-items: center;
-  gap: 2px;
-
-  color: ${colors.blueGray500};
 `;
 
 const Items = styled.div`

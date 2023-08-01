@@ -3182,6 +3182,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/youtube@npm:^0.0.47":
+  version: 0.0.47
+  resolution: "@types/youtube@npm:0.0.47"
+  checksum: 837d84ae727a045743ff0e1740bebd05f6f968ae2c1575108b037bdba43ee93e39848560b45bddeffd98f463e18e6ade71c208e4c5514ca29a85a5c5ebc0cc54
+  languageName: node
+  linkType: hard
+
 "@typescript-eslint/eslint-plugin@npm:^5.59.11":
   version: 5.59.11
   resolution: "@typescript-eslint/eslint-plugin@npm:5.59.11"
@@ -8127,6 +8134,7 @@ __metadata:
     "@types/node": ^20.3.1
     "@types/react": ^18.2.12
     "@types/react-dom": ^18.2.5
+    "@types/youtube": ^0.0.47
     "@typescript-eslint/eslint-plugin": ^5.59.11
     "@typescript-eslint/parser": ^5.59.11
     "@vitejs/plugin-react-swc": ^3.3.2

@@ -18,6 +18,7 @@ import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
 import Visual from "@components/player/Visual/Visual";
+import Youtube from "@components/youtube/Youtube";
 
 import RootOverlay from "@layouts/RootOverlay";
 
@@ -62,6 +63,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
       </BrowserRouter>
 
       <Visual />
+      <Youtube />
 
       <ModalPortal>
         <LoginModal />

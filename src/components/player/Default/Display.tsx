@@ -1,7 +1,9 @@
+import { useMemo } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
 import { ReactComponent as PlayListSVG } from "@assets/icons/ic_20_play_list.svg";
+import dummyThumbnail from "@assets/imgs/dummy.png";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
@@ -20,7 +22,13 @@ const Display = ({}: DisplayProps) => {
   const toggleVisualModeState = useToggleVisualModeState();
 
   const song = useCurrentSongState();
-  const img = `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`;
+  const img = useMemo(
+    () =>
+      song?.songId
+        ? `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`
+        : dummyThumbnail,
+    [song?.songId]
+  );
 
   return (
     <Container image={img}>

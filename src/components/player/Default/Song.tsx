@@ -34,8 +34,8 @@ const Song = ({}: SongProps) => {
         />
 
         <TitleContainer>
-          <TitleText>{song.title}</TitleText>
-          <ArtistText>{song.artist}</ArtistText>
+          <TitleText>{song?.title}</TitleText>
+          <ArtistText>{song?.artist}</ArtistText>
         </TitleContainer>
 
         <View />
@@ -65,6 +65,7 @@ const UpperContainer = styled.div`
 
 const TitleContainer = styled.div`
   width: 200px;
+  height: 52px;
 
   margin: 0 8px;
 

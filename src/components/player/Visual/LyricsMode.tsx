@@ -20,8 +20,8 @@ const LyricsMode = ({}: LyricsModeProps) => {
   return (
     <Container $on={controlState.isLyricsOn}>
       <TitleContainer>
-        <T4Medium color={colors.blueGray25}>{song.title}</T4Medium>
-        <T5Light color={colors.blueGray100}>{song.artist}</T5Light>
+        <T4Medium color={colors.blueGray25}>{song?.title}</T4Medium>
+        <T5Light color={colors.blueGray100}>{song?.artist}</T5Light>
       </TitleContainer>
 
       <LyricsContainer>
@@ -59,6 +59,7 @@ const Container = styled.div<{ $on: boolean }>`
 
 const TitleContainer = styled.div`
   width: 100%;
+  height: 52px;
 
   text-align: center;
 `;

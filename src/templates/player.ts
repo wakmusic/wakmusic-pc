@@ -9,6 +9,8 @@ export type SongInfo = {
   title: string;
   artist: string;
   views: number;
+  start: number;
+  end: number;
 };
 
 export type Lyrics = {
@@ -29,5 +31,13 @@ export type ControlStateType = {
 
 export type PlayingInfoStateType = {
   playlist: SongInfo[];
+  history: string[];
   current: number;
+};
+
+export type LyricType = {
+  identifier: string;
+  start: number;
+  end: number;
+  text: string;
 };

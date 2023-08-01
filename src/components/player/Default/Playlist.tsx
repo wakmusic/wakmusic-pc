@@ -107,6 +107,8 @@ const Playlist = ({}: PlaylistProps) => {
         title: song.title,
         artist: song.artist,
         views: song.views,
+        start: song.start,
+        end: song.end,
       })),
       current: playlistData.findIndex((song) => song.isPlaying),
     });

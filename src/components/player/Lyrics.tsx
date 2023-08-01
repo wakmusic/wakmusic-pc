@@ -4,9 +4,14 @@ import styled, { css } from "styled-components/macro";
 import { T4Medium, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
-import { lyrics as dummy } from "@constants/dummys";
 
-import { usePlayingProgressState } from "@hooks/player";
+import {
+  useLyricsState,
+  usePlayingProgressChangeState,
+  usePlayingProgressState,
+} from "@hooks/player";
+
+import { isNull } from "@utils/isTypes";
 
 interface LyricsProps {
   size: "large" | "medium" | "small";
@@ -14,18 +19,24 @@ interface LyricsProps {
 }
 
 const Lyrics = ({ size, extraPadding }: LyricsProps) => {
-  const lyrics = dummy;
+  const [lyrics] = useLyricsState();
 
-  const [current, setCurrent] = usePlayingProgressState();
+  const [current] = usePlayingProgressState();
+  const [, setCurrent] = usePlayingProgressChangeState();
+
   const [padding, setPadding] = useState(0);
 
   const ref = useRef<HTMLDivElement>(null);
 
   function onLineClick(index: number) {
+    if (isNull(lyrics)) return;
+
     setCurrent(lyrics[index].start);
   }
 
   const getIndex = useCallback(() => {
+    if (isNull(lyrics)) return 0;
+
     if (current < lyrics[0].start) {
       return 0;
     }
@@ -54,6 +65,14 @@ const Lyrics = ({ size, extraPadding }: LyricsProps) => {
     setPadding((ref.current?.offsetHeight ?? 0) / 2);
   }, [ref]);
 
+  if (!lyrics) {
+    return (
+      <NoLyricsContainer>
+        <NoLyrics>가사가 존재하지 않습니다</NoLyrics>
+      </NoLyricsContainer>
+    );
+  }
+
   return (
     <Container
       ref={ref}
@@ -77,6 +96,19 @@ const Lyrics = ({ size, extraPadding }: LyricsProps) => {
     </Container>
   );
 };
+
+const NoLyricsContainer = styled.div`
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NoLyrics = styled(T4Medium)`
+  color: ${colors.blueGray25};
+`;
 
 const Container = styled.div<{
   padding: number;

@@ -16,6 +16,10 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import {
   useControlState,
+  useNextSong,
+  usePlayingInfoState,
+  usePlayingLengthState,
+  usePlayingProgressState,
   useSetVolumeState,
   useToggleIsLyricsOnState,
   useToggleIsPlayingState,
@@ -30,7 +34,10 @@ import Volume from "./Volume";
 interface ControllerProps {}
 
 const Controller = ({}: ControllerProps) => {
-  const [controlState] = useControlState();
+  const [controlState, setControlState] = useControlState();
+  const [playingInfo, setPlayingInfo] = usePlayingInfoState();
+  const [, setPlayingProgress] = usePlayingProgressState();
+  const [, setPlayingLength] = usePlayingLengthState();
 
   const setVolumeState = useSetVolumeState();
   const toggleRepeatTypeState = useToggleRepeatTypeState();
@@ -38,17 +45,74 @@ const Controller = ({}: ControllerProps) => {
   const toggleIsRandomState = useToggleIsRandomState();
   const toggleIsLyricsOnState = useToggleIsLyricsOnState();
 
+  const nextSong = useNextSong();
+
   function onVolumeChange(value: number) {
     setVolumeState(value);
   }
 
-  // TODO
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  function movePrev() {}
+  function movePrev() {
+    let prevIndex = -1;
 
-  // TODO
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  function moveNext() {}
+    if (controlState.isRandom) {
+      const getSongIndex = (): number => {
+        if (playingInfo.history.length === 0) {
+          return -1;
+        }
+
+        let minus = 1;
+        let songId = playingInfo.history[playingInfo.history.length - minus];
+
+        if (songId === playingInfo.playlist[playingInfo.current].songId) {
+          songId = playingInfo.history[playingInfo.history.length - 2];
+          minus = 2;
+        }
+
+        const songIndex = playingInfo.playlist.findIndex(
+          (song) => song.songId === songId
+        );
+
+        if (songId) {
+          setPlayingInfo((prev) => ({
+            ...prev,
+            history: prev.history.slice(0, prev.history.length - minus),
+          }));
+        }
+
+        if (!songIndex) {
+          return getSongIndex();
+        }
+
+        return songIndex;
+      };
+
+      prevIndex = getSongIndex();
+    } else {
+      prevIndex = playingInfo.current - 1;
+    }
+
+    if (prevIndex < -1) {
+      prevIndex = -1;
+    }
+
+    if (prevIndex === -1) {
+      setPlayingLength(1);
+      setPlayingProgress(0);
+      setControlState((prev) => ({
+        ...prev,
+        isPlaying: false,
+      }));
+    }
+
+    setPlayingInfo((prev) => ({
+      ...prev,
+      current: prevIndex,
+    }));
+  }
+
+  function moveNext() {
+    nextSong();
+  }
 
   function getRepeatIcon() {
     switch (controlState.repeatType) {

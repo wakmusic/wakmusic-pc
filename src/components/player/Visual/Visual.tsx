@@ -1,4 +1,7 @@
+import { useMemo } from "react";
 import styled, { css } from "styled-components/macro";
+
+import dummyThumbnail from "@assets/imgs/dummy.png";
 
 import { useCurrentSongState, useVisualModeState } from "@hooks/player";
 
@@ -12,7 +15,13 @@ const Visual = ({}: VisualProps) => {
   const [visualMode] = useVisualModeState();
   const song = useCurrentSongState();
 
-  const img = `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`;
+  const img = useMemo(
+    () =>
+      song?.songId
+        ? `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`
+        : dummyThumbnail,
+    [song?.songId]
+  );
 
   return (
     <Container $image={img} $on={visualMode}>

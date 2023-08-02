@@ -28,7 +28,7 @@ interface PlaylistProps {}
 const isDefaultImage = (
   target: PlaylistType | RecommendlistType
 ): target is PlaylistType => {
-  return "name" in target && "version" in target;
+  return "name" in target.image && "version" in target.image;
 };
 
 const Playlist = ({}: PlaylistProps) => {

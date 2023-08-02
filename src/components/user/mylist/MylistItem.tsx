@@ -1,7 +1,5 @@
-import { dragAndDropState, myListState } from "@state/user/atoms";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 import styled from "styled-components/macro";
 
 import { ReactComponent as DragPlaylist } from "@assets/icons/ic_24_move.svg";
@@ -10,6 +8,8 @@ import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";
 import { T6Medium, T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
+
+import { useDragAndDropState, useMylistState } from "@hooks/mylist";
 
 import { XY } from "@pages/user/Mylist";
 
@@ -31,8 +31,8 @@ const MylistItem = ({
   onMouseEnter,
 }: MylistItemProps) => {
   const navigate = useNavigate();
-  const isEditMode = useRecoilValue(myListState);
-  const dragAndDropTarget = useRecoilValue(dragAndDropState);
+  const [isEditMode] = useMylistState();
+  const [dragAndDropTarget] = useDragAndDropState();
 
   const marginLeft = useMemo(() => {
     if (!mouseDown) return 0;

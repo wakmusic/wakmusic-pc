@@ -1,6 +1,4 @@
-import { dragAndDropState, myListState } from "@state/user/atoms";
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { useRecoilState } from "recoil";
 import styled from "styled-components/macro";
 
 import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
@@ -16,6 +14,7 @@ import { myList } from "@constants/dummys";
 
 import { useCreateListModal } from "@hooks/createListModal";
 import { useLoadListModal } from "@hooks/loadListModal";
+import { useDragAndDropState, useMylistState } from "@hooks/mylist";
 
 import { PlaylistType, myListItemType } from "@templates/playlist";
 
@@ -69,15 +68,14 @@ const getPlaylistInitialPosition = (targetIndex: number): XY => {
 };
 
 const Mylist = ({}: MylistProps) => {
-  const [isEditMode] = useRecoilState(myListState);
+  const [isEditMode] = useMylistState();
   const [shuffledList, dispatchMyList] = useReducer(shuffleMyList, myList);
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseDownPosition, setmouseDownPosition] = useState<XY>({
     x: 0,
     y: 0,
   });
-  const [dragAndDropTarget, setDragAndDropTarget] =
-    useRecoilState(dragAndDropState);
+  const [dragAndDropTarget, setDragAndDropTarget] = useDragAndDropState();
   const [playlistInitialPosition, setPlayListInitialPosition] = useState<XY>({
     x: 0,
     y: 0,

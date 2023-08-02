@@ -18,6 +18,7 @@ import PageItemContainer from "@layouts/PageItemContainer";
 import colors from "@constants/colors";
 
 import { usePlaylistState } from "@hooks/playlist";
+import { useShareListModal } from "@hooks/shareListModal";
 
 import { PlaylistType, RecommendlistType } from "@templates/playlist";
 
@@ -39,6 +40,8 @@ const Playlist = ({}: PlaylistProps) => {
 
     return state;
   }, [state]);
+
+  const shareListModal = useShareListModal();
 
   return (
     <Container>
@@ -62,7 +65,13 @@ const Playlist = ({}: PlaylistProps) => {
             <Functions>
               <IconButton icon={PlayAll}>전체 재생</IconButton>
               <IconButton icon={RandomPlay}>랜덤 재생</IconButton>
-              <Share style={{ marginLeft: "8px" }} />
+              {!isRecommendlist(playlist) && (
+                <ShareIcon
+                  onClick={() => {
+                    shareListModal(playlist.key);
+                  }}
+                />
+              )}
             </Functions>
           </Details>
         </Info>
@@ -154,6 +163,12 @@ const Functions = styled.div`
   align-items: center;
 
   margin-top: 20px;
+`;
+
+const ShareIcon = styled(Share)`
+  margin-left: 8px;
+
+  cursor: pointer;
 `;
 
 const Icon = styled.img`

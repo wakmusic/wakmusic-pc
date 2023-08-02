@@ -25,10 +25,10 @@ import { isNull } from "@utils/isTypes";
 
 interface PlaylistProps {}
 
-const isDefaultImage = (
+const isRecommendlist = (
   target: PlaylistType | RecommendlistType
-): target is PlaylistType => {
-  return "name" in target.image && "version" in target.image;
+): target is RecommendlistType => {
+  return "round" in target.image && "square" in target.image;
 };
 
 const Playlist = ({}: PlaylistProps) => {
@@ -46,9 +46,9 @@ const Playlist = ({}: PlaylistProps) => {
         <Info>
           <Icon
             src={
-              isDefaultImage(playlist)
-                ? `https://static.wakmusic.xyz/static/playlist/${playlist.image.version}.png`
-                : `https://static.wakmusic.xyz/static/playlist/icon/square/${playlist.key}.png?v=${playlist.image.square}`
+              isRecommendlist(playlist)
+                ? `https://static.wakmusic.xyz/static/playlist/icon/square/${playlist.key}.png?v=${playlist.image.square}`
+                : `https://static.wakmusic.xyz/static/playlist/${playlist.image.version}.png`
             }
           />
           <Details>
@@ -66,10 +66,12 @@ const Playlist = ({}: PlaylistProps) => {
             </Functions>
           </Details>
         </Info>
-        <TextButton
-          text={{ default: "편집", activated: "완료" }}
-          activated={isEditmode}
-        />
+        {!isRecommendlist(playlist) && (
+          <TextButton
+            text={{ default: "편집", activated: "완료" }}
+            activated={isEditmode}
+          />
+        )}
       </Header>
 
       <GuideBar

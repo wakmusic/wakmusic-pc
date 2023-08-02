@@ -1,7 +1,5 @@
-import { playlistState } from "@state/playlist/atoms";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 import { styled } from "styled-components/macro";
 
 import { ReactComponent as EditTitle } from "@assets/icons/ic_24_edit_filled.svg";
@@ -19,6 +17,8 @@ import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 
+import { usePlaylistState } from "@hooks/playlist";
+
 import { PlaylistType, RecommendlistType } from "@templates/playlist";
 
 import { isNull } from "@utils/isTypes";
@@ -32,7 +32,7 @@ const isDefaultImage = (
 };
 
 const Playlist = ({}: PlaylistProps) => {
-  const isEditmode = useRecoilValue(playlistState);
+  const [isEditmode] = usePlaylistState();
   const { state } = useLocation();
   const playlist = useMemo<PlaylistType | RecommendlistType>(() => {
     if (isNull(state)) return; // param 기반으로 플레이리스트 정보 불러오기, 추천 플레이리스트 정보 불러오기

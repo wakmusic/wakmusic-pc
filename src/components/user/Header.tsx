@@ -1,8 +1,5 @@
-import { likesState } from "@state/likes/atoms";
-import { myListState } from "@state/user/atoms";
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import styled from "styled-components/macro";
 
 import Tab from "@components/globals/Tab";
@@ -11,12 +8,15 @@ import TextButton from "@components/globals/TextButton";
 
 import { userTabs } from "@constants/tabs";
 
+import { useLikesState } from "@hooks/likes";
+import { useMylistState } from "@hooks/mylist";
+
 interface HeaderProps {}
 
 const Header = ({}: HeaderProps) => {
   const location = useLocation();
-  const [isMylistEditMode, setMylistEditMode] = useRecoilState(myListState);
-  const [isLikesEditMode, setLikesEditMode] = useRecoilState(likesState);
+  const [isMylistEditMode, setMylistEditMode] = useMylistState();
+  const [isLikesEditMode, setLikesEditMode] = useLikesState();
 
   const toggleEditMode = () => {
     if (location.pathname === "/user/playlists") {

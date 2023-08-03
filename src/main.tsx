@@ -62,6 +62,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <Header />
           <RootOverlay>
             <GNB />
+
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/playground" element={<Playground />} />
@@ -74,11 +75,11 @@ createRoot(document.getElementById("root") as HTMLElement).render(
 
               <Route path="/player" element={<PlayerFallback />} />
             </Routes>
+
             <Player />
+            <Visual />
           </RootOverlay>
         </BrowserRouter>
-
-        <Visual />
 
         <ModalPortal>
           <LoginModal />

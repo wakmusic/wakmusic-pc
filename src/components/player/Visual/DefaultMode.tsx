@@ -8,6 +8,8 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import { useControlState, useCurrentSongState } from "@hooks/player";
 
+import { getYoutubeHQThumbnail } from "@utils/staticUtill";
+
 import Controller from "../Controller";
 import Lyrics from "../Lyrics";
 import Timeline from "../Timeline";
@@ -20,7 +22,7 @@ const DefaultMode = ({}: DefaultModeProps) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const song = useCurrentSongState();
-  const img = `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`;
+  const img = getYoutubeHQThumbnail(song.songId);
 
   function changeIsLikeState() {
     setIsLiked(!isLiked);

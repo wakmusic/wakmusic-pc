@@ -19,6 +19,8 @@ import {
   useVisualModeState,
 } from "@hooks/player";
 
+import { getYoutubeHQThumbnail } from "@utils/staticUtill";
+
 import Lyrics from "../Lyrics";
 
 interface DisplayProps {}
@@ -28,7 +30,7 @@ const Display = ({}: DisplayProps) => {
   const [visualModeState, setVisualModeState] = useVisualModeState();
 
   const song = useCurrentSongState();
-  const img = `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`;
+  const img = getYoutubeHQThumbnail(song.songId);
 
   const navigate = useNavigate();
   const location = useLocation();

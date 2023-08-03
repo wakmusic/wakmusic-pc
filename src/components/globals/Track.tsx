@@ -6,6 +6,8 @@ import { T5Medium, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { getYoutubeThumbnail } from "@utils/staticUtill";
+
 interface TrackProps {
   // TODO: Interface 작업 예정
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,7 +30,7 @@ const Track = ({ item, onClick, maxWidth }: TrackProps) => {
     <Container onClick={onClickHandler}>
       <PlayIcon />
 
-      <Thumbnail src={`https://i.ytimg.com/vi/${item.songId}/default.jpg`} />
+      <Thumbnail src={getYoutubeThumbnail(item.songId)} />
 
       <TrackInfo>
         <TrackTitle $maxWidth={maxWidth}>{item.title}</TrackTitle>

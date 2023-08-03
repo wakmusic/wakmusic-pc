@@ -5,6 +5,8 @@ import styled, { css } from "styled-components/macro";
 
 import { useCurrentSongState, useVisualModeState } from "@hooks/player";
 
+import { getYoutubeHQThumbnail } from "@utils/staticUtill";
+
 import DefaultMode from "./DefaultMode";
 import Header from "./Header";
 import LyricsMode from "./LyricsMode";
@@ -15,7 +17,7 @@ const Visual = ({}: VisualProps) => {
   const [visualMode] = useVisualModeState();
   const song = useCurrentSongState();
 
-  const img = `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`;
+  const img = getYoutubeHQThumbnail(song.songId);
 
   const controls = useAnimation();
 

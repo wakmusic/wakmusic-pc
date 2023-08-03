@@ -2,7 +2,7 @@ import throttle from "lodash.throttle";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
-import { T4Medium, T6Medium } from "@components/Typography";
+import { PretendardMedium, T4Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
@@ -15,12 +15,13 @@ import {
 
 import { isNull } from "@utils/isTypes";
 
+type LyricsSize = "large" | "small";
+
 interface LyricsProps {
-  size: "large" | "medium" | "small";
-  extraPadding?: number;
+  size: LyricsSize;
 }
 
-const Lyrics = ({ size, extraPadding }: LyricsProps) => {
+const Lyrics = ({ size }: LyricsProps) => {
   const [lyrics] = useLyricsState();
 
   const [current] = usePlayingProgressState();
@@ -89,9 +90,7 @@ const Lyrics = ({ size, extraPadding }: LyricsProps) => {
   return (
     <Container
       ref={ref}
-      padding={padding}
-      $extraPadding={extraPadding ?? 0}
-      $noGap={size === "medium"}
+      $padding={padding}
       onWheel={throttle(() => setTimeout(5))}
     >
       {lyrics.map((line, i) => {
@@ -100,6 +99,7 @@ const Lyrics = ({ size, extraPadding }: LyricsProps) => {
         return (
           <Line
             key={i}
+            $size={size}
             color={colors.blueGray25}
             onClick={() => onLineClick(i)}
           >
@@ -125,21 +125,18 @@ const NoLyrics = styled(T4Medium)`
 `;
 
 const Container = styled.div<{
-  padding: number;
-  $extraPadding: number;
-  $noGap: boolean;
+  $padding: number;
 }>`
   width: 100%;
   height: 100%;
 
-  padding: ${({ padding }) => padding}px 0
-    ${({ padding, $extraPadding }) => padding + $extraPadding}px 0;
+  padding: ${({ $padding }) => $padding}px 0;
 
   overflow-y: scroll;
 
   display: flex;
   flex-direction: column;
-  gap: ${({ $noGap }) => ($noGap ? "4px" : "6px")};
+  gap: 6px;
 
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -156,16 +153,36 @@ const Line = css`
   white-space: pre-wrap;
 `;
 
-const CurrentLine = styled(T4Medium)`
-  line-height: 23px;
-
+const CurrentLine = styled(PretendardMedium)<{ $size: LyricsSize }>`
   ${Line}
+
+  ${({ $size }) =>
+    $size === "large"
+      ? css`
+          font-size: 18px;
+          line-height: 30px;
+        `
+      : css`
+          font-size: 16px;
+          line-height: 22px;
+        `}
 `;
 
-const DefaultLine = styled(T6Medium)`
+const DefaultLine = styled(PretendardMedium)<{ $size: LyricsSize }>`
   ${Line}
 
   opacity: 0.6;
+
+  ${({ $size }) =>
+    $size === "large"
+      ? css`
+          font-size: 14px;
+          line-height: 20px;
+        `
+      : css`
+          font-size: 12px;
+          line-height: 18px;
+        `}
 `;
 
 export default Lyrics;

@@ -5,9 +5,9 @@
   "repository": "https://github.com/wakmusic/wakmusic-pc.git",
   "author": "wakmusic",
   "private": true,
-  "main": "src/electron.js",
+  "main": "dist/electron.js",
   "scripts": {
-    "dev": "concurrently -k \"yarn dev:web\" \"tsc src/electron.ts && electron .\"",
+    "dev": "concurrently -k \"yarn dev:web\" \"tsc --outDir dist src/electron.ts && electron .\"",
     "dev:web": "vite --port 3000",
     "dev:electron": "tsc src/electron.ts && BUILD_TYPE=1 electron .",
     "build:web": "vite build",

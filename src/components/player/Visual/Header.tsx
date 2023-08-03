@@ -18,7 +18,7 @@ const Header = ({}: HeaderProps) => {
         <SimpleIconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
       </ReduceContainer>
 
-      <ControlBar />
+      <ControlBar isVisualMode />
     </Container>
   );
 };

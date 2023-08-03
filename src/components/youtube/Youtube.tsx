@@ -11,6 +11,7 @@ import {
   usePlayingProgressChangeState,
   usePlayingProgressState,
 } from "@hooks/player";
+import { usePrevious } from "@hooks/previous";
 
 import { SongInfo } from "@templates/player";
 
@@ -21,6 +22,7 @@ const Youtube = ({}: YoutubeProps) => {
   const [playingLength, setPlayingLength] = usePlayingLengthState();
   const [playingProgress, setPlayingProgress] = usePlayingProgressState();
   const [changeProgress] = usePlayingProgressChangeState();
+  const prevChangeProgress = usePrevious(changeProgress);
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
   const [isControlling] = useIsControllingState();
 
@@ -71,7 +73,7 @@ const Youtube = ({}: YoutubeProps) => {
             (current.end === 0 ? videoDuration : current.end) - current.start;
 
           setPlayingLength(Math.round(duration));
-          setPlayingProgress(current.start);
+          setPlayingProgress(0);
           setLoaded(true);
         }
 
@@ -127,12 +129,18 @@ const Youtube = ({}: YoutubeProps) => {
 
   // changeProgress 변경 시 영상 재생 위치 변경
   useEffect(() => {
-    if (!player.current) return;
-    if (isControlling) return;
+    if (!nowPlaying || !player.current || isControlling) return;
+    if (changeProgress === prevChangeProgress) return;
 
-    player.current.seekTo(changeProgress, true);
+    player.current.seekTo(changeProgress + nowPlaying.start, true);
     setPlayingProgress(changeProgress);
-  }, [changeProgress, isControlling, setPlayingProgress]);
+  }, [
+    changeProgress,
+    isControlling,
+    setPlayingProgress,
+    nowPlaying,
+    prevChangeProgress,
+  ]);
 
   // 재생 컨트롤
   useEffect(() => {

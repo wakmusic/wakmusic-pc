@@ -24,6 +24,15 @@ export const controlState = atom<ControlStateType>({
     isRandom: false,
     isLyricsOn: false,
   },
+  effects: [
+    ({ onSet }) => {
+      onSet((newValue, oldValue) => {
+        if (newValue.isPlaying !== (oldValue as ControlStateType).isPlaying) {
+          window.ipcRenderer?.send("rpc:playing", newValue.isPlaying);
+        }
+      });
+    },
+  ],
 });
 
 export const isControlling = atom<boolean>({
@@ -39,6 +48,13 @@ export const playingLength = atom<number>({
 export const playingProgress = atom<number>({
   key: "currentPlaying",
   default: 0,
+  effects: [
+    ({ onSet }) => {
+      onSet((value) => {
+        window.ipcRenderer?.send("rpc:progress", value);
+      });
+    },
+  ],
 });
 
 export const playingChangeProgress = atom<number>({
@@ -82,6 +98,14 @@ export const playingInfoState = atom<PlayingInfoStateType>({
     history: [],
     current: -1,
   },
+  effects: [
+    ({ onSet }) => {
+      onSet((value) => {
+        const current = value.playlist[value.current];
+        window.ipcRenderer?.send("rpc:track", current);
+      });
+    },
+  ],
 });
 
 export const lyricsState = atom<LyricType[] | null>({

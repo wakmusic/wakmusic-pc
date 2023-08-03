@@ -9,6 +9,18 @@ export const userInfo = {
 
 export const hourlyChart = [
   {
+    songId: "AA8acCRSvEA",
+    title: "버스 안에서",
+    artist: "오이쿤(주폭), 윤대대(주폭), 코코미(지하돌), 배춘희(지하돌)",
+    remix: "",
+    reaction: "v1IpzIezRxY",
+    date: 230630,
+    start: 41,
+    end: 230,
+    like: 0,
+    hourly: { views: 51174, increase: 93, last: 84 },
+  },
+  {
     songId: "QgMFpuos4Rg",
     title: "LOCKDOWN",
     artist: "이세계아이돌",
@@ -1004,18 +1016,6 @@ export const hourlyChart = [
     end: 0,
     like: 0,
     hourly: { views: 1026547, increase: 94, last: 80 },
-  },
-  {
-    songId: "AA8acCRSvEA",
-    title: "버스 안에서",
-    artist: "오이쿤(주폭), 윤대대(주폭), 코코미(지하돌), 배춘희(지하돌)",
-    remix: "",
-    reaction: "v1IpzIezRxY",
-    date: 230630,
-    start: 41,
-    end: 230,
-    like: 0,
-    hourly: { views: 51174, increase: 93, last: 84 },
   },
   {
     songId: "8tJb1YlMHfA",

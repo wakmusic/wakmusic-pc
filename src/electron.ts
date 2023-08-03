@@ -2,7 +2,13 @@ import { BrowserWindow, app, ipcMain, nativeImage } from "electron";
 import * as isDev from "electron-is-dev";
 import { join } from "path";
 
-import { runDiscordRPC } from "./electron/discord";
+import {
+  changePresence,
+  client,
+  setProgress,
+  showPlaying,
+} from "./electron/discord";
+import { SongInfo } from "./templates/player";
 
 (async () => {
   // Initialize the Electron application
@@ -13,6 +19,7 @@ import { runDiscordRPC } from "./electron/discord";
       minWidth: 1250,
       minHeight: 714,
       frame: false,
+      show: false,
       backgroundColor: "#FFF",
       icon: nativeImage.createFromPath(
         join(__dirname, "../public/favicon.ico")
@@ -37,7 +44,10 @@ import { runDiscordRPC } from "./electron/discord";
       win.loadFile(join(__dirname, "../dist/index.html"));
     }
 
-    runDiscordRPC();
+    win.once("ready-to-show", () => {
+      win.show();
+      client.login();
+    });
   });
 })();
 
@@ -59,4 +69,16 @@ ipcMain.on("window:max", () => {
 ipcMain.on("window:close", () => {
   const win = BrowserWindow.getFocusedWindow();
   if (win) win.close();
+});
+
+ipcMain.on("rpc:progress", (_event, progress: number) => {
+  setProgress(progress);
+});
+
+ipcMain.on("rpc:playing", (_event, isPlaying: boolean) => {
+  showPlaying(isPlaying);
+});
+
+ipcMain.on("rpc:track", (_event, current: SongInfo | null) => {
+  changePresence(current);
 });

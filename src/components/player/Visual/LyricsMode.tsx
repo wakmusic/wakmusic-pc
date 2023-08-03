@@ -68,6 +68,7 @@ const LyricsContainer = styled.div`
   height: 243px;
 
   margin-top: 24px;
+  padding-top: 10px;
 `;
 
 const TimelineContainer = styled.div`

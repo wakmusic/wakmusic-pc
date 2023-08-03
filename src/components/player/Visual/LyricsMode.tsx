@@ -25,7 +25,9 @@ const LyricsMode = ({}: LyricsModeProps) => {
       </TitleContainer>
 
       <LyricsContainer>
-        <Lyrics size="large" />
+        <LyricsInnerContainer>
+          <Lyrics size="large" />
+        </LyricsInnerContainer>
       </LyricsContainer>
 
       <TimelineContainer>
@@ -65,10 +67,12 @@ const TitleContainer = styled.div`
 
 const LyricsContainer = styled.div`
   width: 100%;
-  height: 243px;
-
   margin-top: 24px;
-  padding-top: 10px;
+`;
+
+const LyricsInnerContainer = styled.div`
+  width: 100%;
+  height: 243px;
 `;
 
 const TimelineContainer = styled.div`

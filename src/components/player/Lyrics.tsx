@@ -1,3 +1,4 @@
+import throttle from "lodash.throttle";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
@@ -5,6 +6,7 @@ import { T4Medium, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useInterval } from "@hooks/interval";
 import {
   useLyricsState,
   usePlayingProgressChangeState,
@@ -25,6 +27,8 @@ const Lyrics = ({ size, extraPadding }: LyricsProps) => {
   const [, setCurrent] = usePlayingProgressChangeState();
 
   const [padding, setPadding] = useState(0);
+
+  const [timeout, setTimeout] = useState<number>(0);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -50,6 +54,7 @@ const Lyrics = ({ size, extraPadding }: LyricsProps) => {
 
   useEffect(() => {
     if (!ref.current) return;
+    if (timeout !== 0) return;
 
     const index = getIndex();
 
@@ -59,11 +64,19 @@ const Lyrics = ({ size, extraPadding }: LyricsProps) => {
     const top = target.offsetTop - ref.current.offsetTop - padding + 12;
 
     ref.current.scrollTo({ top, behavior: "smooth" });
-  }, [getIndex, padding]);
+  }, [getIndex, padding, timeout]);
 
   useEffect(() => {
     setPadding((ref.current?.offsetHeight ?? 0) / 2);
   }, [ref]);
+
+  useInterval(() => {
+    setTimeout((prev) => {
+      if (prev === 0) return 0;
+
+      return prev - 1;
+    });
+  }, 1000);
 
   if (!lyrics) {
     return (
@@ -79,6 +92,7 @@ const Lyrics = ({ size, extraPadding }: LyricsProps) => {
       padding={padding}
       $extraPadding={extraPadding ?? 0}
       $noGap={size === "medium"}
+      onWheel={throttle(() => setTimeout(5))}
     >
       {lyrics.map((line, i) => {
         const Line = i === getIndex() ? CurrentLine : DefaultLine;

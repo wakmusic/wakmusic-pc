@@ -11,6 +11,9 @@ import {
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 import { RepeatType } from "@templates/player";
+import { Song } from "@templates/song";
+
+import getChartData from "@utils/getChartData";
 
 export const usePlayingLengthState = () => {
   return useRecoilState(playingLength);
@@ -174,4 +177,28 @@ export const useNextSong = () => {
   };
 
   return handler;
+};
+
+export const usePlaySong = () => {
+  const setPlayingInfo = useSetRecoilState(playingInfoState);
+
+  return (song: Song) => {
+    const chartData = getChartData(song);
+
+    setPlayingInfo((prev) => ({
+      ...prev,
+      current: prev.playlist.length,
+      playlist: [
+        ...prev.playlist,
+        {
+          songId: song.songId,
+          title: song.title,
+          artist: song.artist,
+          views: chartData.views,
+          start: song.start,
+          end: song.end,
+        },
+      ],
+    }));
+  };
 };

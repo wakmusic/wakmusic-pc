@@ -54,7 +54,10 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
       }
 
       setIsMouseDown(true);
-      changeProgressPosition(e);
+
+      if (e.type === "mousedown") {
+        changeProgressPosition(e);
+      }
     },
     [changeProgressPosition]
   );

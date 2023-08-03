@@ -22,18 +22,17 @@ const Youtube = ({}: YoutubeProps) => {
   const [playingLength, setPlayingLength] = usePlayingLengthState();
   const [playingProgress, setPlayingProgress] = usePlayingProgressState();
   const [changeProgress] = usePlayingProgressChangeState();
-  const prevChangeProgress = usePrevious(changeProgress);
-  const [playingInfo, setPlayingInfo] = usePlayingInfoState();
+  const [playingInfo] = usePlayingInfoState();
   const [isControlling] = useIsControllingState();
 
+  const [nowPlaying, setNowPlaying] = useState<SongInfo | null>(null);
   const [loaded, setLoaded] = useState(false);
+
+  const prevSongId = usePrevious(nowPlaying?.songId);
 
   const nextSong = useNextSong();
 
-  const [nowPlaying, setNowPlaying] = useState<SongInfo | null>(null);
-
   const player = useRef<YT.Player>();
-
   const playerState = useRef<{
     current: SongInfo | null;
     loaded: boolean;
@@ -42,15 +41,12 @@ const Youtube = ({}: YoutubeProps) => {
     loaded: false,
   });
 
+  // 괴랄한 유튜브 iframe api를 사용하기 위한 꼼수
   useEffect(() => {
     setNowPlaying(playingInfo.playlist[playingInfo.current]);
-
     playerState.current.current = playingInfo.playlist[playingInfo.current];
-  }, [playingInfo]);
-
-  useEffect(() => {
     playerState.current.loaded = loaded;
-  }, [loaded]);
+  }, [playingInfo, loaded]);
 
   const onStateChange = useCallback(
     (e: YT.OnStateChangeEvent) => {
@@ -101,13 +97,13 @@ const Youtube = ({}: YoutubeProps) => {
 
   // 영상 재생
   useEffect(() => {
-    if (!nowPlaying) return;
-    if (!player.current) return;
+    if (!nowPlaying || !player.current || prevSongId === nowPlaying.songId)
+      return;
 
     setLoaded(false);
 
     player.current.loadVideoById(nowPlaying.songId, nowPlaying.start);
-  }, [nowPlaying]);
+  }, [nowPlaying, prevSongId]);
 
   // 영상 재생 위치 변경
   useInterval(() => {
@@ -129,18 +125,13 @@ const Youtube = ({}: YoutubeProps) => {
 
   // changeProgress 변경 시 영상 재생 위치 변경
   useEffect(() => {
+    const nowPlaying = playerState.current.current;
+
     if (!nowPlaying || !player.current || isControlling) return;
-    if (changeProgress === prevChangeProgress) return;
 
     player.current.seekTo(changeProgress + nowPlaying.start, true);
     setPlayingProgress(changeProgress);
-  }, [
-    changeProgress,
-    isControlling,
-    setPlayingProgress,
-    nowPlaying,
-    prevChangeProgress,
-  ]);
+  }, [changeProgress, isControlling, setPlayingProgress]);
 
   // 재생 컨트롤
   useEffect(() => {
@@ -161,13 +152,6 @@ const Youtube = ({}: YoutubeProps) => {
   return <Container id="wakmu-youtube" />;
 };
 
-const Container = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 500px;
-  height: 300px;
-  z-index: 100;
-`;
+const Container = styled.div``;
 
 export default Youtube;

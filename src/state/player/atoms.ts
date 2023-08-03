@@ -1,13 +1,12 @@
 import { atom } from "recoil";
 
-import { hourlyChart as dummy, lyrics as lyricsDummy } from "@constants/dummys";
+import { lyrics as lyricsDummy } from "@constants/dummys";
 
 import {
   ControlStateType,
   LyricType,
   PlayingInfoStateType,
   RepeatType,
-  SongInfo,
 } from "@templates/player";
 
 export const visualModeState = atom<boolean>({
@@ -18,7 +17,7 @@ export const visualModeState = atom<boolean>({
 export const controlState = atom<ControlStateType>({
   key: "control",
   default: {
-    volume: 50,
+    volume: Number(localStorage.getItem("volume")) || 100,
     repeatType: RepeatType.Off,
     isPlaying: false,
     isRandom: false,
@@ -29,6 +28,10 @@ export const controlState = atom<ControlStateType>({
       onSet((newValue, oldValue) => {
         if (newValue.isPlaying !== (oldValue as ControlStateType).isPlaying) {
           window.ipcRenderer?.send("rpc:playing", newValue.isPlaying);
+        }
+
+        if (newValue.volume !== (oldValue as ControlStateType).volume) {
+          localStorage.setItem("volume", newValue.volume.toString());
         }
       });
     },
@@ -64,45 +67,22 @@ export const playingChangeProgress = atom<number>({
 
 export const playingInfoState = atom<PlayingInfoStateType>({
   key: "playingInfo",
-  // dummy
   default: {
-    playlist: [
-      ...[...dummy].map(
-        (song) =>
-          ({
-            songId: song.songId,
-            title: song.title,
-            artist: song.artist,
-            views: song.hourly.views,
-            start: song.start,
-            end: song.end,
-          } as unknown as SongInfo)
-      ),
-      {
-        songId: "Qunl6JX5RPg",
-        title: "저랑 사겨주세요",
-        artist: "봉인 풀린 주르르",
-        views: 0,
-        start: 0,
-        end: 0,
-      },
-      {
-        songId: "gnLdwkh4rjw",
-        title: "순혈주의자",
-        artist: "달의하루",
-        views: 0,
-        start: 0,
-        end: 0,
-      },
-    ],
+    playlist: localStorage.getItem("playlist")
+      ? JSON.parse(localStorage.getItem("playlist") as string)
+      : [],
     history: [],
     current: -1,
   },
   effects: [
     ({ onSet }) => {
-      onSet((value) => {
+      onSet((value, oldValue) => {
         const current = value.playlist[value.current];
         window.ipcRenderer?.send("rpc:track", current);
+
+        if (value.playlist !== (oldValue as PlayingInfoStateType).playlist) {
+          localStorage.setItem("playlist", JSON.stringify(value.playlist));
+        }
       });
     },
   ],

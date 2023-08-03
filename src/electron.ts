@@ -58,6 +58,7 @@ ipcMain.on("window:least", () => {
 
 ipcMain.on("window:max", () => {
   const win = BrowserWindow.getFocusedWindow();
+
   if (win)
     if (win.isMaximized()) {
       win.unmaximize();
@@ -69,6 +70,53 @@ ipcMain.on("window:max", () => {
 ipcMain.on("window:close", () => {
   const win = BrowserWindow.getFocusedWindow();
   if (win) win.close();
+});
+
+ipcMain.on("mode:default", () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  win.setMaximumSize(10000, 10000);
+  win.setMinimumSize(1250, 714);
+
+  const beforeBounds = win.getBounds();
+
+  win.setSize(1250, 714);
+
+  const afterBounds = win.getBounds();
+
+  win.setPosition(
+    beforeBounds.x + (beforeBounds.width - afterBounds.width),
+    beforeBounds.y
+  );
+});
+
+ipcMain.on("mode:separate", () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  win.setMaximumSize(290, 10000);
+  win.setMinimumSize(290, 714);
+
+  const beforeBounds = win.getBounds();
+
+  win.setSize(290, 714);
+
+  const afterBounds = win.getBounds();
+
+  win.setPosition(
+    beforeBounds.x + (beforeBounds.width - afterBounds.width),
+    beforeBounds.y
+  );
+});
+
+ipcMain.on("query:isSeparate", (event) => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  const bounds = win.getBounds();
+
+  event.returnValue = bounds.width === 290;
 });
 
 ipcMain.on("rpc:progress", (_event, progress: number) => {

@@ -10,6 +10,8 @@ import { usePlaySong } from "@hooks/player";
 
 import { Song } from "@templates/song";
 
+import { getYoutubeThumbnail } from "@utils/staticUtill";
+
 interface TrackProps {
   item: Song;
 
@@ -29,7 +31,7 @@ const Track = ({ item, maxWidth }: TrackProps) => {
     <Container onClick={onClickHandler}>
       <PlayIcon />
 
-      <Thumbnail src={`https://i.ytimg.com/vi/${item.songId}/default.jpg`} />
+      <Thumbnail src={getYoutubeThumbnail(item.songId)} />
 
       <TrackInfo>
         <TrackTitle $maxWidth={maxWidth}>{item.title}</TrackTitle>

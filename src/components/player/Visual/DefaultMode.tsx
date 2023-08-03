@@ -9,6 +9,8 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import { useControlState, useCurrentSongState } from "@hooks/player";
 
+import { getYoutubeHQThumbnail } from "@utils/staticUtill";
+
 import Controller from "../Controller";
 import Lyrics from "../Lyrics";
 import Timeline from "../Timeline";
@@ -22,10 +24,7 @@ const DefaultMode = ({}: DefaultModeProps) => {
 
   const song = useCurrentSongState();
   const img = useMemo(
-    () =>
-      song?.songId
-        ? `https://i.ytimg.com/vi/${song.songId}/hqdefault.jpg`
-        : dummyThumbnail,
+    () => (song?.songId ? getYoutubeHQThumbnail(song.songId) : dummyThumbnail),
     [song?.songId]
   );
 
@@ -47,7 +46,7 @@ const DefaultMode = ({}: DefaultModeProps) => {
         <Thumbnail src={img} />
 
         <LyricsContainer>
-          <Lyrics size="small" />
+          <Lyrics size="large" />
         </LyricsContainer>
 
         <TimelineContainer>

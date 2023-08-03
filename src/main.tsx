@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 import "overlayscrollbars/overlayscrollbars.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
@@ -41,40 +43,53 @@ import "./index.css";
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      staleTime: 5000,
+    },
+  },
+});
+
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <RecoilRoot>
-      <BrowserRouter>
-        <Header />
-        <RootOverlay>
-          <GNB />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/playground" element={<Playground />} />
-            <Route path="/chart" element={<Chart />} />
-            <Route path="/artists" element={<Artists />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/new" element={<New />} />
-            <Route path="/user/*" element={<User />} />
-            <Route path="/mypage" element={<MyPage />} />
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+          <Header />
+          <RootOverlay>
+            <GNB />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/playground" element={<Playground />} />
+              <Route path="/chart" element={<Chart />} />
+              <Route path="/artists" element={<Artists />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/new" element={<New />} />
+              <Route path="/user/*" element={<User />} />
+              <Route path="/mypage" element={<MyPage />} />
 
-            <Route path="/player" element={<PlayerFallback />} />
-          </Routes>
-          <Player />
-        </RootOverlay>
+              <Route path="/player" element={<PlayerFallback />} />
+            </Routes>
+            <Player />
+          </RootOverlay>
+        </BrowserRouter>
 
         <Visual />
-      </BrowserRouter>
 
-      <ModalPortal>
-        <LoginModal />
-        <SelectProfileModal />
-        <AlertModal />
-        <ConfirmModal />
-        <CreateListModal />
-        <LoadListModal />
-        <ShareListModal />
-      </ModalPortal>
+        <ModalPortal>
+          <LoginModal />
+          <SelectProfileModal />
+          <AlertModal />
+          <ConfirmModal />
+          <CreateListModal />
+          <LoadListModal />
+          <ShareListModal />
+        </ModalPortal>
+      </QueryClientProvider>
     </RecoilRoot>
   </StrictMode>
 );

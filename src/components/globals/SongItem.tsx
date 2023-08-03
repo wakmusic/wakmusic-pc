@@ -23,7 +23,6 @@ interface SongItemProps {
   features?: SongItemFeature[];
   selected?: boolean;
 
-  onPlayClick?: (song: Song) => void;
   onClick?: (song: Song) => void;
 
   noPadding?: boolean;
@@ -63,7 +62,6 @@ const SongItem = ({
   editMode,
   features,
   selected,
-  onPlayClick,
   onClick,
   noPadding,
 }: SongItemProps) => {
@@ -92,7 +90,7 @@ const SongItem = ({
       {editMode && <MoveButton />}
 
       <TrackWrapper $width={width}>
-        <Track item={song} onClick={onPlayClick} maxWidth={width - 80} />
+        <Track item={song} maxWidth={width - 80} />
       </TrackWrapper>
 
       {featureTexts.map((text, index) => (

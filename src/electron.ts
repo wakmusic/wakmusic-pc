@@ -2,6 +2,8 @@ import { BrowserWindow, app, ipcMain, nativeImage } from "electron";
 import * as isDev from "electron-is-dev";
 import { join } from "path";
 
+import { runDiscordRPC } from "./electron/discord";
+
 (async () => {
   // Initialize the Electron application
   app.whenReady().then(() => {
@@ -34,6 +36,8 @@ import { join } from "path";
     } else {
       win.loadFile(join(__dirname, "../dist/index.html"));
     }
+
+    runDiscordRPC();
   });
 })();
 

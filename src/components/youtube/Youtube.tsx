@@ -40,6 +40,7 @@ const Youtube = ({}: YoutubeProps) => {
   const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
+  const gainNode = useRef<GainNode>();
   const player = useRef<YT.Player>();
   const playerState = useRef<{
     current: SongInfo | null;
@@ -65,6 +66,26 @@ const Youtube = ({}: YoutubeProps) => {
       }
 
       if (e.data === YT.PlayerState.PLAYING) {
+        const iframe = e.target.getIframe() as HTMLIFrameElement;
+        const video = iframe.contentWindow?.document.querySelector("video");
+
+        if (video) {
+          // 노멀라이즈 비활성화
+          video.volume = 1;
+        }
+
+        if (!gainNode.current && video) {
+          const audioCtx = new AudioContext();
+          const source = audioCtx.createMediaElementSource(video);
+
+          gainNode.current = audioCtx.createGain();
+          gainNode.current.gain.value = (controlState.volume * 2) / 100;
+          source.connect(gainNode.current);
+          console.log("gainNode", gainNode.current.gain.value);
+
+          gainNode.current.connect(audioCtx.destination);
+        }
+
         if (!playerState.current.loaded && playerState.current.current) {
           const current = playerState.current.current;
           const videoDuration = Math.round(
@@ -200,9 +221,9 @@ const Youtube = ({}: YoutubeProps) => {
 
   // 볼륨 컨트롤
   useEffect(() => {
-    if (!player.current) return;
+    if (!player.current || !gainNode.current) return;
 
-    player.current.setVolume(controlState.volume);
+    gainNode.current.gain.value = (controlState.volume * 2) / 100;
   }, [controlState.volume]);
 
   return <Container id="wakmu-youtube" />;

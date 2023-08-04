@@ -17,7 +17,7 @@ export const visualModeState = atom<boolean>({
 export const controlState = atom<ControlStateType>({
   key: "control",
   default: {
-    volume: Number(localStorage.getItem("volume")) || 100,
+    volume: Number(localStorage.getItem("volume")) || 50,
     repeatType: RepeatType.Off,
     isPlaying: false,
     isRandom: false,

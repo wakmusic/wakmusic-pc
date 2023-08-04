@@ -25,9 +25,7 @@ const LyricsMode = ({}: LyricsModeProps) => {
       </TitleContainer>
 
       <LyricsContainer>
-        <LyricsInnerContainer>
-          <Lyrics size="large" />
-        </LyricsInnerContainer>
+        <Lyrics size="large" />
       </LyricsContainer>
 
       <TimelineContainer>
@@ -52,6 +50,8 @@ const Container = styled.div<{ $on: boolean }>`
 
   visibility: hidden;
 
+  margin-top: -73px;
+
   ${({ $on }) =>
     $on &&
     css`
@@ -68,25 +68,21 @@ const TitleContainer = styled.div`
 
 const LyricsContainer = styled.div`
   width: 100%;
-  margin-top: 24px;
-`;
-
-const LyricsInnerContainer = styled.div`
-  width: 100%;
   height: 243px;
+
+  margin-top: 35px;
 `;
 
 const TimelineContainer = styled.div`
   width: 100%;
 
-  margin: 76px 0 20px 0;
+  margin-top: 64px;
+  margin-bottom: 42px;
 `;
 
 const ControllerContainer = styled.div`
   display: flex;
   justify-content: center;
-
-  margin: 19px 0 72px 0;
 `;
 
 export default LyricsMode;

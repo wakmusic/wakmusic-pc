@@ -10,6 +10,7 @@ import {
   usePlayingLengthState,
   usePlayingProgressChangeState,
   usePlayingProgressState,
+  usePrevSong,
 } from "@hooks/player";
 import { usePrevious } from "@hooks/previous";
 
@@ -31,6 +32,7 @@ const Youtube = ({}: YoutubeProps) => {
   const [loaded, setLoaded] = useState(false);
 
   const prevSongId = usePrevious(nowPlaying?.songId);
+  const prevChangeProgress = usePrevious(changeProgress);
 
   const nextSong = useNextSong();
 
@@ -131,7 +133,13 @@ const Youtube = ({}: YoutubeProps) => {
   useEffect(() => {
     const nowPlaying = playerState.current.current;
 
-    if (!nowPlaying || !player.current || isControlling) return;
+    if (
+      changeProgress !== prevChangeProgress ||
+      !nowPlaying ||
+      !player.current ||
+      isControlling
+    )
+      return;
 
     player.current.seekTo(changeProgress + nowPlaying.start, true);
     setPlayingProgress(changeProgress);

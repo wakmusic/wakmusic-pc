@@ -5,7 +5,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
 import GNB from "@components/gnb/GNB";
@@ -58,7 +58,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+        <HashRouter>
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
           <Header />
 
@@ -83,7 +83,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           </RootOverlay>
 
           <CheckPlayerMode />
-        </BrowserRouter>
+        </HashRouter>
 
         <Youtube />
 

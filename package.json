@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "concurrently -k \"yarn dev:web\" \"tsc --outDir dist src/electron.ts && electron .\"",
     "dev:web": "vite --port 3000",
-    "dev:electron": "tsc src/electron.ts && BUILD_TYPE=1 electron .",
+    "dev:electron": "tsc --outDir dist src/electron.ts && BUILD_TYPE=1 electron .",
     "build:web": "vite build",
     "lint": "eslint src --ext .ts,.tsx",
     "format": "eslint src --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\""

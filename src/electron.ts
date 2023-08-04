@@ -114,13 +114,13 @@ ipcMain.on("mode:separate", () => {
   );
 });
 
-ipcMain.on("query:isSeparate", (event) => {
+ipcMain.on("query:isSeparate", () => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
   const bounds = win.getBounds();
 
-  event.returnValue = bounds.width === 290;
+  ipcMain.emit("reply:isSeparate", bounds.width === 290);
 });
 
 ipcMain.on("rpc:progress", (_event, progress: number) => {

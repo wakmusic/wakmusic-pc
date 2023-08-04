@@ -180,10 +180,18 @@ export const useNextSong = () => {
 };
 
 export const usePlaySong = () => {
-  const setPlayingInfo = useSetRecoilState(playingInfoState);
+  const [playingInfo, setPlayingInfo] = useRecoilState(playingInfoState);
+  const setPlayingChangeProgress = useSetRecoilState(playingChangeProgress);
 
   return (song: Song) => {
     const chartData = getChartData(song);
+    const current = playingInfo.playlist[playingInfo.current];
+
+    if (current?.songId === song.songId) {
+      setPlayingChangeProgress(0);
+
+      return;
+    }
 
     setPlayingInfo((prev) => ({
       ...prev,

@@ -134,7 +134,7 @@ const Youtube = ({}: YoutubeProps) => {
     const nowPlaying = playerState.current.current;
 
     if (
-      changeProgress !== prevChangeProgress ||
+      (changeProgress !== 0 && changeProgress !== prevChangeProgress) ||
       !nowPlaying ||
       !player.current ||
       isControlling

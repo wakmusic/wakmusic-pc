@@ -15,6 +15,8 @@ import { usePrevious } from "@hooks/previous";
 
 import { SongInfo } from "@templates/player";
 
+import { applyHook } from "@utils/consoleApi";
+
 interface YoutubeProps {}
 
 const Youtube = ({}: YoutubeProps) => {
@@ -22,7 +24,7 @@ const Youtube = ({}: YoutubeProps) => {
   const [playingLength, setPlayingLength] = usePlayingLengthState();
   const [playingProgress, setPlayingProgress] = usePlayingProgressState();
   const [changeProgress] = usePlayingProgressChangeState();
-  const [playingInfo] = usePlayingInfoState();
+  const [playingInfo, setPlayingInfo] = usePlayingInfoState();
   const [isControlling] = useIsControllingState();
 
   const [nowPlaying, setNowPlaying] = useState<SongInfo | null>(null);
@@ -40,6 +42,8 @@ const Youtube = ({}: YoutubeProps) => {
     current: null,
     loaded: false,
   });
+
+  applyHook(setPlayingInfo);
 
   // 괴랄한 유튜브 iframe api를 사용하기 위한 꼼수
   useEffect(() => {

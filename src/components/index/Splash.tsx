@@ -44,7 +44,7 @@ const Container = styled(motion.div)`
 
   background-color: ${colors.white};
 
-  z-index: 999999;
+  z-index: 1000;
 
   display: flex;
   justify-content: center;

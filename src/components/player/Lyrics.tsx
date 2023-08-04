@@ -40,9 +40,7 @@ const Lyrics = ({ size }: LyricsProps) => {
   }
 
   const getIndex = useCallback(() => {
-    if (isNull(lyrics)) return 0;
-
-    if (current < lyrics[0].start) {
+    if (isNull(lyrics) || current < lyrics[0].start) {
       return 0;
     }
 

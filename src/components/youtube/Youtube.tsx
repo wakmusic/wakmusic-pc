@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import styled from "styled-components/macro";
+import styled from "styled-components";
 
 import { useInterval } from "@hooks/interval";
 import {
@@ -11,12 +11,14 @@ import {
   usePlayingProgressChangeState,
   usePlayingProgressState,
   usePrevSong,
+  useToggleIsPlayingState,
 } from "@hooks/player";
 import { usePrevious } from "@hooks/previous";
 
 import { SongInfo } from "@templates/player";
 
 import { applyHook } from "@utils/consoleApi";
+import { getYoutubeHQThumbnail } from "@utils/staticUtill";
 
 interface YoutubeProps {}
 
@@ -34,6 +36,8 @@ const Youtube = ({}: YoutubeProps) => {
   const prevSongId = usePrevious(nowPlaying?.songId);
   const prevChangeProgress = usePrevious(changeProgress);
 
+  const toggleIsPlayingState = useToggleIsPlayingState();
+  const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
   const player = useRef<YT.Player>();
@@ -74,6 +78,38 @@ const Youtube = ({}: YoutubeProps) => {
           const duration =
             (current.end === 0 ? videoDuration : current.end) - current.start;
 
+          const iframe = e.target.getIframe() as HTMLIFrameElement;
+
+          // 그냥 넣으면 안먹힘
+          setTimeout(() => {
+            if (iframe.contentWindow) {
+              const mediaSession = iframe.contentWindow.navigator.mediaSession;
+
+              mediaSession.metadata = new MediaMetadata({
+                title: current.title,
+                artist: current.artist,
+                artwork: [
+                  {
+                    src: getYoutubeHQThumbnail(current.songId),
+                    sizes: "480x360",
+                    type: "image/jpg",
+                  },
+                ],
+              });
+
+              mediaSession.setActionHandler("nexttrack", () => nextSong());
+              mediaSession.setActionHandler("previoustrack", () => prevSong());
+
+              mediaSession.setActionHandler("play", () =>
+                toggleIsPlayingState()
+              );
+
+              mediaSession.setActionHandler("pause", () =>
+                toggleIsPlayingState()
+              );
+            }
+          }, 500);
+
           setPlayingLength(Math.round(duration));
           setPlayingProgress(0);
           setLoaded(true);
@@ -91,7 +127,7 @@ const Youtube = ({}: YoutubeProps) => {
 
   // 유튜브 플레이어 생성
   useEffect(() => {
-    new YT.Player("wakmu-youtube", {
+    const _player = new YT.Player("wakmu-youtube", {
       events: {
         onReady: (e) => {
           player.current = e.target;
@@ -99,6 +135,10 @@ const Youtube = ({}: YoutubeProps) => {
         onStateChange: onStateChange,
       },
     });
+
+    return () => {
+      _player.destroy();
+    };
   }, [onStateChange]);
 
   // 영상 재생

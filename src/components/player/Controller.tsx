@@ -17,9 +17,7 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 import {
   useControlState,
   useNextSong,
-  usePlayingInfoState,
-  usePlayingLengthState,
-  usePlayingProgressState,
+  usePrevSong,
   useSetVolumeState,
   useToggleIsLyricsOnState,
   useToggleIsPlayingState,
@@ -34,10 +32,7 @@ import Volume from "./Volume";
 interface ControllerProps {}
 
 const Controller = ({}: ControllerProps) => {
-  const [controlState, setControlState] = useControlState();
-  const [playingInfo, setPlayingInfo] = usePlayingInfoState();
-  const [, setPlayingProgress] = usePlayingProgressState();
-  const [, setPlayingLength] = usePlayingLengthState();
+  const [controlState] = useControlState();
 
   const setVolumeState = useSetVolumeState();
   const toggleRepeatTypeState = useToggleRepeatTypeState();
@@ -45,73 +40,11 @@ const Controller = ({}: ControllerProps) => {
   const toggleIsRandomState = useToggleIsRandomState();
   const toggleIsLyricsOnState = useToggleIsLyricsOnState();
 
+  const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
   function onVolumeChange(value: number) {
     setVolumeState(value);
-  }
-
-  function movePrev() {
-    let prevIndex = -1;
-
-    if (controlState.isRandom) {
-      const getSongIndex = (): number => {
-        if (playingInfo.history.length === 0) {
-          return -1;
-        }
-
-        let minus = 1;
-        let songId = playingInfo.history[playingInfo.history.length - minus];
-
-        if (songId === playingInfo.playlist[playingInfo.current].songId) {
-          songId = playingInfo.history[playingInfo.history.length - 2];
-          minus = 2;
-        }
-
-        const songIndex = playingInfo.playlist.findIndex(
-          (song) => song.songId === songId
-        );
-
-        if (songId) {
-          setPlayingInfo((prev) => ({
-            ...prev,
-            history: prev.history.slice(0, prev.history.length - minus),
-          }));
-        }
-
-        if (!songIndex) {
-          return getSongIndex();
-        }
-
-        return songIndex;
-      };
-
-      prevIndex = getSongIndex();
-    } else {
-      prevIndex = playingInfo.current - 1;
-    }
-
-    if (prevIndex < -1) {
-      prevIndex = -1;
-    }
-
-    if (prevIndex === -1) {
-      setPlayingLength(1);
-      setPlayingProgress(0);
-      setControlState((prev) => ({
-        ...prev,
-        isPlaying: false,
-      }));
-    }
-
-    setPlayingInfo((prev) => ({
-      ...prev,
-      current: prevIndex,
-    }));
-  }
-
-  function moveNext() {
-    nextSong();
   }
 
   function getRepeatIcon() {
@@ -132,12 +65,12 @@ const Controller = ({}: ControllerProps) => {
         icon={getRepeatIcon()}
         onClick={toggleRepeatTypeState}
       />
-      <SimpleIconButton icon={PrevSvg} onClick={movePrev} />
+      <SimpleIconButton icon={PrevSvg} onClick={prevSong} />
       <SimpleIconButton
         icon={controlState.isPlaying ? StopSvg : PlaySvg}
         onClick={toggleIsPlayingState}
       />
-      <SimpleIconButton icon={NextSvg} onClick={moveNext} />
+      <SimpleIconButton icon={NextSvg} onClick={nextSong} />
       <SimpleIconButton
         icon={controlState.isRandom ? RandomOnSvg : RandomOffSvg}
         onClick={toggleIsRandomState}

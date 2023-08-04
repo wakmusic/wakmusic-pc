@@ -10,6 +10,8 @@ import {
 } from "./electron/discord";
 import { SongInfo } from "./templates/player";
 
+app.commandLine.appendSwitch("disable-site-isolation-trials");
+
 (async () => {
   // Initialize the Electron application
   app.whenReady().then(() => {
@@ -27,6 +29,8 @@ import { SongInfo } from "./templates/player";
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
+        webSecurity: false,
+        allowRunningInsecureContent: false,
       },
     });
 

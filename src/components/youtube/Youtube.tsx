@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
+import soundBoosts from "@constants/soundBoosts";
+
 import { useInterval } from "@hooks/interval";
 import {
   useControlState,
@@ -70,8 +72,7 @@ const Youtube = ({}: YoutubeProps) => {
         const video = iframe.contentWindow?.document.querySelector("video");
 
         if (video) {
-          // 노멀라이즈 비활성화
-          video.volume = 1;
+          video.volume = controlState.volume / 100;
         }
 
         if (!gainNode.current && video) {
@@ -79,9 +80,8 @@ const Youtube = ({}: YoutubeProps) => {
           const source = audioCtx.createMediaElementSource(video);
 
           gainNode.current = audioCtx.createGain();
-          gainNode.current.gain.value = (controlState.volume * 2) / 100;
+          gainNode.current.gain.value = 1;
           source.connect(gainNode.current);
-          console.log("gainNode", gainNode.current.gain.value);
 
           gainNode.current.connect(audioCtx.destination);
         }
@@ -98,6 +98,17 @@ const Youtube = ({}: YoutubeProps) => {
 
           const duration =
             (current.end === 0 ? videoDuration : current.end) - current.start;
+
+          if (gainNode.current) {
+            if (current.songId in soundBoosts) {
+              gainNode.current.gain.value = soundBoosts[current.songId];
+              console.debug(
+                `[SoundBoost] ${current.title}: ${soundBoosts[current.songId]}x`
+              );
+            } else {
+              gainNode.current.gain.value = 1;
+            }
+          }
 
           const iframe = e.target.getIframe() as HTMLIFrameElement;
 
@@ -221,9 +232,14 @@ const Youtube = ({}: YoutubeProps) => {
 
   // 볼륨 컨트롤
   useEffect(() => {
-    if (!player.current || !gainNode.current) return;
+    if (!player.current) return;
 
-    gainNode.current.gain.value = (controlState.volume * 2) / 100;
+    const iframe = player.current.getIframe() as HTMLIFrameElement;
+    const video = iframe.contentWindow?.document.querySelector("video");
+
+    if (video) {
+      video.volume = controlState.volume / 100;
+    }
   }, [controlState.volume]);
 
   return <Container id="wakmu-youtube" />;

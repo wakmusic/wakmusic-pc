@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { T6Medium } from "@components/Typography";
@@ -12,7 +13,11 @@ import Section from "./Section";
 interface GNB {}
 
 const GNB = ({}: GNB) => {
+  const location = useLocation();
+
   const loginModalOpener = useLoginModalOpener();
+
+  if (location.pathname === "/player") return null;
 
   return (
     <Container>

@@ -19,6 +19,7 @@ import SelectProfileModal from "@components/modals/SelectProfileModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
+import PlayerFallback from "@components/player/PlayerFallback";
 import Visual from "@components/player/Visual/Visual";
 
 import RootOverlay from "@layouts/RootOverlay";
@@ -42,6 +43,7 @@ import "./index.css";
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -61,6 +63,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <Header />
           <RootOverlay>
             <GNB />
+
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/playground" element={<Playground />} />
@@ -71,12 +74,14 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/user/*" element={<User />} />
               <Route path="/playlist/:playlistid" element={<Playlist />} />
               <Route path="/mypage" element={<MyPage />} />
+
+              <Route path="/player" element={<PlayerFallback />} />
             </Routes>
+
             <Player />
+            <Visual />
           </RootOverlay>
         </BrowserRouter>
-
-        <Visual />
 
         <ModalPortal>
           <LoginModal />

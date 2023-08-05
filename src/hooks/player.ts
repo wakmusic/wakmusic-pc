@@ -1,6 +1,7 @@
 import {
   controlState,
   isControlling,
+  isSpaceDisabled,
   lyricsState,
   playingChangeProgress,
   playingInfoState,
@@ -38,6 +39,10 @@ export const usePlayingProgressChangeState = () => {
 
 export const useControlState = () => {
   return useRecoilState(controlState);
+};
+
+export const useIsSpaceDisabled = () => {
+  return useRecoilState(isSpaceDisabled);
 };
 
 export const useSetVolumeState = () => {

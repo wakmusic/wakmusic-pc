@@ -243,6 +243,8 @@ const Youtube = ({}: YoutubeProps) => {
   return <Container id="wakmu-youtube" />;
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  display: none;
+`;
 
 export default Youtube;

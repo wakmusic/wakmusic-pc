@@ -17,6 +17,7 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import {
   useControlState,
+  useIsSpaceDisabled,
   useNextSong,
   usePrevSong,
   useSetVolumeState,
@@ -44,6 +45,8 @@ const Controller = ({}: ControllerProps) => {
   const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
+  const [isSpaceDisabled] = useIsSpaceDisabled();
+
   function onVolumeChange(value: number) {
     setVolumeState(value);
   }
@@ -61,7 +64,7 @@ const Controller = ({}: ControllerProps) => {
 
   useEffect(() => {
     const toggleMusicPlay = (e: KeyboardEvent) => {
-      if (e.code === "Space" && e.repeat === false) {
+      if (e.code === "Space" && e.repeat === false && !isSpaceDisabled) {
         toggleIsPlayingState();
       }
     };
@@ -71,7 +74,7 @@ const Controller = ({}: ControllerProps) => {
     return () => {
       window.removeEventListener("keydown", toggleMusicPlay);
     };
-  }, [toggleIsPlayingState]);
+  }, [toggleIsPlayingState, isSpaceDisabled]);
 
   return (
     <Container>

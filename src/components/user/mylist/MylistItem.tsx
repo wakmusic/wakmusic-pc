@@ -1,6 +1,5 @@
-import { dragAndDropState, myListState } from "@state/user/atoms";
 import { useMemo } from "react";
-import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { ReactComponent as DragPlaylist } from "@assets/icons/ic_24_move.svg";
@@ -10,27 +9,30 @@ import { T6Medium, T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { XY } from "@pages/user/Playlists";
+import { useDragAndDropState, useMylistState } from "@hooks/mylist";
 
-import { myListItem } from "@templates/playlist";
+import { XY } from "@pages/user/Mylist";
 
-interface PlaylistItemProps {
-  item: myListItem;
+import { myListItemType } from "@templates/playlist";
+
+interface MylistItemProps {
+  item: myListItemType;
   hide?: boolean;
   mouseDown?: boolean;
-  onSelect?: (target: myListItem, position: XY) => void;
+  onSelect?: (target: myListItemType, position: XY) => void;
   onMouseEnter?: () => void;
 }
 
-const PlaylistItem = ({
+const MylistItem = ({
   item,
   hide = false,
   mouseDown = false,
   onSelect,
   onMouseEnter,
-}: PlaylistItemProps) => {
-  const isEditMode = useRecoilValue(myListState);
-  const dragAndDropTarget = useRecoilValue(dragAndDropState);
+}: MylistItemProps) => {
+  const navigate = useNavigate();
+  const [isEditMode] = useMylistState();
+  const [dragAndDropTarget] = useDragAndDropState();
 
   const marginLeft = useMemo(() => {
     if (!mouseDown) return 0;
@@ -117,6 +119,9 @@ const PlaylistItem = ({
         marginRight: `${marginRight}px`,
       }}
       onMouseEnter={onMouseEnter}
+      onClick={() => {
+        navigate(`/playlist/${item.key}`, { state: item });
+      }}
     >
       <ShiftContainer>
         <Icon
@@ -144,6 +149,8 @@ const PlaylistItem = ({
 const Container = styled.div`
   width: 222px;
   height: 74px;
+
+  cursor: pointer;
 `;
 
 const ShiftContainer = styled.div`
@@ -181,4 +188,4 @@ const Volume = styled(T7Light)`
   color: ${colors.blueGray500};
 `;
 
-export default PlaylistItem;
+export default MylistItem;

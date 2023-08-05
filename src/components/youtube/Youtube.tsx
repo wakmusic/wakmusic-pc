@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import soundBoosts from "@constants/soundBoosts";
@@ -47,9 +47,11 @@ const Youtube = ({}: YoutubeProps) => {
   const playerState = useRef<{
     current: SongInfo | null;
     loaded: boolean;
+    volume: number;
   }>({
     current: null,
     loaded: false,
+    volume: controlState.volume,
   });
 
   applyHook(setPlayingInfo);
@@ -57,105 +59,100 @@ const Youtube = ({}: YoutubeProps) => {
   // 괴랄한 유튜브 iframe api를 사용하기 위한 꼼수
   useEffect(() => {
     setNowPlaying(playingInfo.playlist[playingInfo.current]);
-    playerState.current.current = playingInfo.playlist[playingInfo.current];
-    playerState.current.loaded = loaded;
   }, [playingInfo, loaded]);
 
-  const onStateChange = useCallback(
-    (e: YT.OnStateChangeEvent) => {
-      if (e.data === YT.PlayerState.UNSTARTED) {
-        player.current?.playVideo();
+  playerState.current.current = playingInfo.playlist[playingInfo.current];
+  playerState.current.loaded = loaded;
+  playerState.current.volume = controlState.volume;
+
+  const onStateChange = (e: YT.OnStateChangeEvent) => {
+    if (e.data === YT.PlayerState.UNSTARTED) {
+      player.current?.playVideo();
+    }
+
+    if (e.data === YT.PlayerState.PLAYING) {
+      const iframe = e.target.getIframe() as HTMLIFrameElement;
+      const video = iframe.contentWindow?.document.querySelector("video");
+
+      if (video) {
+        video.volume = playerState.current.volume / 100;
       }
 
-      if (e.data === YT.PlayerState.PLAYING) {
-        const iframe = e.target.getIframe() as HTMLIFrameElement;
-        const video = iframe.contentWindow?.document.querySelector("video");
+      if (!gainNode.current && video) {
+        const audioCtx = new AudioContext();
+        const source = audioCtx.createMediaElementSource(video);
 
-        if (video) {
-          video.volume = controlState.volume / 100;
-        }
+        gainNode.current = audioCtx.createGain();
+        gainNode.current.gain.value = 1;
+        source.connect(gainNode.current);
 
-        if (!gainNode.current && video) {
-          const audioCtx = new AudioContext();
-          const source = audioCtx.createMediaElementSource(video);
+        gainNode.current.connect(audioCtx.destination);
+      }
 
-          gainNode.current = audioCtx.createGain();
-          gainNode.current.gain.value = 1;
-          source.connect(gainNode.current);
-
-          gainNode.current.connect(audioCtx.destination);
-        }
-
-        if (!playerState.current.loaded && playerState.current.current) {
-          const current = playerState.current.current;
-          const videoDuration = Math.round(
-            (
-              e.target as unknown as {
-                playerInfo: { duration: number };
-              }
-            ).playerInfo.duration
-          );
-
-          const duration =
-            (current.end === 0 ? videoDuration : current.end) - current.start;
-
-          if (gainNode.current) {
-            if (current.songId in soundBoosts) {
-              gainNode.current.gain.value = soundBoosts[current.songId];
-              console.debug(
-                `[SoundBoost] ${current.title}: ${soundBoosts[current.songId]}x`
-              );
-            } else {
-              gainNode.current.gain.value = 1;
+      if (!playerState.current.loaded && playerState.current.current) {
+        const current = playerState.current.current;
+        const videoDuration = Math.round(
+          (
+            e.target as unknown as {
+              playerInfo: { duration: number };
             }
+          ).playerInfo.duration
+        );
+
+        const duration =
+          (current.end === 0 ? videoDuration : current.end) - current.start;
+
+        if (gainNode.current) {
+          if (current.songId in soundBoosts) {
+            gainNode.current.gain.value = soundBoosts[current.songId];
+            console.debug(
+              `[SoundBoost] ${current.title}: ${soundBoosts[current.songId]}x`
+            );
+          } else {
+            gainNode.current.gain.value = 1;
           }
-
-          const iframe = e.target.getIframe() as HTMLIFrameElement;
-
-          // 그냥 넣으면 안먹힘
-          setTimeout(() => {
-            if (iframe.contentWindow) {
-              const mediaSession = iframe.contentWindow.navigator.mediaSession;
-
-              mediaSession.metadata = new MediaMetadata({
-                title: current.title,
-                artist: current.artist,
-                artwork: [
-                  {
-                    src: getYoutubeHQThumbnail(current.songId),
-                    sizes: "480x360",
-                    type: "image/jpg",
-                  },
-                ],
-              });
-
-              mediaSession.setActionHandler("nexttrack", () => nextSong());
-              mediaSession.setActionHandler("previoustrack", () => prevSong());
-
-              mediaSession.setActionHandler("play", () =>
-                toggleIsPlayingState()
-              );
-
-              mediaSession.setActionHandler("pause", () =>
-                toggleIsPlayingState()
-              );
-            }
-          }, 500);
-
-          setPlayingLength(Math.round(duration));
-          setPlayingProgress(0);
-          setLoaded(true);
         }
 
-        setControlState((prev) => ({ ...prev, isPlaying: true }));
+        const iframe = e.target.getIframe() as HTMLIFrameElement;
+
+        // 그냥 넣으면 안먹힘
+        setTimeout(() => {
+          if (iframe.contentWindow) {
+            const mediaSession = iframe.contentWindow.navigator.mediaSession;
+
+            mediaSession.metadata = new MediaMetadata({
+              title: current.title,
+              artist: current.artist,
+              artwork: [
+                {
+                  src: getYoutubeHQThumbnail(current.songId),
+                  sizes: "480x360",
+                  type: "image/jpg",
+                },
+              ],
+            });
+
+            const toggle = () => toggleIsPlayingState();
+
+            mediaSession.setActionHandler("nexttrack", () => nextSong());
+            mediaSession.setActionHandler("previoustrack", () => prevSong());
+            mediaSession.setActionHandler("play", toggle);
+            mediaSession.setActionHandler("pause", toggle);
+          }
+        }, 500);
+
+        setPlayingLength(Math.round(duration));
+        setPlayingProgress(0);
+        setLoaded(true);
       }
 
-      if (e.data === YT.PlayerState.PAUSED) {
-        setControlState((prev) => ({ ...prev, isPlaying: false }));
-      }
-    },
-    [setControlState, setPlayingLength, setPlayingProgress]
-  );
+      setControlState((prev) => ({ ...prev, isPlaying: true }));
+    }
+
+    if (e.data === YT.PlayerState.PAUSED) {
+      setControlState((prev) => ({ ...prev, isPlaying: false }));
+    }
+  };
 
   // 유튜브 플레이어 생성
   useEffect(() => {
@@ -171,7 +168,8 @@ const Youtube = ({}: YoutubeProps) => {
     return () => {
       _player.destroy();
     };
-  }, [onStateChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 영상 재생
   useEffect(() => {
@@ -215,7 +213,7 @@ const Youtube = ({}: YoutubeProps) => {
 
     player.current.seekTo(changeProgress + nowPlaying.start, true);
     setPlayingProgress(changeProgress);
-  }, [changeProgress, isControlling, setPlayingProgress]);
+  }, [changeProgress, isControlling, prevChangeProgress, setPlayingProgress]);
 
   // 재생 컨트롤
   useEffect(() => {

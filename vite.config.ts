@@ -10,6 +10,7 @@ export default defineConfig({
   publicDir: "./../public",
   cacheDir: "./../.yarn/.vite",
   base: "./",
+  envDir: "./../",
   build: {
     outDir: "./../dist",
   },

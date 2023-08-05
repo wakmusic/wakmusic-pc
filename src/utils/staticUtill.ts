@@ -1,4 +1,4 @@
-const staticURL = process.env.REACT_APP_STATIC_URL;
+const staticURL = import.meta.env.VITE_STATIC_URL;
 
 type profileImgType =
   | "bat"

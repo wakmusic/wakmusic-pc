@@ -34,6 +34,7 @@ import MyPage from "@pages/mypage/MyPage";
 import New from "@pages/new/New";
 import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
+import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
 import "@utils/loadIpcRenderer";
@@ -74,6 +75,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/search" element={<Search />} />
               <Route path="/new" element={<New />} />
               <Route path="/user/*" element={<User />} />
+              <Route path="/playlist/:playlistid" element={<Playlist />} />
               <Route path="/mypage" element={<MyPage />} />
 
               <Route path="/player" element={<PlayerFallback />} />

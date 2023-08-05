@@ -5,17 +5,19 @@ import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface RecommandItemProps {
+interface RecommendItemProps {
   // TODO: Interface 작업 예정
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   item: any;
 }
 
-const RecommandItem = ({ item }: RecommandItemProps) => {
+const RecommendItem = ({ item }: RecommendItemProps) => {
   const navigate = useNavigate();
 
   return (
-    <Container onClick={() => navigate(`/recommand/${item.key}`)}>
+    <Container
+      onClick={() => navigate(`/playlist/${item.key}`, { state: item })} // api 작업 후에 state 제거
+    >
       <Title>{item.title}</Title>
       <Icon
         src={`https://static.wakmusic.xyz/static/playlist/icon/round/${item.key}.png?v=${item.image.round}`}
@@ -51,4 +53,4 @@ const Icon = styled.img`
   height: 48px;
 `;
 
-export default RecommandItem;
+export default RecommendItem;

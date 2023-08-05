@@ -9,8 +9,11 @@ import UpdatedText from "@components/globals/UpdatedText";
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
+import VirtualItem from "@layouts/VirtualItem";
 
 import { chartUpdated, hourlyChart } from "@constants/dummys";
+
+import useVirtualizer from "@hooks/virtualizer";
 
 import { Song } from "@templates/song";
 
@@ -19,6 +22,8 @@ interface ChartProps {}
 const Chart = ({}: ChartProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selected, setSelected] = useState<Song[]>([]);
+
+  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(hourlyChart);
 
   useEffect(() => {
     // /chart로 접속하면 ?type=hourly로 이동
@@ -43,26 +48,31 @@ const Chart = ({}: ChartProps) => {
           ]}
         />
 
-        <PageItemContainer height={209}>
-          {hourlyChart.map((item, index) => (
-            <SongItem
-              key={index}
-              rank={index + 1}
-              song={item}
-              selected={selected.includes(item)}
-              features={[
-                SongItemFeature.last,
-                SongItemFeature.date,
-                SongItemFeature.views,
-              ]}
-              onClick={(song) => {
-                if (selected.includes(song)) {
-                  setSelected(selected.filter((item) => item !== song));
-                } else {
-                  setSelected([...selected, song]);
-                }
-              }}
-            />
+        <PageItemContainer
+          height={209}
+          ref={viewportRef}
+          totalSize={getTotalSize()}
+        >
+          {virtualMap((virtualItem, item) => (
+            <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
+              <SongItem
+                rank={virtualItem.index + 1}
+                song={item}
+                selected={selected.includes(item)}
+                features={[
+                  SongItemFeature.last,
+                  SongItemFeature.date,
+                  SongItemFeature.views,
+                ]}
+                onClick={(song) => {
+                  if (selected.includes(song)) {
+                    setSelected(selected.filter((item) => item !== song));
+                  } else {
+                    setSelected([...selected, song]);
+                  }
+                }}
+              />
+            </VirtualItem>
           ))}
         </PageItemContainer>
       </PageContainer>

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as DocumentOffSvg } from "@assets/icons/ic_20_document_off.svg";
@@ -57,6 +58,20 @@ const Controller = ({}: ControllerProps) => {
         return RepeatOffSvg;
     }
   }
+
+  useEffect(() => {
+    const toggleMusicPlay = (e: KeyboardEvent) => {
+      if (e.code === "Space" && e.repeat === false) {
+        toggleIsPlayingState();
+      }
+    };
+
+    window.addEventListener("keydown", toggleMusicPlay);
+
+    return () => {
+      window.removeEventListener("keydown", toggleMusicPlay);
+    };
+  }, [toggleIsPlayingState]);
 
   return (
     <Container>

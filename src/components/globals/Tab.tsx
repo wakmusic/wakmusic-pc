@@ -59,9 +59,7 @@ const Container = styled.div`
   width: 50px;
   height: 38px;
 
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 `;
 
 const Title = styled(Pretendard)<{ $activated: boolean }>`

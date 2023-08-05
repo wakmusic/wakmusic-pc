@@ -290,17 +290,6 @@ export const usePlaySong = () => {
     const chartData = getChartData(song);
     const current = playingInfo.playlist[playingInfo.current];
 
-    if (playingInfo.playlist.find((s) => s.songId === song.songId)) {
-      setPlayingInfo((prev) => ({
-        ...prev,
-        current: playingInfo.playlist.findIndex(
-          (s) => s.songId === song.songId
-        ),
-      }));
-
-      return;
-    }
-
     if (current?.songId === song.songId) {
       setPlayingChangeProgress(0);
 

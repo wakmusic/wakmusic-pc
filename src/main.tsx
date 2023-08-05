@@ -10,6 +10,7 @@ import { RecoilRoot } from "recoil";
 
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
+import Splash from "@components/index/Splash";
 import AlertModal from "@components/modals/AlertModal";
 import ConfirmModal from "@components/modals/ConfirmModal";
 import CreateListModal from "@components/modals/CreateListModal";
@@ -59,6 +60,8 @@ createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
+        <Splash />
+
         <HashRouter>
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
           <Header />

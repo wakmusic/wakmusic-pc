@@ -57,12 +57,12 @@ export const patchEditPlaylistName = async (key: string, body: any) => {
 };
 
 export const deletePlaylist = async (key: string) => {
-  const { data } = await instance.patch(`${PLAYLIST_URL}/${key}/delete`);
+  const { data } = await instance.delete(`${PLAYLIST_URL}/${key}/delete`);
   return data;
 };
 
 export const postAddToMyPlaylist = async (key: string) => {
-  const { data } = await instance.patch(
+  const { data } = await instance.post(
     `${PLAYLIST_URL}/${key}/addToMyPlaylist`
   );
   return data;

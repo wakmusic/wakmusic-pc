@@ -3,10 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import Section from "@components/faq/Section";
-import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 
+import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
@@ -37,19 +37,17 @@ const Faq = ({}: FaqProps) => {
           </TabBar>
         </TabContainer>
         <ScrollContainer>
-          <DefaultScroll>
-            <Wrapper>
-              {tab === "전체"
-                ? faq.article.map((article, index) => (
+          <PageItemContainer>
+            {tab === "전체"
+              ? faq.article.map((article, index) => (
+                  <Section key={tab + index} article={article} />
+                ))
+              : faq.article
+                  .filter((article) => article.category.category === tab)
+                  .map((article, index) => (
                     <Section key={tab + index} article={article} />
-                  ))
-                : faq.article
-                    .filter((article) => article.category.category === tab)
-                    .map((article, index) => (
-                      <Section key={tab + index} article={article} />
-                    ))}
-            </Wrapper>
-          </DefaultScroll>
+                  ))}
+          </PageItemContainer>
         </ScrollContainer>
       </Container>
     </PageLayout>
@@ -58,7 +56,6 @@ const Faq = ({}: FaqProps) => {
 
 const Container = styled.div`
   width: 754px;
-  height: 636px;
   border-radius: 16px;
 
   margin-top: 20px;

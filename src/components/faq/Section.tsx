@@ -8,10 +8,10 @@ import { T6Bold, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { Faq } from "@templates/faq";
+import { FaqType } from "@templates/faq";
 
 interface SectionProps {
-  article: Faq;
+  article: FaqType;
 }
 
 const Section = ({ article }: SectionProps) => {
@@ -98,7 +98,6 @@ const UpSVG = styled(ArrowUpSVG)`
 
   color: ${colors.gray600};
 `;
-UpSVG;
 
 const DownSVG = styled(ArrowDownSVG)`
   margin-left: auto;

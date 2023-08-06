@@ -10,7 +10,7 @@ import {
   visualModeState,
 } from "@state/player/atoms";
 import { useRef } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import { hourlyChart } from "@constants/dummys";
 
@@ -134,21 +134,35 @@ export const usePrevSong = () => {
   const [controlState] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
+  const progress = useRecoilValue(playingProgress);
+  const setProgress = useSetRecoilState(playingChangeProgress);
+
   const stateRef = useRef<{
     controlState: ControlStateType;
     playingInfo: PlayingInfoStateType;
+    progress: number;
   }>({
     controlState,
     playingInfo,
+    progress,
   });
 
   stateRef.current = {
     controlState,
     playingInfo,
+    progress,
   };
 
   const handler = () => {
-    const { controlState, playingInfo } = stateRef.current;
+    const { controlState, playingInfo, progress } = stateRef.current;
+
+    if (progress > 5) {
+      setProgress({
+        progress: 0,
+        force: false,
+      });
+      return;
+    }
 
     let prevIndex = 0;
 

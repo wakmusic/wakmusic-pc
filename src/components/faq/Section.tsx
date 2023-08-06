@@ -29,8 +29,8 @@ const Section = ({ article }: SectionProps) => {
         {isOpened ? <UpSVG /> : <DownSVG />}
       </Grid>
       <DescriptionContainer
-        open={isOpened}
-        lines={article.description.split("\n").length}
+        $open={isOpened}
+        $lines={article.description.split("\n").length}
       >
         <Description>{article.description}</Description>
       </DescriptionContainer>
@@ -54,8 +54,8 @@ const Grid = styled.div<{
   height: 52px;
 
   left: 20px;
-  ${({ open: isOpened }) =>
-    !isOpened &&
+  ${({ open }) =>
+    !open &&
     css`
       border-bottom: 1px solid ${colors.blueGray200};
     `}
@@ -105,13 +105,13 @@ const DownSVG = styled(ArrowDownSVG)`
 `;
 
 const DescriptionContainer = styled.div<{
-  open: boolean;
-  lines: number;
+  $open: boolean;
+  $lines: number;
 }>`
   width: 100%;
   padding: 0 20px;
 
-  height: ${({ open, lines }) => (open ? lines * 20 + 32 : 0)}px;
+  height: ${({ $open, $lines }) => ($open ? $lines * 20 + 32 : 0)}px;
 
   overflow: hidden;
   background-color: ${colors.blueGray200};

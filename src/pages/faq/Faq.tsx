@@ -62,6 +62,8 @@ const Container = styled.div`
   border: 1px solid ${colors.blueGray25};
   background: ${colors.whiteAlpha40};
   backdrop-filter: blur(62.5px);
+
+  overflow: hidden;
 `;
 
 const TabContainer = styled.div`

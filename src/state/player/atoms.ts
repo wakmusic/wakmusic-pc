@@ -1,5 +1,7 @@
 import { atom } from "recoil";
 
+import { lyrics } from "@constants/dummys";
+
 import {
   ControlStateType,
   LyricType,
@@ -88,5 +90,5 @@ export const playingInfoState = atom<PlayingInfoStateType>({
 
 export const lyricsState = atom<LyricType[] | null>({
   key: "lyrics",
-  default: null,
+  default: lyrics,
 });

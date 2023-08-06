@@ -55,11 +55,10 @@ const Grid = styled.div<{
 
   left: 20px;
   ${({ open: isOpened }) =>
-    !isOpened
-      ? css`
-          border-bottom: 1px solid ${colors.blueGray200};
-        `
-      : null}
+    !isOpened &&
+    css`
+      border-bottom: 1px solid ${colors.blueGray200};
+    `}
 
   display: flex;
   align-items: center;

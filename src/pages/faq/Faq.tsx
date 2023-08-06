@@ -75,10 +75,4 @@ const ScrollContainer = styled.div`
   margin-top: 15px;
 `;
 
-const Wrapper = styled.div`
-  position: relative;
-  top: -15px;
-  height: 564px;
-`;
-
 export default Faq;

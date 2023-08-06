@@ -1,5 +1,7 @@
 import { Client } from "@xhayper/discord-rpc";
 
+import { getYoutubeThumbnail } from "@utils/staticUtill";
+
 import { SongInfo } from "../templates/player";
 
 let last: SongInfo | undefined;
@@ -42,7 +44,7 @@ export const changePresence = (
   last = current;
 
   client.user?.setActivity({
-    largeImageKey: `https://i.ytimg.com/vi/${current.songId}/default.jpg`,
+    largeImageKey: getYoutubeThumbnail(current.songId),
     smallImageKey: "logo",
 
     state: current.artist,

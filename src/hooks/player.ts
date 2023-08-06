@@ -205,7 +205,7 @@ export const useNextSong = () => {
   const [control, setControl] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
-  const setProgress = useSetRecoilState(playingProgress);
+  const setProgress = useSetRecoilState(playingChangeProgress);
 
   const stateRef = useRef<{
     control: ControlStateType;
@@ -279,7 +279,10 @@ export const useNextSong = () => {
 
         const start = playingInfo.playlist[playingInfo.current]?.start || 0;
 
-        setProgress(start);
+        setProgress({
+          progress: start,
+          force: true,
+        });
 
         break;
       }

@@ -119,10 +119,15 @@ const Youtube = ({}: YoutubeProps) => {
           }
         }
 
-        const iframe = e.target.getIframe() as HTMLIFrameElement;
-
         // 그냥 넣으면 안먹힘
         setTimeout(() => {
+          const iframe = e.target.getIframe() as HTMLIFrameElement;
+          const video = iframe.contentWindow?.document.querySelector("video");
+
+          if (video) {
+            video.volume = playerState.current.volume / 100;
+          }
+
           if (iframe.contentWindow) {
             const mediaSession = iframe.contentWindow.navigator.mediaSession;
 
@@ -145,7 +150,7 @@ const Youtube = ({}: YoutubeProps) => {
             mediaSession.setActionHandler("play", toggle);
             mediaSession.setActionHandler("pause", toggle);
           }
-        }, 500);
+        }, 250);
 
         setPlayingLength(Math.round(duration));
         setPlayingProgress(0);

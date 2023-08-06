@@ -222,16 +222,18 @@ const Youtube = ({}: YoutubeProps) => {
   useEffect(() => {
     const nowPlaying = playerState.current.current;
 
+    if (!nowPlaying || !player.current) return;
+
     if (
-      (changeProgress !== 0 && changeProgress !== prevChangeProgress) ||
-      !nowPlaying ||
-      !player.current ||
-      isControlling
+      !changeProgress.force &&
+      ((changeProgress.progress !== 0 &&
+        changeProgress.progress !== prevChangeProgress?.progress) ||
+        isControlling)
     )
       return;
 
-    player.current.seekTo(changeProgress + nowPlaying.start, true);
-    setPlayingProgress(changeProgress);
+    player.current.seekTo(changeProgress.progress + nowPlaying.start, true);
+    setPlayingProgress(changeProgress.progress);
   }, [changeProgress, isControlling, prevChangeProgress, setPlayingProgress]);
 
   // 재생 컨트롤

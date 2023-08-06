@@ -309,7 +309,10 @@ export const usePlaySong = () => {
     }
 
     if (current?.songId === song.songId) {
-      setPlayingChangeProgress(0);
+      setPlayingChangeProgress({
+        progress: 0,
+        force: false,
+      });
 
       return;
     }

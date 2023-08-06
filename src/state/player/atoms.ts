@@ -3,6 +3,7 @@ import { atom } from "recoil";
 import { lyrics } from "@constants/dummys";
 
 import {
+  ChangeProgressStateType,
   ControlStateType,
   LyricType,
   PlayingInfoStateType,
@@ -60,9 +61,12 @@ export const playingProgress = atom<number>({
   ],
 });
 
-export const playingChangeProgress = atom<number>({
+export const playingChangeProgress = atom<ChangeProgressStateType>({
   key: "currentPlayingChange",
-  default: 0,
+  default: {
+    force: false,
+    progress: 0,
+  },
 });
 
 export const playingInfoState = atom<PlayingInfoStateType>({

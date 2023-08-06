@@ -41,3 +41,8 @@ export type LyricType = {
   end: number;
   text: string;
 };
+
+export type ChangeProgressStateType = {
+  force: boolean;
+  progress: number;
+};

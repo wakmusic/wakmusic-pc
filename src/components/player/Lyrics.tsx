@@ -8,6 +8,7 @@ import colors from "@constants/colors";
 
 import { useInterval } from "@hooks/interval";
 import {
+  useControlState,
   useLyricsState,
   usePlayingProgressChangeState,
   usePlayingProgressState,
@@ -26,6 +27,7 @@ const Lyrics = ({ size }: LyricsProps) => {
 
   const [current] = usePlayingProgressState();
   const [, setCurrent] = usePlayingProgressChangeState();
+  const [control, setControl] = useControlState();
 
   const [padding, setPadding] = useState(0);
 
@@ -36,7 +38,14 @@ const Lyrics = ({ size }: LyricsProps) => {
   function onLineClick(index: number) {
     if (isNull(lyrics)) return;
 
-    setCurrent(lyrics[index].start);
+    if (!control.isPlaying) {
+      setControl({ ...control, isPlaying: true });
+    }
+
+    setCurrent({
+      progress: lyrics[index].start,
+      force: true,
+    });
   }
 
   const getIndex = useCallback(() => {

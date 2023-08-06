@@ -19,7 +19,7 @@ const Section = ({ article }: SectionProps) => {
 
   return (
     <Container>
-      <Grid open={isOpened} onClick={() => setIsOpened(!isOpened)}>
+      <Grid $open={isOpened} onClick={() => setIsOpened(!isOpened)}>
         <Category>{article.category.category}</Category>
         {isOpened ? (
           <HighlightedQuestion>{article.question}</HighlightedQuestion>
@@ -46,7 +46,7 @@ const Container = styled.div`
 `;
 
 const Grid = styled.div<{
-  open: boolean;
+  $open: boolean;
 }>`
   position: relative;
   top: 1px;
@@ -54,8 +54,8 @@ const Grid = styled.div<{
   height: 52px;
 
   left: 20px;
-  ${({ open }) =>
-    !open &&
+  ${({ $open }) =>
+    !$open &&
     css`
       border-bottom: 1px solid ${colors.blueGray200};
     `}

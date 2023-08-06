@@ -238,7 +238,7 @@ const Youtube = ({}: YoutubeProps) => {
 
   // 재생 컨트롤
   useEffect(() => {
-    if (!player.current || !nowPlaying) return;
+    if (!player.current) return;
 
     if (controlState.isPlaying) {
       player.current.playVideo();

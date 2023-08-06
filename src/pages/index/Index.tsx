@@ -3,7 +3,7 @@ import styled from "styled-components/macro";
 import { T4Medium } from "@components/Typography";
 import Background from "@components/index/Background";
 import Chart from "@components/index/Chart";
-import RecommandItem from "@components/index/RecommandItem";
+import RecommendItem from "@components/index/RecommendItem";
 
 import PageLayout from "@layouts/PageLayout";
 
@@ -21,11 +21,11 @@ const Index = ({}: IndexProps) => {
 
       <RecommandContainer>
         <T4Medium color={colors.primary900}>왁뮤팀이 추천하는 리스트</T4Medium>
-        <RecommandItems>
+        <RecommendItems>
           {recommended.map((item, index) => (
-            <RecommandItem key={index} item={item} />
+            <RecommendItem key={index} item={item} />
           ))}
-        </RecommandItems>
+        </RecommendItems>
       </RecommandContainer>
     </Container>
   );
@@ -44,7 +44,7 @@ const RecommandContainer = styled.div`
   height: 186px;
 `;
 
-const RecommandItems = styled.div`
+const RecommendItems = styled.div`
   margin-top: 12px;
 
   display: grid;

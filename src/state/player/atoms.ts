@@ -96,3 +96,8 @@ export const lyricsState = atom<LyricType[] | null>({
   key: "lyrics",
   default: lyrics,
 });
+
+export const isSpaceDisabled = atom({
+  key: "isSpaceDisabled",
+  default: false,
+});

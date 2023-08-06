@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as DocumentOffSvg } from "@assets/icons/ic_20_document_off.svg";
@@ -16,6 +17,7 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import {
   useControlState,
+  useIsSpaceDisabled,
   useNextSong,
   usePrevSong,
   useSetVolumeState,
@@ -43,6 +45,8 @@ const Controller = ({}: ControllerProps) => {
   const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
+  const [isSpaceDisabled] = useIsSpaceDisabled();
+
   function onVolumeChange(value: number) {
     setVolumeState(value);
   }
@@ -57,6 +61,20 @@ const Controller = ({}: ControllerProps) => {
         return RepeatOffSvg;
     }
   }
+
+  useEffect(() => {
+    const toggleMusicPlay = (e: KeyboardEvent) => {
+      if (e.code === "Space" && e.repeat === false && !isSpaceDisabled) {
+        toggleIsPlayingState();
+      }
+    };
+
+    window.addEventListener("keydown", toggleMusicPlay);
+
+    return () => {
+      window.removeEventListener("keydown", toggleMusicPlay);
+    };
+  }, [toggleIsPlayingState, isSpaceDisabled]);
 
   return (
     <Container>

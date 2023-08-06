@@ -1,6 +1,7 @@
 import {
   controlState,
   isControlling,
+  isSpaceDisabled,
   lyricsState,
   playingChangeProgress,
   playingInfoState,
@@ -40,6 +41,10 @@ export const usePlayingProgressChangeState = () => {
 
 export const useControlState = () => {
   return useRecoilState(controlState);
+};
+
+export const useIsSpaceDisabled = () => {
+  return useRecoilState(isSpaceDisabled);
 };
 
 export const useSetVolumeState = () => {
@@ -299,17 +304,6 @@ export const usePlaySong = () => {
   return (song: Song) => {
     const chartData = getChartData(song);
     const current = playingInfo.playlist[playingInfo.current];
-
-    if (playingInfo.playlist.find((s) => s.songId === song.songId)) {
-      setPlayingInfo((prev) => ({
-        ...prev,
-        current: playingInfo.playlist.findIndex(
-          (s) => s.songId === song.songId
-        ),
-      }));
-
-      return;
-    }
 
     if (current?.songId === song.songId) {
       setPlayingChangeProgress({

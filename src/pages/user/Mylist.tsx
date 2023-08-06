@@ -1,17 +1,22 @@
-import { dragAndDropState, myListState } from "@state/user/atoms";
 import { useCallback, useEffect, useReducer, useState } from "react";
-import { useRecoilState } from "recoil";
 import styled from "styled-components/macro";
 
-import Menu from "@components/user/playlist/Menu";
-import PlaylistItem from "@components/user/playlist/PlaylistItem";
+import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
+import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
+
+import IconButton from "@components/globals/IconButton";
+import MylistItem from "@components/user/mylist/MylistItem";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 import { myList } from "@constants/dummys";
 
-import { Playlist, myListItem } from "@templates/playlist";
+import { useCreateListModal } from "@hooks/createListModal";
+import { useLoadListModal } from "@hooks/loadListModal";
+import { useDragAndDropState, useMylistState } from "@hooks/mylist";
+
+import { PlaylistType, myListItemType } from "@templates/playlist";
 
 import { isUndefined } from "@utils/isTypes";
 
@@ -32,9 +37,9 @@ interface ShuffleAction {
   to?: number;
 }
 
-interface PlaylistsProps {}
+interface MylistProps {}
 
-const shuffleMyList = (state: Playlist[], action: ShuffleAction) => {
+const shuffleMyList = (state: PlaylistType[], action: ShuffleAction) => {
   const newList = state.slice();
 
   switch (action.type) {
@@ -62,21 +67,23 @@ const getPlaylistInitialPosition = (targetIndex: number): XY => {
   };
 };
 
-const Playlists = ({}: PlaylistsProps) => {
-  const [isEditMode] = useRecoilState(myListState);
+const Mylist = ({}: MylistProps) => {
+  const [isEditMode] = useMylistState();
   const [shuffledList, dispatchMyList] = useReducer(shuffleMyList, myList);
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseDownPosition, setmouseDownPosition] = useState<XY>({
     x: 0,
     y: 0,
   });
-  const [dragAndDropTarget, setDragAndDropTarget] =
-    useRecoilState(dragAndDropState);
+  const [dragAndDropTarget, setDragAndDropTarget] = useDragAndDropState();
   const [playlistInitialPosition, setPlayListInitialPosition] = useState<XY>({
     x: 0,
     y: 0,
   });
   const [dragPosition, setDragPostion] = useState<XY>({ x: 0, y: 0 });
+
+  const createListModal = useCreateListModal();
+  const loadListModal = useLoadListModal();
 
   useEffect(() => {
     let dropTarget =
@@ -100,7 +107,7 @@ const Playlists = ({}: PlaylistsProps) => {
     shuffledList.length,
   ]);
 
-  const initializeDragTarget = (target: myListItem, position: XY) => {
+  const initializeDragTarget = (target: myListItemType, position: XY) => {
     setMouseDown(true);
 
     setDragAndDropTarget({
@@ -129,7 +136,14 @@ const Playlists = ({}: PlaylistsProps) => {
 
   return (
     <Container>
-      <Menu />
+      <Menu>
+        <IconButton icon={Create} onClick={createListModal}>
+          리스트 만들기
+        </IconButton>
+        <IconButton icon={Import} onClick={loadListModal}>
+          리스트 가져오기
+        </IconButton>
+      </Menu>
 
       <PageItemContainer height={206}>
         <PlayLists
@@ -151,7 +165,7 @@ const Playlists = ({}: PlaylistsProps) => {
         >
           {!isEditMode
             ? myList.map((item, index) => (
-                <PlaylistItem
+                <MylistItem
                   key={index}
                   item={{
                     ...item,
@@ -160,7 +174,7 @@ const Playlists = ({}: PlaylistsProps) => {
                 />
               ))
             : shuffledList.map((item, index) => (
-                <PlaylistItem
+                <MylistItem
                   key={index}
                   item={{
                     ...item,
@@ -178,7 +192,7 @@ const Playlists = ({}: PlaylistsProps) => {
               display: mouseDown ? "block" : "none",
             }}
           >
-            <PlaylistItem item={dragAndDropTarget.drag} />
+            <MylistItem item={dragAndDropTarget.drag} />
           </DragedPlaylist>
         </PlayLists>
       </PageItemContainer>
@@ -188,6 +202,14 @@ const Playlists = ({}: PlaylistsProps) => {
 
 const Container = styled.div`
   margin: 16px 0px 0px 20px;
+`;
+
+const Menu = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  margin-bottom: 16px;
 `;
 
 const PlayLists = styled.div`
@@ -217,5 +239,5 @@ const DragedPlaylist = styled.div`
   border-radius: 16px;
 `;
 
-export default Playlists;
+export default Mylist;
 export type { XY };

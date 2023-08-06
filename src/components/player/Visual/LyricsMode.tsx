@@ -70,13 +70,14 @@ const LyricsContainer = styled.div`
   width: 100%;
   height: 238px;
 
-  margin-top: 37px;
+  margin-top: 40px;
 `;
 
 const TimelineContainer = styled.div`
   width: 100%;
 
-  margin: 68px 0 20px 0;
+  margin: 65px 0 40px 0;
+  padding-top: 1px;
 `;
 
 const ControllerContainer = styled.div`

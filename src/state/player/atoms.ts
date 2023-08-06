@@ -1,8 +1,9 @@
 import { atom } from "recoil";
 
-import { lyrics as lyricsDummy } from "@constants/dummys";
+import { lyrics } from "@constants/dummys";
 
 import {
+  ChangeProgressStateType,
   ControlStateType,
   LyricType,
   PlayingInfoStateType,
@@ -60,9 +61,12 @@ export const playingProgress = atom<number>({
   ],
 });
 
-export const playingChangeProgress = atom<number>({
+export const playingChangeProgress = atom<ChangeProgressStateType>({
   key: "currentPlayingChange",
-  default: 0,
+  default: {
+    force: false,
+    progress: 0,
+  },
 });
 
 export const playingInfoState = atom<PlayingInfoStateType>({
@@ -72,7 +76,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
       ? JSON.parse(localStorage.getItem("playlist") as string)
       : [],
     history: [],
-    current: -1,
+    current: 0,
   },
   effects: [
     ({ onSet }) => {
@@ -90,7 +94,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
 
 export const lyricsState = atom<LyricType[] | null>({
   key: "lyrics",
-  default: lyricsDummy,
+  default: lyrics,
 });
 
 export const isSpaceDisabled = atom({

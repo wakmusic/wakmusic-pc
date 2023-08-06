@@ -34,8 +34,8 @@ const Song = ({}: SongProps) => {
         />
 
         <TitleContainer>
-          <TitleText>{song?.title}</TitleText>
-          <ArtistText>{song?.artist}</ArtistText>
+          <TitleText>{song?.title || "왁뮤차트 TOP100"}</TitleText>
+          <ArtistText>{song?.artist || "재생 버튼을 클릭해보세요."}</ArtistText>
         </TitleContainer>
 
         <View />

@@ -27,7 +27,7 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const current = useMemo(() => {
-    return isMouseDown ? change : progress;
+    return isMouseDown ? change.progress : progress;
   }, [change, isMouseDown, progress]);
 
   const [, setIsControlling] = useIsControllingState();
@@ -40,7 +40,10 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
       const x = e.clientX - rect.left;
       const newProgress = x / rect.width;
 
-      setChange(Math.min(1, Math.max(0, newProgress)) * length);
+      setChange({
+        progress: Math.min(1, Math.max(0, newProgress)) * length,
+        force: false,
+      });
     },
     [length, setChange]
   );

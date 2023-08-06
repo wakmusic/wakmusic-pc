@@ -12,6 +12,8 @@ import {
 import { useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
+import { hourlyChart } from "@constants/dummys";
+
 import {
   ControlStateType,
   PlayingInfoStateType,
@@ -59,8 +61,29 @@ export const useToggleRepeatTypeState = () => {
 
 export const useToggleIsPlayingState = () => {
   const setState = useSetRecoilState(controlState);
+  const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
-  return () => setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
+  return () => {
+    if (playingInfo.playlist.length === 0) {
+      setPlayingInfo((prev) => ({
+        ...prev,
+        playlist: hourlyChart.map((song) => {
+          const chartData = getChartData(song);
+
+          return {
+            songId: song.songId,
+            title: song.title,
+            artist: song.artist,
+            views: chartData.views,
+            start: song.start,
+            end: song.end,
+          };
+        }),
+      }));
+    }
+
+    setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
+  };
 };
 
 export const useToggleIsRandomState = () => {
@@ -108,10 +131,8 @@ export const useLyricsState = () => {
 };
 
 export const usePrevSong = () => {
-  const [controlState, setControlState] = useControlState();
+  const [controlState] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
-  const setPlayingProgress = useSetRecoilState(playingProgress);
-  const setPlayingLength = useSetRecoilState(playingLength);
 
   const stateRef = useRef<{
     controlState: ControlStateType;
@@ -129,12 +150,12 @@ export const usePrevSong = () => {
   const handler = () => {
     const { controlState, playingInfo } = stateRef.current;
 
-    let prevIndex = -1;
+    let prevIndex = 0;
 
     if (controlState.isRandom) {
       const getSongIndex = (): number => {
         if (playingInfo.history.length === 0) {
-          return -1;
+          return 0;
         }
 
         let minus = 1;
@@ -168,17 +189,12 @@ export const usePrevSong = () => {
       prevIndex = playingInfo.current - 1;
     }
 
-    if (prevIndex < -1) {
-      prevIndex = -1;
+    if (prevIndex < 0) {
+      prevIndex = 0;
     }
 
-    if (prevIndex === -1) {
-      setPlayingLength(1);
-      setPlayingProgress(0);
-      setControlState((prev) => ({
-        ...prev,
-        isPlaying: false,
-      }));
+    if (prevIndex === 0 && controlState.repeatType === RepeatType.All) {
+      prevIndex = playingInfo.playlist.length - 1;
     }
 
     setPlayingInfo((prev) => ({
@@ -194,8 +210,7 @@ export const useNextSong = () => {
   const [control, setControl] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
-  const setProgress = useSetRecoilState(playingProgress);
-  const setLength = useSetRecoilState(playingLength);
+  const setProgress = useSetRecoilState(playingChangeProgress);
 
   const stateRef = useRef<{
     control: ControlStateType;
@@ -235,15 +250,7 @@ export const useNextSong = () => {
     switch (control.repeatType) {
       case RepeatType.Off: {
         if (playingInfo.current === playingInfo.playlist.length - 1) {
-          setPlayingInfo((prev) => ({
-            ...prev,
-            current: -1,
-          }));
-
-          setProgress(0);
-          setLength(1);
-
-          break;
+          return;
         }
 
         setPlayingInfo((prev) => ({
@@ -277,7 +284,10 @@ export const useNextSong = () => {
 
         const start = playingInfo.playlist[playingInfo.current]?.start || 0;
 
-        setProgress(start);
+        setProgress({
+          progress: start,
+          force: true,
+        });
 
         break;
       }
@@ -296,7 +306,10 @@ export const usePlaySong = () => {
     const current = playingInfo.playlist[playingInfo.current];
 
     if (current?.songId === song.songId) {
-      setPlayingChangeProgress(0);
+      setPlayingChangeProgress({
+        progress: 0,
+        force: false,
+      });
 
       return;
     }

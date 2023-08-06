@@ -1,8 +1,7 @@
 import { Client } from "@xhayper/discord-rpc";
 
-import { getYoutubeThumbnail } from "@utils/staticUtill";
-
 import { SongInfo } from "../templates/player";
+import { getYoutubeThumbnail } from "../utils/staticUtill";
 
 let last: SongInfo | undefined;
 let startTimestamp: number | undefined;

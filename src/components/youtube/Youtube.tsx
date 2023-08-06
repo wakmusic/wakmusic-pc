@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
+import { getLyrics } from "@apis/lyrics";
+
 import soundBoosts from "@constants/soundBoosts";
 
 import { useInterval } from "@hooks/interval";
 import {
   useControlState,
   useIsControllingState,
+  useLyricsState,
   useNextSong,
   usePlayingInfoState,
   usePlayingLengthState,
@@ -31,6 +34,7 @@ const Youtube = ({}: YoutubeProps) => {
   const [changeProgress] = usePlayingProgressChangeState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
   const [isControlling] = useIsControllingState();
+  const [, setLyrics] = useLyricsState();
 
   const [nowPlaying, setNowPlaying] = useState<SongInfo | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -198,7 +202,13 @@ const Youtube = ({}: YoutubeProps) => {
     player.current.loadVideoById(nowPlaying.songId, nowPlaying.start);
 
     playerState.current.isFirst = false;
-  }, [nowPlaying, prevSongId]);
+
+    (async () => {
+      const lyrics = await getLyrics(nowPlaying.songId);
+
+      setLyrics(lyrics);
+    })();
+  }, [nowPlaying, prevSongId, setLyrics]);
 
   // 영상 재생 위치 변경
   useInterval(() => {
@@ -238,7 +248,7 @@ const Youtube = ({}: YoutubeProps) => {
 
   // 재생 컨트롤
   useEffect(() => {
-    if (!player.current || !nowPlaying) return;
+    if (!player.current) return;
 
     if (controlState.isPlaying) {
       player.current.playVideo();

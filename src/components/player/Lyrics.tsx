@@ -29,8 +29,6 @@ const Lyrics = ({ size }: LyricsProps) => {
   const [, setCurrent] = usePlayingProgressChangeState();
   const [control, setControl] = useControlState();
 
-  const [padding, setPadding] = useState(0);
-
   const [timeout, setTimeout] = useState<number>(0);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -42,6 +40,7 @@ const Lyrics = ({ size }: LyricsProps) => {
       setControl({ ...control, isPlaying: true });
     }
 
+    setTimeout(0);
     setCurrent({
       progress: lyrics[index].start,
       force: true,
@@ -69,14 +68,11 @@ const Lyrics = ({ size }: LyricsProps) => {
     const target = ref.current.children[index] as HTMLDivElement;
     if (!target) return;
 
+    const padding = ref.current.offsetHeight / 2;
     const top = target.offsetTop - ref.current.offsetTop - padding + 12;
 
     ref.current.scrollTo({ top, behavior: "smooth" });
-  }, [getIndex, padding, timeout]);
-
-  useEffect(() => {
-    setPadding((ref.current?.offsetHeight ?? 0) / 2);
-  }, [ref]);
+  }, [getIndex, timeout]);
 
   useInterval(() => {
     setTimeout((prev) => {
@@ -97,8 +93,10 @@ const Lyrics = ({ size }: LyricsProps) => {
   return (
     <Container
       ref={ref}
-      $padding={padding}
       onWheel={throttle(() => setTimeout(5))}
+      style={{
+        padding: `${(ref.current?.offsetHeight ?? 0) / 2}px 0`,
+      }}
     >
       {lyrics.map((line, i) => {
         const Line = i === getIndex() ? CurrentLine : DefaultLine;
@@ -131,13 +129,9 @@ const NoLyrics = styled(T4Medium)`
   color: ${colors.blueGray25};
 `;
 
-const Container = styled.div<{
-  $padding: number;
-}>`
+const Container = styled.div`
   width: 100%;
   height: 100%;
-
-  padding: ${({ $padding }) => $padding}px 0;
 
   overflow-y: scroll;
 

@@ -10,7 +10,7 @@ import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
 import { ReactComponent as PlayListSVG } from "@assets/icons/ic_20_play_list.svg";
-import dummyThumbnail from "@assets/imgs/dummy.png";
+import dummyThumbnail from "@assets/svgs/MediumDummy.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
@@ -53,7 +53,7 @@ const Display = ({}: DisplayProps) => {
   return (
     <Container>
       <InnerContainer
-        $image={img}
+        $image={song?.songId ? img : undefined}
         animate={controls}
         variants={toggleVariants}
         initial="initial"
@@ -125,15 +125,20 @@ const Container = styled.div`
   height: 200px;
 `;
 
-const InnerContainer = styled(motion.div)<{ $image: string }>`
+const InnerContainer = styled(motion.div)<{ $image?: string }>`
   width: 100%;
   height: 200px;
 
-  background-image: url(${({ $image }) => $image});
   background-position: center;
   background-size: 150%;
 
   z-index: 100;
+
+  ${({ $image }) =>
+    $image &&
+    css`
+      background-image: url(${$image});
+    `}
 `;
 
 const Grid = styled.div`

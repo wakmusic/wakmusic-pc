@@ -48,10 +48,12 @@ const Youtube = ({}: YoutubeProps) => {
     current: SongInfo | null;
     loaded: boolean;
     volume: number;
+    isFirst: boolean;
   }>({
     current: null,
     loaded: false,
     volume: controlState.volume,
+    isFirst: true,
   });
 
   applyHook(setPlayingInfo);
@@ -66,7 +68,11 @@ const Youtube = ({}: YoutubeProps) => {
   playerState.current.volume = controlState.volume;
 
   const onStateChange = (e: YT.OnStateChangeEvent) => {
-    if (e.data === YT.PlayerState.UNSTARTED) {
+    if (
+      e.data === YT.PlayerState.UNSTARTED &&
+      !playerState.current.loaded &&
+      !playerState.current.isFirst
+    ) {
       player.current?.playVideo();
     }
 
@@ -146,7 +152,13 @@ const Youtube = ({}: YoutubeProps) => {
         setLoaded(true);
       }
 
-      setControlState((prev) => ({ ...prev, isPlaying: true }));
+      if (!playerState.current.isFirst) {
+        setControlState((prev) => ({ ...prev, isPlaying: true }));
+      } else {
+        player.current?.pauseVideo();
+      }
+
+      playerState.current.isFirst = false;
     }
 
     if (e.data === YT.PlayerState.PAUSED) {
@@ -160,6 +172,11 @@ const Youtube = ({}: YoutubeProps) => {
       events: {
         onReady: (e) => {
           player.current = e.target;
+
+          if (playerState.current.current) {
+            const nowPlaying = playerState.current.current;
+            player.current.loadVideoById(nowPlaying.songId, nowPlaying.start);
+          }
         },
         onStateChange: onStateChange,
       },
@@ -179,6 +196,8 @@ const Youtube = ({}: YoutubeProps) => {
     setLoaded(false);
 
     player.current.loadVideoById(nowPlaying.songId, nowPlaying.start);
+
+    playerState.current.isFirst = false;
   }, [nowPlaying, prevSongId]);
 
   // 영상 재생 위치 변경
@@ -226,7 +245,7 @@ const Youtube = ({}: YoutubeProps) => {
     }
 
     player.current.pauseVideo();
-  }, [controlState.isPlaying, nowPlaying]);
+  }, [controlState.isPlaying]);
 
   // 볼륨 컨트롤
   useEffect(() => {

@@ -3,7 +3,7 @@ import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off_bright.svg";
 import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";
-import dummyThumbnail from "@assets/imgs/dummy.png";
+import dummyThumbnail from "@assets/svgs/BigDummy.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 

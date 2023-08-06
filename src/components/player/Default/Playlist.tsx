@@ -101,7 +101,7 @@ const Playlist = ({}: PlaylistProps) => {
       target
     );
 
-    setPlayingInfo({
+    setPlayingInfo((prev) => ({
       playlist: playlistData.map((song) => ({
         songId: song.songId,
         title: song.title,
@@ -111,7 +111,8 @@ const Playlist = ({}: PlaylistProps) => {
         end: song.end,
       })),
       current: playlistData.findIndex((song) => song.isPlaying),
-    });
+      history: prev.history,
+    }));
     setLastSelected(null);
   }, [playlistData, targetIndex, getCursorIndex, setPlayingInfo]);
 

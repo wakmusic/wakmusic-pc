@@ -1,7 +1,5 @@
 import { atom } from "recoil";
 
-import { lyrics as lyricsDummy } from "@constants/dummys";
-
 import {
   ControlStateType,
   LyricType,
@@ -72,7 +70,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
       ? JSON.parse(localStorage.getItem("playlist") as string)
       : [],
     history: [],
-    current: -1,
+    current: 0,
   },
   effects: [
     ({ onSet }) => {
@@ -90,5 +88,5 @@ export const playingInfoState = atom<PlayingInfoStateType>({
 
 export const lyricsState = atom<LyricType[] | null>({
   key: "lyrics",
-  default: lyricsDummy,
+  default: null,
 });

@@ -1,14 +1,18 @@
-import { LyricType } from "@templates/player";
+import { LyricType, SongInfo } from "@templates/player";
 
 import { instance } from "..";
 
 export const getLyrics = async (
-  songId: string
+  song: SongInfo
 ): Promise<LyricType[] | null> => {
   try {
-    const { data } = await instance.get(`/songs/lyrics/${songId}`);
+    const { data } = await instance.get(`/songs/lyrics/${song.songId}`);
 
-    return data;
+    return data.map((lyric: LyricType) => ({
+      ...lyric,
+      start: lyric.start - song.start,
+      end: lyric.end - song.start,
+    }));
   } catch (err) {
     return null;
   }

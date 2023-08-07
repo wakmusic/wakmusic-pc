@@ -12,15 +12,6 @@ export type SongInfo = {
   start: number;
   end: number;
 };
-
-export type Lyrics = {
-  identifier: string;
-  start: number;
-  end: number;
-  text: string;
-  style: string;
-}[];
-
 export type ControlStateType = {
   volume: number;
   repeatType: RepeatType;

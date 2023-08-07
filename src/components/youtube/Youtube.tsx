@@ -213,7 +213,7 @@ const Youtube = ({}: YoutubeProps) => {
     playerState.current.isFirst = false;
 
     (async () => {
-      const lyrics = await getLyrics(nowPlaying.songId);
+      const lyrics = await getLyrics(nowPlaying);
 
       setLyrics(lyrics);
     })();

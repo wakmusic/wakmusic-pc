@@ -70,7 +70,9 @@ const Artist = ({}: ArtistProps) => {
 
       return await fetchArtistAlbums(artistId, tab, pageParam);
     },
-    getNextPageParam: (_, allPages) => {
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length === 0) return undefined;
+
       return allPages.flat().length;
     },
   });

@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
+import { getLyrics } from "@apis/lyrics";
+
 import soundBoosts from "@constants/soundBoosts";
 
 import { useInterval } from "@hooks/interval";
 import {
   useControlState,
   useIsControllingState,
+  useLyricsState,
   useNextSong,
   usePlayingInfoState,
   usePlayingLengthState,
@@ -28,9 +31,10 @@ const Youtube = ({}: YoutubeProps) => {
   const [controlState, setControlState] = useControlState();
   const [playingLength, setPlayingLength] = usePlayingLengthState();
   const [playingProgress, setPlayingProgress] = usePlayingProgressState();
-  const [changeProgress] = usePlayingProgressChangeState();
+  const [changeProgress, setChangeProgress] = usePlayingProgressChangeState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
   const [isControlling] = useIsControllingState();
+  const [, setLyrics] = useLyricsState();
 
   const [nowPlaying, setNowPlaying] = useState<SongInfo | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -149,6 +153,15 @@ const Youtube = ({}: YoutubeProps) => {
             mediaSession.setActionHandler("previoustrack", () => prevSong());
             mediaSession.setActionHandler("play", toggle);
             mediaSession.setActionHandler("pause", toggle);
+            mediaSession.setActionHandler(
+              "seekto",
+              (data: MediaSessionActionDetails) => {
+                setChangeProgress({
+                  progress: data.seekTime ?? 0,
+                  force: true,
+                });
+              }
+            );
           }
         }, 250);
 
@@ -203,7 +216,13 @@ const Youtube = ({}: YoutubeProps) => {
     player.current.loadVideoById(nowPlaying.songId, nowPlaying.start);
 
     playerState.current.isFirst = false;
-  }, [nowPlaying, prevSongId]);
+
+    (async () => {
+      const lyrics = await getLyrics(nowPlaying);
+
+      setLyrics(lyrics);
+    })();
+  }, [nowPlaying, prevSongId, setLyrics]);
 
   // 영상 재생 위치 변경
   useInterval(() => {

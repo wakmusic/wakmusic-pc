@@ -21,10 +21,6 @@ export const getArtistImg = (type: artistImgType, id: string) => {
   return `${staticURL}/artist/${type}/${id}.png`;
 };
 
-export const getLyrics = (id: string) => {
-  return `${staticURL}/lyrics/${id}.vtt`;
-};
-
 export const getProfileImg = (name: profileImgType) => {
   return `${staticURL}/profile/${name}.png`;
 };

@@ -1,7 +1,5 @@
 import { atom } from "recoil";
 
-import { lyrics } from "@constants/dummys";
-
 import {
   ChangeProgressStateType,
   ControlStateType,
@@ -94,7 +92,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
 
 export const lyricsState = atom<LyricType[] | null>({
   key: "lyrics",
-  default: lyrics,
+  default: null,
 });
 
 export const isSpaceDisabled = atom({

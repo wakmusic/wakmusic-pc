@@ -1,11 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { T8Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { usePlayingProgressState } from "@hooks/player";
+import {
+  useIsControllingState,
+  usePlayingLengthState,
+  usePlayingProgressChangeState,
+  usePlayingProgressState,
+} from "@hooks/player";
 
 import { formatSecond } from "@utils/formatting";
 
@@ -14,12 +19,18 @@ interface TimelineProps {
 }
 
 const Timeline = ({ isSeparated }: TimelineProps) => {
-  const length = 272;
-
-  const [current, setCurrent] = usePlayingProgressState();
+  const [length] = usePlayingLengthState();
+  const [progress] = usePlayingProgressState();
+  const [change, setChange] = usePlayingProgressChangeState();
 
   const [isMouseDown, setIsMouseDown] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+
+  const current = useMemo(() => {
+    return isMouseDown ? change.progress : progress;
+  }, [change, isMouseDown, progress]);
+
+  const [, setIsControlling] = useIsControllingState();
 
   const changeProgressPosition = useCallback(
     (e: MouseEvent | React.MouseEvent<HTMLDivElement>) => {
@@ -29,9 +40,12 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
       const x = e.clientX - rect.left;
       const newProgress = x / rect.width;
 
-      setCurrent(Math.min(1, Math.max(0, newProgress)) * length);
+      setChange({
+        progress: Math.min(1, Math.max(0, newProgress)) * length,
+        force: false,
+      });
     },
-    [setCurrent]
+    [length, setChange]
   );
 
   const handleMouseState = useCallback(
@@ -43,7 +57,10 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
       }
 
       setIsMouseDown(true);
-      changeProgressPosition(e);
+
+      if (e.type === "mousedown") {
+        changeProgressPosition(e);
+      }
     },
     [changeProgressPosition]
   );
@@ -66,6 +83,10 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, [handleMouseState, handleMouseMove]);
+
+  useEffect(() => {
+    setIsControlling(isMouseDown);
+  }, [isMouseDown, setIsControlling]);
 
   return (
     <Container

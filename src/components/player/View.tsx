@@ -23,7 +23,7 @@ const View = ({ isBright }: ViewProps) => {
     <Container>
       <ViewsPopover>
         <ViewsText color={colors.blueGray25}>
-          {formatNumber(song.views)}
+          {formatNumber(song?.views)}
         </ViewsText>
       </ViewsPopover>
       <SimpleIconButton icon={isBright ?? false ? ViewsBrightSvg : ViewsSvg} />

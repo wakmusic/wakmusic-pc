@@ -28,7 +28,7 @@ const All = ({ query, res }: AllProps) => {
   const [, setSearchParams] = useSearchParams();
 
   return (
-    <PageItemContainer>
+    <PageItemContainer height={142}>
       <Wrapper>
         {(Object.keys(res) as Array<"song" | "artist" | "remix">)
           .filter((key) => res[key].length !== 0)
@@ -63,6 +63,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  margin-top: 8px;
+  padding-top: 8px;
 `;
 
 const CategoryContainer = styled.div``;

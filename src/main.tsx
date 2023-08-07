@@ -5,7 +5,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
 import GNB from "@components/gnb/GNB";
@@ -20,8 +20,8 @@ import SelectProfileModal from "@components/modals/SelectProfileModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
-import PlayerFallback from "@components/player/PlayerFallback";
 import Visual from "@components/player/Visual/Visual";
+import Youtube from "@components/youtube/Youtube";
 
 import RootOverlay from "@layouts/RootOverlay";
 
@@ -38,6 +38,7 @@ import Search from "@pages/search/Search";
 import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
+import CheckPlayerMode from "@utils/checkPlayerMode";
 import "@utils/loadIpcRenderer";
 
 import "./index.css";
@@ -62,9 +63,10 @@ createRoot(document.getElementById("root") as HTMLElement).render(
       <QueryClientProvider client={queryClient}>
         <Splash />
 
-        <BrowserRouter>
+        <HashRouter>
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
           <Header />
+
           <RootOverlay>
             <GNB />
 
@@ -80,13 +82,17 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/faq" element={<Faq />} />
 
-              <Route path="/player" element={<PlayerFallback />} />
+              <Route path="/player" element={null} />
             </Routes>
 
             <Player />
             <Visual />
           </RootOverlay>
-        </BrowserRouter>
+
+          <CheckPlayerMode />
+        </HashRouter>
+
+        <Youtube />
 
         <ModalPortal>
           <LoginModal />

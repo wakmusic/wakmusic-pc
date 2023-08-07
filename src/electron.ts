@@ -2,6 +2,16 @@ import { BrowserWindow, app, ipcMain, nativeImage } from "electron";
 import * as isDev from "electron-is-dev";
 import { join } from "path";
 
+import {
+  changePresence,
+  client,
+  setProgress,
+  showPlaying,
+} from "./electron/discord";
+import { SongInfo } from "./templates/player";
+
+app.commandLine.appendSwitch("disable-site-isolation-trials");
+
 (async () => {
   // Initialize the Electron application
   app.whenReady().then(() => {
@@ -19,6 +29,8 @@ import { join } from "path";
       webPreferences: {
         nodeIntegration: true,
         contextIsolation: false,
+        webSecurity: false,
+        allowRunningInsecureContent: false,
       },
     });
 
@@ -38,6 +50,7 @@ import { join } from "path";
 
     win.once("ready-to-show", () => {
       win.show();
+      client.login();
     });
   });
 })();
@@ -86,6 +99,10 @@ ipcMain.on("mode:separate", () => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
+  if (win.isMaximized()) {
+    win.unmaximize();
+  }
+
   win.setMaximumSize(290, 10000);
   win.setMinimumSize(290, 714);
 
@@ -101,11 +118,23 @@ ipcMain.on("mode:separate", () => {
   );
 });
 
-ipcMain.on("query:isSeparate", (event) => {
+ipcMain.on("query:isSeparate", () => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
   const bounds = win.getBounds();
 
-  event.returnValue = bounds.width === 290;
+  ipcMain.emit("reply:isSeparate", bounds.width === 290);
+});
+
+ipcMain.on("rpc:progress", (_event, progress: number) => {
+  setProgress(progress);
+});
+
+ipcMain.on("rpc:playing", (_event, isPlaying: boolean) => {
+  showPlaying(isPlaying);
+});
+
+ipcMain.on("rpc:track", (_event, current: SongInfo | null) => {
+  changePresence(current);
 });

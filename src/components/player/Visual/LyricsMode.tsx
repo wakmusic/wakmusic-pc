@@ -20,8 +20,8 @@ const LyricsMode = ({}: LyricsModeProps) => {
   return (
     <Container $on={controlState.isLyricsOn}>
       <TitleContainer>
-        <T4Medium color={colors.blueGray25}>{song.title}</T4Medium>
-        <T5Light color={colors.blueGray100}>{song.artist}</T5Light>
+        <T4Medium color={colors.blueGray25}>{song?.title}</T4Medium>
+        <T5Light color={colors.blueGray100}>{song?.artist}</T5Light>
       </TitleContainer>
 
       <LyricsContainer>
@@ -50,6 +50,8 @@ const Container = styled.div<{ $on: boolean }>`
 
   visibility: hidden;
 
+  margin-top: -73px;
+
   ${({ $on }) =>
     $on &&
     css`
@@ -59,28 +61,28 @@ const Container = styled.div<{ $on: boolean }>`
 
 const TitleContainer = styled.div`
   width: 100%;
+  height: 52px;
 
   text-align: center;
 `;
 
 const LyricsContainer = styled.div`
   width: 100%;
-  height: 238px;
+  height: 243px;
 
-  margin-top: 37px;
+  margin-top: 34px;
 `;
 
 const TimelineContainer = styled.div`
   width: 100%;
 
-  margin: 68px 0 20px 0;
+  margin: 64px 0 40px 0;
+  padding-top: 1px;
 `;
 
 const ControllerContainer = styled.div`
   display: flex;
   justify-content: center;
-
-  margin: 19px 0 72px 0;
 `;
 
 export default LyricsMode;

@@ -34,8 +34,8 @@ const Song = ({}: SongProps) => {
         />
 
         <TitleContainer>
-          <TitleText>{song.title}</TitleText>
-          <ArtistText>{song.artist}</ArtistText>
+          <TitleText>{song?.title || "왁뮤차트 TOP100"}</TitleText>
+          <ArtistText>{song?.artist || "재생 버튼을 클릭해보세요."}</ArtistText>
         </TitleContainer>
 
         <View />
@@ -65,6 +65,7 @@ const UpperContainer = styled.div`
 
 const TitleContainer = styled.div`
   width: 200px;
+  height: 52px;
 
   margin: 0 8px;
 

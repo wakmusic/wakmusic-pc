@@ -101,15 +101,18 @@ const Playlist = ({}: PlaylistProps) => {
       target
     );
 
-    setPlayingInfo({
+    setPlayingInfo((prev) => ({
       playlist: playlistData.map((song) => ({
         songId: song.songId,
         title: song.title,
         artist: song.artist,
         views: song.views,
+        start: song.start,
+        end: song.end,
       })),
       current: playlistData.findIndex((song) => song.isPlaying),
-    });
+      history: prev.history,
+    }));
     setLastSelected(null);
   }, [playlistData, targetIndex, getCursorIndex, setPlayingInfo]);
 

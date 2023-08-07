@@ -15,7 +15,7 @@ const ChartItem = ({ rank, item }: ChartItemProps) => {
   return (
     <Container>
       <Rank now={rank} last={item.hourly.last} />
-      <Track item={item} onClick={console.log} />
+      <Track item={item} />
     </Container>
   );
 };

@@ -1,19 +1,10 @@
+import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
-
-import { ReactComponent as ArtistSVG } from "@assets/icons/ic_40_artist_disabled.svg";
-import { ReactComponent as ChartSVG } from "@assets/icons/ic_40_chart_disabled.svg";
-import { ReactComponent as HomeSVG } from "@assets/icons/ic_40_home_disabled.svg";
-import { ReactComponent as KeepSVG } from "@assets/icons/ic_40_keep_disabled.svg";
-import { ReactComponent as SearchSVG } from "@assets/icons/ic_40_search_disabled.svg";
-import artistLottie from "@assets/lotties/ic_artist.json";
-import chartLottie from "@assets/lotties/ic_chart.json";
-import homeLottie from "@assets/lotties/ic_home.json";
-import keepLottie from "@assets/lotties/ic_keep.json";
-import searchLottie from "@assets/lotties/ic_search.json";
 
 import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
+import { SectionData } from "@constants/gnb";
 
 import { useLoginModalOpener } from "@hooks/loginModal";
 
@@ -22,30 +13,25 @@ import Section from "./Section";
 interface GNB {}
 
 const GNB = ({}: GNB) => {
+  const location = useLocation();
+
   const loginModalOpener = useLoginModalOpener();
+
+  if (location.pathname === "/player") return null;
 
   return (
     <Container>
       <Navigator>
-        <Section path="/" icon={HomeSVG} lottie={homeLottie}>
-          홈
-        </Section>
-
-        <Section path="/chart" icon={ChartSVG} lottie={chartLottie}>
-          왁뮤차트
-        </Section>
-
-        <Section path="/new" icon={SearchSVG} lottie={searchLottie}>
-          최신음악
-        </Section>
-
-        <Section path="/artists" icon={ArtistSVG} lottie={artistLottie}>
-          아티스트
-        </Section>
-
-        <Section path="/user/playlists" icon={KeepSVG} lottie={keepLottie}>
-          보관함
-        </Section>
+        {SectionData.map((item, index) => (
+          <Section
+            path={item.path}
+            icon={item.icon}
+            lottie={item.lottie}
+            key={index}
+          >
+            {item.name}
+          </Section>
+        ))}
       </Navigator>
 
       <Login onClick={() => loginModalOpener()}>

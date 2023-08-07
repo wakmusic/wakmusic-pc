@@ -7,7 +7,7 @@ import PageContainer from "@layouts/PageContainer";
 import PageLayout from "@layouts/PageLayout";
 
 import Likes from "./Likes";
-import Playlists from "./Playlists";
+import Mylist from "./Mylist";
 
 interface UserProps {}
 
@@ -17,7 +17,7 @@ const User = ({}: UserProps) => {
       <Container>
         <Header />
         <Routes>
-          <Route path="/playlists" element={<Playlists />} />
+          <Route path="/playlists" element={<Mylist />} />
           <Route path="/likes" element={<Likes />} />
         </Routes>
       </Container>

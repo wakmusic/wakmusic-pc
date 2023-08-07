@@ -11,6 +11,7 @@ import { join } from "path";
       minWidth: 1250,
       minHeight: 714,
       frame: false,
+      show: false,
       backgroundColor: "#FFF",
       icon: nativeImage.createFromPath(
         join(__dirname, "../public/favicon.ico")
@@ -34,6 +35,10 @@ import { join } from "path";
     } else {
       win.loadFile(join(__dirname, "../dist/index.html"));
     }
+
+    win.once("ready-to-show", () => {
+      win.show();
+    });
   });
 })();
 
@@ -44,6 +49,7 @@ ipcMain.on("window:least", () => {
 
 ipcMain.on("window:max", () => {
   const win = BrowserWindow.getFocusedWindow();
+
   if (win)
     if (win.isMaximized()) {
       win.unmaximize();
@@ -55,4 +61,51 @@ ipcMain.on("window:max", () => {
 ipcMain.on("window:close", () => {
   const win = BrowserWindow.getFocusedWindow();
   if (win) win.close();
+});
+
+ipcMain.on("mode:default", () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  win.setMaximumSize(10000, 10000);
+  win.setMinimumSize(1250, 714);
+
+  const beforeBounds = win.getBounds();
+
+  win.setSize(1250, 714);
+
+  const afterBounds = win.getBounds();
+
+  win.setPosition(
+    beforeBounds.x + (beforeBounds.width - afterBounds.width),
+    beforeBounds.y
+  );
+});
+
+ipcMain.on("mode:separate", () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  win.setMaximumSize(290, 10000);
+  win.setMinimumSize(290, 714);
+
+  const beforeBounds = win.getBounds();
+
+  win.setSize(290, 714);
+
+  const afterBounds = win.getBounds();
+
+  win.setPosition(
+    beforeBounds.x + (beforeBounds.width - afterBounds.width),
+    beforeBounds.y
+  );
+});
+
+ipcMain.on("query:isSeparate", (event) => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  const bounds = win.getBounds();
+
+  event.returnValue = bounds.width === 290;
 });

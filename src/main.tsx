@@ -3,11 +3,14 @@ import { initializeApp } from "firebase/app";
 import "overlayscrollbars/overlayscrollbars.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
+import Splash from "@components/index/Splash";
 import AlertModal from "@components/modals/AlertModal";
 import ConfirmModal from "@components/modals/ConfirmModal";
 import CreateListModal from "@components/modals/CreateListModal";
@@ -17,6 +20,7 @@ import SelectProfileModal from "@components/modals/SelectProfileModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
+import PlayerFallback from "@components/player/PlayerFallback";
 import Visual from "@components/player/Visual/Visual";
 
 import RootOverlay from "@layouts/RootOverlay";
@@ -31,6 +35,7 @@ import MyPage from "@pages/mypage/MyPage";
 import New from "@pages/new/New";
 import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
+import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
 import "@utils/loadIpcRenderer";
@@ -41,39 +46,58 @@ import "./index.css";
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+      staleTime: 5000,
+    },
+  },
+});
+
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <RecoilRoot>
-      <BrowserRouter>
-        <Header />
-        <RootOverlay>
-          <GNB />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/playground" element={<Playground />} />
-            <Route path="/chart" element={<Chart />} />
-            <Route path="/artists" element={<Artists />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/new" element={<New />} />
-            <Route path="/user/*" element={<User />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/faq" element={<Faq />} />
-          </Routes>
-          <Player />
-        </RootOverlay>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <Splash />
 
-      <Visual />
+        <BrowserRouter>
+          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+          <Header />
+          <RootOverlay>
+            <GNB />
 
-      <ModalPortal>
-        <LoginModal />
-        <SelectProfileModal />
-        <AlertModal />
-        <ConfirmModal />
-        <CreateListModal />
-        <LoadListModal />
-        <ShareListModal />
-      </ModalPortal>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/playground" element={<Playground />} />
+              <Route path="/chart" element={<Chart />} />
+              <Route path="/artists" element={<Artists />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/new" element={<New />} />
+              <Route path="/user/*" element={<User />} />
+              <Route path="/playlist/:playlistid" element={<Playlist />} />
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/faq" element={<Faq />} />
+
+              <Route path="/player" element={<PlayerFallback />} />
+            </Routes>
+
+            <Player />
+            <Visual />
+          </RootOverlay>
+        </BrowserRouter>
+
+        <ModalPortal>
+          <LoginModal />
+          <SelectProfileModal />
+          <AlertModal />
+          <ConfirmModal />
+          <CreateListModal />
+          <LoadListModal />
+          <ShareListModal />
+        </ModalPortal>
+      </QueryClientProvider>
     </RecoilRoot>
   </StrictMode>
 );

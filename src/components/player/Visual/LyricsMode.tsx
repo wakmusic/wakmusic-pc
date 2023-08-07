@@ -25,7 +25,7 @@ const LyricsMode = ({}: LyricsModeProps) => {
       </TitleContainer>
 
       <LyricsContainer>
-        <Lyrics size="large" extraPadding={26} />
+        <Lyrics size="large" />
       </LyricsContainer>
 
       <TimelineContainer>
@@ -65,15 +65,15 @@ const TitleContainer = styled.div`
 
 const LyricsContainer = styled.div`
   width: 100%;
-  height: 243px;
+  height: 238px;
 
-  margin-top: 24px;
+  margin-top: 37px;
 `;
 
 const TimelineContainer = styled.div`
   width: 100%;
 
-  margin: 76px 0 20px 0;
+  margin: 68px 0 20px 0;
 `;
 
 const ControllerContainer = styled.div`

@@ -60,7 +60,7 @@ const Artist = ({}: ArtistProps) => {
   } = useInfiniteQuery<SongTotal[]>({
     queryKey: ["artistsAlbums", tab, artistId],
     queryFn: async ({ pageParam = 0 }) => {
-      if (!artistId || !tab) return;
+      if (!artistId || !tab) return [];
 
       return await fetchArtistAlbums(artistId, tab, pageParam);
     },

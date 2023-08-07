@@ -31,7 +31,7 @@ const Youtube = ({}: YoutubeProps) => {
   const [controlState, setControlState] = useControlState();
   const [playingLength, setPlayingLength] = usePlayingLengthState();
   const [playingProgress, setPlayingProgress] = usePlayingProgressState();
-  const [changeProgress] = usePlayingProgressChangeState();
+  const [changeProgress, setChangeProgress] = usePlayingProgressChangeState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
   const [isControlling] = useIsControllingState();
   const [, setLyrics] = useLyricsState();
@@ -148,6 +148,15 @@ const Youtube = ({}: YoutubeProps) => {
             mediaSession.setActionHandler("previoustrack", () => prevSong());
             mediaSession.setActionHandler("play", toggle);
             mediaSession.setActionHandler("pause", toggle);
+            mediaSession.setActionHandler(
+              "seekto",
+              (data: MediaSessionActionDetails) => {
+                setChangeProgress({
+                  progress: data.seekTime ?? 0,
+                  force: true,
+                });
+              }
+            );
           }
         }, 500);
 

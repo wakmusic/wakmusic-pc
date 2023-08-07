@@ -30,6 +30,7 @@ const Artists = ({}: ArtistsProps) => {
     },
   });
 
+  // TODO: 스켈레톤, 오류
   if (isLoading) return <div>로딩중...</div>;
   if (error || !artists) return <div>에러 발생!</div>;
 

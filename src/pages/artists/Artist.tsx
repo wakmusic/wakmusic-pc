@@ -111,6 +111,11 @@ const Artist = ({}: ArtistProps) => {
     }
   }, [albums, fetchNextPage, getVirtualItems, hasNextPage, isFetchingNextPage]);
 
+  useEffect(() => {
+    viewportRef.current?.scrollTo(0, 0);
+  }, [tab, viewportRef]);
+
+  // TODO: 스켈레톤, 오류
   if (artistsIsLoading || albumsIsLoading) return <div>로딩중...</div>;
   if (artistsError || albumsError || !artists || !artist || !albums)
     return <div>에러 발생!</div>;

@@ -7,6 +7,7 @@ import { useRef } from "react";
 interface VirtualizerProps {
   size?: number;
   overscan?: number;
+  hasNextPage?: boolean;
 }
 
 /**
@@ -16,7 +17,7 @@ interface VirtualizerProps {
  *
  * @template T 리스트 아이템의 타입입니다.
  * @param {T[]} items 리스트 아이템 배열입니다.
- * @param {VirtualizerProps} [options={ size: 64, overscan: 5 }] 옵션입니다.
+ * @param {VirtualizerProps} [options={ size: 64, overscan: 5, hasNextPage: false }] 옵션입니다.
  * @returns {{
  *   viewportRef: React.RefObject<HTMLDivElement>,
  *   virtualizer: TanstackVirtualizer,
@@ -43,12 +44,12 @@ interface VirtualizerProps {
  */
 const useVirtualizer = <T>(
   items: T[],
-  { size = 64, overscan = 5 }: VirtualizerProps = {}
+  { size = 64, overscan = 5, hasNextPage = false }: VirtualizerProps = {}
 ) => {
   const viewportRef = useRef<HTMLDivElement>(null);
   const virtualizer = useTanstackVirtualizer({
     getScrollElement: () => viewportRef.current,
-    count: items.length,
+    count: hasNextPage ? items.length + 1 : items.length,
     estimateSize: () => size,
     overscan,
   });
@@ -66,6 +67,7 @@ const useVirtualizer = <T>(
     viewportRef,
     virtualizer,
     getTotalSize: virtualizer.getTotalSize,
+    getVirtualItems: () => virtualizer.getVirtualItems(),
     virtualMap,
   };
 };

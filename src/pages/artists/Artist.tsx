@@ -18,8 +18,11 @@ import TabBar from "@components/globals/TabBar";
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
+import VirtualItem from "@layouts/VirtualItem";
 
 import { artistDetailTabs } from "@constants/tabs";
+
+import useVirtualizer from "@hooks/virtualizer";
 
 import { Song, SongTotal } from "@templates/song";
 
@@ -57,6 +60,9 @@ const Artist = ({}: ArtistProps) => {
     isLoading: albumsIsLoading,
     error: albumsError,
     data: albumsData,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
   } = useInfiniteQuery<SongTotal[]>({
     queryKey: ["artistsAlbums", tab, artistId],
     queryFn: async ({ pageParam = 0 }) => {
@@ -79,6 +85,29 @@ const Artist = ({}: ArtistProps) => {
 
     return albumsData.pages.flat();
   }, [albumsData]);
+
+  const { viewportRef, getTotalSize, virtualMap, getVirtualItems } =
+    useVirtualizer(albums, {
+      hasNextPage,
+    });
+
+  useEffect(() => {
+    if (!albums) return;
+
+    const [lastItem] = [...getVirtualItems()].reverse();
+
+    if (!lastItem) {
+      return;
+    }
+
+    if (
+      lastItem.index >= albums.length - 1 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  }, [albums, fetchNextPage, getVirtualItems, hasNextPage, isFetchingNextPage]);
 
   if (artistsIsLoading || albumsIsLoading) return <div>로딩중...</div>;
   if (artistsError || albumsError || !artists || !artist || !albums)
@@ -108,26 +137,41 @@ const Artist = ({}: ArtistProps) => {
           ]}
         />
 
-        <PageItemContainer height={381}>
-          {albums.map((item, index) => (
-            <SongItem
-              key={index}
-              song={item}
-              selected={selected.includes(item)}
-              features={[
-                SongItemFeature.date,
-                SongItemFeature.views,
-                SongItemFeature.like,
-              ]}
-              onClick={(song) => {
-                if (selected.includes(song)) {
-                  setSelected(selected.filter((item) => item !== song));
-                } else {
-                  setSelected([...selected, song]);
-                }
-              }}
-            />
-          ))}
+        <PageItemContainer
+          height={381}
+          ref={viewportRef}
+          totalSize={getTotalSize()}
+        >
+          {virtualMap((virtualItem, item) => {
+            const isLoader = virtualItem.index > albums.length - 1;
+
+            return (
+              <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
+                {isLoader ? (
+                  <SpinnerWrapper>
+                    <Spinner />
+                  </SpinnerWrapper>
+                ) : (
+                  <SongItem
+                    song={item}
+                    selected={selected.includes(item)}
+                    features={[
+                      SongItemFeature.date,
+                      SongItemFeature.views,
+                      SongItemFeature.like,
+                    ]}
+                    onClick={(song) => {
+                      if (selected.includes(song)) {
+                        setSelected(selected.filter((item) => item !== song));
+                      } else {
+                        setSelected([...selected, song]);
+                      }
+                    }}
+                  />
+                )}
+              </VirtualItem>
+            );
+          })}
         </PageItemContainer>
       </PageContainer>
     </PageLayout>
@@ -136,6 +180,36 @@ const Artist = ({}: ArtistProps) => {
 
 const TabBarWrapper = styled.div`
   margin: 16px 0 0 20px;
+`;
+
+const SpinnerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding-top: 20px;
+`;
+
+const Spinner = styled.div`
+  display: inline-block;
+
+  width: 20px;
+  height: 20px;
+
+  border: 2px solid black;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+
+  animation: rotation 1s linear infinite;
+
+  @keyframes rotation {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 export default Artist;

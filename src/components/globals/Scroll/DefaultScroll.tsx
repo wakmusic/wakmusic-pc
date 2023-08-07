@@ -10,6 +10,7 @@ interface DefaultScrollProps {
 
 const DefaultScroll = forwardRef<HTMLDivElement, DefaultScrollProps>(
   ({ children }: DefaultScrollProps, ref) => {
+    const viewportRef = useRef<HTMLDivElement>(null);
     const osRef = useRef<HTMLDivElement>(null);
 
     const [initialize] = useOverlayScrollbars({
@@ -19,19 +20,23 @@ const DefaultScroll = forwardRef<HTMLDivElement, DefaultScrollProps>(
     });
 
     useEffect(() => {
-      if (!osRef.current || !(ref as RefObject<HTMLDivElement>).current) return;
+      if (
+        !osRef.current ||
+        !((ref || viewportRef) as RefObject<HTMLDivElement>).current
+      )
+        return;
 
       initialize({
         target: osRef.current,
         elements: {
-          viewport: (ref as RefObject<HTMLDivElement>).current,
+          viewport: ((ref || viewportRef) as RefObject<HTMLDivElement>).current,
         },
       });
     }, [initialize, ref]);
 
     return (
       <ScrollWrapper ref={osRef}>
-        <ScrollBar ref={ref}>{children}</ScrollBar>
+        <ScrollBar ref={ref || viewportRef}>{children}</ScrollBar>
       </ScrollWrapper>
     );
   }

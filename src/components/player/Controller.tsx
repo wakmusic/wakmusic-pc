@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as DocumentOffSvg } from "@assets/icons/ic_20_document_off.svg";
@@ -16,6 +17,9 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import {
   useControlState,
+  useIsSpaceDisabled,
+  useNextSong,
+  usePrevSong,
   useSetVolumeState,
   useToggleIsLyricsOnState,
   useToggleIsPlayingState,
@@ -38,17 +42,14 @@ const Controller = ({}: ControllerProps) => {
   const toggleIsRandomState = useToggleIsRandomState();
   const toggleIsLyricsOnState = useToggleIsLyricsOnState();
 
+  const prevSong = usePrevSong();
+  const nextSong = useNextSong();
+
+  const [isSpaceDisabled] = useIsSpaceDisabled();
+
   function onVolumeChange(value: number) {
     setVolumeState(value);
   }
-
-  // TODO
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  function movePrev() {}
-
-  // TODO
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  function moveNext() {}
 
   function getRepeatIcon() {
     switch (controlState.repeatType) {
@@ -61,6 +62,20 @@ const Controller = ({}: ControllerProps) => {
     }
   }
 
+  useEffect(() => {
+    const toggleMusicPlay = (e: KeyboardEvent) => {
+      if (e.code === "Space" && e.repeat === false && !isSpaceDisabled) {
+        toggleIsPlayingState();
+      }
+    };
+
+    window.addEventListener("keydown", toggleMusicPlay);
+
+    return () => {
+      window.removeEventListener("keydown", toggleMusicPlay);
+    };
+  }, [toggleIsPlayingState, isSpaceDisabled]);
+
   return (
     <Container>
       <Volume volume={controlState.volume} onChange={onVolumeChange} />
@@ -68,12 +83,12 @@ const Controller = ({}: ControllerProps) => {
         icon={getRepeatIcon()}
         onClick={toggleRepeatTypeState}
       />
-      <SimpleIconButton icon={PrevSvg} onClick={movePrev} />
+      <SimpleIconButton icon={PrevSvg} onClick={prevSong} />
       <SimpleIconButton
         icon={controlState.isPlaying ? StopSvg : PlaySvg}
         onClick={toggleIsPlayingState}
       />
-      <SimpleIconButton icon={NextSvg} onClick={moveNext} />
+      <SimpleIconButton icon={NextSvg} onClick={nextSong} />
       <SimpleIconButton
         icon={controlState.isRandom ? RandomOnSvg : RandomOffSvg}
         onClick={toggleIsRandomState}

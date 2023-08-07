@@ -26,7 +26,7 @@ const MusicList = ({ rank, item }: MusicListProps) => {
     <Wrapper $select={Math.random() > 0.5}>
       <RankLayout>
         <Rank now={rank} last={item.hourly.last} />
-        <Track item={item} onClick={console.log} />
+        <Track item={item} />
       </RankLayout>
       <TextLayout>
         <Text>{item.hourly.last}위</Text>

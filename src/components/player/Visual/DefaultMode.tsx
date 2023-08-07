@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off_bright.svg";
 import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";
+import dummyThumbnail from "@assets/svgs/BigDummy.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
@@ -22,7 +23,10 @@ const DefaultMode = ({}: DefaultModeProps) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const song = useCurrentSongState();
-  const img = getYoutubeHQThumbnail(song.songId);
+  const img = useMemo(
+    () => (song?.songId ? getYoutubeHQThumbnail(song.songId) : dummyThumbnail),
+    [song?.songId]
+  );
 
   function changeIsLikeState() {
     setIsLiked(!isLiked);

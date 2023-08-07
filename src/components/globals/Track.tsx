@@ -6,24 +6,25 @@ import { T5Medium, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { usePlaySong } from "@hooks/player";
+
+import { Song } from "@templates/song";
+
 import { getYoutubeThumbnail } from "@utils/staticUtill";
 
 interface TrackProps {
-  // TODO: Interface 작업 예정
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  item: any;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onClick?: (item: any) => void;
+  item: Song;
 
   maxWidth?: number;
 }
 
-const Track = ({ item, onClick, maxWidth }: TrackProps) => {
+const Track = ({ item, maxWidth }: TrackProps) => {
+  const playSong = usePlaySong();
+
   const onClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
 
-    onClick && onClick(item);
+    playSong(item);
   };
 
   return (

@@ -16,10 +16,6 @@ type documentType = "privacy" | "terms";
 
 type RoundOrSquare = "round" | "square";
 
-export const getLyrics = (id: string) => {
-  return `${staticURL}/lyrics/${id}.vtt`;
-};
-
 export const getProfileImg = (name: profileImgType) => {
   return `${staticURL}/profile/${name}.png`;
 };

@@ -6,6 +6,7 @@ import { T4Bold, T5Light } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useLoadListModalState } from "@hooks/loadListModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import TwoButton from "../globals/TwoButton";
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
@@ -17,10 +18,14 @@ const LoadListModal = ({}: LoadListModalProps) => {
   const [modalState, setModalState] = useLoadListModalState();
   const [value, setValue] = useState("");
 
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
+
   const resolve = (cancel?: boolean) => {
     if (modalState.resolve) modalState.resolve(cancel ? undefined : value);
     setModalState({ ...modalState, isOpen: false });
     setValue("");
+
+    setIsSpaceDisabled(false);
   };
 
   if (!modalState.isOpen) return null;

@@ -2,6 +2,113 @@ import { SongsSearchResponse } from "@templates/search";
 
 export const chartUpdated = "1688630567";
 
+export const faq = {
+  category: [
+    { type: "qna", category: "전체" },
+    { type: "qna", category: "기타" },
+    { type: "qna", category: "리스트" },
+    { type: "qna", category: "회원" },
+    { type: "qna", category: "플레이어" },
+  ],
+  article: [
+    {
+      question: "왁뮤에서 노래를 들어도 유튜브 조회수에 반영이 되나요?",
+      description:
+        "반영됩니다. \n왁타버스 뮤직은 유튜브 기반 플레이어를 사용하여 재생되는 모든 음악이 조회수로 집계됩니다.",
+      createAt: 1687696656,
+      category: { type: "qna", category: "기타" },
+    },
+    {
+      question: "나만의 플레이리스트 만들 수 있나요?",
+      description:
+        "만들 수 있습니다.\n로그인 후 보관함에서 '리스트 만들기'를 선택하면 생성이 가능합니다. 생성된 리스트는 앱과 연동이 됩니다.",
+      createAt: 1687697114,
+      category: { type: "qna", category: "리스트" },
+    },
+    {
+      question: "회원탈퇴는 어떻게 할 수 있나요?",
+      description:
+        "'보관함' > 오른쪽 상단 '건의사항' > 오른쪽 상단 '회원탈퇴' 버튼을 통해 탈퇴할 수 있습니다.",
+      createAt: 1687697156,
+      category: { type: "qna", category: "회원" },
+    },
+    {
+      question: "프로필을 편집할 수 있나요?",
+      description:
+        "‘보관함’ > 왼쪽 상단 ‘프로필’을 선택하면 프로필 사진과 닉네임 모두 편집 가능합니다.",
+      createAt: 1687697201,
+      category: { type: "qna", category: "회원" },
+    },
+    {
+      question: "데이터 소모량이 어떻게 되나요?",
+      description: "유튜브 영상과 비슷합니다.",
+      createAt: 1687697242,
+      category: { type: "qna", category: "기타" },
+    },
+    {
+      question: "왁뮤목록에 없는 노래를 추가하려고 하는데 어떻게 해야 하나요?",
+      description: "‘보관함’ > ‘건의사항’ > ‘문의하기’를 이용해주세요.",
+      createAt: 1687697306,
+      category: { type: "qna", category: "기타" },
+    },
+    {
+      question: "썸네일 말고 영상이 나오게는 할 수 없나요?",
+      description:
+        "영상이 플레이되면 기능에 제약이 생기는 문제가 많아서 썸네일만 표시되도록 조정했습니다.",
+      createAt: 1687697382,
+      category: { type: "qna", category: "플레이어" },
+    },
+    {
+      question: "특정 노래들이 다른 노래에 비해서 소리가 너무 작아요.",
+      description:
+        "유튜브에서 그대로 가져오기 때문에 원본이 소리가 작으면 작게 들립니다.",
+      createAt: 1687697451,
+      category: { type: "qna", category: "플레이어" },
+    },
+    {
+      question: "가사가 아직 안나오는 곡들이 있어요.",
+      description:
+        "작업 중입니다. 가내수공업으로 직접 제작 중이니 이해 부탁드립니다.",
+      createAt: 1687697499,
+      category: { type: "qna", category: "기타" },
+    },
+    {
+      question: "PC와 모바일이 연동이 되나요?",
+      description:
+        "계정이 연동되어 있어 내 리스트, 좋아요 등의 기능을 두 플랫폼 모두 사용하실 수 있습니다.",
+      createAt: 1687697585,
+      category: { type: "qna", category: "기타" },
+    },
+    {
+      question: "iOS 백그라운드 재생 진입 시 잠시 끊겨요",
+      description: "개발자 : “어쩔 수 없음”",
+      createAt: 1687697669,
+      category: { type: "qna", category: "플레이어" },
+    },
+    {
+      question:
+        "블루투스 연결이 끊기면 노래가 일시정지되지 않아서 노래가 나와요. 암살 방지 기능 안되나요?",
+      description: "개발자 : “힘든 상황…”",
+      createAt: 1687697703,
+      category: { type: "qna", category: "기타" },
+    },
+    {
+      question: "버그제보는 아무나 이용 가능한가요?",
+      description:
+        "네 가능합니다. \n다만 정말 필요할 경우에만 이용 바랍니다. 많은 데이터 이동으로 인한 서버 부담이 이어질 수 있습니다.",
+      createAt: 1687697741,
+      category: { type: "qna", category: "기타" },
+    },
+    {
+      question: "안드로이드 백그라운드 재생 중 다음 곡으로 넘어가질 않아요",
+      description:
+        "배터리 절약 옵션과 충돌이 날 수 있습니다.\n'설정 > 애플리케이션 > 왁타버스 뮤직 > 배터리 > 제한 없음' 순서대로 설정 부탁드립니다.",
+      createAt: 1689083213,
+      category: { type: "qna", category: "플레이어" },
+    },
+  ],
+};
+
 export const userInfo = {
   username: "왁타버스 뮤직",
   via: "카카오톡",

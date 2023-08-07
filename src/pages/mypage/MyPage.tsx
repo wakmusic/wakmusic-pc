@@ -3,10 +3,6 @@ import styled from "styled-components/macro";
 import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
 import { ReactComponent as EditSVG } from "@assets/icons/ic_24_edit.svg";
 import { ReactComponent as SetSVG } from "@assets/icons/ic_30_set.svg";
-import { ReactComponent as DocumentSVG } from "@assets/icons/ic_40_document.svg";
-import { ReactComponent as NotiSVG } from "@assets/icons/ic_40_noti.svg";
-import { ReactComponent as QnaSVG } from "@assets/icons/ic_40_qna.svg";
-import { ReactComponent as QuestionSVG } from "@assets/icons/ic_40_question.svg";
 
 import {
   T4Bold,
@@ -21,6 +17,7 @@ import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
 import { userInfo } from "@constants/dummys";
+import { blocks } from "@constants/myPage";
 
 interface MyPageProps {}
 
@@ -49,30 +46,15 @@ const MyPage = ({}: MyPageProps) => {
             <T6Medium>회원탈퇴</T6Medium>
           </QuitButton>
         </ProfileBlock>
-        <Block
-          title="공지사항"
-          description={`최신 업데이트 및
-                        중요한 정보를 안내합니다.`}
-          svg={<NotiSVG />}
-        />
-        <Block
-          title="문의하기"
-          description={`이용 관련 문의를 등록하신다면
-                        빠른 시일 내에 처리하겠습니다.`}
-          svg={<QuestionSVG />}
-        />
-        <Block
-          title="자주 묻는 질문"
-          description={`왁뮤를 이용하시는 회원님들의
-                        자주 묻는 질문을 모았습니다.`}
-          svg={<QnaSVG />}
-        />
-        <Block
-          title="서비스 정보"
-          description={`개인정보 처리방침 및
-                        서비스 내 이용 정보를 확인 가능합니다.`}
-          svg={<DocumentSVG />}
-        />
+        {blocks.map((block, index) => (
+          <Block
+            key={index}
+            title={block.title}
+            description={block.description}
+            endPoint={block.endPoint}
+            svg={<block.svg />}
+          />
+        ))}
       </Container>
       <Buanebi>
         <DotSVG />

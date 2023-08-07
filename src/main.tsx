@@ -29,6 +29,7 @@ import firebaseConfig from "@constants/firebaseConfig";
 
 import Artists from "@pages/artists/Artists";
 import Chart from "@pages/chart/Chart";
+import Faq from "@pages/faq/Faq";
 import Index from "@pages/index/Index";
 import MyPage from "@pages/mypage/MyPage";
 import New from "@pages/new/New";
@@ -77,6 +78,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/user/*" element={<User />} />
               <Route path="/playlist/:playlistid" element={<Playlist />} />
               <Route path="/mypage" element={<MyPage />} />
+              <Route path="/faq" element={<Faq />} />
 
               <Route path="/player" element={<PlayerFallback />} />
             </Routes>

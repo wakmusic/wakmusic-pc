@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { T4Bold, T6Medium } from "@components/Typography";
@@ -8,12 +9,15 @@ import colors from "@constants/colors";
 interface BlockProps {
   title: string;
   description: string;
+  endPoint: string;
   svg: ReactElement;
 }
 
-const Block = ({ title, description, svg }: BlockProps) => {
+const Block = ({ title, description, endPoint, svg }: BlockProps) => {
+  const navigate = useNavigate();
+
   return (
-    <Container>
+    <Container onClick={() => navigate(endPoint)}>
       <Title>{title}</Title>
       <Description>{description}</Description>
       {svg}

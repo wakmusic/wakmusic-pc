@@ -93,7 +93,7 @@ const Lyrics = ({ size }: LyricsProps) => {
   return (
     <Container
       ref={ref}
-      onWheel={throttle(() => setTimeout(5))}
+      onWheel={throttle(() => setTimeout(3))}
       style={{
         padding: `${(ref.current?.offsetHeight ?? 0) / 2}px 0`,
       }}

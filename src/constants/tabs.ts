@@ -35,3 +35,9 @@ export const userTabs = [
   { text: "내 리스트", to: "/user/playlists" },
   { text: "좋아요", to: "/user/likes" },
 ];
+
+export const artistDetailTabs = [
+  { text: "최신순", to: { tab: "new" } },
+  { text: "인기순", to: { tab: "popular" } },
+  { text: "과거순", to: { tab: "old" } },
+];

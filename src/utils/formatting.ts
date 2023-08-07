@@ -48,3 +48,7 @@ export function formatDate(date: number): string {
 
   return stringDate.replace(/(.\d)(.\d)(.\d)/, "20$1.$2.$3");
 }
+
+export function capitalize(word: string) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}

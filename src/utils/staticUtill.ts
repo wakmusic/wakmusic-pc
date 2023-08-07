@@ -1,3 +1,5 @@
+import { Artist } from "@templates/artists";
+
 const staticURL = import.meta.env.VITE_STATIC_URL;
 
 type profileImgType =
@@ -10,16 +12,9 @@ type profileImgType =
   | "segyun"
   | "ifari";
 
-type artistImgType = "card" | "big" | "group" | "full" | "round" | "square";
-
 type documentType = "privacy" | "terms";
 
-export const getArtistImg = (type: artistImgType, id: string) => {
-  if (type == "big") {
-    return `${staticURL}/artist/${type}/${id}.jpg`;
-  }
-  return `${staticURL}/artist/${type}/${id}.png`;
-};
+type RoundOrSquare = "round" | "square";
 
 export const getLyrics = (id: string) => {
   return `${staticURL}/lyrics/${id}.vtt`;
@@ -55,4 +50,16 @@ export const getPlaylistIcon = (id: number) => {
 
 export const getDocument = (type: documentType) => {
   return `${staticURL}/document/${type}.pdf`;
+};
+
+export const getArtistImage = (artist: Artist, type: RoundOrSquare) => {
+  return `${staticURL}/artist/${type}/${artist.artistId}.png?v=${artist.image[type]}`;
+};
+
+export const getArtistRoundImage = (artist: Artist) => {
+  return getArtistImage(artist, "round");
+};
+
+export const getArtistSquareImage = (artist: Artist) => {
+  return getArtistImage(artist, "square");
 };

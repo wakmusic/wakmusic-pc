@@ -1,5 +1,8 @@
+import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components/macro";
+
+import { fetchArtistList } from "@apis/artist";
 
 import Artist from "@components/artists/Artist";
 import Tab from "@components/globals/Tab";
@@ -9,13 +12,26 @@ import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
 
-import { artistList } from "@constants/dummys";
 import { artistTabs } from "@constants/tabs";
 
 interface ArtistsProps {}
 
 const Artists = ({}: ArtistsProps) => {
   const [searchParams] = useSearchParams();
+  const {
+    isLoading,
+    data: artists,
+    error,
+  } = useQuery({
+    queryKey: "artists",
+    queryFn: async () => {
+      const artists = fetchArtistList();
+      return artists;
+    },
+  });
+
+  if (isLoading) return <div>로딩중...</div>;
+  if (error || !artists) return <div>에러 발생!</div>;
 
   return (
     <PageLayout>
@@ -32,7 +48,7 @@ const Artists = ({}: ArtistsProps) => {
 
         <PageItemContainer>
           <ArtistsContainer>
-            {artistList
+            {artists
               .filter((artist) => {
                 if (searchParams.get("type") === null) return true;
                 else return artist.group.en === searchParams.get("type");

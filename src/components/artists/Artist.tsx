@@ -1,9 +1,12 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { T7Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
+
+import { getArtistRoundImage } from "@utils/staticUtill";
 
 interface ArtistProps {
   // TODO: Interface 작업 예정
@@ -12,11 +15,17 @@ interface ArtistProps {
 }
 
 const Artist = ({ artist }: ArtistProps) => {
+  const navigate = useNavigate();
+
   return (
-    <Container whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-      <Image
-        src={`https://static.wakmusic.xyz/static/artist/round/${artist.artistId}.png?v=${artist.image.round}`}
-      />
+    <Container
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      onClick={() => {
+        navigate(`/artists/${artist.artistId}`);
+      }}
+    >
+      <Image src={getArtistRoundImage(artist)} />
       <Name>{artist.name}</Name>
     </Container>
   );

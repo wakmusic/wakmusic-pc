@@ -28,7 +28,7 @@ interface ArtistProps {}
 const Artist = ({}: ArtistProps) => {
   const [selected, setSelected] = useState<Song[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const tab = searchParams.get("tab") as ArtistAlbumsSortType;
+  const tab = (searchParams.get("tab") as ArtistAlbumsSortType) ?? "new";
 
   useEffect(() => {
     if (searchParams.size === 0) {

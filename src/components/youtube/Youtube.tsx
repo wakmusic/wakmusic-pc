@@ -88,15 +88,31 @@ const Youtube = ({}: YoutubeProps) => {
         video.volume = playerState.current.volume / 100;
       }
 
-      if (!gainNode.current && video) {
+      if (video) {
         const audioCtx = new AudioContext();
-        const source = audioCtx.createMediaElementSource(video);
 
-        gainNode.current = audioCtx.createGain();
-        gainNode.current.gain.value = 1;
-        source.connect(gainNode.current);
+        try {
+          const mediaSource = audioCtx.createMediaElementSource(video);
+          const _gainNode = audioCtx.createGain();
+          mediaSource.connect(_gainNode);
+          _gainNode.connect(audioCtx.destination);
+          gainNode.current = _gainNode;
+        } catch {
+          // gainNode가 이미 있을 경우 패스
+        }
 
-        gainNode.current.connect(audioCtx.destination);
+        if (gainNode.current && playerState.current.current) {
+          const current = playerState.current.current;
+
+          if (current.songId in soundBoosts) {
+            gainNode.current.gain.value = soundBoosts[current.songId];
+            console.debug(
+              `[SoundBoost] ${current.title}: ${soundBoosts[current.songId]}x`
+            );
+          } else {
+            gainNode.current.gain.value = 1;
+          }
+        }
       }
 
       if (!playerState.current.loaded && playerState.current.current) {
@@ -113,14 +129,17 @@ const Youtube = ({}: YoutubeProps) => {
           (current.end === 0 ? videoDuration : current.end) - current.start;
 
         if (gainNode.current) {
-          if (current.songId in soundBoosts) {
-            gainNode.current.gain.value = soundBoosts[current.songId];
-            console.debug(
-              `[SoundBoost] ${current.title}: ${soundBoosts[current.songId]}x`
-            );
-          } else {
-            gainNode.current.gain.value = 1;
-          }
+          // gainNode.current.gain.value = 100;
+          // if (current.songId in soundBoosts) {
+          //   console.log(gainNode);
+          //   // gainNode.current.gain.value = 200; //soundBoosts[current.songId];
+          //   console.log(gainNode);
+          //   console.debug(
+          //     `[SoundBoost] ${current.title}: ${soundBoosts[current.songId]}x`
+          //   );
+          // } else {
+          //   gainNode.current.gain.value = 100;
+          // }
         }
 
         // 그냥 넣으면 안먹힘

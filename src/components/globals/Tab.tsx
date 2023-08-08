@@ -12,9 +12,10 @@ import { isString } from "@utils/isTypes";
 interface TabProps {
   to: string | Query; // 라우트 또는 쿼리 파라미터
   children: string;
+  onClick?: () => void;
 }
 
-const Tab = ({ to, children }: TabProps) => {
+const Tab = ({ to, children, onClick }: TabProps) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
@@ -45,6 +46,7 @@ const Tab = ({ to, children }: TabProps) => {
     <Container
       onClick={() => {
         nav();
+        onClick && onClick();
       }}
     >
       <Title $activated={isCurrent()}>{children}</Title>

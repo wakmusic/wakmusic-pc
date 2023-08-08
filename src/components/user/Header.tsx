@@ -38,7 +38,14 @@ const Header = ({}: HeaderProps) => {
     <Container>
       <TabBar>
         {userTabs.map((item, index) => (
-          <Tab to={item.to} key={index}>
+          <Tab
+            to={item.to}
+            onClick={() => {
+              setMylistEditMode(false);
+              setLikesEditMode(false);
+            }}
+            key={index}
+          >
             {item.text}
           </Tab>
         ))}

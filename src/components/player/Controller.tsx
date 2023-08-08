@@ -65,6 +65,7 @@ const Controller = ({}: ControllerProps) => {
   useEffect(() => {
     const toggleMusicPlay = (e: KeyboardEvent) => {
       if (e.code === "Space" && e.repeat === false && !isSpaceDisabled) {
+        e.preventDefault();
         toggleIsPlayingState();
       }
     };

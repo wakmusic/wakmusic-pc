@@ -1,11 +1,14 @@
 import { SongTotal } from "./song";
 import { User } from "./user";
 
-type basePlaylist = {
+type playlistMeta = {
   key: string;
   title: string;
   createAt: number;
   user?: User;
+};
+
+export type BasePlaylist = playlistMeta & {
   songs: SongTotal[];
 };
 
@@ -19,13 +22,16 @@ type recommendImage = {
   square: boolean;
 };
 
-export type PlaylistType = basePlaylist & {
+export type RecommendListMetaType = playlistMeta & {
+  public: boolean;
+  image: recommendImage;
+};
+
+export type PlaylistType = BasePlaylist & {
   image: defaultImage;
 };
 
-export type RecommendlistType = basePlaylist & {
-  image: recommendImage;
-};
+export type RecommendListType = RecommendListMetaType & BasePlaylist;
 
 export type myListItemType = PlaylistType & {
   index: number;

@@ -1,3 +1,5 @@
+import { useAnimation } from "framer-motion";
+import throttle from "lodash.throttle";
 import { useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
@@ -115,6 +117,49 @@ const Artist = ({}: ArtistProps) => {
     viewportRef.current?.scrollTo(0, 0);
   }, [tab, viewportRef]);
 
+  const controls = useAnimation();
+
+  // useEffect(() => {
+  //   if (!viewportRef.current) return;
+
+  //   const scrollEvent = (e: Event) => {
+  //     const { scrollTop } = e.target as HTMLDivElement;
+
+  //     if (scrollTop > 0) {
+  //       controls.start("round");
+  //     } else {
+  //       controls.start("square");
+  //     }
+  //   };
+
+  //   viewportRef.current.addEventListener("scroll", scrollEvent);
+
+  //   return () => {
+  //     if (!viewportRef.current) return;
+
+  //     viewportRef.current.removeEventListener("scroll", scrollEvent);
+  //   };
+  // }, [controls, viewportRef]);
+
+  const [scroll, setScroll] = useState(0);
+  const [animationing, setAnimationing] = useState(false);
+
+  useEffect(() => {
+    if (animationing) return;
+
+    setAnimationing(true);
+
+    (async () => {
+      if (scroll > 0) {
+        await controls.start("round");
+      } else {
+        await controls.start("square");
+      }
+
+      setAnimationing(false);
+    })();
+  }, [animationing, controls, scroll]);
+
   // TODO: 스켈레톤, 오류
   if (artistsIsLoading || albumsIsLoading) return <div>로딩중...</div>;
   if (artistsError || albumsError || !artists || !artist || !albums)
@@ -123,7 +168,7 @@ const Artist = ({}: ArtistProps) => {
   return (
     <PageLayout>
       <PageContainer>
-        <ArtistInfo artist={artist} />
+        <ArtistInfo artist={artist} controls={controls} small={scroll > 0} />
 
         <TabBarWrapper>
           <TabBar>
@@ -145,9 +190,13 @@ const Artist = ({}: ArtistProps) => {
         />
 
         <PageItemContainer
-          height={381}
+          height={273}
           ref={viewportRef}
           totalSize={getTotalSize()}
+          onScroll={throttle((e) => {
+            const { scrollTop } = e.target as HTMLDivElement;
+            setScroll(scrollTop);
+          })}
         >
           {virtualMap((virtualItem, item) => {
             const isLoader = virtualItem.index > albums.length - 1;

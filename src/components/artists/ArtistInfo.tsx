@@ -1,4 +1,10 @@
-import { useState } from "react";
+import { AnimationControls, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import {
+  containerVariants,
+  contentVariants,
+  hiddenVariants,
+} from "src/animations/artist";
 import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as DocumentOff } from "@assets/icons/ic_30_document_off.svg";
@@ -12,51 +18,79 @@ import colors from "@constants/colors";
 import { Artist } from "@templates/artists";
 
 import { capitalize } from "@utils/formatting";
-import { getArtistSquareImage } from "@utils/staticUtill";
 import { addAlpha } from "@utils/utils";
+
+import ArtistImage from "./ArtistImage";
 
 interface ArtistInfoProps {
   artist: Artist;
+  controls: AnimationControls;
+  small: boolean;
 }
 
-const ArtistInfo = ({ artist }: ArtistInfoProps) => {
-  const [open, setOpen] = useState(false);
+const ArtistInfo = ({ artist, controls, small }: ArtistInfoProps) => {
+  const [descriptionOpen, setDescriptionOpen] = useState(false);
+
+  useEffect(() => {
+    if (small) {
+      setDescriptionOpen(false);
+    }
+  }, [small]);
 
   return (
-    <Container>
+    <Container animate={controls} initial="square" variants={containerVariants}>
       <Background $color={artist.color} />
 
       <InnerContainer>
-        <Image src={getArtistSquareImage(artist)} alt={artist.name} />
+        <ArtistImage artist={artist} controls={controls} />
 
-        <Content>
+        <Content animate={controls} initial="square" variants={contentVariants}>
           <T3Medium color={colors.gray900}>
-            {open ? "소개글" : artist.name}
+            {descriptionOpen ? "소개글" : artist.name}
           </T3Medium>
 
-          {open ? (
+          {descriptionOpen ? (
             <DescriptionContainer>
               <DefaultScroll>
-                <Description>{artist.description}</Description>
+                <Description $color={colors.blueGray600}>
+                  {artist.description}
+                </Description>
               </DefaultScroll>
             </DescriptionContainer>
           ) : (
             <>
               <EnglishName>{capitalize(artist.artistId)}</EnglishName>
-              <Description>{artist.appTitle}</Description>
+
+              <motion.div
+                animate={controls}
+                initial="square"
+                variants={hiddenVariants}
+              >
+                <GroupText>
+                  {artist.group.kr !== "우왁굳" && artist.group.kr}
+                  {artist.graduated && " · 졸업"}
+                </GroupText>
+
+                <Description>{artist.appTitle}</Description>
+              </motion.div>
             </>
           )}
         </Content>
 
-        <DocumentButton onClick={() => setOpen(!open)}>
-          {open ? <DocumentOn /> : <DocumentOff />}
+        <DocumentButton
+          animate={controls}
+          initial="square"
+          variants={hiddenVariants}
+          onClick={() => !small && setDescriptionOpen(!descriptionOpen)}
+        >
+          {descriptionOpen ? <DocumentOn /> : <DocumentOff />}
         </DocumentButton>
       </InnerContainer>
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   height: 200px;
 `;
 
@@ -85,34 +119,35 @@ const InnerContainer = styled.div`
   align-items: flex-start;
 `;
 
-const Image = styled.img`
-  width: 140px;
-`;
-
-const Content = styled.div`
+const Content = styled(motion.div)`
   margin-left: 24px;
+  margin-top: 12px;
 `;
 
-const DescriptionContainer = styled.div`
+const DescriptionContainer = styled(motion.div)`
   width: 566px;
 `;
 
-const Description = styled(T6Medium)`
+const Description = styled(T6Medium)<{ $color?: string }>`
   width: 542px;
   height: 132px;
 
-  color: ${colors.primary900};
+  color: ${({ $color }) => $color || colors.gray900};
 
   margin-top: 4px;
 `;
-
 const EnglishName = styled(T6Light)`
   color: ${colors.blueGray500};
-
-  margin: 4px 0 22px 0;
 `;
 
-const DocumentButton = styled.div`
+const GroupText = styled(T6Medium)`
+  color: ${colors.gray900};
+
+  margin-top: 12px;
+  margin-bottom: 16px;
+`;
+
+const DocumentButton = styled(motion.div)`
   position: absolute;
   right: 28px;
 `;

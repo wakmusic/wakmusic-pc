@@ -2571,7 +2571,7 @@ export const profileList = [
   },
 ];
 
-const myListSongs = [
+export const myListSongs = [
   {
     songId: "QgMFpuos4Rg",
     title: "LOCKDOWN",

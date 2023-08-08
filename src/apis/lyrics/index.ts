@@ -1,6 +1,6 @@
 import { LyricType, SongInfo } from "@templates/player";
 
-import { instance } from "..";
+import instance from "../axios";
 
 export const getLyrics = async (
   song: SongInfo

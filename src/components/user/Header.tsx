@@ -49,7 +49,9 @@ const Header = ({}: HeaderProps) => {
           activated: "완료",
         }}
         activated={isEditMode}
-        onClick={toggleEditMode}
+        onClick={() => {
+          toggleEditMode();
+        }}
       />
     </Container>
   );

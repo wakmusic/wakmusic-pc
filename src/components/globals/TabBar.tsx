@@ -10,10 +10,9 @@ import { TabProps } from "./Tab";
 
 interface TabBarProps {
   children: JSX.Element[];
-  onChange?: () => void;
 }
 
-const TabBar = ({ children, onChange }: TabBarProps) => {
+const TabBar = ({ children }: TabBarProps) => {
   const [indicate, setIndicater] = useState(0);
   const [searchParams] = useSearchParams();
   const location = useLocation();
@@ -29,7 +28,6 @@ const TabBar = ({ children, onChange }: TabBarProps) => {
       ) {
         // 중첩 라우트인 경우
         setIndicater(index);
-        onChange && onChange();
       } else if (isObject(_props.to)) {
         // Query Paramter인 경우
         for (const [key, value] of Object.entries(_props.to)) {
@@ -39,10 +37,9 @@ const TabBar = ({ children, onChange }: TabBarProps) => {
         }
 
         setIndicater(index);
-        onChange && onChange();
       }
     });
-  }, [children, searchParams, location, onChange]);
+  }, [children, searchParams, location]);
 
   return (
     <Container>

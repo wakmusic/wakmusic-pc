@@ -19,7 +19,7 @@ const UpdatedText = ({ updated, marginTop, marginLeft }: UpdatedTextProps) => {
     const date = new Date(Number(updated) * 1000);
 
     const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     const ampm = date.getHours() > 12 ? "오후" : "오전";
     const hour = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
 

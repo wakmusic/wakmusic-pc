@@ -38,6 +38,7 @@ const Playlist = ({}: PlaylistProps) => {
   const { data: recommendLists } = useQuery({
     queryKey: "recommendLists",
     queryFn: fetchRecommendedPlaylist,
+    staleTime: Infinity,
   });
 
   const [isEditmode] = usePlaylistState();
@@ -59,6 +60,7 @@ const Playlist = ({}: PlaylistProps) => {
 
       return await fetchRecommendedPlaylistDetail(recommendKey);
     },
+    staleTime: 24 * 60 * 60 * 1000,
   });
 
   const playlist: BasePlaylist = useMemo(() => {

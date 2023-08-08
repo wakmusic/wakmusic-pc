@@ -22,6 +22,7 @@ const Index = ({}: IndexProps) => {
   } = useQuery({
     queryKey: "recommendLists",
     queryFn: fetchRecommendedPlaylist,
+    staleTime: Infinity,
   });
 
   // TODO

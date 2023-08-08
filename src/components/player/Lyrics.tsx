@@ -1,12 +1,20 @@
+import throttle from "lodash.throttle";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
-import { PretendardMedium } from "@components/Typography";
+import { PretendardMedium, T4Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
-import { lyrics as dummy } from "@constants/dummys";
 
-import { usePlayingProgressState } from "@hooks/player";
+import { useInterval } from "@hooks/interval";
+import {
+  useControlState,
+  useLyricsState,
+  usePlayingProgressChangeState,
+  usePlayingProgressState,
+} from "@hooks/player";
+
+import { isNull } from "@utils/isTypes";
 
 type LyricsSize = "large" | "small";
 
@@ -15,19 +23,32 @@ interface LyricsProps {
 }
 
 const Lyrics = ({ size }: LyricsProps) => {
-  const lyrics = dummy;
+  const [lyrics] = useLyricsState();
 
-  const [current, setCurrent] = usePlayingProgressState();
-  const [padding, setPadding] = useState(0);
+  const [current] = usePlayingProgressState();
+  const [, setCurrent] = usePlayingProgressChangeState();
+  const [control, setControl] = useControlState();
+
+  const [timeout, setTimeout] = useState<number>(0);
 
   const ref = useRef<HTMLDivElement>(null);
 
   function onLineClick(index: number) {
-    setCurrent(lyrics[index].start);
+    if (isNull(lyrics)) return;
+
+    if (!control.isPlaying) {
+      setControl({ ...control, isPlaying: true });
+    }
+
+    setTimeout(0);
+    setCurrent({
+      progress: lyrics[index].start,
+      force: true,
+    });
   }
 
   const getIndex = useCallback(() => {
-    if (current < lyrics[0].start) {
+    if (isNull(lyrics) || current < lyrics[0].start) {
       return 0;
     }
 
@@ -40,23 +61,43 @@ const Lyrics = ({ size }: LyricsProps) => {
 
   useEffect(() => {
     if (!ref.current) return;
+    if (timeout !== 0) return;
 
     const index = getIndex();
 
     const target = ref.current.children[index] as HTMLDivElement;
     if (!target) return;
 
+    const padding = ref.current.offsetHeight / 2;
     const top = target.offsetTop - ref.current.offsetTop - padding + 12;
 
     ref.current.scrollTo({ top, behavior: "smooth" });
-  }, [getIndex, padding]);
+  }, [getIndex, timeout]);
 
-  useEffect(() => {
-    setPadding((ref.current?.offsetHeight ?? 0) / 2);
-  }, [ref]);
+  useInterval(() => {
+    setTimeout((prev) => {
+      if (prev === 0) return 0;
+
+      return prev - 1;
+    });
+  }, 1000);
+
+  if (!lyrics) {
+    return (
+      <NoLyricsContainer>
+        <NoLyrics>가사가 존재하지 않습니다</NoLyrics>
+      </NoLyricsContainer>
+    );
+  }
 
   return (
-    <Container ref={ref} $padding={padding}>
+    <Container
+      ref={ref}
+      onWheel={throttle(() => setTimeout(3))}
+      style={{
+        padding: `${(ref.current?.offsetHeight ?? 0) / 2}px 0`,
+      }}
+    >
       {lyrics.map((line, i) => {
         const Line = i === getIndex() ? CurrentLine : DefaultLine;
 
@@ -75,13 +116,22 @@ const Lyrics = ({ size }: LyricsProps) => {
   );
 };
 
-const Container = styled.div<{
-  $padding: number;
-}>`
+const NoLyricsContainer = styled.div`
   width: 100%;
   height: 100%;
 
-  padding: ${({ $padding }) => $padding}px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NoLyrics = styled(T4Medium)`
+  color: ${colors.blueGray25};
+`;
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
 
   overflow-y: scroll;
 

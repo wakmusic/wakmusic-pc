@@ -8,6 +8,8 @@ import { ReactComponent as SearchIconSVG } from "@assets/icons/ic_16_line_search
 
 import colors from "@constants/colors";
 
+import { useIsSpaceDisabled } from "@hooks/player";
+
 import SearchDropdown from "./SearchDropdown";
 
 interface SearchProps {}
@@ -26,6 +28,7 @@ const Search = ({}: SearchProps) => {
   );
 
   const navigate = useNavigate();
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   useEffect(() => {
     const sub = watch((value, { type }) => {
@@ -93,10 +96,12 @@ const Search = ({}: SearchProps) => {
     switch (e.type) {
       case "focus":
         setIsFocusing(true);
+        setIsSpaceDisabled(true);
         break;
       case "blur":
         if (e.relatedTarget === null) {
           setIsFocusing(false);
+          setIsSpaceDisabled(false);
         }
     }
   }, []);

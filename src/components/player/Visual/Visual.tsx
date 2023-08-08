@@ -1,7 +1,9 @@
 import { motion, useAnimation } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { visualVariants } from "src/animations/toggleVisualMode";
 import styled, { css } from "styled-components/macro";
+
+import dummyThumbnail from "@assets/svgs/BigDummy.svg";
 
 import { useCurrentSongState, useVisualModeState } from "@hooks/player";
 
@@ -17,7 +19,10 @@ const Visual = ({}: VisualProps) => {
   const [visualMode] = useVisualModeState();
   const song = useCurrentSongState();
 
-  const img = getYoutubeHQThumbnail(song.songId);
+  const img = useMemo(
+    () => (song?.songId ? getYoutubeHQThumbnail(song.songId) : dummyThumbnail),
+    [song?.songId]
+  );
 
   const controls = useAnimation();
 

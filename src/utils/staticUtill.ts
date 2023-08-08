@@ -1,4 +1,4 @@
-const staticURL = process.env.REACT_APP_STATIC_URL;
+const staticURL = import.meta.env.VITE_STATIC_URL;
 
 type profileImgType =
   | "bat"
@@ -19,10 +19,6 @@ export const getArtistImg = (type: artistImgType, id: string) => {
     return `${staticURL}/artist/${type}/${id}.jpg`;
   }
   return `${staticURL}/artist/${type}/${id}.png`;
-};
-
-export const getLyrics = (id: string) => {
-  return `${staticURL}/lyrics/${id}.vtt`;
 };
 
 export const getProfileImg = (name: profileImgType) => {

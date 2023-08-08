@@ -1,12 +1,11 @@
 import { atom } from "recoil";
 
-import { hourlyChart as dummy } from "@constants/dummys";
-
 import {
+  ChangeProgressStateType,
   ControlStateType,
+  LyricType,
   PlayingInfoStateType,
   RepeatType,
-  SongInfo,
 } from "@templates/player";
 
 export const visualModeState = atom<boolean>({
@@ -17,32 +16,86 @@ export const visualModeState = atom<boolean>({
 export const controlState = atom<ControlStateType>({
   key: "control",
   default: {
-    volume: 50,
+    volume: Number(localStorage.getItem("volume")) || 50,
     repeatType: RepeatType.Off,
     isPlaying: false,
     isRandom: false,
     isLyricsOn: false,
   },
+  effects: [
+    ({ onSet }) => {
+      onSet((newValue, oldValue) => {
+        if (newValue.isPlaying !== (oldValue as ControlStateType).isPlaying) {
+          window.ipcRenderer?.send("rpc:playing", newValue.isPlaying);
+        }
+
+        if (newValue.volume !== (oldValue as ControlStateType).volume) {
+          localStorage.setItem("volume", newValue.volume.toString());
+        }
+      });
+    },
+  ],
+});
+
+export const isControlling = atom<boolean>({
+  key: "isControlling",
+  default: false,
+});
+
+export const playingLength = atom<number>({
+  key: "playingLength",
+  default: 1,
 });
 
 export const playingProgress = atom<number>({
   key: "currentPlaying",
   default: 0,
+  effects: [
+    ({ onSet }) => {
+      onSet((value) => {
+        window.ipcRenderer?.send("rpc:progress", value);
+      });
+    },
+  ],
+});
+
+export const playingChangeProgress = atom<ChangeProgressStateType>({
+  key: "currentPlayingChange",
+  default: {
+    force: false,
+    progress: 0,
+  },
 });
 
 export const playingInfoState = atom<PlayingInfoStateType>({
   key: "playingInfo",
-  // dummy
   default: {
-    playlist: [...dummy, ...dummy, ...dummy, ...dummy].map(
-      (song) =>
-        ({
-          songId: song.songId,
-          title: song.title,
-          artist: song.artist,
-          views: song.hourly.views,
-        } as unknown as SongInfo)
-    ),
-    current: 11,
+    playlist: localStorage.getItem("playlist")
+      ? JSON.parse(localStorage.getItem("playlist") as string)
+      : [],
+    history: [],
+    current: 0,
   },
+  effects: [
+    ({ onSet }) => {
+      onSet((value, oldValue) => {
+        const current = value.playlist[value.current];
+        window.ipcRenderer?.send("rpc:track", current);
+
+        if (value.playlist !== (oldValue as PlayingInfoStateType).playlist) {
+          localStorage.setItem("playlist", JSON.stringify(value.playlist));
+        }
+      });
+    },
+  ],
+});
+
+export const lyricsState = atom<LyricType[] | null>({
+  key: "lyrics",
+  default: null,
+});
+
+export const isSpaceDisabled = atom({
+  key: "isSpaceDisabled",
+  default: false,
 });

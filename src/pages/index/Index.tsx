@@ -18,14 +18,15 @@ const Index = ({}: IndexProps) => {
   const {
     isLoading: recommendIsLoading,
     error: recommendError,
-    data,
+    data: recommendLists,
   } = useQuery({
     queryKey: "recommendLists",
     queryFn: fetchRecommendedPlaylist,
   });
 
-  if (recommendIsLoading) return <div>loading...</div>;
-  if (recommendError || !data) return <div>error...</div>;
+  // TODO
+  if (recommendIsLoading || !recommendLists) return <div>loading...</div>;
+  if (recommendError) return <div>error...</div>;
 
   return (
     <Container>
@@ -36,7 +37,7 @@ const Index = ({}: IndexProps) => {
       <RecommandContainer>
         <T4Medium color={colors.primary900}>왁뮤팀이 추천하는 리스트</T4Medium>
         <RecommendItems>
-          {data.map((item, index) => (
+          {recommendLists.map((item, index) => (
             <RecommendItem key={index} item={item} />
           ))}
         </RecommendItems>

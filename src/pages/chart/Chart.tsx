@@ -1,5 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
+
+import { ChartsType, fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
 
 import FunctionSection from "@components/chart/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
@@ -11,8 +14,6 @@ import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
 import VirtualItem from "@layouts/VirtualItem";
 
-import { chartUpdated, hourlyChart } from "@constants/dummys";
-
 import useVirtualizer from "@hooks/virtualizer";
 
 import { Song } from "@templates/song";
@@ -22,8 +23,10 @@ interface ChartProps {}
 const Chart = ({}: ChartProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selected, setSelected] = useState<Song[]>([]);
-
-  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(hourlyChart);
+  const tab = useMemo(
+    () => (searchParams.get("type") ?? "hourly") as ChartsType,
+    [searchParams]
+  );
 
   useEffect(() => {
     // /chart로 접속하면 ?type=hourly로 이동
@@ -31,6 +34,38 @@ const Chart = ({}: ChartProps) => {
       setSearchParams({ type: "hourly" });
     }
   }, [searchParams, setSearchParams]);
+
+  const {
+    isLoading: chartsIsLoading,
+    error: chartsError,
+    data: charts,
+  } = useQuery({
+    queryKey: ["charts", tab],
+    queryFn: async () => await fetchCharts(tab, 100),
+  });
+
+  const {
+    isLoading: chartUpdatedIsLoading,
+    error: chartUpdatedError,
+    data: chartUpdated,
+  } = useQuery({
+    queryKey: ["chartUpdated", tab],
+    queryFn: async () => await fetchChartsUpdateTypes(tab),
+  });
+
+  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
+    charts ?? []
+  );
+
+  useEffect(() => {
+    setSelected([]);
+    viewportRef.current?.scrollTo(0, 0);
+  }, [tab, viewportRef]);
+
+  // TODO
+  if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)
+    return <div>로딩중...</div>;
+  if (chartsError || chartUpdatedError) return <div>에러...</div>;
 
   return (
     <PageLayout>

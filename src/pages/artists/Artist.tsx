@@ -3,11 +3,7 @@ import { useInfiniteQuery, useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
 import styled from "styled-components/macro";
 
-import {
-  ArtistAlbumsSortType,
-  fetchArtistAlbums,
-  fetchArtistList,
-} from "@apis/artist";
+import { fetchArtistAlbums, fetchArtistList } from "@apis/artist";
 
 import ArtistInfo from "@components/artists/ArtistInfo";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
@@ -24,14 +20,14 @@ import { artistDetailTabs } from "@constants/tabs";
 
 import useVirtualizer from "@hooks/virtualizer";
 
-import { Song, SongTotal } from "@templates/song";
+import { Song, SongSortType, SongTotal } from "@templates/song";
 
 interface ArtistProps {}
 
 const Artist = ({}: ArtistProps) => {
   const [selected, setSelected] = useState<Song[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const tab = (searchParams.get("tab") as ArtistAlbumsSortType) ?? "new";
+  const tab = (searchParams.get("tab") as SongSortType) ?? "new";
 
   useEffect(() => {
     if (searchParams.size === 0) {

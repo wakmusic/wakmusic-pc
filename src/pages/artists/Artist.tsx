@@ -45,7 +45,9 @@ const Artist = ({}: ArtistProps) => {
   const controls = useAnimation();
 
   const [scroll, setScroll] = useState(0);
-  const [animationing, setAnimationing] = useState(false);
+  const [animationState, setAnimationState] = useState<"round" | "square">(
+    "square"
+  );
 
   const [, setPlayingInfo] = usePlayingInfoState();
 
@@ -123,20 +125,16 @@ const Artist = ({}: ArtistProps) => {
   }, [tab, viewportRef]);
 
   useEffect(() => {
-    if (animationing) return;
+    if (scroll > 0 && animationState === "square") {
+      controls.start("round");
+      setAnimationState("round");
+    }
 
-    setAnimationing(true);
-
-    (async () => {
-      if (scroll > 0) {
-        await controls.start("round");
-      } else {
-        await controls.start("square");
-      }
-
-      setAnimationing(false);
-    })();
-  }, [animationing, controls, scroll]);
+    if (scroll === 0 && animationState === "round") {
+      controls.start("square");
+      setAnimationState("square");
+    }
+  }, [animationState, controls, scroll]);
 
   const play = (songs: Song[]) => {
     setPlayingInfo({

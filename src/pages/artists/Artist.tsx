@@ -39,7 +39,7 @@ interface ArtistProps {}
 
 const Artist = ({}: ArtistProps) => {
   const [selected, setSelected] = useState<Song[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const tab = (searchParams.get("tab") as ArtistAlbumsSortType) ?? "new";
 
   const controls = useAnimation();
@@ -48,12 +48,6 @@ const Artist = ({}: ArtistProps) => {
   const [animationing, setAnimationing] = useState(false);
 
   const [, setPlayingInfo] = usePlayingInfoState();
-
-  useEffect(() => {
-    if (searchParams.size === 0) {
-      setSearchParams({ tab: "new" });
-    }
-  }, [searchParams, setSearchParams]);
 
   const location = useLocation();
   const artistId = useMemo(

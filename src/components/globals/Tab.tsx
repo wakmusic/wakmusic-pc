@@ -10,7 +10,7 @@ import { Query } from "@templates/tabType";
 import { isString } from "@utils/isTypes";
 
 interface TabProps {
-  to: string | Query; // 라우트 또는 쿼리 파라미터
+  to: string | Query | null; // 라우트 또는 쿼리 파라미터
   children: string;
 }
 
@@ -24,14 +24,17 @@ const Tab = ({ to, children }: TabProps) => {
         navigate(to);
       }
     : () => {
-        setSearchParams(to);
+        setSearchParams(to ?? {});
       };
 
   const isCurrent = () => {
     if (isString(to)) {
       return location.pathname === to && searchParams.size === 0;
+    } else if (to === null) {
+      console.log(searchParams);
+      return searchParams.size === 0;
     } else {
-      for (const [key, value] of Object.entries(to)) {
+      for (const [key, value] of Object.entries(to ?? {})) {
         if (searchParams.get(key) !== value) {
           return false;
         }

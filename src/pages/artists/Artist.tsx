@@ -57,7 +57,7 @@ const Artist = ({}: ArtistProps) => {
 
   const location = useLocation();
   const artistId = useMemo(
-    () => location.pathname.split("/")[2],
+    () => decodeURI(location.pathname.split("/")[2]),
     [location.pathname]
   );
 
@@ -73,7 +73,6 @@ const Artist = ({}: ArtistProps) => {
   });
 
   const {
-    isLoading: albumsIsLoading,
     error: albumsError,
     data: albumsData,
     isFetchingNextPage,
@@ -105,7 +104,7 @@ const Artist = ({}: ArtistProps) => {
   }, [albumsData]);
 
   const { viewportRef, getTotalSize, virtualMap, getVirtualItems } =
-    useVirtualizer(albums, {
+    useVirtualizer(albums ?? [], {
       hasNextPage,
     });
 
@@ -171,8 +170,8 @@ const Artist = ({}: ArtistProps) => {
   };
 
   // TODO: 스켈레톤, 오류
-  if (artistsIsLoading || albumsIsLoading) return <div>로딩중...</div>;
-  if (artistsError || albumsError || !artists || !artist || !albums)
+  if (artistsIsLoading) return <div>로딩중...</div>;
+  if (artistsError || albumsError || !artists || !artist)
     return <div>에러 발생!</div>;
 
   return (

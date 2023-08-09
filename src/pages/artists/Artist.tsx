@@ -11,8 +11,12 @@ import {
   fetchArtistList,
 } from "@apis/artist";
 
+import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";
+import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg";
+
 import ArtistInfo from "@components/artists/ArtistInfo";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
+import IconButton from "@components/globals/IconButton";
 import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
@@ -24,9 +28,12 @@ import VirtualItem from "@layouts/VirtualItem";
 
 import { artistDetailTabs } from "@constants/tabs";
 
+import { usePlayingInfoState } from "@hooks/player";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { Song, SongTotal } from "@templates/song";
+
+import getChartData from "@utils/getChartData";
 
 interface ArtistProps {}
 
@@ -34,6 +41,13 @@ const Artist = ({}: ArtistProps) => {
   const [selected, setSelected] = useState<Song[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = (searchParams.get("tab") as ArtistAlbumsSortType) ?? "new";
+
+  const controls = useAnimation();
+
+  const [scroll, setScroll] = useState(0);
+  const [animationing, setAnimationing] = useState(false);
+
+  const [, setPlayingInfo] = usePlayingInfoState();
 
   useEffect(() => {
     if (searchParams.size === 0) {
@@ -117,33 +131,6 @@ const Artist = ({}: ArtistProps) => {
     viewportRef.current?.scrollTo(0, 0);
   }, [tab, viewportRef]);
 
-  const controls = useAnimation();
-
-  // useEffect(() => {
-  //   if (!viewportRef.current) return;
-
-  //   const scrollEvent = (e: Event) => {
-  //     const { scrollTop } = e.target as HTMLDivElement;
-
-  //     if (scrollTop > 0) {
-  //       controls.start("round");
-  //     } else {
-  //       controls.start("square");
-  //     }
-  //   };
-
-  //   viewportRef.current.addEventListener("scroll", scrollEvent);
-
-  //   return () => {
-  //     if (!viewportRef.current) return;
-
-  //     viewportRef.current.removeEventListener("scroll", scrollEvent);
-  //   };
-  // }, [controls, viewportRef]);
-
-  const [scroll, setScroll] = useState(0);
-  const [animationing, setAnimationing] = useState(false);
-
   useEffect(() => {
     if (animationing) return;
 
@@ -159,6 +146,29 @@ const Artist = ({}: ArtistProps) => {
       setAnimationing(false);
     })();
   }, [animationing, controls, scroll]);
+
+  const play = (songs: Song[]) => {
+    setPlayingInfo({
+      playlist: songs.map((song) => ({
+        songId: song.songId,
+        title: song.title,
+        artist: song.artist,
+        views: getChartData(song).views,
+        start: song.start,
+        end: song.end,
+      })),
+      history: [],
+      current: 0,
+    });
+  };
+
+  const playAllHandler = () => {
+    play(albums);
+  };
+
+  const playShuffleHandler = () => {
+    play(albums.sort(() => Math.random() - 0.5));
+  };
 
   // TODO: 스켈레톤, 오류
   if (artistsIsLoading || albumsIsLoading) return <div>로딩중...</div>;
@@ -178,6 +188,15 @@ const Artist = ({}: ArtistProps) => {
               </Tab>
             ))}
           </TabBar>
+
+          <ButtonLayout>
+            <IconButton icon={PlayAllSVG} onClick={playAllHandler}>
+              전체재생
+            </IconButton>
+            <IconButton icon={RandomSVG} onClick={playShuffleHandler}>
+              랜덤재생
+            </IconButton>
+          </ButtonLayout>
         </TabBarWrapper>
 
         <GuideBar
@@ -235,7 +254,17 @@ const Artist = ({}: ArtistProps) => {
 };
 
 const TabBarWrapper = styled.div`
-  margin: 16px 0 0 20px;
+  margin: 16px 20px 0 20px;
+
+  display: flex;
+`;
+
+const ButtonLayout = styled.div`
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
 
 const SpinnerWrapper = styled.div`

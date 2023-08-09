@@ -161,13 +161,8 @@ const Artist = ({}: ArtistProps) => {
     });
   };
 
-  const playAllHandler = () => {
-    play(albums);
-  };
-
-  const playShuffleHandler = () => {
-    play(albums.sort(() => Math.random() - 0.5));
-  };
+  const playAllHandler = () => play(albums);
+  const playShuffleHandler = () => play(albums.sort(() => Math.random() - 0.5));
 
   // TODO: 스켈레톤, 오류
   if (artistsIsLoading) return <div>로딩중...</div>;

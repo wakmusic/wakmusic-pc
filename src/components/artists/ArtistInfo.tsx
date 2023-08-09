@@ -101,7 +101,7 @@ const Background = styled.div<{ $color: string[][] }>`
   width: 754px;
   height: 200px;
 
-  opacity: 0.6;
+  opacity: 0.3;
 
   ${({ $color: color }) => css`
     background: linear-gradient(

@@ -31,7 +31,6 @@ const Tab = ({ to, children }: TabProps) => {
     if (isString(to)) {
       return location.pathname === to && searchParams.size === 0;
     } else if (to === null) {
-      console.log(searchParams);
       return searchParams.size === 0;
     } else {
       for (const [key, value] of Object.entries(to ?? {})) {

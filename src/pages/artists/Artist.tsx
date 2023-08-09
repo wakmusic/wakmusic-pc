@@ -61,9 +61,7 @@ const Artist = ({}: ArtistProps) => {
     data: artists,
   } = useQuery({
     queryKey: "artists",
-    queryFn: async () => {
-      return await fetchArtistList();
-    },
+    queryFn: fetchArtistList,
   });
 
   const {

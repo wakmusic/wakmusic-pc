@@ -128,20 +128,6 @@ const Youtube = ({}: YoutubeProps) => {
         const duration =
           (current.end === 0 ? videoDuration : current.end) - current.start;
 
-        if (gainNode.current) {
-          // gainNode.current.gain.value = 100;
-          // if (current.songId in soundBoosts) {
-          //   console.log(gainNode);
-          //   // gainNode.current.gain.value = 200; //soundBoosts[current.songId];
-          //   console.log(gainNode);
-          //   console.debug(
-          //     `[SoundBoost] ${current.title}: ${soundBoosts[current.songId]}x`
-          //   );
-          // } else {
-          //   gainNode.current.gain.value = 100;
-          // }
-        }
-
         // 그냥 넣으면 안먹힘
         setTimeout(() => {
           const iframe = e.target.getIframe() as HTMLIFrameElement;

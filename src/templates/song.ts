@@ -44,3 +44,5 @@ export type Song =
   | SongWeekly
   | SongMonthly
   | SongTotal;
+
+export type SongSortType = "popular" | "new" | "old";

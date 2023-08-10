@@ -4,7 +4,7 @@ export interface Query {
 
 interface tabType {
   text: string;
-  to: string | Query;
+  to: string | Query | null;
 }
 
 export default tabType;

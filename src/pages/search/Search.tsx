@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components/macro";
+
+import { fetchSearchSongs } from "@apis/songs";
 
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
@@ -9,13 +12,10 @@ import Result from "@components/search/Result";
 import PageContainer from "@layouts/PageContainer";
 import PageLayout from "@layouts/PageLayout";
 
-import { songList } from "@constants/dummys";
 import { searchTabs } from "@constants/tabs";
 
-import { SongsSearchResponse, tabsTypes } from "@templates/search";
+import { tabsTypes } from "@templates/search";
 import { Query } from "@templates/tabType";
-
-import { isNull } from "@utils/isTypes";
 
 interface SearchProps {}
 
@@ -25,27 +25,22 @@ function isTabsTypes(arg: unknown): arg is tabsTypes {
 
 const Search = ({}: SearchProps) => {
   const [searchParams] = useSearchParams();
-  const [query, setQuery] = useState("");
-  const [responses, setResponses] = useState<SongsSearchResponse>();
-  const [tab, setTab] = useState<tabsTypes>("all");
-
-  useEffect(() => {
-    const search = searchParams.get("query");
-    const tab = isTabsTypes(searchParams.get("tab"))
+  const tab = useMemo(() => {
+    return isTabsTypes(searchParams.get("tab"))
       ? (searchParams.get("tab") as tabsTypes)
       : "all";
+  }, [searchParams]);
 
-    if (!isNull(search)) {
-      setQuery(search);
-    }
+  const query = useMemo(() => searchParams.get("query") ?? "", [searchParams]);
 
-    if (!isNull(tab)) {
-      setTab(tab);
-    }
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["search", query],
+    queryFn: async () => await fetchSearchSongs(query),
+  });
 
-    // TODO: 여기서 api 요청
-    setResponses(songList);
-  }, [query, searchParams]);
+  // TODO
+  if (isLoading || !data) return <div>로딩중...</div>;
+  if (error) return <div>에러...</div>;
 
   return (
     <PageLayout>
@@ -58,12 +53,7 @@ const Search = ({}: SearchProps) => {
           ))}
         </TabBar>
 
-        {responses ? (
-          <Result tab={tab} query={query} res={responses} />
-        ) : (
-          // TODO
-          <div>로딩중이에용</div>
-        )}
+        <Result tab={tab} query={query} res={data} />
       </Container>
     </PageLayout>
   );

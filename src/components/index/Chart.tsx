@@ -1,4 +1,7 @@
+import { useQuery } from "react-query";
 import styled from "styled-components/macro";
+
+import { fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
 
 import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";
 import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg";
@@ -8,13 +11,35 @@ import Button from "@components/globals/IconButton";
 import UpdatedText from "@components/globals/UpdatedText";
 
 import colors from "@constants/colors";
-import { chartUpdated, hourlyChart } from "@constants/dummys";
 
 import ChartItem from "./ChartItem";
 
 interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
+  const {
+    isLoading: chartsIsLoading,
+    error: chartsError,
+    data: charts,
+  } = useQuery({
+    queryKey: ["charts", "hourly"],
+    queryFn: async () => await fetchCharts("hourly", 100),
+  });
+
+  const {
+    isLoading: chartUpdatedIsLoading,
+    error: chartUpdatedError,
+    data: chartUpdated,
+  } = useQuery({
+    queryKey: ["chartUpdated", "hourly"],
+    queryFn: async () => await fetchChartsUpdateTypes("hourly"),
+  });
+
+  // TODO
+  if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)
+    return <div>로딩중...</div>;
+  if (chartsError || chartUpdatedError) return <div>에러...</div>;
+
   return (
     <Container>
       <Header>
@@ -30,7 +55,7 @@ const Chart = ({}: ChartProps) => {
       </Header>
 
       <Items>
-        {hourlyChart.slice(0, 8).map((item, index) => (
+        {charts.slice(0, 8).map((item, index) => (
           <ChartItem key={index} rank={index + 1} item={item} />
         ))}
       </Items>

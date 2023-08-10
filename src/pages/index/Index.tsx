@@ -1,4 +1,7 @@
+import { useQuery } from "react-query";
 import styled from "styled-components/macro";
+
+import { fetchRecommendedPlaylist } from "@apis/playlist";
 
 import { T4Medium } from "@components/Typography";
 import Background from "@components/index/Background";
@@ -8,11 +11,24 @@ import RecommendItem from "@components/index/RecommendItem";
 import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
-import { recommended } from "@constants/dummys";
 
 interface IndexProps {}
 
 const Index = ({}: IndexProps) => {
+  const {
+    isLoading: recommendIsLoading,
+    error: recommendError,
+    data: recommendLists,
+  } = useQuery({
+    queryKey: "recommendLists",
+    queryFn: fetchRecommendedPlaylist,
+    staleTime: Infinity,
+  });
+
+  // TODO
+  if (recommendIsLoading || !recommendLists) return <div>loading...</div>;
+  if (recommendError) return <div>error...</div>;
+
   return (
     <Container>
       <Background />
@@ -22,7 +38,7 @@ const Index = ({}: IndexProps) => {
       <RecommandContainer>
         <T4Medium color={colors.primary900}>왁뮤팀이 추천하는 리스트</T4Medium>
         <RecommendItems>
-          {recommended.map((item, index) => (
+          {recommendLists.map((item, index) => (
             <RecommendItem key={index} item={item} />
           ))}
         </RecommendItems>

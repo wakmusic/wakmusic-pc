@@ -1,5 +1,5 @@
 import { VirtualItem as VirtualItemType } from "@tanstack/react-virtual";
-import styled, { css } from "styled-components/macro";
+import styled from "styled-components/macro";
 
 interface VirtualItemProps {
   children: React.ReactNode;
@@ -10,15 +10,17 @@ const VirtualItem = ({ children, virtualItem }: VirtualItemProps) => {
   return <Container $virtualItem={virtualItem}>{children}</Container>;
 };
 
-const Container = styled.div<{ $virtualItem: VirtualItemType }>`
+const Container = styled.div.attrs<{ $virtualItem: VirtualItemType }>(
+  ({ $virtualItem }) => ({
+    style: {
+      height: `${$virtualItem.size}px`,
+      transform: `translateY(${$virtualItem.start}px)`,
+    },
+  })
+)`
   position: absolute;
 
   width: 100%;
-
-  ${({ $virtualItem }) => css`
-    height: ${$virtualItem.size}px;
-    transform: translateY(${$virtualItem.start}px);
-  `}
 `;
 
 export default VirtualItem;

@@ -35,6 +35,13 @@
   src: url("/fonts/Pretendard-Bold.subset.woff2") format("woff2");
 }
 
+@font-face {
+  font-family: "PretendardJP";
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/PretendardJP-Medium.woff2") format("woff2");
+}
+
 /* S-Core Dream */
 
 @font-face {
@@ -53,9 +60,9 @@ body {
 
 * {
   font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-    "Pretendard Variable", Pretendard, Roboto, "Noto Sans KR", "Segoe UI",
-    "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    sans-serif;
+    "Pretendard Variable", Pretendard, PretendardJP, Roboto, "Noto Sans KR",
+    "Segoe UI", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", sans-serif;
 
   user-select: none;
   -webkit-user-select: none;

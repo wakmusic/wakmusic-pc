@@ -7,7 +7,7 @@ export const Text = styled.p<{ color?: string }>`
 `;
 
 export const Pretendard = styled(Text)`
-  font-family: "Pretendard", sans-serif;
+  font-family: "Pretendard", PretendardJP, sans-serif;
   letter-spacing: -0.5px;
 `;
 

@@ -1,5 +1,4 @@
 import { BrowserWindow, app, ipcMain, nativeImage } from "electron";
-import * as isDev from "electron-is-dev";
 import { join } from "path";
 
 import {
@@ -10,50 +9,45 @@ import {
 } from "./electron/discord";
 import { SongInfo } from "./templates/player";
 
+declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
+
+if (require("electron-squirrel-startup")) {
+  app.quit();
+}
+
 app.commandLine.appendSwitch("disable-site-isolation-trials");
 
-(async () => {
-  // Initialize the Electron application
-  app.whenReady().then(() => {
-    const win = new BrowserWindow({
-      width: 1250,
-      height: 714,
-      minWidth: 1250,
-      minHeight: 714,
-      frame: false,
-      show: false,
-      backgroundColor: "#FFF",
-      icon: nativeImage.createFromPath(
-        join(__dirname, "../public/favicon.ico")
-      ),
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        webSecurity: false,
-        allowRunningInsecureContent: false,
-      },
-    });
-
-    win.setMenuBarVisibility(false);
-
-    if (isDev) {
-      win.webContents.openDevTools();
-
-      if (process.env.BUILD_TYPE === "1") {
-        win.loadFile(join(__dirname, "../dist/index.html"));
-      } else {
-        win.loadURL(`http://localhost:3000`);
-      }
-    } else {
-      win.loadFile(join(__dirname, "../dist/index.html"));
-    }
-
-    win.once("ready-to-show", () => {
-      win.show();
-      client.login();
-    });
+app.whenReady().then(() => {
+  const win = new BrowserWindow({
+    width: 1250,
+    height: 714,
+    minWidth: 1250,
+    minHeight: 714,
+    frame: false,
+    show: false,
+    backgroundColor: "#FFF",
+    icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      webSecurity: false,
+      allowRunningInsecureContent: false,
+    },
   });
-})();
+
+  win.setMenuBarVisibility(false);
+
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+  } else {
+    win.loadFile(join(__dirname, `/web/index.html`));
+  }
+
+  win.once("ready-to-show", () => {
+    win.show();
+    client.login();
+  });
+});
 
 ipcMain.on("window:least", () => {
   const win = BrowserWindow.getFocusedWindow();

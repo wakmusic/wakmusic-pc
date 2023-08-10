@@ -8,11 +8,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   root: "./src",
   publicDir: "./../public",
-  cacheDir: "./../.yarn/.vite",
   base: "./",
   envDir: "./../",
   build: {
-    outDir: "./../dist",
+    outDir: "./../.vite/build/web",
+    sourcemap: true,
   },
   plugins: [react(), tsconfigPaths(), svgr(), macrosPlugin()],
 });

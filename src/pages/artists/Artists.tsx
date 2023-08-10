@@ -67,7 +67,7 @@ const Artists = ({}: ArtistsProps) => {
 const TabBarWrapper = styled.div`
   padding: 16px 20px 0 20px;
 
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 `;
 
 const ArtistsContainer = styled.div`
@@ -76,9 +76,7 @@ const ArtistsContainer = styled.div`
   grid-auto-rows: 124px;
   grid-row-gap: 14px;
 
-  padding-left: 20px;
-  padding-right: 29px;
-  padding-bottom: 20px;
+  padding: 8px 20px 20px 20px;
 `;
 
 export default Artists;

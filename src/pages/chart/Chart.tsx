@@ -21,19 +21,12 @@ import { Song } from "@templates/song";
 interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [selected, setSelected] = useState<Song[]>([]);
   const tab = useMemo(
     () => (searchParams.get("type") ?? "hourly") as ChartsType,
     [searchParams]
   );
-
-  useEffect(() => {
-    // /chart로 접속하면 ?type=hourly로 이동
-    if (searchParams.size === 0) {
-      setSearchParams({ type: "hourly" });
-    }
-  }, [searchParams, setSearchParams]);
 
   const {
     isLoading: chartsIsLoading,

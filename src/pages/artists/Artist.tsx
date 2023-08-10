@@ -1,3 +1,5 @@
+import { useAnimation } from "framer-motion";
+import throttle from "lodash.throttle";
 import { useEffect, useMemo, useState } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
@@ -5,8 +7,12 @@ import styled from "styled-components/macro";
 
 import { fetchArtistAlbums, fetchArtistList } from "@apis/artist";
 
+import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";
+import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg";
+
 import ArtistInfo from "@components/artists/ArtistInfo";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
+import IconButton from "@components/globals/IconButton";
 import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
@@ -18,26 +24,32 @@ import VirtualItem from "@layouts/VirtualItem";
 
 import { artistDetailTabs } from "@constants/tabs";
 
+import { usePlayingInfoState } from "@hooks/player";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { Song, SongSortType, SongTotal } from "@templates/song";
+
+import getChartData from "@utils/getChartData";
 
 interface ArtistProps {}
 
 const Artist = ({}: ArtistProps) => {
   const [selected, setSelected] = useState<Song[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const tab = (searchParams.get("tab") as SongSortType) ?? "new";
 
-  useEffect(() => {
-    if (searchParams.size === 0) {
-      setSearchParams({ tab: "new" });
-    }
-  }, [searchParams, setSearchParams]);
+  const controls = useAnimation();
+
+  const [scroll, setScroll] = useState(0);
+  const [animationState, setAnimationState] = useState<"round" | "square">(
+    "square"
+  );
+
+  const [, setPlayingInfo] = usePlayingInfoState();
 
   const location = useLocation();
   const artistId = useMemo(
-    () => location.pathname.split("/")[2],
+    () => decodeURI(location.pathname.split("/")[2]),
     [location.pathname]
   );
 
@@ -47,13 +59,10 @@ const Artist = ({}: ArtistProps) => {
     data: artists,
   } = useQuery({
     queryKey: "artists",
-    queryFn: async () => {
-      return await fetchArtistList();
-    },
+    queryFn: fetchArtistList,
   });
 
   const {
-    isLoading: albumsIsLoading,
     error: albumsError,
     data: albumsData,
     isFetchingNextPage,
@@ -85,7 +94,7 @@ const Artist = ({}: ArtistProps) => {
   }, [albumsData]);
 
   const { viewportRef, getTotalSize, virtualMap, getVirtualItems } =
-    useVirtualizer(albums, {
+    useVirtualizer(albums ?? [], {
       hasNextPage,
     });
 
@@ -111,15 +120,45 @@ const Artist = ({}: ArtistProps) => {
     viewportRef.current?.scrollTo(0, 0);
   }, [tab, viewportRef]);
 
+  useEffect(() => {
+    if (scroll > 0 && animationState === "square") {
+      controls.start("round");
+      setAnimationState("round");
+    }
+
+    if (scroll === 0 && animationState === "round") {
+      controls.start("square");
+      setAnimationState("square");
+    }
+  }, [animationState, controls, scroll]);
+
+  const play = (songs: Song[]) => {
+    setPlayingInfo({
+      playlist: songs.map((song) => ({
+        songId: song.songId,
+        title: song.title,
+        artist: song.artist,
+        views: getChartData(song).views,
+        start: song.start,
+        end: song.end,
+      })),
+      history: [],
+      current: 0,
+    });
+  };
+
+  const playAllHandler = () => play(albums);
+  const playShuffleHandler = () => play(albums.sort(() => Math.random() - 0.5));
+
   // TODO: 스켈레톤, 오류
-  if (artistsIsLoading || albumsIsLoading) return <div>로딩중...</div>;
-  if (artistsError || albumsError || !artists || !artist || !albums)
+  if (artistsIsLoading) return <div>로딩중...</div>;
+  if (artistsError || albumsError || !artists || !artist)
     return <div>에러 발생!</div>;
 
   return (
     <PageLayout>
       <PageContainer>
-        <ArtistInfo artist={artist} />
+        <ArtistInfo artist={artist} controls={controls} small={scroll > 0} />
 
         <TabBarWrapper>
           <TabBar>
@@ -129,6 +168,15 @@ const Artist = ({}: ArtistProps) => {
               </Tab>
             ))}
           </TabBar>
+
+          <ButtonLayout>
+            <IconButton icon={PlayAllSVG} onClick={playAllHandler}>
+              전체재생
+            </IconButton>
+            <IconButton icon={RandomSVG} onClick={playShuffleHandler}>
+              랜덤재생
+            </IconButton>
+          </ButtonLayout>
         </TabBarWrapper>
 
         <GuideBar
@@ -141,9 +189,13 @@ const Artist = ({}: ArtistProps) => {
         />
 
         <PageItemContainer
-          height={381}
+          height={273}
           ref={viewportRef}
           totalSize={getTotalSize()}
+          onScroll={throttle((e) => {
+            const { scrollTop } = e.target as HTMLDivElement;
+            setScroll(scrollTop);
+          })}
         >
           {virtualMap((virtualItem, item) => {
             const isLoader = virtualItem.index > albums.length - 1;
@@ -182,7 +234,17 @@ const Artist = ({}: ArtistProps) => {
 };
 
 const TabBarWrapper = styled.div`
-  margin: 16px 0 0 20px;
+  margin: 16px 20px 0 20px;
+
+  display: flex;
+`;
+
+const ButtonLayout = styled.div`
+  margin-left: auto;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
 
 const SpinnerWrapper = styled.div`

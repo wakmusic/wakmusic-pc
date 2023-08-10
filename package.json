@@ -22,7 +22,7 @@
     "firebase": "^9.23.0",
     "framer-motion": "^10.13.1",
     "lodash.throttle": "^4.1.1",
-    "lottie-react": "^2.4.0",
+    "lottie-web": "^5.12.2",
     "overlayscrollbars": "^2.2.1",
     "overlayscrollbars-react": "^0.5.1",
     "react": "^18.2.0",

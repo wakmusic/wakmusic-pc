@@ -99,7 +99,10 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
         progress={(current / length) * 100}
         $isSeparated={isSeparated ?? false}
       />
-      <HandleContainer progress={(current / length) * 100}>
+      <HandleContainer
+        progress={(current / length) * 100}
+        $isSeparated={isSeparated}
+      >
         <Handle />
       </HandleContainer>
       <TimelinePopover
@@ -117,9 +120,12 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
 
 const HandleContainer = styled.div.attrs<{
   progress: number;
-}>(({ progress }) => ({
+  $isSeparated: boolean;
+}>(({ progress, $isSeparated }) => ({
   style: {
-    left: `calc(${progress}% - 3px)`,
+    left: $isSeparated
+      ? `calc(${progress}% - 6px)`
+      : `min(calc(100% - 12px), max(0px, calc(${progress}% - 6px)))`,
   },
 }))`
   position: relative;

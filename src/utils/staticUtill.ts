@@ -1,4 +1,5 @@
 import { Artist } from "@templates/artists";
+import { RecommendListMetaType } from "@templates/playlist";
 
 const staticURL = import.meta.env.VITE_STATIC_URL;
 
@@ -40,12 +41,27 @@ export const getPlaylistIconRound = (id: string) => {
   return `${staticURL}/playlist/icon/round/${id}.png`;
 };
 
+export const getDocument = (type: documentType) => {
+  return `${staticURL}/document/${type}.pdf`;
+};
+
 export const getPlaylistIcon = (id: number) => {
   return `${staticURL}/playlist/${id}.png`;
 };
 
-export const getDocument = (type: documentType) => {
-  return `${staticURL}/document/${type}.pdf`;
+export const getRecommendImage = (
+  list: RecommendListMetaType,
+  type: RoundOrSquare
+) => {
+  return `${staticURL}/playlist/icon/${type}/${list.key}.png?v=${list.image[type]}`;
+};
+
+export const getRecommendRoundImage = (list: RecommendListMetaType) => {
+  return getRecommendImage(list, "round");
+};
+
+export const getRecommendSquareImage = (list: RecommendListMetaType) => {
+  return getRecommendImage(list, "square");
 };
 
 export const getArtistImage = (artist: Artist, type: RoundOrSquare) => {

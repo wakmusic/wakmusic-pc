@@ -53,7 +53,7 @@ const queryClient = new QueryClient({
     queries: {
       keepPreviousData: true,
       refetchOnWindowFocus: false,
-      staleTime: 10 * 60 * 1000, // 10분
+      staleTime: 60 * 1000, // 1분
     },
   },
 });

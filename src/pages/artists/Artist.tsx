@@ -5,11 +5,7 @@ import { useInfiniteQuery, useQuery } from "react-query";
 import { useLocation, useSearchParams } from "react-router-dom";
 import styled from "styled-components/macro";
 
-import {
-  ArtistAlbumsSortType,
-  fetchArtistAlbums,
-  fetchArtistList,
-} from "@apis/artist";
+import { fetchArtistAlbums, fetchArtistList } from "@apis/artist";
 
 import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";
 import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg";
@@ -31,7 +27,7 @@ import { artistDetailTabs } from "@constants/tabs";
 import { usePlayingInfoState } from "@hooks/player";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { Song, SongTotal } from "@templates/song";
+import { Song, SongSortType, SongTotal } from "@templates/song";
 
 import getChartData from "@utils/getChartData";
 
@@ -40,7 +36,7 @@ interface ArtistProps {}
 const Artist = ({}: ArtistProps) => {
   const [selected, setSelected] = useState<Song[]>([]);
   const [searchParams] = useSearchParams();
-  const tab = (searchParams.get("tab") as ArtistAlbumsSortType) ?? "new";
+  const tab = (searchParams.get("tab") as SongSortType) ?? "new";
 
   const controls = useAnimation();
 

@@ -1,25 +1,49 @@
 import instance from "@apis/axios";
 
-const CHARTS_URL = "/charts";
+import {
+  SongDaily,
+  SongHourly,
+  SongMonthly,
+  SongTotal,
+  SongWeekly,
+} from "@templates/song";
 
-type chartsType = "monthly" | "weekly" | "daily" | "hourly" | "total";
+const CHARTS_UPDATE_URL = "/charts";
 
-export const fetchCharts = async (type: chartsType, limit = 10) => {
-  const { data } = await instance.get(`${CHARTS_URL}`, {
+export type ChartsType = "monthly" | "weekly" | "daily" | "hourly" | "total";
+
+export type SongByChartsType<T extends ChartsType> = T extends "monthly"
+  ? SongMonthly
+  : T extends "weekly"
+  ? SongWeekly
+  : T extends "daily"
+  ? SongDaily
+  : T extends "hourly"
+  ? SongHourly
+  : T extends "total"
+  ? SongTotal
+  : never;
+
+export const fetchCharts = async <T extends ChartsType>(
+  type: T,
+  limit = 10
+): Promise<SongByChartsType<T>[]> => {
+  const { data } = await instance.get(`/v2/charts`, {
     params: {
       type,
       limit,
     },
   });
+
   return data;
 };
 
-export const fetchChartsUpdate = async () => {
-  const { data } = await instance.get(`${CHARTS_URL}/update`);
-  return data;
-};
+export const fetchChartsUpdateTypes = async (
+  chartType: ChartsType
+): Promise<string> => {
+  const { data } = await instance.get(
+    `${CHARTS_UPDATE_URL}/updated/${chartType}`
+  );
 
-export const fetchChartsUpdateTypes = async (chartType: chartsType) => {
-  const { data } = await instance.get(`${CHARTS_URL}/update/${chartType}`);
   return data;
 };

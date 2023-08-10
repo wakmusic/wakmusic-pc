@@ -24,12 +24,10 @@ import VirtualItem from "@layouts/VirtualItem";
 
 import { artistDetailTabs } from "@constants/tabs";
 
-import { usePlayingInfoState } from "@hooks/player";
+import { usePlaySongs } from "@hooks/player";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { Song, SongSortType, SongTotal } from "@templates/song";
-
-import getChartData from "@utils/getChartData";
 
 interface ArtistProps {}
 
@@ -45,7 +43,7 @@ const Artist = ({}: ArtistProps) => {
     "square"
   );
 
-  const [, setPlayingInfo] = usePlayingInfoState();
+  const playSongs = usePlaySongs();
 
   const location = useLocation();
   const artistId = useMemo(
@@ -132,24 +130,6 @@ const Artist = ({}: ArtistProps) => {
     }
   }, [animationState, controls, scroll]);
 
-  const play = (songs: Song[]) => {
-    setPlayingInfo({
-      playlist: songs.map((song) => ({
-        songId: song.songId,
-        title: song.title,
-        artist: song.artist,
-        views: getChartData(song).views,
-        start: song.start,
-        end: song.end,
-      })),
-      history: [],
-      current: 0,
-    });
-  };
-
-  const playAllHandler = () => play(albums);
-  const playShuffleHandler = () => play(albums.sort(() => Math.random() - 0.5));
-
   // TODO: 스켈레톤, 오류
   if (artistsIsLoading) return <div>로딩중...</div>;
   if (artistsError || albumsError || !artists || !artist)
@@ -170,10 +150,13 @@ const Artist = ({}: ArtistProps) => {
           </TabBar>
 
           <ButtonLayout>
-            <IconButton icon={PlayAllSVG} onClick={playAllHandler}>
+            <IconButton icon={PlayAllSVG} onClick={() => playSongs(albums)}>
               전체재생
             </IconButton>
-            <IconButton icon={RandomSVG} onClick={playShuffleHandler}>
+            <IconButton
+              icon={RandomSVG}
+              onClick={() => playSongs(albums, true)}
+            >
               랜덤재생
             </IconButton>
           </ButtonLayout>

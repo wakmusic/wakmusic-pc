@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 
 import { ChartsType, fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
 
-import FunctionSection from "@components/chart/FunctionSection";
+import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import UpdatedText from "@components/globals/UpdatedText";
@@ -14,6 +14,9 @@ import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
 import VirtualItem from "@layouts/VirtualItem";
 
+import { chartTabs } from "@constants/tabs";
+
+import { usePlaySongs } from "@hooks/player";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { Song } from "@templates/song";
@@ -27,6 +30,8 @@ const Chart = ({}: ChartProps) => {
     () => (searchParams.get("type") ?? "hourly") as ChartsType,
     [searchParams]
   );
+
+  const playSongs = usePlaySongs();
 
   const {
     isLoading: chartsIsLoading,
@@ -63,7 +68,13 @@ const Chart = ({}: ChartProps) => {
   return (
     <PageLayout>
       <PageContainer>
-        <FunctionSection />
+        <FunctionSection
+          tabs={chartTabs}
+          play={(shuffle) => {
+            playSongs(charts, shuffle);
+          }}
+        />
+
         <UpdatedText updated={chartUpdated} marginTop={12} marginLeft={20} />
 
         <GuideBar

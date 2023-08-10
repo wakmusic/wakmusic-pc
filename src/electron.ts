@@ -52,6 +52,14 @@ app.commandLine.appendSwitch("disable-site-isolation-trials");
       win.show();
       client.login();
     });
+
+    win.on("maximize", () => {
+      win.webContents.send("window:maximized");
+    });
+
+    win.on("unmaximize", () => {
+      win.webContents.send("window:unmaximized");
+    });
   });
 })();
 

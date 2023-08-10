@@ -122,6 +122,8 @@ const InnerContainer = styled.div`
 const Content = styled(motion.div)`
   margin-left: 24px;
   margin-top: 12px;
+
+  pointer-events: none;
 `;
 
 const DescriptionContainer = styled(motion.div)`

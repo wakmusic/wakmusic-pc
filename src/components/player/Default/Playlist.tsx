@@ -143,7 +143,7 @@ const Playlist = ({}: PlaylistProps) => {
           setMouseState({ ...mouseState, isMoving: true });
         }
 
-        if (!scrollState.isScrolling) {
+        if (!scrollState.isScrolling && scrollState.isScrollEnabled) {
           setScrollState({ ...scrollState, isScrollEnabled: false });
         }
       }
@@ -157,13 +157,19 @@ const Playlist = ({}: PlaylistProps) => {
 
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [handleMouseUp]);
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [handleMouseUp, handleMouseMove]);
+  }, [handleMouseMove]);
 
   useInterval(() => {
     if (!mouseState.isMoving) return;
@@ -190,7 +196,7 @@ const Playlist = ({}: PlaylistProps) => {
       });
 
       setScrollState({ isScrollEnabled: true, isScrolling: true });
-    } else {
+    } else if (scrollState.isScrollEnabled) {
       setScrollState({ ...scrollState, isScrolling: false });
     }
   }, 24);

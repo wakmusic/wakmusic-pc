@@ -124,7 +124,7 @@ ipcMain.on("query:isSeparate", () => {
 
   const bounds = win.getBounds();
 
-  ipcMain.emit("reply:isSeparate", bounds.width === 290);
+  win.webContents.send("reply:isSeparate", bounds.width === 290);
 });
 
 ipcMain.on("rpc:progress", (_event, progress: number) => {

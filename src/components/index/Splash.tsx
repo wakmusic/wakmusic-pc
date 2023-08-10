@@ -1,10 +1,11 @@
 import { motion, useAnimation } from "framer-motion";
-import Lottie from "lottie-react";
 import { useState } from "react";
 import { spalshVariants } from "src/animations/splash";
 import styled from "styled-components/macro";
 
-import splashLogo from "@assets/lotties/SplashLogo.json";
+import splashLottie from "@assets/lotties/SplashLogo.json";
+
+import Lottie from "@components/globals/Lottie";
 
 import colors from "@constants/colors";
 
@@ -25,11 +26,13 @@ const Logo = ({}: LogoProps) => {
 
   return (
     <Container animate={controls} variants={spalshVariants} initial="initial">
-      <LogoLottie
-        animationData={splashLogo}
-        loop={false}
-        onComplete={onCompleteHandler}
-      />
+      <LottieContainer>
+        <Lottie
+          animationData={splashLottie}
+          renderer="canvas"
+          onCompleteHandler={onCompleteHandler}
+        />
+      </LottieContainer>
     </Container>
   );
 };
@@ -51,8 +54,9 @@ const Container = styled(motion.div)`
   align-items: center;
 `;
 
-const LogoLottie = styled(Lottie)`
+const LottieContainer = styled.div`
   width: 250px;
+  height: 250px;
 `;
 
 export default Logo;

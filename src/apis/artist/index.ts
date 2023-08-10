@@ -1,22 +1,24 @@
 import instance from "@apis/axios";
 
-const ARTIST_URL = "/artist";
+import { Artist } from "@templates/artists";
 
-type sortType = "popular" | "new" | "old";
+export type ArtistAlbumsSortType = "popular" | "new" | "old";
 
-export const fetchArtistList = async () => {
-  const { data } = await instance.get(`${ARTIST_URL}/list`);
+type ArtistListResponse = Artist[];
+
+export const fetchArtistList = async (): Promise<ArtistListResponse> => {
+  const { data } = await instance.get(`/artist/list`);
   return data;
 };
 
 export const fetchArtistAlbums = async (
-  id: string,
-  sort: sortType,
+  artistId: string,
+  sort: ArtistAlbumsSortType,
   start: number
 ) => {
-  const { data } = await instance.get(`${ARTIST_URL}/albums`, {
+  const { data } = await instance.get(`v2/artist/albums`, {
     params: {
-      id,
+      id: artistId,
       sort,
       start,
     },

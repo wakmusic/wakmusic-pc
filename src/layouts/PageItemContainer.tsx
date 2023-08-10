@@ -8,14 +8,16 @@ interface PageItemContainerProps {
   children: React.ReactNode;
 
   totalSize?: number;
+
+  onScroll?: (e: React.UIEvent<HTMLDivElement, UIEvent>) => void;
 }
 
 const PageItemContainer = forwardRef<HTMLDivElement, PageItemContainerProps>(
-  ({ height, children, totalSize }: PageItemContainerProps, ref) => {
+  ({ height, children, totalSize, onScroll }: PageItemContainerProps, ref) => {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     return (
-      <DefaultScroll ref={ref || scrollRef}>
+      <DefaultScroll ref={ref || scrollRef} onScroll={onScroll}>
         <ItemsWrapper $height={height}>
           <InnerWrapper $height={totalSize}>{children}</InnerWrapper>
         </ItemsWrapper>

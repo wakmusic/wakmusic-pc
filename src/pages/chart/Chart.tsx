@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 
 import FunctionSection from "@components/chart/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
@@ -20,17 +19,9 @@ import { Song } from "@templates/song";
 interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const [selected, setSelected] = useState<Song[]>([]);
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(hourlyChart);
-
-  useEffect(() => {
-    // /chart로 접속하면 ?type=hourly로 이동
-    if (searchParams.size === 0) {
-      setSearchParams({ type: "hourly" });
-    }
-  }, [searchParams, setSearchParams]);
 
   return (
     <PageLayout>

@@ -27,6 +27,7 @@ import RootOverlay from "@layouts/RootOverlay";
 
 import firebaseConfig from "@constants/firebaseConfig";
 
+import Artist from "@pages/artists/Artist";
 import Artists from "@pages/artists/Artists";
 import Chart from "@pages/chart/Chart";
 import Faq from "@pages/faq/Faq";
@@ -52,7 +53,7 @@ const queryClient = new QueryClient({
     queries: {
       keepPreviousData: true,
       refetchOnWindowFocus: false,
-      staleTime: 5000,
+      staleTime: 10 * 60 * 1000, // 10분
     },
   },
 });
@@ -75,6 +76,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/playground" element={<Playground />} />
               <Route path="/chart" element={<Chart />} />
               <Route path="/artists" element={<Artists />} />
+              <Route path="/artists/:artist" element={<Artist />} />
               <Route path="/search" element={<Search />} />
               <Route path="/new" element={<New />} />
               <Route path="/user/*" element={<User />} />

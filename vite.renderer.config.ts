@@ -11,8 +11,14 @@ export default defineConfig({
   base: "./",
   envDir: "./../",
   build: {
-    outDir: "./../.vite/build/web",
-    sourcemap: true,
+    outDir: "./../dist",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "lottie-web": ["lottie-web"],
+        },
+      },
+    },
   },
   plugins: [react(), tsconfigPaths(), svgr(), macrosPlugin()],
 });

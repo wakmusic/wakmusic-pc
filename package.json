@@ -11,6 +11,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "dev:web": "vite --port 3000",
+    "build:web": "vite build -c vite.renderer.config.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "format": "eslint src --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\""
   },

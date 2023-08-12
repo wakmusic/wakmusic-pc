@@ -1,6 +1,6 @@
 import { Client } from "@xhayper/discord-rpc";
 
-import { SongInfo } from "../templates/player";
+import { SongInfo } from "@templates/player";
 
 let last: SongInfo | undefined;
 let startTimestamp: number | undefined;

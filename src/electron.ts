@@ -1,13 +1,14 @@
 import { BrowserWindow, app, ipcMain, nativeImage } from "electron";
 import { join } from "path";
 
+import { SongInfo } from "@templates/player";
+
 import {
   changePresence,
   client,
   setProgress,
   showPlaying,
 } from "./electron/discord";
-import { SongInfo } from "./templates/player";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 
@@ -40,7 +41,7 @@ app.whenReady().then(() => {
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
   } else {
-    win.loadFile(join(__dirname, `/web/index.html`));
+    win.loadURL(import.meta.env.VITE_PUBLISH_URL);
   }
 
   win.once("ready-to-show", () => {

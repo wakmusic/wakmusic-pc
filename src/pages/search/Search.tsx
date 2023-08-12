@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components/macro";
 
-import { fetchSearchSongs } from "@apis/songs";
+import { fetchSearchAll } from "@apis/songs";
 
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
@@ -14,12 +14,12 @@ import PageLayout from "@layouts/PageLayout";
 
 import { searchTabs } from "@constants/tabs";
 
-import { tabsTypes } from "@templates/search";
+import { SearchTabType } from "@templates/search";
 import { Query } from "@templates/tabType";
 
 interface SearchProps {}
 
-function isTabsTypes(arg: unknown): arg is tabsTypes {
+function isTabsTypes(arg: unknown): arg is SearchTabType {
   return arg === "all" || arg === "song" || arg === "artist" || arg === "remix";
 }
 
@@ -27,7 +27,7 @@ const Search = ({}: SearchProps) => {
   const [searchParams] = useSearchParams();
   const tab = useMemo(() => {
     return isTabsTypes(searchParams.get("tab"))
-      ? (searchParams.get("tab") as tabsTypes)
+      ? (searchParams.get("tab") as SearchTabType)
       : "all";
   }, [searchParams]);
 
@@ -35,7 +35,7 @@ const Search = ({}: SearchProps) => {
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["search", query],
-    queryFn: async () => await fetchSearchSongs(query),
+    queryFn: async () => await fetchSearchAll(query),
   });
 
   // TODO
@@ -53,7 +53,7 @@ const Search = ({}: SearchProps) => {
           ))}
         </TabBar>
 
-        <Result tab={tab} query={query} res={data} />
+        <Result tab={tab} query={query} all={data} />
       </Container>
     </PageLayout>
   );

@@ -1,7 +1,11 @@
 import instance from "@apis/axios";
 
-import { NewSongsResponse, SongsSearchResponse } from "@templates/search";
-import { SongSortType } from "@templates/song";
+import {
+  NewSongsResponse,
+  SearchAllResponse,
+  SearchTabType,
+} from "@templates/search";
+import { SongSortType, SongTotal } from "@templates/song";
 
 export type NewSongsType =
   | "all"
@@ -10,12 +14,30 @@ export type NewSongsType =
   | "gomem"
   | "academy";
 
-export const fetchSearchSongs = async (
+interface FetchSearchTabParams {
+  sort?: SongSortType;
+
+  start?: number;
+  limit?: number;
+}
+
+export const fetchSearchAll = async (
   keyword: string,
   sort: SongSortType = "popular"
-): Promise<SongsSearchResponse> => {
-  const { data } = await instance.get(`/v2/songs/search`, {
-    params: { type: "all", sort, keyword },
+): Promise<SearchAllResponse> => {
+  const { data } = await instance.get(`/v2/songs/search/all`, {
+    params: { sort, keyword },
+  });
+  return data;
+};
+
+export const fetchSearchTab = async (
+  keyword: string,
+  type: SearchTabType,
+  { sort = "popular", start = 0, limit = 30 }: FetchSearchTabParams
+): Promise<SongTotal[]> => {
+  const { data } = await instance.get(`/v2/songs/search/${type}`, {
+    params: { sort, keyword, start, limit },
   });
   return data;
 };

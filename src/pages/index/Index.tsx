@@ -35,6 +35,20 @@ const Index = ({}: IndexProps) => {
   if (recommendIsLoading || !recommendLists) return <div>loading...</div>;
   if (recommendError) return <div>error...</div>;
 
+  function changePage(condition: boolean, change: number) {
+    if (condition) {
+      setPage(page + change);
+    }
+  }
+
+  function listChunk(list: RecommendListMetaType[], divisor: number) {
+    return list.reduce((acc: RecommendListMetaType[][], _, index) => {
+      if (index % divisor === 0) acc.push(list.slice(index, index + divisor));
+
+      return acc;
+    }, []);
+  }
+
   return (
     <Container>
       <Background />
@@ -50,39 +64,26 @@ const Index = ({}: IndexProps) => {
             <NavigatorArrow
               direction="left"
               $disabled={page <= 0}
-              onClick={() => {
-                if (page > 0) {
-                  setPage(page - 1);
-                }
-              }}
+              onClick={() => changePage(page > 0, -1)}
             />
             <NavigatorArrow
               direction="right"
               $disabled={page >= Math.ceil(recommendLists.length / 8) - 1}
-              onClick={() => {
-                if (page < Math.ceil(recommendLists.length / 8) - 1) {
-                  setPage(page + 1);
-                }
-              }}
+              onClick={() =>
+                changePage(page < Math.ceil(recommendLists.length / 8) - 1, 1)
+              }
             />
           </NavigatorContainer>
         </HeaderContainer>
 
         <RecommentItemContainer>
-          {recommendLists
-            .reduce((acc: RecommendListMetaType[][], _, index) => {
-              if (index % 8 === 0)
-                acc.push(recommendLists.slice(index, index + 8));
-
-              return acc;
-            }, [])
-            .map((item, index) => (
-              <RecommendItems key={index} $page={page}>
-                {item.map((item, index) => (
-                  <RecommendItem key={index} item={item} />
-                ))}
-              </RecommendItems>
-            ))}
+          {listChunk(recommendLists, 8).map((item, index) => (
+            <RecommendItems key={index} $page={page}>
+              {item.map((item, index) => (
+                <RecommendItem key={index} item={item} />
+              ))}
+            </RecommendItems>
+          ))}
         </RecommentItemContainer>
       </RecommandContainer>
     </Container>

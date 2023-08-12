@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 
@@ -19,9 +19,10 @@ import VirtualItem from "@layouts/VirtualItem";
 import { newTabs } from "@constants/tabs";
 
 import { usePlaySongs } from "@hooks/player";
+import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { Song, SongTotal } from "@templates/song";
+import { SongTotal } from "@templates/song";
 
 interface NewProps {}
 
@@ -32,7 +33,7 @@ const New = ({}: NewProps) => {
     [searchParams]
   );
 
-  const [selected, setSelected] = useState<Song[]>([]);
+  const { selected, setSelected, selectCallback } = useSelectSongs();
   const playSongs = usePlaySongs();
 
   const {
@@ -91,8 +92,9 @@ const New = ({}: NewProps) => {
   }, [songs, fetchNextPage, getVirtualItems, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {
+    setSelected([]);
     viewportRef.current?.scrollTo(0, 0);
-  }, [tab, viewportRef]);
+  }, [setSelected, tab, viewportRef]);
 
   // TODO
   if (songsIsLoading || updatedIsLoading || !songs || !updated)
@@ -142,13 +144,7 @@ const New = ({}: NewProps) => {
                       SongItemFeature.date,
                       SongItemFeature.views,
                     ]}
-                    onClick={(song) => {
-                      if (selected.includes(song)) {
-                        setSelected(selected.filter((item) => item !== song));
-                      } else {
-                        setSelected([...selected, song]);
-                      }
-                    }}
+                    onClick={selectCallback}
                   />
                 )}
               </VirtualItem>

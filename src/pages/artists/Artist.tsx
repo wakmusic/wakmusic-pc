@@ -26,14 +26,15 @@ import VirtualItem from "@layouts/VirtualItem";
 import { artistDetailTabs } from "@constants/tabs";
 
 import { usePlaySongs } from "@hooks/player";
+import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { Song, SongSortType, SongTotal } from "@templates/song";
+import { SongSortType, SongTotal } from "@templates/song";
 
 interface ArtistProps {}
 
 const Artist = ({}: ArtistProps) => {
-  const [selected, setSelected] = useState<Song[]>([]);
+  const { selected, setSelected, selectCallback } = useSelectSongs();
   const [searchParams] = useSearchParams();
   const tab = (searchParams.get("tab") as SongSortType) ?? "new";
 
@@ -116,8 +117,9 @@ const Artist = ({}: ArtistProps) => {
   }, [albums, fetchNextPage, getVirtualItems, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {
+    setSelected([]);
     viewportRef.current?.scrollTo(0, 0);
-  }, [tab, viewportRef]);
+  }, [tab, viewportRef, setSelected]);
 
   useEffect(() => {
     if (scroll > 0 && animationState === "square") {
@@ -197,13 +199,7 @@ const Artist = ({}: ArtistProps) => {
                       SongItemFeature.views,
                       SongItemFeature.like,
                     ]}
-                    onClick={(song) => {
-                      if (selected.includes(song)) {
-                        setSelected(selected.filter((item) => item !== song));
-                      } else {
-                        setSelected([...selected, song]);
-                      }
-                    }}
+                    onClick={selectCallback}
                   />
                 )}
               </VirtualItem>

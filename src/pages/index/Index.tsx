@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components/macro";
 
 import { fetchRecommendedPlaylist } from "@apis/playlist";
 
 import { T4Medium } from "@components/Typography";
+import Arrow from "@components/icons/Arrow";
 import Background from "@components/index/Background";
 import Chart from "@components/index/Chart";
 import RecommendItem from "@components/index/RecommendItem";
@@ -11,6 +13,8 @@ import RecommendItem from "@components/index/RecommendItem";
 import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
+
+import { RecommendListMetaType } from "@templates/playlist";
 
 interface IndexProps {}
 
@@ -25,9 +29,33 @@ const Index = ({}: IndexProps) => {
     staleTime: Infinity,
   });
 
+  const [page, setPage] = useState<number>(0);
+
   // TODO
   if (recommendIsLoading || !recommendLists) return <div>loading...</div>;
   if (recommendError) return <div>error...</div>;
+
+  function ItemMapper(list: RecommendListMetaType[]) {
+    const groups = [];
+
+    for (let i = 0; i < Math.ceil(list.length / 8); i++) {
+      groups.push(
+        <RecommendItems key={i} $page={page}>
+          {list.slice(i * 8, i * 8 + 8).map((item, index) => (
+            <RecommendItem key={index} item={item} />
+          ))}
+        </RecommendItems>
+      );
+    }
+
+    console.log(list);
+
+    return (
+      <RecommentItemContainer>
+        {groups.map((item) => item)}
+      </RecommentItemContainer>
+    );
+  }
 
   return (
     <Container>
@@ -36,12 +64,32 @@ const Index = ({}: IndexProps) => {
       <Chart />
 
       <RecommandContainer>
-        <T4Medium color={colors.primary900}>왁뮤팀이 추천하는 리스트</T4Medium>
-        <RecommendItems>
-          {recommendLists.map((item, index) => (
-            <RecommendItem key={index} item={item} />
-          ))}
-        </RecommendItems>
+        <HeaderContainer>
+          <T4Medium color={colors.primary900}>
+            왁뮤팀이 추천하는 리스트
+          </T4Medium>
+          <NavigatorContainer>
+            <NavigatorArrow
+              direction="left"
+              $disabled={page <= 0}
+              onClick={() => {
+                if (page > 0) {
+                  setPage(page - 1);
+                }
+              }}
+            />
+            <NavigatorArrow
+              direction="right"
+              $disabled={page >= Math.ceil(recommendLists.length / 8) - 1}
+              onClick={() => {
+                if (page < Math.ceil(recommendLists.length / 8) - 1) {
+                  setPage(page + 1);
+                }
+              }}
+            />
+          </NavigatorContainer>
+        </HeaderContainer>
+        {ItemMapper(recommendLists)}
       </RecommandContainer>
     </Container>
   );
@@ -60,13 +108,51 @@ const RecommandContainer = styled.div`
   height: 186px;
 `;
 
-const RecommendItems = styled.div`
+const HeaderContainer = styled.div`
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+`;
+
+const NavigatorContainer = styled.div`
+  display: flex;
+  gap: 4px;
+
+  margin-left: auto;
+
+  width: 44px;
+  height: 20px;
+`;
+
+const NavigatorArrow = styled(Arrow)<{
+  $disabled?: boolean;
+}>`
+  color: ${({ $disabled }) => ($disabled ? colors.gray400 : colors.gray500)};
+
+  cursor: ${({ $disabled }) => ($disabled ? "auto" : "pointer")};
+`;
+
+const RecommentItemContainer = styled.div`
   margin-top: 12px;
 
+  display: flex;
+  gap: 10px;
+  overflow: hidden;
+
+  height: 186px;
+`;
+
+const RecommendItems = styled.div<{
+  $page: number;
+}>`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 
   gap: 10px;
+
+  transform: translateX(${({ $page }) => $page * -760}px);
+  transition: transform ease 300ms;
 `;
 
 export default Index;

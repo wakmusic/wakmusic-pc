@@ -35,28 +35,6 @@ const Index = ({}: IndexProps) => {
   if (recommendIsLoading || !recommendLists) return <div>loading...</div>;
   if (recommendError) return <div>error...</div>;
 
-  function ItemMapper(list: RecommendListMetaType[]) {
-    const groups = [];
-
-    for (let i = 0; i < Math.ceil(list.length / 8); i++) {
-      groups.push(
-        <RecommendItems key={i} $page={page}>
-          {list.slice(i * 8, i * 8 + 8).map((item, index) => (
-            <RecommendItem key={index} item={item} />
-          ))}
-        </RecommendItems>
-      );
-    }
-
-    console.log(list);
-
-    return (
-      <RecommentItemContainer>
-        {groups.map((item) => item)}
-      </RecommentItemContainer>
-    );
-  }
-
   return (
     <Container>
       <Background />
@@ -89,7 +67,23 @@ const Index = ({}: IndexProps) => {
             />
           </NavigatorContainer>
         </HeaderContainer>
-        {ItemMapper(recommendLists)}
+
+        <RecommentItemContainer>
+          {recommendLists
+            .reduce((acc: RecommendListMetaType[][], _, index) => {
+              if (index % 8 === 0)
+                acc.push(recommendLists.slice(index, index + 8));
+
+              return acc;
+            }, [])
+            .map((item, index) => (
+              <RecommendItems key={index} $page={page}>
+                {item.map((item, index) => (
+                  <RecommendItem key={index} item={item} />
+                ))}
+              </RecommendItems>
+            ))}
+        </RecommentItemContainer>
       </RecommandContainer>
     </Container>
   );

@@ -14,6 +14,7 @@ import ArtistInfo from "@components/artists/ArtistInfo";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import IconButton from "@components/globals/IconButton";
 import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import Spinner from "@components/globals/Spinner";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 
@@ -186,9 +187,7 @@ const Artist = ({}: ArtistProps) => {
             return (
               <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
                 {isLoader ? (
-                  <SpinnerWrapper>
-                    <Spinner />
-                  </SpinnerWrapper>
+                  <Spinner />
                 ) : (
                   <SongItem
                     song={item}
@@ -228,36 +227,6 @@ const ButtonLayout = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-`;
-
-const SpinnerWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  padding-top: 20px;
-`;
-
-const Spinner = styled.div`
-  display: inline-block;
-
-  width: 20px;
-  height: 20px;
-
-  border: 2px solid black;
-  border-bottom-color: transparent;
-  border-radius: 50%;
-
-  animation: rotation 1s linear infinite;
-
-  @keyframes rotation {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
 
 export default Artist;

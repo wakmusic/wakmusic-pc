@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 
@@ -18,7 +18,9 @@ import VirtualItem from "@layouts/VirtualItem";
 
 import { newTabs } from "@constants/tabs";
 
+import { useInfiniteScrollHandler } from "@hooks/infiniteScrollHandler";
 import { usePlaySongs } from "@hooks/player";
+import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
@@ -73,28 +75,14 @@ const New = ({}: NewProps) => {
       hasNextPage,
     });
 
-  useEffect(() => {
-    if (!songs) return;
-
-    const [lastItem] = [...getVirtualItems()].reverse();
-
-    if (!lastItem) {
-      return;
-    }
-
-    if (
-      lastItem.index >= songs.length - 1 &&
-      hasNextPage &&
-      !isFetchingNextPage
-    ) {
-      fetchNextPage();
-    }
-  }, [songs, fetchNextPage, getVirtualItems, hasNextPage, isFetchingNextPage]);
-
-  useEffect(() => {
-    setSelected([]);
-    viewportRef.current?.scrollTo(0, 0);
-  }, [setSelected, tab, viewportRef]);
+  useScrollToTop(tab, viewportRef, setSelected);
+  useInfiniteScrollHandler({
+    items: songs,
+    hasNextPage,
+    fetchNextPage,
+    getVirtualItems,
+    isFetchingNextPage,
+  });
 
   // TODO
   if (songsIsLoading || updatedIsLoading || !songs || !updated)

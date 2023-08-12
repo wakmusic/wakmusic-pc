@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useInfiniteQuery } from "react-query";
 import styled from "styled-components/macro";
 
@@ -11,6 +11,8 @@ import Spinner from "@components/globals/Spinner";
 import PageItemContainer from "@layouts/PageItemContainer";
 import VirtualItem from "@layouts/VirtualItem";
 
+import { useInfiniteScrollHandler } from "@hooks/infiniteScrollHandler";
+import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
@@ -60,28 +62,14 @@ const List = ({ tab, query }: ListProps) => {
       hasNextPage,
     });
 
-  useEffect(() => {
-    if (!songs) return;
-
-    const [lastItem] = [...getVirtualItems()].reverse();
-
-    if (!lastItem) {
-      return;
-    }
-
-    if (
-      lastItem.index >= songs.length - 1 &&
-      hasNextPage &&
-      !isFetchingNextPage
-    ) {
-      fetchNextPage();
-    }
-  }, [songs, fetchNextPage, getVirtualItems, hasNextPage, isFetchingNextPage]);
-
-  useEffect(() => {
-    setSelected([]);
-    viewportRef.current?.scrollTo(0, 0);
-  }, [setSelected, tab, viewportRef]);
+  useScrollToTop(tab, viewportRef, setSelected);
+  useInfiniteScrollHandler({
+    items: songs,
+    hasNextPage,
+    fetchNextPage,
+    getVirtualItems,
+    isFetchingNextPage,
+  });
 
   if (error) return <div>오류</div>;
   if (!isLoading && songs.length === 0) return <NotFound />;

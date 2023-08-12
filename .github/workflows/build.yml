@@ -25,6 +25,11 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
+      - name: Make Dotenv
+        run: echo "$DOTENV" > .env
+        env:
+          DOTENV: ${{ secrets.DOTENV }}
+
       - name: Build
         run: yarn build:web
 

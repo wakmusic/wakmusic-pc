@@ -15,6 +15,7 @@ import PageLayout from "@layouts/PageLayout";
 import VirtualItem from "@layouts/VirtualItem";
 
 import { chartTabs } from "@constants/tabs";
+import { lastTextMap } from "@constants/textMap";
 
 import { usePlaySongs } from "@hooks/player";
 import useVirtualizer from "@hooks/virtualizer";
@@ -22,14 +23,6 @@ import useVirtualizer from "@hooks/virtualizer";
 import { Song } from "@templates/song";
 
 interface ChartProps {}
-
-const lastTextMap = {
-  hourly: "1시간 전",
-  daily: "1일 전",
-  weekly: "1주 전",
-  monthly: "1개월 전",
-  yearly: "1년 전",
-};
 
 const Chart = ({}: ChartProps) => {
   const [searchParams] = useSearchParams();

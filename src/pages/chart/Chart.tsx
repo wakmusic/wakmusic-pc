@@ -23,6 +23,14 @@ import { Song } from "@templates/song";
 
 interface ChartProps {}
 
+const lastTextMap = {
+  hourly: "1시간 전",
+  daily: "1일 전",
+  weekly: "1주 전",
+  monthly: "1개월 전",
+  yearly: "1년 전",
+};
+
 const Chart = ({}: ChartProps) => {
   const [searchParams] = useSearchParams();
   const [selected, setSelected] = useState<Song[]>([]);
@@ -78,10 +86,11 @@ const Chart = ({}: ChartProps) => {
         <UpdatedText updated={chartUpdated} marginTop={12} marginLeft={20} />
 
         <GuideBar
+          lastText={tab !== "total" ? lastTextMap[tab] : undefined}
           features={[
             GuideBarFeature.rank,
             GuideBarFeature.info,
-            GuideBarFeature.last,
+            tab !== "total" ? GuideBarFeature.last : undefined,
             GuideBarFeature.date,
             GuideBarFeature.views,
           ]}
@@ -99,7 +108,7 @@ const Chart = ({}: ChartProps) => {
                 song={item}
                 selected={selected.includes(item)}
                 features={[
-                  SongItemFeature.last,
+                  tab !== "total" ? SongItemFeature.last : undefined,
                   SongItemFeature.date,
                   SongItemFeature.views,
                 ]}
@@ -110,6 +119,7 @@ const Chart = ({}: ChartProps) => {
                     setSelected([...selected, song]);
                   }
                 }}
+                useIncrease={tab !== "total"}
               />
             </VirtualItem>
           ))}

@@ -28,7 +28,6 @@ export const controlState = atom<ControlStateType>({
         if (newValue.isPlaying !== (oldValue as ControlStateType).isPlaying) {
           window.ipcRenderer?.send("rpc:playing", newValue.isPlaying);
         }
-
         if (newValue.volume !== (oldValue as ControlStateType).volume) {
           localStorage.setItem("volume", newValue.volume.toString());
         }

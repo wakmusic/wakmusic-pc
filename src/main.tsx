@@ -34,6 +34,7 @@ import Faq from "@pages/faq/Faq";
 import Index from "@pages/index/Index";
 import MyPage from "@pages/mypage/MyPage";
 import New from "@pages/new/New";
+import PlayerPlaylist from "@pages/playerPlaylist/PlayerPlaylist";
 import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
 import Playlist from "@pages/user/Playlist";
@@ -83,8 +84,8 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/playlist/:playlistid" element={<Playlist />} />
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/faq" element={<Faq />} />
-
               <Route path="/player" element={null} />
+              <Route path="/player/playlist" element={<PlayerPlaylist />} />
             </Routes>
 
             <Player />

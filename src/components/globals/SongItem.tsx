@@ -24,6 +24,7 @@ interface SongItemProps {
   selected?: boolean;
 
   onClick?: (song: Song) => void;
+  onEdit?: (event: React.MouseEvent) => void;
 
   noPadding?: boolean;
 }
@@ -63,6 +64,7 @@ const SongItem = ({
   features,
   selected,
   onClick,
+  onEdit,
   noPadding,
 }: SongItemProps) => {
   const chartData = useMemo(() => getChartData(song), [song]);
@@ -87,7 +89,13 @@ const SongItem = ({
       $noPadding={noPadding}
     >
       {rank && <Rank now={rank} last={chartData.last} />}
-      {editMode && <MoveButton />}
+      {editMode && (
+        <MoveButton
+          onMouseDown={(e) => {
+            onEdit && onEdit(e);
+          }}
+        />
+      )}
 
       <TrackWrapper $width={width}>
         <Track item={song} maxWidth={width - 80} />

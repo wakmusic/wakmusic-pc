@@ -1,10 +1,13 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { VirtualItem as VirtualItemType } from "@tanstack/react-virtual";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import PageItemContainer from "@layouts/PageItemContainer";
+import VirtualItem from "@layouts/VirtualItem";
 
 import { useInterval } from "@hooks/interval";
 import { useControlState, usePlayingInfoState } from "@hooks/player";
+import useVirtualizer from "@hooks/virtualizer";
 
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
@@ -29,7 +32,7 @@ interface SongsProps {
   showController?: boolean;
   editMode?: boolean;
 
-  dispatchSongs?: (songs: Song[]) => void;
+  dispatchSongs?: (newSongs: Song[], action: ControllerFeature) => void;
 
   children: Song[];
 }
@@ -78,6 +81,7 @@ const Songs = ({
 }: SongsProps) => {
   const [showControllerState, setShowControllerState] =
     useState(showController);
+  const [songs, setSongs] = useState(children);
   const [selectedSongs, dispatchSelectedSongs] = useReducer(selectSongs, []);
   const [popdown, setPopdown] = useState(false);
 
@@ -102,17 +106,20 @@ const Songs = ({
   const [, setPlayingInfo] = usePlayingInfoState();
   const [, setControlState] = useControlState();
 
-  const songsContainer = useRef<HTMLDivElement>(null);
+  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(songs);
 
-  const getSongItemY = (index: number) => {
-    if (isNull(songsContainer.current)) {
-      return -100;
-    }
+  const getSongItemY = useCallback(
+    (index: number) => {
+      if (isNull(viewportRef.current)) {
+        return -100;
+      }
 
-    const scrolled = songsContainer.current.scrollTop;
+      const scrolled = viewportRef.current.scrollTop;
 
-    return (index - Math.floor(scrolled / 64)) * 64 - (scrolled % 64);
-  };
+      return (index - Math.floor(scrolled / 64)) * 64 - (scrolled % 64);
+    },
+    [viewportRef]
+  );
 
   const addSongs = useCallback(
     (list: Song[], play?: boolean) => {
@@ -185,9 +192,9 @@ const Songs = ({
                 });
                 dispatchSelectedSongs([]);
 
-                dispatchSongs && dispatchSongs(newSongs);
+                dispatchSongs &&
+                  dispatchSongs(newSongs, ControllerFeature.delete);
               }}
-              key={key}
             />
           );
       }
@@ -195,9 +202,73 @@ const Songs = ({
     [addSongs, children, selectedSongs, dispatchSongs]
   );
 
+  const mapSongComponent = useCallback(
+    (virtualItem: VirtualItemType, item: Song) => {
+      const index = songs.indexOf(item);
+
+      const margin = { paddingTop: "", paddingBottom: "" };
+      const songHeight = "64px";
+
+      if (isMouseDown) {
+        if (dropTarget === songs.length + 1 && index === songs.length) {
+          margin.paddingBottom = songHeight;
+        } else if (dropTarget <= index) {
+          margin.paddingTop = songHeight;
+        }
+      }
+
+      return (
+        <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
+          <SongPadding style={margin} $transition={animateDrag}>
+            <SongItem
+              song={item}
+              editMode={editMode}
+              selected={selectedSongs.includes(item)}
+              features={songFeatures}
+              onClick={(song) => {
+                dispatchSelectedSongs(song);
+              }}
+              onEdit={(e) => {
+                setIsMouseDown(true);
+
+                const position = getSongItemY(index);
+                setDragTarget({
+                  index: index,
+                  song: item,
+                  position: position,
+                  offset: e.nativeEvent.offsetY,
+                });
+                setDragStart({
+                  relative: position,
+                  absolute: e.clientY,
+                  fixed: e.clientY,
+                });
+                setDropTarget(index);
+
+                const temp = songs.slice();
+                temp.splice(index, 1);
+                setSongs(temp);
+              }}
+            />
+          </SongPadding>
+        </VirtualItem>
+      );
+    },
+    [
+      songs,
+      animateDrag,
+      dropTarget,
+      editMode,
+      getSongItemY,
+      isMouseDown,
+      selectedSongs,
+      songFeatures,
+    ]
+  );
+
   const moveDragedSong = useCallback(
     (e: React.MouseEvent) => {
-      const songsDOM = songsContainer.current;
+      const songsDOM = viewportRef.current;
 
       if (!songsDOM) return;
       document.body.style.cursor = "pointer";
@@ -218,52 +289,8 @@ const Songs = ({
         });
       }
     },
-    [dragStart, dragTarget]
+    [viewportRef, dragStart, dragTarget]
   );
-
-  useEffect(() => {
-    // mouse 이벤트 핸들러 등록
-    if (!editMode) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      setMouseY(e.clientY);
-    };
-
-    const handleMouseUp = () => {
-      if (isMouseDown) {
-        document.body.style.cursor = "default";
-        setIsMouseDown(false);
-        setAnimateDrag(false);
-
-        if (dropTarget === -1) return;
-
-        const newSongs = children.slice();
-
-        newSongs.splice(dragTarget.index, 1);
-        newSongs.splice(dropTarget, 0, dragTarget.song);
-
-        dispatchSongs && dispatchSongs(newSongs);
-
-        setDropTarget(-1);
-      }
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [
-    editMode,
-    isMouseDown,
-    children,
-    dragTarget.index,
-    dragTarget.song,
-    dropTarget,
-    dispatchSongs,
-  ]);
 
   useEffect(() => {
     // 컨트롤러 에니미에션 토글
@@ -285,8 +312,59 @@ const Songs = ({
   ]);
 
   useEffect(() => {
+    // mouse 이벤트 핸들러 등록
+    if (!editMode) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      setMouseY(e.clientY);
+    };
+
+    const handleMouseUp = () => {
+      if (isMouseDown) {
+        document.body.style.cursor = "default";
+        setIsMouseDown(false);
+        setAnimateDrag(false);
+
+        if (dropTarget === -1 || !dispatchSongs) return;
+
+        const newSongs = songs.slice();
+
+        if (dropTarget === songs.length) {
+          newSongs.push(dragTarget.song);
+        } else {
+          newSongs.splice(dropTarget, 0, dragTarget.song);
+        }
+
+        setSongs(newSongs);
+        setDropTarget(-1);
+
+        if (newSongs !== children) {
+          dispatchSongs(newSongs, ControllerFeature.edit);
+        }
+      }
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [
+    songs,
+    children,
+    editMode,
+    isMouseDown,
+    dragTarget.index,
+    dragTarget.song,
+    dropTarget,
+    dispatchSongs,
+  ]);
+
+  useEffect(() => {
     // 드롭 위치 계산
-    const songsDOM = songsContainer.current;
+    const songsDOM = viewportRef.current;
     if (dragTarget.index === -1 || !songsDOM || !isMouseDown) return;
 
     let newDropTarget = dropTarget;
@@ -325,6 +403,7 @@ const Songs = ({
 
     setDropTarget(newDropTarget);
   }, [
+    viewportRef,
     mouseY,
     isMouseDown,
     children.length,
@@ -337,7 +416,7 @@ const Songs = ({
 
   useInterval(() => {
     // 자동 스크롤
-    const songsDOM = songsContainer.current;
+    const songsDOM = viewportRef.current;
     if (!songsDOM || !isMouseDown || !editMode) return;
 
     const songsPosition = songsDOM.getBoundingClientRect();
@@ -388,70 +467,13 @@ const Songs = ({
         moveDragedSong(e);
       }}
     >
-      <PageItemContainer height={height} ref={songsContainer}>
+      <PageItemContainer
+        height={height}
+        ref={viewportRef}
+        totalSize={getTotalSize()}
+      >
         <FixedBox height={children.length * 64}>
-          {children.map((item, index) => {
-            if (dragTarget.index === index && isMouseDown) return;
-
-            const margin = { paddingTop: "", paddingBottom: "" };
-            const songHeight = "64px";
-
-            if (isMouseDown) {
-              if (dropTarget === 0 && index === 0) {
-                margin.paddingTop = songHeight;
-              } else if (
-                dropTarget === children.length - 1 &&
-                index === children.length - 1
-              ) {
-                margin.paddingBottom = songHeight;
-              } else if (
-                dropTarget === children.length - 1 &&
-                dragTarget.index === children.length - 1 &&
-                index === children.length - 2
-              ) {
-                margin.paddingBottom = songHeight;
-              } else if (dragTarget.index <= dropTarget) {
-                if (index - 1 === dropTarget) {
-                  margin.paddingTop = songHeight;
-                }
-              } else if (dragTarget.index > dropTarget) {
-                if (index === dropTarget && dropTarget !== 0) {
-                  margin.paddingTop = songHeight;
-                }
-              }
-            }
-
-            return (
-              <SongMargin key={index} style={margin} $transition={animateDrag}>
-                <SongItem
-                  song={item}
-                  editMode={editMode}
-                  selected={selectedSongs.includes(item)}
-                  features={songFeatures}
-                  onClick={(song) => {
-                    dispatchSelectedSongs(song);
-                  }}
-                  onEdit={(e) => {
-                    setIsMouseDown(true);
-
-                    const position = getSongItemY(index);
-                    setDragTarget({
-                      index: index,
-                      song: item,
-                      position: position,
-                      offset: e.nativeEvent.offsetY,
-                    });
-                    setDragStart({
-                      relative: position,
-                      absolute: e.clientY,
-                      fixed: e.clientY,
-                    });
-                    setDropTarget(index);
-                  }}
-                />
-              </SongMargin>
-            );
-          })}
+          {virtualMap(mapSongComponent)}
         </FixedBox>
       </PageItemContainer>
 
@@ -467,6 +489,7 @@ const Songs = ({
           {controllerFeatures.map((item, index) =>
             getControllerComponent(item, index)
           )}
+          {editMode && getControllerComponent(ControllerFeature.delete, -1)}
         </MusicControllerBar>
       </Controller>
 
@@ -505,7 +528,7 @@ const PseuduSongItem = styled.div`
   width: 100%;
 `;
 
-const SongMargin = styled.div<{ $transition: boolean }>`
+const SongPadding = styled.div<{ $transition: boolean }>`
   ${({ $transition }) =>
     $transition &&
     css`

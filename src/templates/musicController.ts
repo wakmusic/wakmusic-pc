@@ -4,4 +4,5 @@ export enum ControllerFeature {
   addToList,
   play,
   delete,
+  edit,
 }

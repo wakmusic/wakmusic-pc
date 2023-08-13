@@ -28,7 +28,7 @@ const isSongTotal = (songs: Song[]): songs is SongTotal[] => {
 
 const Likes = ({}: LikesProps) => {
   const [editMode] = useLikesState();
-  const [songs, setSongs] = useState(myListSongs);
+  const [likes, setLikes] = useState(myListSongs);
 
   return (
     <Container>
@@ -46,7 +46,7 @@ const Likes = ({}: LikesProps) => {
         dispatchSongs={(songs) => {
           if (!isSongTotal(songs)) return;
 
-          setSongs(songs);
+          setLikes(songs);
           // api에 좋아요 곡 삭제 또는 순서 수정 요청
         }}
         editMode={editMode}
@@ -55,24 +55,14 @@ const Likes = ({}: LikesProps) => {
           SongItemFeature.views,
           SongItemFeature.like,
         ]}
-        controllerFeatures={
-          editMode
-            ? [
-                ControllerFeature.selectAll,
-                ControllerFeature.addMusic,
-                ControllerFeature.addToList,
-                ControllerFeature.play,
-                ControllerFeature.delete,
-              ]
-            : [
-                ControllerFeature.selectAll,
-                ControllerFeature.addMusic,
-                ControllerFeature.addToList,
-                ControllerFeature.play,
-              ]
-        }
+        controllerFeatures={[
+          ControllerFeature.selectAll,
+          ControllerFeature.addMusic,
+          ControllerFeature.addToList,
+          ControllerFeature.play,
+        ]}
       >
-        {songs}
+        {likes}
       </Songs>
     </Container>
   );

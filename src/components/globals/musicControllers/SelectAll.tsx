@@ -3,21 +3,26 @@ import styled from "styled-components/macro";
 import { ReactComponent as CheckOff } from "@assets/icons/ic_24_Check_off.svg";
 import { ReactComponent as Checkon } from "@assets/icons/ic_24_Check_on.svg";
 
-import { T7Medium } from "@components/Typography/Medium";
+import { T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
 interface SelectAllProps {
   isSelect: boolean;
+  onClick?: () => void;
 }
 
-const SelectAll = ({ isSelect }: SelectAllProps) => {
+const SelectAll = ({ isSelect, onClick }: SelectAllProps) => {
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={() => {
+        onClick && onClick();
+      }}
+    >
       {isSelect ? <Checkon /> : <CheckOff />}
-      <T7Medium color={colors.blueGray25}>
+      <T7Light color={colors.blueGray25}>
         {isSelect ? "선택취소" : "전체선택"}
-      </T7Medium>
+      </T7Light>
     </Wrapper>
   );
 };

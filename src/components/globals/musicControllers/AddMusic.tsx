@@ -2,17 +2,23 @@ import styled from "styled-components/macro";
 
 import { ReactComponent as Add } from "@assets/icons/ic_24_playadd_25.svg";
 
-import { T7Medium } from "@components/Typography/Medium";
+import { T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface AddMusicProps {}
+interface AddMusicProps {
+  onClick?: () => void;
+}
 
-const AddMusic = ({}: AddMusicProps) => {
+const AddMusic = ({ onClick }: AddMusicProps) => {
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={() => {
+        onClick && onClick();
+      }}
+    >
       <Add />
-      <T7Medium color={colors.blueGray25}>노래담기</T7Medium>
+      <T7Light color={colors.blueGray25}>노래담기</T7Light>
     </Wrapper>
   );
 };

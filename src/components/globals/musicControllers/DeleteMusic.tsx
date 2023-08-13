@@ -2,17 +2,23 @@ import styled from "styled-components/macro";
 
 import { ReactComponent as Delete } from "@assets/icons/ic_24_delete.svg";
 
-import { T7Medium } from "@components/Typography/Medium";
+import { T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface DeleteMusicProps {}
+interface DeleteMusicProps {
+  onClick?: () => void;
+}
 
-const DeleteMusic = ({}: DeleteMusicProps) => {
+const DeleteMusic = ({ onClick }: DeleteMusicProps) => {
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={() => {
+        onClick && onClick();
+      }}
+    >
       <Delete />
-      <T7Medium color={colors.blueGray25}>재생목록추가</T7Medium>
+      <T7Light color={colors.blueGray25}>삭제</T7Light>
     </Wrapper>
   );
 };

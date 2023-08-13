@@ -14,7 +14,7 @@ import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
 
-import { RecommendListMetaType } from "@templates/playlist";
+import listChunk from "@utils/listChunk";
 
 interface IndexProps {}
 
@@ -39,14 +39,6 @@ const Index = ({}: IndexProps) => {
     if (condition) {
       setPage(page + change);
     }
-  }
-
-  function listChunk(list: RecommendListMetaType[], divisor: number) {
-    return list.reduce((acc: RecommendListMetaType[][], _, index) => {
-      if (index % divisor === 0) acc.push(list.slice(index, index + divisor));
-
-      return acc;
-    }, []);
   }
 
   return (

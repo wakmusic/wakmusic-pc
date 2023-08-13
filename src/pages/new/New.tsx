@@ -46,7 +46,7 @@ const New = ({}: NewProps) => {
     fetchNextPage,
     hasNextPage,
   } = useInfiniteQuery<SongTotal[]>({
-    queryKey: ["charts", tab],
+    queryKey: ["new", tab],
     queryFn: async ({ pageParam = 0 }) => await fetchNewSongs(tab, pageParam),
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.length === 0) return undefined;

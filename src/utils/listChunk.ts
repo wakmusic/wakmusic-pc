@@ -1,4 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default (list: any[], divisor: number) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return list.reduce((acc: any[][], _, index) => {
     if (index % divisor === 0) acc.push(list.slice(index, index + divisor));
 

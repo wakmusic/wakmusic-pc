@@ -1,13 +1,79 @@
+import { useState } from "react";
 import styled from "styled-components/macro";
 
-import * as Typography from "@components/Typography";
+import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
+import { SongItemFeature } from "@components/globals/SongItem";
+import Songs from "@components/globals/Songs";
+
+import { myListSongs } from "@constants/dummys";
+
+import { useLikesState } from "@hooks/likes";
+
+import { ControllerFeature } from "@templates/musicController";
+import { Song, SongTotal } from "@templates/song";
 
 interface LikesProps {}
 
+const isSongTotal = (songs: Song[]): songs is SongTotal[] => {
+  let isTrue = true;
+
+  songs.forEach((item) => {
+    if (!("total" in item)) {
+      isTrue = false;
+    }
+  });
+
+  return isTrue;
+};
+
 const Likes = ({}: LikesProps) => {
+  const [editMode] = useLikesState();
+  const [songs, setSongs] = useState(myListSongs);
+
   return (
     <Container>
-      <Typography.PretendardBold>Likes</Typography.PretendardBold>
+      <GuideBar
+        features={[
+          GuideBarFeature.info,
+          GuideBarFeature.date,
+          GuideBarFeature.views,
+          GuideBarFeature.like,
+        ]}
+      />
+
+      <Songs
+        height={181}
+        dispatchSongs={(songs) => {
+          if (!isSongTotal(songs)) return;
+
+          setSongs(songs);
+          // api에 좋아요 곡 삭제 또는 순서 수정 요청
+        }}
+        editMode={editMode}
+        songFeatures={[
+          SongItemFeature.date,
+          SongItemFeature.views,
+          SongItemFeature.like,
+        ]}
+        controllerFeatures={
+          editMode
+            ? [
+                ControllerFeature.selectAll,
+                ControllerFeature.addMusic,
+                ControllerFeature.addToList,
+                ControllerFeature.play,
+                ControllerFeature.delete,
+              ]
+            : [
+                ControllerFeature.selectAll,
+                ControllerFeature.addMusic,
+                ControllerFeature.addToList,
+                ControllerFeature.play,
+              ]
+        }
+      >
+        {songs}
+      </Songs>
     </Container>
   );
 };

@@ -33,6 +33,7 @@ const Wrapper = styled.button`
   gap: 2px;
   width: 60px;
   height: 52px;
+  margin-left: -10px;
 `;
 
 export default DeleteMusic;

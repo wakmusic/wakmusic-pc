@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import styled, { css } from "styled-components/macro";
+import styled, { css, keyframes } from "styled-components/macro";
 
 import { T4Bold } from "@components/Typography/Bold";
 
@@ -8,11 +8,16 @@ import colors from "@constants/colors";
 interface MusicControllerBarProps {
   children: ReactNode;
   count: number;
+  popdown: boolean;
 }
 
-const MusicControllerBar = ({ children, count }: MusicControllerBarProps) => {
+const MusicControllerBar = ({
+  children,
+  count,
+  popdown,
+}: MusicControllerBarProps) => {
   return (
-    <Wrapper>
+    <Wrapper $popdown={popdown}>
       <ButtonContainer>
         <Count $isWidth={count >= 100}>
           <T4Bold color={colors.sub}>{count}</T4Bold>
@@ -23,7 +28,35 @@ const MusicControllerBar = ({ children, count }: MusicControllerBarProps) => {
   );
 };
 
-const Wrapper = styled.div`
+const Popup = keyframes`
+  0% {
+    bottom: -70px;
+  }
+
+  75% {
+    bottom: 50px;
+  }
+
+  100% {
+    bottom: 40px;
+  }
+`;
+
+const Popdown = keyframes`
+  0% {
+    bottom: 40px;
+  }
+
+  25% {
+    bottom: 50px;
+  }
+
+  100% {
+    bottom: -70px;
+  }
+`;
+
+const Wrapper = styled.div<{ $popdown: boolean }>`
   position: fixed;
   width: fit-content;
   height: 60px;
@@ -31,6 +64,9 @@ const Wrapper = styled.div`
   left: 0;
   right: 0;
   bottom: 40px;
+
+  animation: ${({ $popdown }) => ($popdown ? Popdown : Popup)} 0.25s ease-out
+    forwards;
 `;
 
 const ButtonContainer = styled.div`

@@ -30,7 +30,7 @@ const TabBar = ({ children }: TabBarProps) => {
         setIndicater(index);
       } else if (isObject(_props.to)) {
         // Query Paramter인 경우
-        for (const [key, value] of Object.entries(_props.to)) {
+        for (const [key, value] of Object.entries(_props.to ?? {})) {
           if (searchParams.get(key) !== value) {
             return;
           }

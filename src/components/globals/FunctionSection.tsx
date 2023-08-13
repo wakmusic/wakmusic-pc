@@ -1,23 +1,25 @@
 import styled from "styled-components/macro";
 
+import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";
+import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg";
+
 import IconButton from "@components/globals/IconButton";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 
-import { playButtonData } from "@constants/IconButton";
-import { chartTabs } from "@constants/tabs";
-
-import iconButtonType from "@templates/iconButtonType";
 import tabType from "@templates/tabType";
 
-interface FunctionSectionProps {}
+interface FunctionSectionProps {
+  tabs: tabType[];
+  play: (shuffle?: boolean) => void;
+}
 
-const FunctionSection = ({}: FunctionSectionProps) => {
+const FunctionSection = ({ tabs, play }: FunctionSectionProps) => {
   return (
     <Wrapper>
       <TimeLineLayout>
         <TabBar>
-          {chartTabs.map((item: tabType, index: number) => {
+          {tabs.map((item: tabType, index: number) => {
             return (
               <Tab key={index} to={item.to}>
                 {item.text}
@@ -26,14 +28,14 @@ const FunctionSection = ({}: FunctionSectionProps) => {
           })}
         </TabBar>
       </TimeLineLayout>
+
       <ButtonLayout>
-        {playButtonData.map((item: iconButtonType, index: number) => {
-          return (
-            <IconButton key={index} icon={item.icon}>
-              {item.text}
-            </IconButton>
-          );
-        })}
+        <IconButton icon={PlayAllSVG} onClick={() => play()}>
+          전체재생
+        </IconButton>
+        <IconButton icon={RandomSVG} onClick={() => play(true)}>
+          랜덤재생
+        </IconButton>
       </ButtonLayout>
     </Wrapper>
   );

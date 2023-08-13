@@ -1,9 +1,9 @@
-import Lottie from "lottie-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components/macro";
 
 import { Pretendard } from "@components/Typography";
+import Lottie from "@components/globals/Lottie";
 
 import colors from "@constants/colors";
 import { SectionData } from "@constants/gnb";
@@ -53,14 +53,7 @@ const Section = ({ path, icon: Icon, lottie, children }: Section) => {
     >
       <IconContainer>
         {isCurrent ? (
-          <Lottie
-            animationData={lottie}
-            loop={false}
-            style={{
-              width: 40,
-              height: 40,
-            }}
-          />
+          <Lottie animationData={lottie} renderer="svg" loop={false} />
         ) : (
           <Icon />
         )}
@@ -101,6 +94,9 @@ const Text = styled(Pretendard)<{ $activated: boolean }>`
         `}
 `;
 
-const IconContainer = styled.div``;
+const IconContainer = styled.div`
+  width: 40px;
+  height: 40px;
+`;
 
 export default Section;

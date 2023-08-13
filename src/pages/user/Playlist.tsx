@@ -1,6 +1,12 @@
 import { useMemo } from "react";
+import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import { styled } from "styled-components/macro";
+
+import {
+  fetchRecommendedPlaylist,
+  fetchRecommendedPlaylistDetail,
+} from "@apis/playlist";
 
 import { ReactComponent as EditTitle } from "@assets/icons/ic_24_edit_filled.svg";
 import { ReactComponent as Share } from "@assets/icons/ic_24_export.svg";
@@ -14,34 +20,65 @@ import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import TextButton from "@components/globals/TextButton";
 
 import PageItemContainer from "@layouts/PageItemContainer";
+import VirtualItem from "@layouts/VirtualItem";
 
 import colors from "@constants/colors";
 
+import { usePlaySongs } from "@hooks/player";
 import { usePlaylistState } from "@hooks/playlist";
 import { useShareListModal } from "@hooks/shareListModal";
+import useVirtualizer from "@hooks/virtualizer";
 
-import { PlaylistType, RecommendlistType } from "@templates/playlist";
+import { BasePlaylist, PlaylistType } from "@templates/playlist";
 
-import { isNull } from "@utils/isTypes";
+import { getPlaylistIcon, getRecommendSquareImage } from "@utils/staticUtill";
 
 interface PlaylistProps {}
 
-const isRecommendlist = (
-  target: PlaylistType | RecommendlistType
-): target is RecommendlistType => {
-  return "round" in target.image && "square" in target.image;
-};
-
 const Playlist = ({}: PlaylistProps) => {
-  const [isEditmode] = usePlaylistState();
-  const { state } = useLocation();
-  const playlist = useMemo<PlaylistType | RecommendlistType>(() => {
-    if (isNull(state)) return; // param 기반으로 플레이리스트 정보 불러오기, 추천 플레이리스트 정보 불러오기
+  const { data: recommendLists } = useQuery({
+    queryKey: "recommendLists",
+    queryFn: fetchRecommendedPlaylist,
+    staleTime: Infinity,
+  });
 
-    return state;
-  }, [state]);
+  const [isEditmode] = usePlaylistState();
+  const location = useLocation();
+  const playlistId = useMemo(
+    () => location.pathname.split("/")[2],
+    [location.pathname]
+  );
+
+  const recommendKey: string | undefined = useMemo(
+    () => recommendLists?.find((item) => item.key === playlistId)?.key,
+    [recommendLists, playlistId]
+  );
+
+  const { data: recommendList } = useQuery({
+    queryKey: ["recommendList", recommendKey],
+    queryFn: async () => {
+      if (!recommendKey) return null;
+
+      return await fetchRecommendedPlaylistDetail(recommendKey);
+    },
+    staleTime: 24 * 60 * 60 * 1000,
+  });
+
+  const playlist: BasePlaylist = useMemo(() => {
+    if (recommendList) return recommendList;
+
+    return location.state as BasePlaylist;
+  }, [location.state, recommendList]);
 
   const shareListModal = useShareListModal();
+  const playSongs = usePlaySongs();
+
+  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
+    playlist.songs ?? []
+  );
+
+  // TODO
+  if (!playlist) return <div>loading...</div>;
 
   return (
     <Container>
@@ -49,9 +86,9 @@ const Playlist = ({}: PlaylistProps) => {
         <Info>
           <Icon
             src={
-              isRecommendlist(playlist)
-                ? `https://static.wakmusic.xyz/static/playlist/icon/square/${playlist.key}.png?v=${playlist.image.square}`
-                : `https://static.wakmusic.xyz/static/playlist/${playlist.image.version}.png`
+              recommendList
+                ? getRecommendSquareImage(recommendList)
+                : getPlaylistIcon((playlist as PlaylistType).image.version)
             }
           />
           <Details>
@@ -60,12 +97,24 @@ const Playlist = ({}: PlaylistProps) => {
               {isEditmode && <EditTitle />}
             </Title>
             <T6Light color={colors.blueGray500}>
-              {playlist.songs.length}곡
+              {playlist.songs?.length}곡
             </T6Light>
             <Functions>
-              <IconButton icon={PlayAll}>전체 재생</IconButton>
-              <IconButton icon={RandomPlay}>랜덤 재생</IconButton>
-              {!isRecommendlist(playlist) && (
+              <IconButton
+                icon={PlayAll}
+                onClick={() => playSongs(playlist.songs)}
+              >
+                전체재생
+              </IconButton>
+
+              <IconButton
+                icon={RandomPlay}
+                onClick={() => playSongs(playlist.songs, true)}
+              >
+                랜덤재생
+              </IconButton>
+
+              {!recommendList && (
                 <ShareIcon
                   onClick={() => {
                     shareListModal(playlist.key);
@@ -75,7 +124,7 @@ const Playlist = ({}: PlaylistProps) => {
             </Functions>
           </Details>
         </Info>
-        {!isRecommendlist(playlist) && (
+        {!recommendList && (
           <TextButton
             text={{ default: "편집", activated: "완료" }}
             activated={isEditmode}
@@ -92,18 +141,23 @@ const Playlist = ({}: PlaylistProps) => {
         ]}
       />
 
-      <PageItemContainer height={281}>
-        {playlist.songs.map((item, index) => (
-          <SongItem
-            key={index}
-            song={item}
-            selected={false}
-            features={[
-              SongItemFeature.date,
-              SongItemFeature.views,
-              SongItemFeature.like,
-            ]}
-          />
+      <PageItemContainer
+        height={281}
+        ref={viewportRef}
+        totalSize={getTotalSize()}
+      >
+        {virtualMap((virtualItem, item) => (
+          <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
+            <SongItem
+              song={item}
+              selected={false}
+              features={[
+                SongItemFeature.date,
+                SongItemFeature.views,
+                SongItemFeature.like,
+              ]}
+            />
+          </VirtualItem>
         ))}
       </PageItemContainer>
     </Container>

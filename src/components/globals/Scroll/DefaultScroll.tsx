@@ -6,10 +6,13 @@ import colors from "@constants/colors";
 
 interface DefaultScrollProps {
   children: React.ReactNode | undefined;
+
+  onScroll?: (e: React.UIEvent<HTMLDivElement, UIEvent>) => void;
 }
 
 const DefaultScroll = forwardRef<HTMLDivElement, DefaultScrollProps>(
-  ({ children }: DefaultScrollProps, ref) => {
+  ({ children, onScroll }: DefaultScrollProps, ref) => {
+    const viewportRef = useRef<HTMLDivElement>(null);
     const osRef = useRef<HTMLDivElement>(null);
 
     const [initialize] = useOverlayScrollbars({
@@ -19,19 +22,25 @@ const DefaultScroll = forwardRef<HTMLDivElement, DefaultScrollProps>(
     });
 
     useEffect(() => {
-      if (!osRef.current || !(ref as RefObject<HTMLDivElement>).current) return;
+      if (
+        !osRef.current ||
+        !((ref || viewportRef) as RefObject<HTMLDivElement>).current
+      )
+        return;
 
       initialize({
         target: osRef.current,
         elements: {
-          viewport: (ref as RefObject<HTMLDivElement>).current,
+          viewport: ((ref || viewportRef) as RefObject<HTMLDivElement>).current,
         },
       });
     }, [initialize, ref]);
 
     return (
       <ScrollWrapper ref={osRef}>
-        <ScrollBar ref={ref}>{children}</ScrollBar>
+        <ScrollBar ref={ref || viewportRef} onScroll={onScroll}>
+          {children}
+        </ScrollBar>
       </ScrollWrapper>
     );
   }

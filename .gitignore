@@ -31,5 +31,5 @@ dist-ssr
 !.yarn/sdks
 !.yarn/versions
 
-electron.js
-discord.js
+.vite
+out

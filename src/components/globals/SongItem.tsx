@@ -20,12 +20,13 @@ interface SongItemProps {
 
   rank?: number;
   editMode?: boolean;
-  features?: SongItemFeature[];
+  features?: (SongItemFeature | undefined)[];
   selected?: boolean;
 
   onClick?: (song: Song) => void;
   onEdit?: (event: React.MouseEvent) => void;
 
+  useIncrease?: boolean;
   noPadding?: boolean;
 }
 
@@ -43,17 +44,22 @@ const featureBuilder = (
     increase: number;
     last: number;
   },
-  feature: SongItemFeature
+  feature: SongItemFeature | undefined,
+  useIncrease?: boolean
 ) => {
   switch (feature) {
     case SongItemFeature.last:
-      return `${chartData.last}위`;
+      return chartData.last ? `${chartData.last}위` : "-";
     case SongItemFeature.date:
       return formatDate(song.date);
     case SongItemFeature.views:
-      return `${formatNumber(chartData.views)}회`;
+      return `${formatNumber(
+        useIncrease ? chartData.increase : chartData.views
+      )}회`;
     case SongItemFeature.like:
       return formatNumber(song.like);
+    default:
+      return null;
   }
 };
 
@@ -66,13 +72,15 @@ const SongItem = ({
   onClick,
   onEdit,
   noPadding,
+  useIncrease,
 }: SongItemProps) => {
   const chartData = useMemo(() => getChartData(song), [song]);
   const featureTexts = useMemo(
     () =>
-      features?.map((feature) => featureBuilder(song, chartData, feature)) ??
-      [],
-    [song, chartData, features]
+      features?.map((feature) =>
+        featureBuilder(song, chartData, feature, useIncrease)
+      ) ?? [],
+    [song, chartData, features, useIncrease]
   );
 
   const width = useMemo(() => {

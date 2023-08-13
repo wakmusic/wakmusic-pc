@@ -1,11 +1,11 @@
-import { Song, SongTotal } from "./song";
+import { SongTotal } from "./song";
 
-export type SongsSearchResponse = {
-  song: Song[];
-  artist: Song[];
-  remix: Song[];
+export type SearchAllResponse = {
+  song: SongTotal[];
+  artist: SongTotal[];
+  remix: SongTotal[];
 };
 
 export type NewSongsResponse = SongTotal[];
 
-export type tabsTypes = "all" | "song" | "artist" | "remix";
+export type SearchTabType = "all" | "song" | "artist" | "remix";

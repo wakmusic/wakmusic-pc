@@ -25,7 +25,9 @@ import VirtualItem from "@layouts/VirtualItem";
 
 import { artistDetailTabs } from "@constants/tabs";
 
+import { useInfiniteScrollHandler } from "@hooks/infiniteScrollHandler";
 import { usePlaySongs } from "@hooks/player";
+import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
@@ -98,28 +100,14 @@ const Artist = ({}: ArtistProps) => {
       hasNextPage,
     });
 
-  useEffect(() => {
-    if (!albums) return;
-
-    const [lastItem] = [...getVirtualItems()].reverse();
-
-    if (!lastItem) {
-      return;
-    }
-
-    if (
-      lastItem.index >= albums.length - 1 &&
-      hasNextPage &&
-      !isFetchingNextPage
-    ) {
-      fetchNextPage();
-    }
-  }, [albums, fetchNextPage, getVirtualItems, hasNextPage, isFetchingNextPage]);
-
-  useEffect(() => {
-    setSelected([]);
-    viewportRef.current?.scrollTo(0, 0);
-  }, [tab, viewportRef, setSelected]);
+  useScrollToTop(tab, viewportRef, setSelected);
+  useInfiniteScrollHandler({
+    items: albums,
+    hasNextPage,
+    fetchNextPage,
+    getVirtualItems,
+    isFetchingNextPage,
+  });
 
   useEffect(() => {
     if (scroll > 0 && animationState === "square") {

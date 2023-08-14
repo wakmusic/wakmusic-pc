@@ -5,6 +5,7 @@ import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off.svg
 import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";
 
 import { T4Medium, T5Light } from "@components/Typography";
+import Marquee from "@components/globals/Marquee";
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import colors from "@constants/colors";
@@ -34,8 +35,15 @@ const Song = ({}: SongProps) => {
         />
 
         <TitleContainer>
-          <TitleText>{song?.title || "왁뮤차트 TOP100"}</TitleText>
-          <ArtistText>{song?.artist || "재생 버튼을 클릭해보세요."}</ArtistText>
+          <Marquee width={200}>
+            <TitleText>{song?.title || "왁뮤차트 TOP100"} </TitleText>
+          </Marquee>
+
+          <Marquee width={200}>
+            <ArtistText>
+              {song?.artist || "재생 버튼을 클릭해보세요."}
+            </ArtistText>
+          </Marquee>
         </TitleContainer>
 
         <View />
@@ -74,19 +82,11 @@ const TitleContainer = styled.div`
 
 const TitleText = styled(T4Medium)`
   color: ${colors.blueGray25};
-
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 `;
 
 const ArtistText = styled(T5Light)`
   color: ${colors.blueGray100};
   opacity: 0.6;
-
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 `;
 
 export default Song;

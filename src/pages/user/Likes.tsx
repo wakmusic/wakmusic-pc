@@ -43,11 +43,20 @@ const Likes = ({}: LikesProps) => {
 
       <Songs
         height={181}
-        dispatchSongs={(songs) => {
+        dispatchSongs={(songs, feature) => {
           if (!isSongTotal(songs)) return;
 
           setLikes(songs);
+
           // api에 좋아요 곡 삭제 또는 순서 수정 요청
+          switch (feature) {
+            case ControllerFeature.edit:
+              break;
+            case ControllerFeature.delete:
+              break;
+            default:
+              setLikes(songs);
+          }
         }}
         editMode={editMode}
         songFeatures={[

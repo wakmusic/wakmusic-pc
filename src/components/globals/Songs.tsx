@@ -47,7 +47,7 @@ interface DragTarget {
 interface DragStart {
   absolute: number; // 화면상에서 처음 클릭이 일어난 위치, 스크롤 영향 안받음
   relative: number; // PageItemContainer을 기준으로 한 위치
-  fixed: number; // 화면상에서 처음 클릭이 일어난 위치, 스크롤 영향 받음
+  //fixed: number; // 화면상에서 처음 클릭이 일어난 위치, 스크롤 영향 받음
 }
 
 const selectSongs = (state: Song[], action: Song | Song[]) => {
@@ -94,7 +94,6 @@ const Songs = ({
   const [dragStart, setDragStart] = useState<DragStart>({
     absolute: 0,
     relative: 0,
-    fixed: 0,
   });
   const [dropTarget, setDropTarget] = useState(-1);
 
@@ -241,7 +240,6 @@ const Songs = ({
                 setDragStart({
                   relative: position,
                   absolute: e.clientY,
-                  fixed: e.clientY,
                 });
                 setDropTarget(index);
 
@@ -268,18 +266,18 @@ const Songs = ({
 
   const moveDragedSong = useCallback(
     (e: React.MouseEvent) => {
-      const songsDOM = viewportRef.current;
+      const viewportDOM = viewportRef.current;
 
-      if (!songsDOM) return;
+      if (!viewportDOM) return;
       document.body.style.cursor = "pointer";
 
       let newPosition = dragStart.relative + (e.clientY - dragStart.absolute);
-      const songsPosition = songsDOM.getBoundingClientRect();
+      const viewportRect = viewportDOM.getBoundingClientRect();
 
       if (newPosition < 0) {
         newPosition = 0;
-      } else if (newPosition + 64 > songsPosition.height) {
-        newPosition = songsPosition.height - 64;
+      } else if (newPosition + 64 > viewportRect.height) {
+        newPosition = viewportRect.height - 64;
       }
 
       if (newPosition !== dragTarget.position) {
@@ -322,8 +320,6 @@ const Songs = ({
     const handleMouseUp = () => {
       if (isMouseDown) {
         document.body.style.cursor = "default";
-        setIsMouseDown(false);
-        setAnimateDrag(false);
 
         if (dropTarget === -1 || !dispatchSongs) return;
 
@@ -335,12 +331,14 @@ const Songs = ({
           newSongs.splice(dropTarget, 0, dragTarget.song);
         }
 
-        setSongs(newSongs);
-        setDropTarget(-1);
-
         if (newSongs !== children) {
           dispatchSongs(newSongs, ControllerFeature.edit);
         }
+
+        setSongs(newSongs);
+        setDropTarget(-1);
+        setIsMouseDown(false);
+        setAnimateDrag(false);
       }
     };
 
@@ -364,24 +362,34 @@ const Songs = ({
 
   useEffect(() => {
     // 드롭 위치 계산
-    const songsDOM = viewportRef.current;
-    if (dragTarget.index === -1 || !songsDOM || !isMouseDown) return;
+    const viewportDOM = viewportRef.current;
+    if (dragTarget.index === -1 || !viewportDOM || !isMouseDown) return;
+
+    const viewportRect = viewportDOM.getBoundingClientRect();
 
     let newDropTarget = dropTarget;
+    let mousePosition = mouseY;
 
-    const songsPosition = songsDOM.getBoundingClientRect();
-    const maxScroll = children.length * 64 - songsPosition.height;
-
-    const dragedDistance = mouseY - dragStart.fixed;
-
-    if (songsDOM.scrollTop === 0 && mouseY < songsPosition.top) {
-      newDropTarget = 0;
+    // 드래그 된 아이템의 Y값이 최대, 최소를 벗어나는 경우
+    if (mousePosition < viewportRect.top + dragTarget.offset + 20) {
+      mousePosition = viewportRect.top + dragTarget.offset + 20;
     } else if (
-      songsDOM.scrollTop === maxScroll &&
-      mouseY > songsPosition.bottom
+      mousePosition >
+      viewportRect.bottom - (24 - dragTarget.offset) - 20
     ) {
-      newDropTarget = children.length - 1;
-    } else if (dragedDistance > 0) {
+      mousePosition = viewportRect.bottom - (24 - dragTarget.offset) - 20;
+    }
+
+    const dragStartPos =
+      dragTarget.index * 64 -
+      viewportDOM.scrollTop +
+      viewportRect.top +
+      (20 + dragTarget.offset);
+    // (스크롤을 적용한 드래그가 시작된 Y값) = {(인덱스 * 64) - 스크롤된 값} + (윈도우 기준 뷰포트 Y값) + (SongItem 내부에서 클릭이 발생한 위치)
+
+    const dragedDistance = mousePosition - dragStartPos;
+
+    if (dragedDistance > 0) {
       newDropTarget =
         dragTarget.index + Math.floor((dragedDistance - 32) / 64) + 1;
     } else {
@@ -396,7 +404,7 @@ const Songs = ({
 
     if (newDropTarget === dropTarget) return;
 
-    if (dropTarget !== -1 && !animateDrag) {
+    if (!animateDrag) {
       // 최초 클릭이 아닌 경우에 애니메이션 재생
       setAnimateDrag(true);
     }
@@ -409,61 +417,39 @@ const Songs = ({
     children.length,
     dragTarget.index,
     dragTarget.offset,
-    dragStart.fixed,
     dropTarget,
     animateDrag,
   ]);
 
   useInterval(() => {
     // 자동 스크롤
-    const songsDOM = viewportRef.current;
-    if (!songsDOM || !isMouseDown || !editMode) return;
+    const viewportDOM = viewportRef.current;
+    if (!viewportDOM || !isMouseDown) return;
 
-    const songsPosition = songsDOM.getBoundingClientRect();
-    const maxScroll = children.length * 64 - songsPosition.height;
+    const viewportRect = viewportDOM.getBoundingClientRect();
+    const maxScroll = children.length * 64 - viewportRect.height;
+    const scrollOffset = viewportDOM.scrollTop;
     const scale = 0.8;
 
     let scroll = 0;
 
-    if (songsPosition.top > mouseY && songsDOM.scrollTop !== 0) {
-      let topOffset = mouseY - songsPosition.top;
-
-      // 버그를 막기 위한 발악
-      if (topOffset < -35) {
-        topOffset = -35;
-      }
-
-      scroll = topOffset * scale;
-    } else if (
-      songsPosition.bottom < mouseY &&
-      songsDOM.scrollTop < maxScroll
-    ) {
-      let bottomOffset = Math.abs(songsPosition.bottom - mouseY);
-
-      if (bottomOffset > 35) {
-        bottomOffset = 35;
-      }
-
-      scroll = bottomOffset * scale;
+    if (viewportRect.top > mouseY && scrollOffset !== 0) {
+      scroll = (mouseY - viewportRect.top) * scale;
+    } else if (viewportRect.bottom < mouseY && scrollOffset < maxScroll) {
+      scroll = Math.abs(viewportRect.bottom - mouseY) * scale;
     }
 
-    scroll = Math.floor(scroll);
     if (scroll === 0) return;
 
-    songsDOM.scrollTo({
-      top: songsDOM.scrollTop + scroll,
+    viewportDOM.scrollTo({
+      top: scrollOffset + scroll,
     });
-
-    setDragStart({
-      ...dragStart,
-      fixed: dragStart.fixed + scroll * -1,
-    });
-  }, 24);
+  }, 25);
 
   return (
     <Container
       onMouseMove={(e) => {
-        if (!isMouseDown || !editMode) return;
+        if (!isMouseDown) return;
         moveDragedSong(e);
       }}
     >

@@ -47,7 +47,6 @@ interface DragTarget {
 interface DragStart {
   absolute: number; // 화면상에서 처음 클릭이 일어난 위치, 스크롤 영향 안받음
   relative: number; // PageItemContainer을 기준으로 한 위치
-  //fixed: number; // 화면상에서 처음 클릭이 일어난 위치, 스크롤 영향 받음
 }
 
 const selectSongs = (state: Song[], action: Song | Song[]) => {
@@ -370,7 +369,7 @@ const Songs = ({
     let newDropTarget = dropTarget;
     let mousePosition = mouseY;
 
-    // 드래그 된 아이템의 Y값이 최대, 최소를 벗어나는 경우
+    // 드래하고 있는 마우스의 Y값이 최대, 최소를 벗어나는 경우
     if (mousePosition < viewportRect.top + dragTarget.offset + 20) {
       mousePosition = viewportRect.top + dragTarget.offset + 20;
     } else if (

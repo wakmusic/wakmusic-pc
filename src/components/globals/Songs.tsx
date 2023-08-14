@@ -1,39 +1,28 @@
 import { VirtualItem as VirtualItemType } from "@tanstack/react-virtual";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 import VirtualItem from "@layouts/VirtualItem";
 
 import { useInterval } from "@hooks/interval";
-import { useControlState, usePlayingInfoState } from "@hooks/player";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
 
-import getChartData from "@utils/getChartData";
 import { isNull } from "@utils/isTypes";
 
 import SongItem, { SongItemFeature } from "./SongItem";
-import AddMusic from "./musicControllers/AddMusic";
-import AddPlaylist from "./musicControllers/AddPlaylist";
-import DeleteMusic from "./musicControllers/DeleteMusic";
-import PlayMusic from "./musicControllers/PlayMusic";
-import SelectAll from "./musicControllers/SelectAll";
-import MusicControllerBar from "./musicControllers/musicControllerContainers/MusicControllerBar";
 
 interface SongsProps {
   height: number;
-
-  songFeatures?: SongItemFeature[];
-  controllerFeatures: ControllerFeature[];
-
-  showController?: boolean;
   editMode?: boolean;
+  songFeatures?: SongItemFeature[];
 
-  dispatchSongs?: (newSongs: Song[], action: ControllerFeature) => void;
+  onSongClick: (song: Song | Song[]) => void;
+  onEdit?: (newSongs: Song[]) => void;
 
+  selectedSongs: Song[];
   children: Song[];
 }
 
@@ -49,40 +38,16 @@ interface DragStart {
   relative: number; // PageItemContainer을 기준으로 한 위치
 }
 
-const selectSongs = (state: Song[], action: Song | Song[]) => {
-  if (Array.isArray(action)) {
-    if (state === action) {
-      return [];
-    }
-
-    return action;
-  }
-
-  const newState = state.slice();
-
-  if (newState.includes(action)) {
-    newState.splice(newState.indexOf(action), 1);
-  } else {
-    newState.push(action);
-  }
-
-  return newState;
-};
-
 const Songs = ({
   height,
-  songFeatures,
-  controllerFeatures,
-  showController = true,
   editMode = false,
-  dispatchSongs,
+  songFeatures,
+  onSongClick,
+  onEdit,
+  selectedSongs,
   children,
 }: SongsProps) => {
-  const [showControllerState, setShowControllerState] =
-    useState(showController);
   const [songs, setSongs] = useState(children);
-  const [selectedSongs, dispatchSelectedSongs] = useReducer(selectSongs, []);
-  const [popdown, setPopdown] = useState(false);
 
   const [dragTarget, setDragTarget] = useState<DragTarget>({
     index: -1,
@@ -101,9 +66,6 @@ const Songs = ({
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [mouseY, setMouseY] = useState(0);
 
-  const [, setPlayingInfo] = usePlayingInfoState();
-  const [, setControlState] = useControlState();
-
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(songs);
 
   const getSongItemY = useCallback(
@@ -117,87 +79,6 @@ const Songs = ({
       return (index - Math.floor(scrolled / 64)) * 64 - (scrolled % 64);
     },
     [viewportRef]
-  );
-
-  const addSongs = useCallback(
-    (list: Song[], play?: boolean) => {
-      // 재생목록에 노래 추가
-      setPlayingInfo((prev) => ({
-        playlist: [
-          ...prev.playlist,
-          ...list.map((item) => ({
-            ...item,
-            views: getChartData(item).views,
-          })),
-        ],
-        history: [],
-        current: play ? prev.playlist.length : prev.current,
-      }));
-
-      if (!play) return;
-      setControlState((prev) => ({
-        ...prev,
-        isPlaying: true,
-      }));
-    },
-    [setControlState, setPlayingInfo]
-  );
-
-  const getControllerComponent = useCallback(
-    (feature: ControllerFeature, key: number) => {
-      switch (feature) {
-        case ControllerFeature.selectAll:
-          return (
-            <SelectAll
-              isSelect={false}
-              onClick={() => {
-                dispatchSelectedSongs(children);
-              }}
-              key={key}
-            />
-          );
-        case ControllerFeature.addMusic:
-          // 플레이리스트에 노래 추가
-          return <AddMusic key={key} />;
-        case ControllerFeature.addToList:
-          return (
-            <AddPlaylist
-              onClick={() => {
-                addSongs(selectedSongs);
-                dispatchSelectedSongs([]);
-              }}
-              key={key}
-            />
-          );
-        case ControllerFeature.play:
-          return (
-            <PlayMusic
-              onClick={() => {
-                addSongs(selectedSongs, true);
-                dispatchSelectedSongs([]);
-              }}
-              key={key}
-            />
-          );
-        case ControllerFeature.delete:
-          return (
-            <DeleteMusic
-              onClick={() => {
-                const newSongs = children.slice();
-
-                selectedSongs.forEach((item) => {
-                  newSongs.splice(newSongs.indexOf(item), 1);
-                });
-                dispatchSelectedSongs([]);
-
-                dispatchSongs &&
-                  dispatchSongs(newSongs, ControllerFeature.delete);
-              }}
-            />
-          );
-      }
-    },
-    [addSongs, children, selectedSongs, dispatchSongs]
   );
 
   const mapSongComponent = useCallback(
@@ -224,7 +105,7 @@ const Songs = ({
               selected={selectedSongs.includes(item)}
               features={songFeatures}
               onClick={(song) => {
-                dispatchSelectedSongs(song);
+                onSongClick(song);
               }}
               onEdit={(e) => {
                 setIsMouseDown(true);
@@ -260,6 +141,7 @@ const Songs = ({
       isMouseDown,
       selectedSongs,
       songFeatures,
+      onSongClick,
     ]
   );
 
@@ -290,25 +172,6 @@ const Songs = ({
   );
 
   useEffect(() => {
-    // 컨트롤러 에니미에션 토글
-    if ((selectedSongs.length === 0 && !showController) || isMouseDown) {
-      setPopdown(true);
-      return;
-    }
-
-    if (selectedSongs.length > 0 || (showController && !isMouseDown)) {
-      setPopdown(false);
-      setShowControllerState(true);
-    }
-  }, [
-    showControllerState,
-    setPopdown,
-    showController,
-    selectedSongs,
-    isMouseDown,
-  ]);
-
-  useEffect(() => {
     // mouse 이벤트 핸들러 등록
     if (!editMode) return;
 
@@ -320,7 +183,7 @@ const Songs = ({
       if (isMouseDown) {
         document.body.style.cursor = "default";
 
-        if (dropTarget === -1 || !dispatchSongs) return;
+        if (dropTarget === -1 || !onEdit) return;
 
         const newSongs = songs.slice();
 
@@ -331,7 +194,7 @@ const Songs = ({
         }
 
         if (newSongs !== children) {
-          dispatchSongs(newSongs, ControllerFeature.edit);
+          onEdit(newSongs);
         }
 
         setSongs(newSongs);
@@ -356,7 +219,7 @@ const Songs = ({
     dragTarget.index,
     dragTarget.song,
     dropTarget,
-    dispatchSongs,
+    onEdit,
   ]);
 
   useEffect(() => {
@@ -462,22 +325,6 @@ const Songs = ({
         </FixedBox>
       </PageItemContainer>
 
-      <Controller $display={showControllerState}>
-        <MusicControllerBar
-          count={
-            selectedSongs.length <= 1 && !showController
-              ? 1
-              : selectedSongs.length
-          }
-          popdown={popdown}
-        >
-          {controllerFeatures.map((item, index) =>
-            getControllerComponent(item, index)
-          )}
-          {editMode && getControllerComponent(ControllerFeature.delete, -1)}
-        </MusicControllerBar>
-      </Controller>
-
       <PseuduSongItem
         style={{
           display: isMouseDown && editMode ? "block" : "none",
@@ -519,10 +366,6 @@ const SongPadding = styled.div<{ $transition: boolean }>`
     css`
       transition: padding 0.1s linear 0s;
     `}
-`;
-
-const Controller = styled.div<{ $display: boolean }>`
-  display: ${({ $display }) => ($display ? "block" : "none")};
 `;
 
 export default Songs;

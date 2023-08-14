@@ -8,14 +8,16 @@ import colors from "@constants/colors";
 interface MusicControllerPlayerProps {
   children: ReactNode;
   count: number;
+  popdown: boolean;
 }
 
 const MusicControllerPlayer = ({
   count,
   children,
+  popdown,
 }: MusicControllerPlayerProps) => {
   return (
-    <Wrapper>
+    <Wrapper $popdown={popdown}>
       <ButtonContainer>
         <Count $isWidth={count >= 100}>
           <T4Bold color={colors.sub}>{count}</T4Bold>
@@ -26,14 +28,16 @@ const MusicControllerPlayer = ({
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $popdown: boolean }>`
   position: fixed;
   width: fit-content;
   height: fit-content;
   margin: 0 auto;
   left: 0;
   right: 0;
-  bottom: 0px;
+  bottom: ${({ $popdown }) => ($popdown ? "-45px" : "0px")};
+
+  transition: bottom 0.25s ease-out 0s;
 `;
 
 const ButtonContainer = styled.div`

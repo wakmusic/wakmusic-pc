@@ -5,8 +5,6 @@ import styled, { css } from "styled-components/macro";
 import PageItemContainer from "@layouts/PageItemContainer";
 import VirtualItem from "@layouts/VirtualItem";
 
-import { dummySong } from "@constants/dummys";
-
 import { useInterval } from "@hooks/interval";
 import useVirtualizer from "@hooks/virtualizer";
 

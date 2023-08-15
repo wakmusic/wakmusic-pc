@@ -137,7 +137,7 @@ const MusicController = ({
   );
 
   useEffect(() => {
-    // 컨트롤러 에니메에션 토글
+    // 컨트롤러 애니메이션 토글
     if ((selectedSongs.length === 0 && !displayDefault) || hide) {
       setPopdown(true);
       return;

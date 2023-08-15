@@ -34,6 +34,7 @@ const Likes = ({}: LikesProps) => {
           GuideBarFeature.views,
           GuideBarFeature.like,
         ]}
+        editMode={editMode}
       />
 
       <CustomSongs

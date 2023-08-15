@@ -1,38 +1,29 @@
 import { useState } from "react";
 import styled from "styled-components/macro";
 
+import CustomSongs from "@components/globals/CustomSongs";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import { SongItemFeature } from "@components/globals/SongItem";
-import Songs from "@components/globals/Songs";
-import MusicController from "@components/globals/musicControllers/musicControllerContainers/MusicController";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import { myListSongs } from "@constants/dummys";
 
 import { useLikesState } from "@hooks/likes";
 import { useSelectSongs } from "@hooks/selectSongs";
 
-import { ControllerFeature } from "@templates/musicController";
-import { Song, SongTotal } from "@templates/song";
+import { Song } from "@templates/song";
 
 interface LikesProps {}
 
-const isSongTotal = (songs: Song[]): songs is SongTotal[] => {
-  let isTrue = true;
-
-  songs.forEach((item) => {
-    if (!("total" in item)) {
-      isTrue = false;
-    }
-  });
-
-  return isTrue;
-};
-
 const Likes = ({}: LikesProps) => {
   const [editMode] = useLikesState();
-  const [likes, setLikes] = useState(myListSongs);
+  const [likes, setLikes] = useState<Song[]>(myListSongs);
 
   const { selected, selectCallback } = useSelectSongs();
+
+  const dispatchLikes = (songs: Song[]) => {
+    setLikes(songs);
+  };
 
   return (
     <Container>
@@ -45,12 +36,10 @@ const Likes = ({}: LikesProps) => {
         ]}
       />
 
-      <Songs
+      <CustomSongs
         height={181}
         editMode={editMode}
-        onEdit={(songs) => {
-          if (!isSongTotal(songs)) return;
-        }}
+        onEdit={dispatchLikes}
         onSongClick={selectCallback}
         selectedSongs={selected}
         songFeatures={[
@@ -60,18 +49,14 @@ const Likes = ({}: LikesProps) => {
         ]}
       >
         {likes}
-      </Songs>
+      </CustomSongs>
 
       <MusicController
-        features={[
-          ControllerFeature.selectAll,
-          ControllerFeature.addMusic,
-          ControllerFeature.addToList,
-          ControllerFeature.play,
-        ]}
+        displayDefault={true}
         songs={likes}
         selectedSongs={selected}
         dispatchSelectedSongs={selectCallback}
+        onDelete={editMode ? dispatchLikes : undefined}
       />
     </Container>
   );

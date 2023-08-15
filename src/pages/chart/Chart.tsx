@@ -8,6 +8,7 @@ import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import UpdatedText from "@components/globals/UpdatedText";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -110,6 +111,12 @@ const Chart = ({}: ChartProps) => {
             </VirtualItem>
           ))}
         </PageItemContainer>
+
+        <MusicController
+          songs={charts ?? []}
+          selectedSongs={selected}
+          dispatchSelectedSongs={selectCallback}
+        />
       </PageContainer>
     </PageLayout>
   );

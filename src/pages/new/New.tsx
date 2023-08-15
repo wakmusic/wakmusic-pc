@@ -10,6 +10,7 @@ import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
 import UpdatedText from "@components/globals/UpdatedText";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -139,6 +140,12 @@ const New = ({}: NewProps) => {
             );
           })}
         </PageItemContainer>
+
+        <MusicController
+          songs={songs}
+          selectedSongs={selected}
+          dispatchSelectedSongs={selectCallback}
+        />
       </PageContainer>
     </PageLayout>
   );

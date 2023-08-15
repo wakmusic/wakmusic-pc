@@ -114,6 +114,19 @@ export const userInfo = {
   via: "카카오톡",
 };
 
+export const dummySong = {
+  songId: "dummySongId",
+  title: "dummy'",
+  artist: "dummy",
+  remix: "",
+  reaction: "",
+  date: 230525,
+  start: 0,
+  end: 0,
+  like: 0,
+  total: { views: 580998, increase: 333, last: 21 },
+};
+
 export const hourlyChart = [
   {
     songId: "XqAKiaxAdu0",

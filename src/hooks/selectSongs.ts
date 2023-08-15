@@ -7,7 +7,21 @@ export const useSelectSongs = () => {
 
   const selectCallback = (song: Song | Song[]) => {
     if (Array.isArray(song)) {
-      if (selected === song) {
+      const _song = song
+        .slice()
+        .sort((a, b) =>
+          a.songId < b.songId ? -1 : a.songId == b.songId ? 0 : 1
+        );
+      const _selected = selected
+        .slice()
+        .sort((a, b) =>
+          a.songId < b.songId ? -1 : a.songId == b.songId ? 0 : 1
+        );
+
+      if (
+        _selected.length === _song.length &&
+        _selected.every((value, index) => value === _song[index])
+      ) {
         setSelected([]);
       } else {
         setSelected(song);

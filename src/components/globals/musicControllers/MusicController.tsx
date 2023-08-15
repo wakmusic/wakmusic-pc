@@ -8,20 +8,20 @@ import { Song } from "@templates/song";
 
 import getChartData from "@utils/getChartData";
 
-import AddMusic from "../AddMusic";
-import AddPlaylist from "../AddPlaylist";
-import DeleteMusic from "../DeleteMusic";
-import PlayMusic from "../PlayMusic";
-import SelectAll from "../SelectAll";
-import MusicControllerBar from "./MusicControllerBar";
-import MusicControllerPlayer from "./MusicControllerPlayer";
+import AddMusic from "./AddMusic";
+import AddPlaylist from "./AddPlaylist";
+import DeleteMusic from "./DeleteMusic";
+import PlayMusic from "./PlayMusic";
+import SelectAll from "./SelectAll";
+import MusicControllerBar from "./musicControllerContainers/MusicControllerBar";
+import MusicControllerPlayer from "./musicControllerContainers/MusicControllerPlayer";
 
 interface MusicControllerProps {
   displayDefault?: boolean;
   hide?: boolean;
 
   player?: boolean;
-  features: ControllerFeature[];
+  features?: ControllerFeature[];
 
   songs: Song[];
   selectedSongs: Song[];
@@ -31,10 +31,15 @@ interface MusicControllerProps {
 }
 
 const MusicController = ({
-  displayDefault = true,
+  displayDefault = false,
   hide = false,
   player = false,
-  features,
+  features = [
+    ControllerFeature.selectAll,
+    ControllerFeature.addMusic,
+    ControllerFeature.addToList,
+    ControllerFeature.play,
+  ],
   songs,
   selectedSongs,
   dispatchSelectedSongs,

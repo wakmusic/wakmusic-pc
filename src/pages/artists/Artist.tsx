@@ -17,6 +17,7 @@ import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -194,6 +195,12 @@ const Artist = ({}: ArtistProps) => {
             );
           })}
         </PageItemContainer>
+
+        <MusicController
+          songs={albums}
+          selectedSongs={selected}
+          dispatchSelectedSongs={selectCallback}
+        />
       </PageContainer>
     </PageLayout>
   );

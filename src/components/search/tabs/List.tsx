@@ -7,6 +7,7 @@ import { fetchSearchTab } from "@apis/songs";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 import VirtualItem from "@layouts/VirtualItem";
@@ -113,6 +114,12 @@ const List = ({ tab, query }: ListProps) => {
           );
         })}
       </PageItemContainer>
+
+      <MusicController
+        songs={songs}
+        selectedSongs={selected}
+        dispatchSelectedSongs={selectCallback}
+      />
     </Container>
   );
 };

@@ -5,6 +5,8 @@ import styled, { css } from "styled-components/macro";
 import PageItemContainer from "@layouts/PageItemContainer";
 import VirtualItem from "@layouts/VirtualItem";
 
+import { dummySong } from "@constants/dummys";
+
 import { useInterval } from "@hooks/interval";
 import useVirtualizer from "@hooks/virtualizer";
 
@@ -38,7 +40,7 @@ interface DragStart {
   relative: number; // PageItemContainer을 기준으로 한 위치
 }
 
-const Songs = ({
+const CustomSongs = ({
   height,
   editMode = false,
   songFeatures,
@@ -51,7 +53,7 @@ const Songs = ({
 
   const [dragTarget, setDragTarget] = useState<DragTarget>({
     index: -1,
-    song: children[0],
+    song: dummySong,
     position: 0,
     offset: 0,
   });
@@ -172,6 +174,12 @@ const Songs = ({
   );
 
   useEffect(() => {
+    if (children.length !== songs.length && !isMouseDown) {
+      setSongs(children);
+    }
+  }, [children, songs, isMouseDown]);
+
+  useEffect(() => {
     // mouse 이벤트 핸들러 등록
     if (!editMode) return;
 
@@ -193,11 +201,11 @@ const Songs = ({
           newSongs.splice(dropTarget, 0, dragTarget.song);
         }
 
+        setSongs(newSongs);
         if (newSongs !== children) {
           onEdit(newSongs);
         }
 
-        setSongs(newSongs);
         setDropTarget(-1);
         setIsMouseDown(false);
         setAnimateDrag(false);
@@ -368,4 +376,4 @@ const SongPadding = styled.div<{ $transition: boolean }>`
     `}
 `;
 
-export default Songs;
+export default CustomSongs;

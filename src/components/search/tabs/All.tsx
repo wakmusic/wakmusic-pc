@@ -6,6 +6,7 @@ import { ReactComponent as ArrowRightSVG } from "@assets/icons/ic_16_arrow_right
 
 import { T5Medium, T7Medium } from "@components/Typography";
 import MusicController from "@components/globals/musicControllers/MusicController";
+import SongItem from "@components/globals/SongItem";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 
@@ -62,13 +63,11 @@ const All = ({ query, res }: AllProps) => {
               </CategoryHeaderButton>
             </CategoryHeader>
 
-            <SongCard
-              songs={res[key]}
-              selectedSongs={selected}
-              onClick={selectCallback}
-            />
-          </CategoryContainer>
-        ))}
+              {res[key].slice(-3).map((song, index) => (
+                <SongItem key={index} song={song} noPadding forceWidth={650} />
+              ))}
+            </CategoryContainer>
+          ))}
       </Wrapper>
 
       <MusicController

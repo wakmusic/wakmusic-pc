@@ -1,10 +1,9 @@
 import { Dispatch, RefObject, SetStateAction, useEffect } from "react";
 
 export const useScrollToTop = <T>(
-  someHook: T,
+  someHook: unknown,
   viewportRef: RefObject<HTMLDivElement>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setSelected: Dispatch<SetStateAction<any[]>> | undefined
+  setSelected: Dispatch<SetStateAction<T[]>> | undefined
 ) => {
   useEffect(() => {
     if (setSelected) setSelected([]);

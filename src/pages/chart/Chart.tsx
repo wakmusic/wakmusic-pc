@@ -19,6 +19,7 @@ import { chartTabs } from "@constants/tabs";
 import { lastTextMap } from "@constants/textMap";
 
 import { usePlaySongs } from "@hooks/player";
+import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
@@ -56,10 +57,7 @@ const Chart = ({}: ChartProps) => {
     charts ?? []
   );
 
-  useEffect(() => {
-    setSelected([]);
-    viewportRef.current?.scrollTo(0, 0);
-  }, [tab, viewportRef, setSelected]);
+  useScrollToTop(tab, viewportRef, setSelected);
 
   // TODO
   if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)

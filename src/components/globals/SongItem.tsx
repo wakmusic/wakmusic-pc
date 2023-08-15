@@ -11,6 +11,7 @@ import { Song } from "@templates/song";
 
 import { formatDate, formatNumber } from "@utils/formatting";
 import getChartData from "@utils/getChartData";
+import { isNumber } from "@utils/isTypes";
 
 import Rank from "./Rank";
 import Track from "./Track";
@@ -27,6 +28,7 @@ interface SongItemProps {
 
   useIncrease?: boolean;
   noPadding?: boolean;
+  forceWidth?: number;
 }
 
 export enum SongItemFeature {
@@ -71,6 +73,7 @@ const SongItem = ({
   onClick,
   noPadding,
   useIncrease,
+  forceWidth,
 }: SongItemProps) => {
   const chartData = useMemo(() => getChartData(song), [song]);
   const featureTexts = useMemo(
@@ -82,11 +85,13 @@ const SongItem = ({
   );
 
   const width = useMemo(() => {
+    if (forceWidth) return forceWidth;
+
     if (rank) return 436;
     if (editMode) return 440;
 
     return 480;
-  }, [rank, editMode]);
+  }, [rank, editMode, forceWidth]);
 
   return (
     <Container
@@ -98,7 +103,10 @@ const SongItem = ({
       {editMode && <MoveButton />}
 
       <TrackWrapper $width={width}>
-        <Track item={song} maxWidth={width - 80} />
+        <Track
+          item={song}
+          maxWidth={isNumber(width) ? width - 80 : undefined}
+        />
       </TrackWrapper>
 
       {featureTexts.map((text, index) => (
@@ -132,8 +140,8 @@ const MoveButton = styled(MoveSVG)`
   margin-right: 16px;
 `;
 
-const TrackWrapper = styled.div<{ $width: number }>`
-  width: ${({ $width }) => $width}px;
+const TrackWrapper = styled.div<{ $width: string | number }>`
+  width: ${({ $width }) => (isNumber($width) ? `${$width}px` : $width)};
 
   margin-left: -1px;
 

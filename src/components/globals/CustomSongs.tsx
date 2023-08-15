@@ -16,7 +16,7 @@ import { isNull } from "@utils/isTypes";
 
 import SongItem, { SongItemFeature } from "./SongItem";
 
-interface SongsProps {
+interface CustomSongsProps {
   height: number;
   editMode?: boolean;
   songFeatures?: SongItemFeature[];
@@ -29,7 +29,7 @@ interface SongsProps {
 }
 
 interface DragTarget {
-  song: Song;
+  song?: Song;
   index: number;
   position: number;
   offset: number;
@@ -48,12 +48,11 @@ const CustomSongs = ({
   onEdit,
   selectedSongs,
   children,
-}: SongsProps) => {
+}: CustomSongsProps) => {
   const [songs, setSongs] = useState(children);
 
   const [dragTarget, setDragTarget] = useState<DragTarget>({
     index: -1,
-    song: dummySong,
     position: 0,
     offset: 0,
   });
@@ -184,14 +183,16 @@ const CustomSongs = ({
     if (!editMode) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      setMouseY(e.clientY);
+      if (isMouseDown) {
+        setMouseY(e.clientY);
+      }
     };
 
     const handleMouseUp = () => {
       if (isMouseDown) {
         document.body.style.cursor = "default";
 
-        if (dropTarget === -1 || !onEdit) return;
+        if (dropTarget === -1 || !onEdit || !dragTarget.song) return;
 
         const newSongs = songs.slice();
 
@@ -339,12 +340,14 @@ const CustomSongs = ({
           top: dragTarget.position,
         }}
       >
-        <SongItem
-          song={dragTarget.song}
-          features={songFeatures}
-          editMode={true}
-          selected={selectedSongs.includes(dragTarget.song)}
-        />
+        {dragTarget.song && (
+          <SongItem
+            song={dragTarget.song}
+            features={songFeatures}
+            editMode={true}
+            selected={selectedSongs.includes(dragTarget.song)}
+          />
+        )}
       </PseuduSongItem>
     </Container>
   );

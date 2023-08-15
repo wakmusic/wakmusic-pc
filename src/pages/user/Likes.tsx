@@ -52,7 +52,6 @@ const Likes = ({}: LikesProps) => {
       </CustomSongs>
 
       <MusicController
-        displayDefault={true}
         songs={likes}
         selectedSongs={selected}
         dispatchSelectedSongs={selectCallback}

@@ -30,7 +30,6 @@ export const useSelectSongs = () => {
       return;
     }
 
-    console.log(selected);
     if (selected.includes(song)) {
       setSelected(selected.filter((s) => s !== song));
     } else {

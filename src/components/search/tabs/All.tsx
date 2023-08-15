@@ -5,8 +5,8 @@ import styled from "styled-components/macro";
 import { ReactComponent as ArrowRightSVG } from "@assets/icons/ic_16_arrow_right.svg";
 
 import { T5Medium, T7Medium } from "@components/Typography";
-import MusicController from "@components/globals/musicControllers/MusicController";
 import SongItem from "@components/globals/SongItem";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 
@@ -15,8 +15,6 @@ import colors from "@constants/colors";
 import { useSelectSongs } from "@hooks/selectSongs";
 
 import { SearchAllResponse } from "@templates/search.ts";
-
-import SongCard from "../SongCard";
 
 enum Category {
   song = "노래",
@@ -63,17 +61,22 @@ const All = ({ query, res }: AllProps) => {
               </CategoryHeaderButton>
             </CategoryHeader>
 
-              {res[key].slice(-3).map((song, index) => (
-                <SongItem key={index} song={song} noPadding forceWidth={650} />
-              ))}
-            </CategoryContainer>
-          ))}
+            {res[key].slice(-3).map((song, index) => (
+              <SongItem
+                key={index}
+                song={song}
+                selected={selected.includes(song)}
+                onClick={selectCallback}
+                noPadding
+                forceWidth={650}
+              />
+            ))}
+          </CategoryContainer>
+        ))}
       </Wrapper>
 
       <MusicController
-        songs={resKeys
-          .map((key) => res[key].filter((_, index) => index <= 2))
-          .flat()}
+        songs={resKeys.map((key) => res[key].slice(-3)).flat()}
         selectedSongs={selected}
         dispatchSelectedSongs={selectCallback}
       />

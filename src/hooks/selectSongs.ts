@@ -22,14 +22,18 @@ export const useSelectSongs = () => {
         _selected.length === _song.length &&
         _selected.every((value, index) => value === _song[index])
       ) {
+        console.log("a");
         setSelected([]);
       } else {
+        console.log("b");
         setSelected(song);
       }
 
+      console.log(song, selected);
       return;
     }
 
+    console.log(selected);
     if (selected.includes(song)) {
       setSelected(selected.filter((s) => s !== song));
     } else {

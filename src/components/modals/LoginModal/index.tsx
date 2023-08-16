@@ -10,6 +10,7 @@ import { T4Bold, T5Light } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useLoginModalState } from "@hooks/loginModal";
+import { useUserState } from "@hooks/user";
 
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
 import Button from "./Button";
@@ -18,11 +19,19 @@ interface LoginModalProps {}
 
 const LoginModal = ({}: LoginModalProps) => {
   const [loginModalState, setLoginModalState] = useLoginModalState();
+  const [user, setUser] = useUserState();
 
   if (!loginModalState) return null;
 
   const handleLogin = (platform: string) => {
-    alert(`${platform}로 로그인합니다.`);
+    setUser({
+      displayName: "왁타버스 뮤직",
+      profile: {
+        type: "panchi",
+        version: 2,
+      },
+    });
+
     setLoginModalState(false);
   };
 

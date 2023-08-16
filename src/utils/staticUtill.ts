@@ -1,5 +1,6 @@
 import { Artist } from "@templates/artists";
 import { RecommendListMetaType } from "@templates/playlist";
+import { UserProfile } from "@templates/user";
 
 const staticURL = import.meta.env.VITE_STATIC_URL;
 
@@ -17,8 +18,8 @@ type documentType = "privacy" | "terms";
 
 type RoundOrSquare = "round" | "square";
 
-export const getProfileImg = (name: profileImgType) => {
-  return `${staticURL}/profile/${name}.png`;
+export const getProfileImg = (profile: UserProfile) => {
+  return `${staticURL}/profile/${profile.type}.png?v=${profile.version}`;
 };
 
 export const getYoutubeHQThumbnail = (id: string) => {

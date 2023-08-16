@@ -39,7 +39,7 @@ const User = ({}: UserProps) => {
     navigate("/mypage");
   };
 
-  if (location.pathname === "/mypage") {
+  if (user && location.pathname === "/mypage") {
     return (
       <Container onClick={logout}>
         <Text>로그아웃</Text>

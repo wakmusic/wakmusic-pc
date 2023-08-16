@@ -12,6 +12,8 @@ import colors from "@constants/colors";
 import { useLoginModalState } from "@hooks/loginModal";
 import { useUserState } from "@hooks/user";
 
+import { LoginPlatform } from "@templates/user";
+
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
 import Button from "./Button";
 
@@ -19,17 +21,18 @@ interface LoginModalProps {}
 
 const LoginModal = ({}: LoginModalProps) => {
   const [loginModalState, setLoginModalState] = useLoginModalState();
-  const [user, setUser] = useUserState();
+  const [, setUser] = useUserState();
 
   if (!loginModalState) return null;
 
-  const handleLogin = (platform: string) => {
+  const handleLogin = (platform: LoginPlatform) => {
     setUser({
       displayName: "왁타버스 뮤직",
       profile: {
         type: "panchi",
         version: 2,
       },
+      platform,
     });
 
     setLoginModalState(false);
@@ -48,15 +51,15 @@ const LoginModal = ({}: LoginModalProps) => {
         </Header>
 
         <Buttons>
-          <Button platform="네이버" onClick={handleLogin}>
+          <Button platform="naver" onClick={handleLogin}>
             <NaverIconSVG />
           </Button>
 
-          <Button platform="구글" onClick={handleLogin}>
+          <Button platform="google" onClick={handleLogin}>
             <GoogleIconSVG />
           </Button>
 
-          <Button platform="애플" onClick={handleLogin}>
+          <Button platform="apple" onClick={handleLogin}>
             <AppleIconSVG />
           </Button>
         </Buttons>

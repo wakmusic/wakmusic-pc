@@ -70,7 +70,7 @@ const Version = styled(T5Light)`
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 8px;
 
   margin-top: 32px;
 `;

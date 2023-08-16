@@ -6,18 +6,32 @@ import { T4Bold, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useServiceInfoModalState } from "@hooks/serviceInfoModal";
+
 interface BlockProps {
   title: string;
   description: string;
-  endPoint: string;
+  endPoint?: string;
   svg: ReactElement;
 }
 
 const Block = ({ title, description, endPoint, svg }: BlockProps) => {
   const navigate = useNavigate();
 
+  const [modalState, setModalState] = useServiceInfoModalState();
+
+  const getScript = () => {
+    if (endPoint) {
+      return navigate(endPoint);
+    } else if (title === "서비스 정보") {
+      return setModalState({ ...modalState, isOpen: true });
+    } else {
+      return undefined;
+    }
+  };
+
   return (
-    <Container onClick={() => navigate(endPoint)}>
+    <Container onClick={getScript}>
       <Title>{title}</Title>
       <Description>{description}</Description>
       {svg}

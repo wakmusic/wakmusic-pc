@@ -11,6 +11,7 @@ import {
   T6Medium,
   T7Medium,
 } from "@components/Typography";
+import ServiceInfoModal from "@components/modals/ServiceInfoModal";
 import Block from "@components/mypage/Block";
 
 import PageLayout from "@layouts/PageLayout";
@@ -25,6 +26,7 @@ const MyPage = ({}: MyPageProps) => {
   return (
     <PageLayout>
       <Container>
+        <ServiceInfoModal />
         <ProfileBlock>
           <FlexDiv>
             <ImageContainer>
@@ -51,7 +53,8 @@ const MyPage = ({}: MyPageProps) => {
             key={index}
             title={block.title}
             description={block.description}
-            endPoint={block.endPoint}
+            endPoint={block.endPoint ?? undefined}
+            modal={block.modal ?? undefined}
             svg={<block.svg />}
           />
         ))}

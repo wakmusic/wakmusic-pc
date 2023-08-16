@@ -1,3 +1,5 @@
+import { FunctionComponent } from "react";
+
 import { ReactComponent as DocumentSVG } from "@assets/icons/ic_40_document.svg";
 import { ReactComponent as NotiSVG } from "@assets/icons/ic_40_noti.svg";
 import { ReactComponent as QnaSVG } from "@assets/icons/ic_40_qna.svg";
@@ -6,8 +8,8 @@ import { ReactComponent as QuestionSVG } from "@assets/icons/ic_40_question.svg"
 export const blocks: {
   title: string;
   description: string;
-  endPoint: string;
-  svg: React.FunctionComponent;
+  endPoint?: string;
+  svg: FunctionComponent;
 }[] = [
   {
     title: "공지사항",
@@ -34,7 +36,6 @@ export const blocks: {
     title: "서비스 정보",
     description: `개인정보 처리방침 및
                   서비스 내 이용 정보를 확인 가능합니다.`,
-    endPoint: "/about",
     svg: DocumentSVG,
   },
 ];

@@ -54,7 +54,6 @@ const MyPage = ({}: MyPageProps) => {
             title={block.title}
             description={block.description}
             endPoint={block.endPoint ?? undefined}
-            modal={block.modal ?? undefined}
             svg={<block.svg />}
           />
         ))}

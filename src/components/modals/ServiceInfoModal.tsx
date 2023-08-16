@@ -52,7 +52,10 @@ const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
 const Container = styled(ModalContainer)`
   width: 440px;
   height: 350px;
-  background: ${colors.blueGray25};
+
+  border-radius: 24px !important;
+
+  background-color: ${colors.blueGray25};
 `;
 
 const Title = styled(T3Medium)`

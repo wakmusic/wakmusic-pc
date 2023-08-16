@@ -53,7 +53,7 @@ const Container = styled(ModalContainer)`
   width: 440px;
   height: 350px;
 
-  border-radius: 24px !important;
+  border-radius: 24px;
 
   background-color: ${colors.blueGray25};
 `;

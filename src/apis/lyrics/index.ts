@@ -6,7 +6,9 @@ export const getLyrics = async (
   song: SongInfo
 ): Promise<LyricType[] | null> => {
   try {
-    const { data } = await instance.get(`/songs/lyrics/${song.songId}`);
+    const { data } = await instance.get(
+      `https://wakmusic.xyz/api/songs/lyrics/${song.songId}`
+    );
 
     return data.map((lyric: LyricType) => ({
       ...lyric,

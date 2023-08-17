@@ -33,20 +33,12 @@ export const getAudio = (id: string) => {
   return `${staticURL}/audio/${id}.mp3`;
 };
 
-export const getPlaylistIconSquare = (id: string) => {
-  return `${staticURL}/playlist/icon/square/${id}.png`;
-};
-
-export const getPlaylistIconRound = (id: string) => {
-  return `${staticURL}/playlist/icon/round/${id}.png`;
+export const getPlaylistIcon = (version: number) => {
+  return `${staticURL}/playlist/${version}.png`;
 };
 
 export const getDocument = (type: documentType) => {
   return `${staticURL}/document/${type}.pdf`;
-};
-
-export const getPlaylistIcon = (id: number) => {
-  return `${staticURL}/playlist/${id}.png`;
 };
 
 export const getRecommendImage = (

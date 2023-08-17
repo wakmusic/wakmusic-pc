@@ -11,6 +11,7 @@ import { RecoilRoot } from "recoil";
 import GNB from "@components/gnb/GNB";
 import Header from "@components/header/Header";
 import Splash from "@components/index/Splash";
+import AddListModal from "@components/modals/AddListModal";
 import AlertModal from "@components/modals/AlertModal";
 import ConfirmModal from "@components/modals/ConfirmModal";
 import CreateListModal from "@components/modals/CreateListModal";
@@ -104,6 +105,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <CreateListModal />
           <LoadListModal />
           <ShareListModal />
+          <AddListModal />
         </ModalPortal>
       </QueryClientProvider>
     </RecoilRoot>

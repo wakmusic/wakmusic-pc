@@ -8,6 +8,8 @@ interface BaseInputProps {
 
   borderColor?: string;
   placeholder?: string;
+
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const BaseInput = ({
@@ -15,6 +17,7 @@ const BaseInput = ({
   onChange,
   borderColor,
   placeholder,
+  onKeyDown,
 }: BaseInputProps) => {
   return (
     <FormInput
@@ -25,6 +28,7 @@ const BaseInput = ({
         onChange(e.target.value);
       }}
       $borderColor={borderColor}
+      onKeyDown={onKeyDown}
     />
   );
 };

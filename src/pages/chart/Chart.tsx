@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 
 import { ChartsType, fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
 
-import FunctionSection from "@components/chart/FunctionSection";
+import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import UpdatedText from "@components/globals/UpdatedText";
@@ -14,19 +14,24 @@ import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
 import VirtualItem from "@layouts/VirtualItem";
 
-import useVirtualizer from "@hooks/virtualizer";
+import { chartTabs } from "@constants/tabs";
+import { lastTextMap } from "@constants/textMap";
 
-import { Song } from "@templates/song";
+import { usePlaySongs } from "@hooks/player";
+import { useSelectSongs } from "@hooks/selectSongs";
+import useVirtualizer from "@hooks/virtualizer";
 
 interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
   const [searchParams] = useSearchParams();
-  const [selected, setSelected] = useState<Song[]>([]);
+  const { selected, setSelected, selectCallback } = useSelectSongs();
   const tab = useMemo(
     () => (searchParams.get("type") ?? "hourly") as ChartsType,
     [searchParams]
   );
+
+  const playSongs = usePlaySongs();
 
   const {
     isLoading: chartsIsLoading,
@@ -53,7 +58,7 @@ const Chart = ({}: ChartProps) => {
   useEffect(() => {
     setSelected([]);
     viewportRef.current?.scrollTo(0, 0);
-  }, [tab, viewportRef]);
+  }, [tab, viewportRef, setSelected]);
 
   // TODO
   if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)
@@ -63,14 +68,21 @@ const Chart = ({}: ChartProps) => {
   return (
     <PageLayout>
       <PageContainer>
-        <FunctionSection />
+        <FunctionSection
+          tabs={chartTabs}
+          play={(shuffle) => {
+            playSongs(charts, shuffle);
+          }}
+        />
+
         <UpdatedText updated={chartUpdated} marginTop={12} marginLeft={20} />
 
         <GuideBar
+          lastText={tab !== "total" ? lastTextMap[tab] : undefined}
           features={[
             GuideBarFeature.rank,
             GuideBarFeature.info,
-            GuideBarFeature.last,
+            tab !== "total" ? GuideBarFeature.last : undefined,
             GuideBarFeature.date,
             GuideBarFeature.views,
           ]}
@@ -88,17 +100,12 @@ const Chart = ({}: ChartProps) => {
                 song={item}
                 selected={selected.includes(item)}
                 features={[
-                  SongItemFeature.last,
+                  tab !== "total" ? SongItemFeature.last : undefined,
                   SongItemFeature.date,
                   SongItemFeature.views,
                 ]}
-                onClick={(song) => {
-                  if (selected.includes(song)) {
-                    setSelected(selected.filter((item) => item !== song));
-                  } else {
-                    setSelected([...selected, song]);
-                  }
-                }}
+                onClick={selectCallback}
+                useIncrease={tab !== "total"}
               />
             </VirtualItem>
           ))}

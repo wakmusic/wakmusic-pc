@@ -345,3 +345,26 @@ export const usePlaySong = () => {
     }));
   };
 };
+
+export const usePlaySongs = () => {
+  const setPlayingInfo = useSetRecoilState(playingInfoState);
+
+  return (songs: Song[], shuffle = false) => {
+    if (shuffle) {
+      songs = songs.sort(() => Math.random() - 0.5);
+    }
+
+    setPlayingInfo({
+      playlist: songs.map((song) => ({
+        songId: song.songId,
+        title: song.title,
+        artist: song.artist,
+        views: getChartData(song).views,
+        start: song.start,
+        end: song.end,
+      })),
+      history: [],
+      current: 0,
+    });
+  };
+};

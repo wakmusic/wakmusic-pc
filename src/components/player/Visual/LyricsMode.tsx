@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components/macro";
 
 import { T4Medium, T5Light } from "@components/Typography";
+import Marquee from "@components/globals/Marquee";
 
 import colors from "@constants/colors";
 
@@ -20,8 +21,13 @@ const LyricsMode = ({}: LyricsModeProps) => {
   return (
     <Container $on={controlState.isLyricsOn}>
       <TitleContainer>
-        <T4Medium color={colors.blueGray25}>{song?.title}</T4Medium>
-        <T5Light color={colors.blueGray100}>{song?.artist}</T5Light>
+        <Marquee width={419}>
+          <T4Medium color={colors.blueGray25}>{song?.title}</T4Medium>
+        </Marquee>
+
+        <Marquee width={419}>
+          <T5Light color={colors.blueGray100}>{song?.artist}</T5Light>
+        </Marquee>
       </TitleContainer>
 
       <LyricsContainer>

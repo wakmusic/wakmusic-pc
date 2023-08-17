@@ -24,6 +24,7 @@ import VirtualItem from "@layouts/VirtualItem";
 
 import colors from "@constants/colors";
 
+import { usePlaySongs } from "@hooks/player";
 import { usePlaylistState } from "@hooks/playlist";
 import { useShareListModal } from "@hooks/shareListModal";
 import useVirtualizer from "@hooks/virtualizer";
@@ -70,6 +71,7 @@ const Playlist = ({}: PlaylistProps) => {
   }, [location.state, recommendList]);
 
   const shareListModal = useShareListModal();
+  const playSongs = usePlaySongs();
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
     playlist.songs ?? []
@@ -98,8 +100,20 @@ const Playlist = ({}: PlaylistProps) => {
               {playlist.songs?.length}곡
             </T6Light>
             <Functions>
-              <IconButton icon={PlayAll}>전체 재생</IconButton>
-              <IconButton icon={RandomPlay}>랜덤 재생</IconButton>
+              <IconButton
+                icon={PlayAll}
+                onClick={() => playSongs(playlist.songs)}
+              >
+                전체재생
+              </IconButton>
+
+              <IconButton
+                icon={RandomPlay}
+                onClick={() => playSongs(playlist.songs, true)}
+              >
+                랜덤재생
+              </IconButton>
+
               {!recommendList && (
                 <ShareIcon
                   onClick={() => {

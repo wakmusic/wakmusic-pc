@@ -14,6 +14,7 @@ import ArtistInfo from "@components/artists/ArtistInfo";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import IconButton from "@components/globals/IconButton";
 import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import Spinner from "@components/globals/Spinner";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 
@@ -24,17 +25,18 @@ import VirtualItem from "@layouts/VirtualItem";
 
 import { artistDetailTabs } from "@constants/tabs";
 
-import { usePlayingInfoState } from "@hooks/player";
+import { useInfiniteScrollHandler } from "@hooks/infiniteScrollHandler";
+import { usePlaySongs } from "@hooks/player";
+import { useScrollToTop } from "@hooks/scrollToTop";
+import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { Song, SongSortType, SongTotal } from "@templates/song";
-
-import getChartData from "@utils/getChartData";
+import { SongSortType, SongTotal } from "@templates/song";
 
 interface ArtistProps {}
 
 const Artist = ({}: ArtistProps) => {
-  const [selected, setSelected] = useState<Song[]>([]);
+  const { selected, setSelected, selectCallback } = useSelectSongs();
   const [searchParams] = useSearchParams();
   const tab = (searchParams.get("tab") as SongSortType) ?? "new";
 
@@ -45,7 +47,7 @@ const Artist = ({}: ArtistProps) => {
     "square"
   );
 
-  const [, setPlayingInfo] = usePlayingInfoState();
+  const playSongs = usePlaySongs();
 
   const location = useLocation();
   const artistId = useMemo(
@@ -98,27 +100,14 @@ const Artist = ({}: ArtistProps) => {
       hasNextPage,
     });
 
-  useEffect(() => {
-    if (!albums) return;
-
-    const [lastItem] = [...getVirtualItems()].reverse();
-
-    if (!lastItem) {
-      return;
-    }
-
-    if (
-      lastItem.index >= albums.length - 1 &&
-      hasNextPage &&
-      !isFetchingNextPage
-    ) {
-      fetchNextPage();
-    }
-  }, [albums, fetchNextPage, getVirtualItems, hasNextPage, isFetchingNextPage]);
-
-  useEffect(() => {
-    viewportRef.current?.scrollTo(0, 0);
-  }, [tab, viewportRef]);
+  useScrollToTop(tab, viewportRef, setSelected);
+  useInfiniteScrollHandler({
+    items: albums,
+    hasNextPage,
+    fetchNextPage,
+    getVirtualItems,
+    isFetchingNextPage,
+  });
 
   useEffect(() => {
     if (scroll > 0 && animationState === "square") {
@@ -131,24 +120,6 @@ const Artist = ({}: ArtistProps) => {
       setAnimationState("square");
     }
   }, [animationState, controls, scroll]);
-
-  const play = (songs: Song[]) => {
-    setPlayingInfo({
-      playlist: songs.map((song) => ({
-        songId: song.songId,
-        title: song.title,
-        artist: song.artist,
-        views: getChartData(song).views,
-        start: song.start,
-        end: song.end,
-      })),
-      history: [],
-      current: 0,
-    });
-  };
-
-  const playAllHandler = () => play(albums);
-  const playShuffleHandler = () => play(albums.sort(() => Math.random() - 0.5));
 
   // TODO: 스켈레톤, 오류
   if (artistsIsLoading) return <div>로딩중...</div>;
@@ -170,10 +141,13 @@ const Artist = ({}: ArtistProps) => {
           </TabBar>
 
           <ButtonLayout>
-            <IconButton icon={PlayAllSVG} onClick={playAllHandler}>
+            <IconButton icon={PlayAllSVG} onClick={() => playSongs(albums)}>
               전체재생
             </IconButton>
-            <IconButton icon={RandomSVG} onClick={playShuffleHandler}>
+            <IconButton
+              icon={RandomSVG}
+              onClick={() => playSongs(albums, true)}
+            >
               랜덤재생
             </IconButton>
           </ButtonLayout>
@@ -203,9 +177,7 @@ const Artist = ({}: ArtistProps) => {
             return (
               <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
                 {isLoader ? (
-                  <SpinnerWrapper>
-                    <Spinner />
-                  </SpinnerWrapper>
+                  <Spinner />
                 ) : (
                   <SongItem
                     song={item}
@@ -215,13 +187,7 @@ const Artist = ({}: ArtistProps) => {
                       SongItemFeature.views,
                       SongItemFeature.like,
                     ]}
-                    onClick={(song) => {
-                      if (selected.includes(song)) {
-                        setSelected(selected.filter((item) => item !== song));
-                      } else {
-                        setSelected([...selected, song]);
-                      }
-                    }}
+                    onClick={selectCallback}
                   />
                 )}
               </VirtualItem>
@@ -245,36 +211,6 @@ const ButtonLayout = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-`;
-
-const SpinnerWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  padding-top: 20px;
-`;
-
-const Spinner = styled.div`
-  display: inline-block;
-
-  width: 20px;
-  height: 20px;
-
-  border: 2px solid black;
-  border-bottom-color: transparent;
-  border-radius: 50%;
-
-  animation: rotation 1s linear infinite;
-
-  @keyframes rotation {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
 
 export default Artist;

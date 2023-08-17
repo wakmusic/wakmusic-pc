@@ -7,16 +7,20 @@ import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";
 import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg";
 
 import { T4Medium } from "@components/Typography";
-import Button from "@components/globals/IconButton";
+import IconButton from "@components/globals/IconButton";
 import UpdatedText from "@components/globals/UpdatedText";
 
 import colors from "@constants/colors";
+
+import { usePlaySongs } from "@hooks/player";
 
 import ChartItem from "./ChartItem";
 
 interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
+  const playSongs = usePlaySongs();
+
   const {
     isLoading: chartsIsLoading,
     error: chartsError,
@@ -49,8 +53,12 @@ const Chart = ({}: ChartProps) => {
         </HeaderTexts>
 
         <HeaderButtons>
-          <Button icon={PlayAllSVG}>전체재생</Button>
-          <Button icon={RandomSVG}>랜덤재생</Button>
+          <IconButton icon={PlayAllSVG} onClick={() => playSongs(charts)}>
+            전체재생
+          </IconButton>
+          <IconButton icon={RandomSVG} onClick={() => playSongs(charts, true)}>
+            랜덤재생
+          </IconButton>
         </HeaderButtons>
       </Header>
 

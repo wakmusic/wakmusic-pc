@@ -4,14 +4,13 @@ import styled from "styled-components/macro";
 import { ReactComponent as ArrowRightSVG } from "@assets/icons/ic_16_arrow_right.svg";
 
 import { T5Medium, T7Medium } from "@components/Typography";
+import SongItem from "@components/globals/SongItem";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 
-import { SongsSearchResponse } from "@templates/search.ts";
-
-import SongCard from "../SongCard";
+import { SearchAllResponse } from "@templates/search";
 
 enum Category {
   song = "노래",
@@ -21,7 +20,7 @@ enum Category {
 
 interface AllProps {
   query: string;
-  res: SongsSearchResponse;
+  res: SearchAllResponse;
 }
 
 const All = ({ query, res }: AllProps) => {
@@ -51,7 +50,9 @@ const All = ({ query, res }: AllProps) => {
                 </CategoryHeaderButton>
               </CategoryHeader>
 
-              <SongCard songs={res[key]} />
+              {res[key].slice(-3).map((song, index) => (
+                <SongItem key={index} song={song} noPadding forceWidth={650} />
+              ))}
             </CategoryContainer>
           ))}
       </Wrapper>

@@ -58,6 +58,13 @@ const queryClient = new QueryClient({
   },
 });
 
+// 스키마 테스트
+if (window.ipcRenderer) {
+  window.ipcRenderer.on("scheme", (_event, url: string) => {
+    console.log(url);
+  });
+}
+
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
     <RecoilRoot>

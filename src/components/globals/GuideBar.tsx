@@ -6,7 +6,7 @@ import { T7Medium } from "@components/Typography";
 import colors from "@constants/colors";
 
 interface GuideBarProps {
-  features: GuideBarFeature[];
+  features: (GuideBarFeature | undefined)[];
 
   editMode?: boolean;
   lastText?: string;
@@ -45,6 +45,8 @@ const GuideBar = ({ features, editMode, lastText }: GuideBarProps) => {
 
         <RightTexts>
           {features.map((feature, index) => {
+            if (!feature) return null;
+
             if ([GuideBarFeature.rank, GuideBarFeature.info].includes(feature))
               return null;
 

@@ -1,28 +1,28 @@
-import { SongsSearchResponse, tabsTypes } from "@templates/search.ts";
+import { SearchAllResponse, SearchTabType } from "@templates/search.ts";
 
 import NotFound from "./NotFound";
 import All from "./tabs/All";
 import List from "./tabs/List";
 
 interface ResultProps {
-  tab: tabsTypes;
+  tab: SearchTabType;
   query: string;
-  res: SongsSearchResponse;
+
+  all: SearchAllResponse;
 }
 
-const Result = ({ tab, query, res }: ResultProps) => {
+const Result = ({ tab, query, all }: ResultProps) => {
   if (
-    tab === "all" &&
-    Object.values(res)
+    Object.values(all)
       .map((i) => i.length)
       .some((i) => i !== 0)
-  )
-    return <All query={query} res={res} />;
+  ) {
+    if (tab === "all") return <All query={query} res={all} />;
+  } else {
+    return <NotFound />;
+  }
 
-  if (tab !== "all" && res[tab].length !== 0)
-    return <List tab={tab} res={res} />;
-
-  return <NotFound />;
+  return <List query={query} tab={tab} />;
 };
 
 export default Result;

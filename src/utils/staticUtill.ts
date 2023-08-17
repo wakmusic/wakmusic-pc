@@ -1,5 +1,6 @@
 import { Artist } from "@templates/artists";
 import { RecommendListMetaType } from "@templates/playlist";
+import { UserProfile } from "@templates/user";
 
 const staticURL = import.meta.env.VITE_STATIC_URL;
 
@@ -17,8 +18,8 @@ type documentType = "privacy" | "terms";
 
 type RoundOrSquare = "round" | "square";
 
-export const getProfileImg = (name: profileImgType) => {
-  return `${staticURL}/profile/${name}.png`;
+export const getProfileImg = (profile: UserProfile) => {
+  return `${staticURL}/profile/${profile.type}.png?v=${profile.version}`;
 };
 
 export const getYoutubeHQThumbnail = (id: string) => {
@@ -64,7 +65,10 @@ export const getRecommendSquareImage = (list: RecommendListMetaType) => {
   return getRecommendImage(list, "square");
 };
 
-export const getArtistImage = (artist: Artist, type: RoundOrSquare) => {
+export const getArtistImage = (
+  artist: Artist,
+  type: RoundOrSquare | "clear"
+) => {
   return `${staticURL}/artist/${type}/${artist.artistId}.png?v=${artist.image[type]}`;
 };
 
@@ -72,6 +76,6 @@ export const getArtistRoundImage = (artist: Artist) => {
   return getArtistImage(artist, "round");
 };
 
-export const getArtistSquareImage = (artist: Artist) => {
-  return getArtistImage(artist, "square");
+export const getArtistClearImage = (artist: Artist) => {
+  return getArtistImage(artist, "clear");
 };

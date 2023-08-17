@@ -48,6 +48,8 @@ const Title = styled(T6Medium)`
   color: ${colors.blueGray600};
 
   width: 85px;
+
+  white-space: pre-wrap;
 `;
 
 const Icon = styled.img`

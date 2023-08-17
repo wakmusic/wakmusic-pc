@@ -11,6 +11,7 @@ import { Song } from "@templates/song";
 
 import { formatDate, formatNumber } from "@utils/formatting";
 import getChartData from "@utils/getChartData";
+import { isNumber } from "@utils/isTypes";
 
 import Rank from "./Rank";
 import Track from "./Track";
@@ -20,12 +21,14 @@ interface SongItemProps {
 
   rank?: number;
   editMode?: boolean;
-  features?: SongItemFeature[];
+  features?: (SongItemFeature | undefined)[];
   selected?: boolean;
 
   onClick?: (song: Song) => void;
 
+  useIncrease?: boolean;
   noPadding?: boolean;
+  forceWidth?: number;
 }
 
 export enum SongItemFeature {
@@ -42,17 +45,22 @@ const featureBuilder = (
     increase: number;
     last: number;
   },
-  feature: SongItemFeature
+  feature: SongItemFeature | undefined,
+  useIncrease?: boolean
 ) => {
   switch (feature) {
     case SongItemFeature.last:
-      return `${chartData.last}위`;
+      return chartData.last ? `${chartData.last}위` : "-";
     case SongItemFeature.date:
       return formatDate(song.date);
     case SongItemFeature.views:
-      return `${formatNumber(chartData.views)}회`;
+      return `${formatNumber(
+        useIncrease ? chartData.increase : chartData.views
+      )}회`;
     case SongItemFeature.like:
       return formatNumber(song.like);
+    default:
+      return null;
   }
 };
 
@@ -64,21 +72,26 @@ const SongItem = ({
   selected,
   onClick,
   noPadding,
+  useIncrease,
+  forceWidth,
 }: SongItemProps) => {
   const chartData = useMemo(() => getChartData(song), [song]);
   const featureTexts = useMemo(
     () =>
-      features?.map((feature) => featureBuilder(song, chartData, feature)) ??
-      [],
-    [song, chartData, features]
+      features?.map((feature) =>
+        featureBuilder(song, chartData, feature, useIncrease)
+      ) ?? [],
+    [song, chartData, features, useIncrease]
   );
 
   const width = useMemo(() => {
+    if (forceWidth) return forceWidth;
+
     if (rank) return 436;
     if (editMode) return 440;
 
     return 480;
-  }, [rank, editMode]);
+  }, [rank, editMode, forceWidth]);
 
   return (
     <Container
@@ -90,7 +103,10 @@ const SongItem = ({
       {editMode && <MoveButton />}
 
       <TrackWrapper $width={width}>
-        <Track item={song} maxWidth={width - 80} />
+        <Track
+          item={song}
+          maxWidth={isNumber(width) ? width - 80 : undefined}
+        />
       </TrackWrapper>
 
       {featureTexts.map((text, index) => (
@@ -124,8 +140,8 @@ const MoveButton = styled(MoveSVG)`
   margin-right: 16px;
 `;
 
-const TrackWrapper = styled.div<{ $width: number }>`
-  width: ${({ $width }) => $width}px;
+const TrackWrapper = styled.div<{ $width: string | number }>`
+  width: ${({ $width }) => (isNumber($width) ? `${$width}px` : $width)};
 
   margin-left: -1px;
 

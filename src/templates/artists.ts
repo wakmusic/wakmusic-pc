@@ -3,10 +3,16 @@ export type Artist = {
   name: string;
   short: string;
   graduated: boolean;
-  title: string;
+  title: {
+    app: string;
+    web: string;
+  };
   appTitle: string;
   description: string;
-  color: string[][];
+  color: {
+    background: string[][];
+    card: string[][];
+  };
   youtube: string;
   twitch: string;
   instagram: string;
@@ -17,5 +23,6 @@ export type Artist = {
   image: {
     round: number;
     square: number;
+    clear: number;
   };
 };

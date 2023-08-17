@@ -8,11 +8,18 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   root: "./src",
   publicDir: "./../public",
-  cacheDir: "./../.yarn/.vite",
   base: "./",
   envDir: "./../",
   build: {
     outDir: "./../dist",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "lottie-web": ["lottie-web"],
+          firebase: ["firebase/analytics", "firebase/app"],
+        },
+      },
+    },
   },
   plugins: [react(), tsconfigPaths(), svgr(), macrosPlugin()],
 });

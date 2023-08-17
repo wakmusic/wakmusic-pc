@@ -1,13 +1,16 @@
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { T7Light } from "@components/Typography";
 import PlayerScroll from "@components/globals/Scroll/PlayerScroll";
 
+import VirtualItem from "@layouts/VirtualItem";
+
 import colors from "@constants/colors";
 
 import { useInterval } from "@hooks/interval";
 import { usePlayingInfoState } from "@hooks/player";
+import useVirtualizer from "@hooks/virtualizer";
 
 import { SongInfo } from "@templates/player";
 
@@ -38,6 +41,11 @@ const Playlist = ({}: PlaylistProps) => {
   const [mouseY, setMouseY] = useState(0);
 
   const [lastSelected, setLastSelected] = useState<number | null>(null);
+
+  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
+    playlistData,
+    { size: 24 }
+  );
 
   const createPlaylistData = useCallback(() => {
     return [
@@ -157,19 +165,13 @@ const Playlist = ({}: PlaylistProps) => {
 
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [handleMouseUp]);
-
-  useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
+      window.removeEventListener("mouseup", handleMouseUp);
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [handleMouseMove]);
+  }, [handleMouseUp, handleMouseMove]);
 
   useInterval(() => {
     if (!mouseState.isMoving) return;
@@ -182,52 +184,71 @@ const Playlist = ({}: PlaylistProps) => {
 
     const topOffset = mouseY - rect.top;
     const bottomOffset = rect.bottom - mouseY;
+    const scrollOffset = scrollbar.scrollTop;
     const maxScroll = scrollbar.scrollHeight - scrollbar.clientHeight;
 
-    if (bottomOffset < range && scrollbar.scrollTop < maxScroll) {
-      scrollbar.scrollTo({
-        top: scrollbar.scrollTop + Math.abs(bottomOffset - range) * scale,
-      });
+    let scroll = 0;
 
-      setScrollState({ isScrollEnabled: true, isScrolling: true });
-    } else if (topOffset < range && scrollbar.scrollTop !== 0) {
-      scrollbar.scrollTo({
-        top: scrollbar.scrollTop + (topOffset - range) * scale,
-      });
-
-      setScrollState({ isScrollEnabled: true, isScrolling: true });
-    } else if (scrollState.isScrollEnabled) {
-      setScrollState({ ...scrollState, isScrolling: false });
+    if (bottomOffset < range && scrollOffset < maxScroll) {
+      scroll = Math.abs(bottomOffset - range) * scale;
+    } else if (topOffset < range && scrollOffset !== 0) {
+      scroll = (topOffset - range) * scale;
     }
+
+    if (scroll === 0) {
+      setScrollState({ ...scrollState, isScrolling: false });
+
+      return;
+    }
+
+    scrollbar.scrollTo({
+      top: scrollOffset + scroll,
+    });
+
+    setScrollState({ isScrollEnabled: true, isScrolling: true });
   }, 24);
 
   return (
     <Container>
-      <PlayerScroll initialize={setScrollbar} scroll={onScroll}>
-        <PlaylistContainer height={playlistData.length * 24}>
-          {playlistData.map((song, i) => (
-            <Fragment key={i}>
-              {mouseState.isMoving &&
-                !scrollState.isScrollEnabled &&
-                i === getCursorIndex() && <MovementCursor />}
-              <SongContainer
-                $playing={playlistData[i].isPlaying}
-                $selected={playlistData[i].isSelected}
-                $ismoving={mouseState.isMoving}
-                $istarget={mouseState.isMoving && targetIndex === i}
-                onClick={(e) => onSongSelected(i, e.shiftKey)}
-                onDoubleClick={() => onSongDoubleClicked(i)}
-                onMouseDown={() => handleMouseDown(i)}
-              >
-                <TitleText>{song.title}</TitleText>
-                <ArtistText>{song.artist}</ArtistText>
-              </SongContainer>
-            </Fragment>
-          ))}
-          {mouseState.isMoving &&
-            !scrollState.isScrollEnabled &&
-            getCursorIndex() === playlistData.length && <MovementCursor />}
-        </PlaylistContainer>
+      <PlayerScroll
+        initialize={setScrollbar}
+        scroll={onScroll}
+        ref={viewportRef}
+      >
+        <Wrapper>
+          <PlaylistContainer height={getTotalSize()}>
+            {virtualMap((virtualItem, item) => (
+              <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
+                <Fragment>
+                  {mouseState.isMoving &&
+                    !scrollState.isScrollEnabled &&
+                    virtualItem.index === getCursorIndex() && (
+                      <MovementCursor />
+                    )}
+                  <SongContainer
+                    $playing={item.isPlaying}
+                    $selected={item.isSelected}
+                    $ismoving={mouseState.isMoving}
+                    $istarget={
+                      mouseState.isMoving && targetIndex === virtualItem.index
+                    }
+                    onClick={(e) =>
+                      onSongSelected(virtualItem.index, e.shiftKey)
+                    }
+                    onDoubleClick={() => onSongDoubleClicked(virtualItem.index)}
+                    onMouseDown={() => handleMouseDown(virtualItem.index)}
+                  >
+                    <TitleText>{item.title}</TitleText>
+                    <ArtistText>{item.artist}</ArtistText>
+                  </SongContainer>
+                </Fragment>
+              </VirtualItem>
+            ))}
+            {mouseState.isMoving &&
+              !scrollState.isScrollEnabled &&
+              getCursorIndex() === playlistData.length && <MovementCursor />}
+          </PlaylistContainer>
+        </Wrapper>
       </PlayerScroll>
     </Container>
   );
@@ -237,9 +258,13 @@ const Container = styled.div`
   padding: 16px 0;
 `;
 
+const Wrapper = styled.div`
+  height: calc(100vh - 410px);
+`;
+
 const PlaylistContainer = styled.div<{ height: number }>`
   width: 100%;
-  height: calc(100vh - 410px);
+  height: ${({ height }) => height}px;
 `;
 
 const SongContainer = styled.div<{

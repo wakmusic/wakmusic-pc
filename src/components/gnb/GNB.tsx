@@ -6,7 +6,6 @@ import { T6Medium } from "@components/Typography";
 import colors from "@constants/colors";
 import { SectionData } from "@constants/gnb";
 
-import { useAddListModal } from "@hooks/addListModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
 
 import Section from "./Section";
@@ -17,7 +16,6 @@ const GNB = ({}: GNB) => {
   const location = useLocation();
 
   const loginModalOpener = useLoginModalOpener();
-  const addListModalOpener = useAddListModal();
 
   if (location.pathname === "/player") return null;
 
@@ -43,16 +41,6 @@ const GNB = ({}: GNB) => {
           }}
         >
           로그인 하기
-        </T6Medium>
-      </Login>
-
-      <Login onClick={() => addListModalOpener([])}>
-        <T6Medium
-          style={{
-            color: colors.blueGray600,
-          }}
-        >
-          AddListModal
         </T6Medium>
       </Login>
     </Container>

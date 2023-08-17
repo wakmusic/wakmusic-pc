@@ -7,6 +7,7 @@ import { T3Medium, T5Light, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 import { buttonList } from "@constants/myPage";
+import { version } from "@constants/version";
 
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
 
@@ -20,7 +21,7 @@ const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
       <Container onClick={(event) => event.stopPropagation()}>
         <AppIcon />
         <Title>왁타버스 뮤직</Title>
-        <Version>현재 버전 0.1.0 (5b6c01b3)</Version>
+        <Version>현재 버전 {version}</Version>
         <ButtonGroup>
           {buttonList.map((button, index) => (
             <Button key={index}>

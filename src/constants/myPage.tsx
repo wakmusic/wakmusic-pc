@@ -42,7 +42,16 @@ export const blocks: {
 ];
 
 export const buttonList = [
-  "서비스 이용약관",
-  "개인정보 처리방침",
-  "오픈소스 라이선스",
+  {
+    name: "서비스 이용약관",
+    path: "https://google.com",
+  },
+  {
+    name: "개인정보 처리방침",
+    path: "https://github.com",
+  },
+  {
+    name: "오픈소스 라이선스",
+    path: "https://theuselessweb.com",
+  },
 ];

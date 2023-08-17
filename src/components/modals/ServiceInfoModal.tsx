@@ -11,6 +11,9 @@ import { version } from "@constants/version";
 
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const shell = require("electron").shell;
+
 interface ServiceInfoModalProps {}
 
 const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
@@ -24,8 +27,8 @@ const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
         <Version>현재 버전 {version}</Version>
         <ButtonGroup>
           {buttonList.map((button, index) => (
-            <Button key={index}>
-              <ButtonText>{button}</ButtonText>
+            <Button key={index} onClick={() => shell.openExternal(button.path)}>
+              <ButtonText>{button.name}</ButtonText>
             </Button>
           ))}
         </ButtonGroup>

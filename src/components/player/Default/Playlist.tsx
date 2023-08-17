@@ -165,13 +165,19 @@ const Playlist = ({}: PlaylistProps) => {
 
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [handleMouseUp]);
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [handleMouseUp, handleMouseMove]);
+  }, [handleMouseMove]);
 
   useInterval(() => {
     if (!mouseState.isMoving) return;

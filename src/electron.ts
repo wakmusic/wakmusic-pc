@@ -43,19 +43,19 @@ app.whenReady().then(() => {
   } else {
     win.loadURL(import.meta.env.VITE_PUBLISH_URL);
   }
-  
-    win.once("ready-to-show", () => {
-      win.show();
-      client.login();
-    });
 
-    win.on("maximize", () => {
-      win.webContents.send("window:maximized");
-    });
+  win.once("ready-to-show", () => {
+    win.show();
+    client.login();
+  });
 
-    win.on("unmaximize", () => {
-      win.webContents.send("window:unmaximized");
-    });
+  win.on("maximize", () => {
+    win.webContents.send("window:maximized");
+  });
+
+  win.on("unmaximize", () => {
+    win.webContents.send("window:unmaximized");
+  });
 });
 
 ipcMain.on("window:least", () => {

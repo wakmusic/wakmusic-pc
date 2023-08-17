@@ -4,32 +4,26 @@ import styled, { css } from "styled-components/macro";
 
 import { Artist } from "@templates/artists";
 
+import { getArtistClearImage } from "@utils/staticUtill";
+import { addAlpha } from "@utils/utils";
+
 interface ArtistImageProps {
   artist: Artist;
   controls: AnimationControls;
 }
 
-const dummy = {
-  imageColor: [
-    ["5EA585", "0"],
-    ["0B3322", "100"],
-  ],
-  image:
-    "https://media.discordapp.net/attachments/1107136927406239744/1138393190324502578/img.png",
-};
-
 const ArtistImage = ({ artist, controls }: ArtistImageProps) => {
   return (
     <Container>
       <Background
-        $color={dummy.imageColor}
+        $color={artist.color.card}
         animate={controls}
         initial="square"
         variants={backgroundVariants}
       />
 
       <CharacterImage
-        src={dummy.image}
+        src={getArtistClearImage(artist)}
         alt={artist.name}
         animate={controls}
         initial="square"
@@ -53,8 +47,12 @@ const Background = styled(motion.div)<{ $color: string[][] }>`
   ${({ $color: c }) => css`
     background: linear-gradient(
       135deg,
-      #${c[0][0]} ${c[0][1]}%,
-      #${c[1][0]} ${c[1][1]}%
+      ${c
+        .map(
+          (color) =>
+            `#${addAlpha(color[0], Number(color[1]) / 100)} ${color[2]}%`
+        )
+        .join(", ")}
     );
   `}
 `;

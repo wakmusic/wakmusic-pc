@@ -64,7 +64,10 @@ export const getRecommendSquareImage = (list: RecommendListMetaType) => {
   return getRecommendImage(list, "square");
 };
 
-export const getArtistImage = (artist: Artist, type: RoundOrSquare) => {
+export const getArtistImage = (
+  artist: Artist,
+  type: RoundOrSquare | "clear"
+) => {
   return `${staticURL}/artist/${type}/${artist.artistId}.png?v=${artist.image[type]}`;
 };
 
@@ -72,6 +75,6 @@ export const getArtistRoundImage = (artist: Artist) => {
   return getArtistImage(artist, "round");
 };
 
-export const getArtistSquareImage = (artist: Artist) => {
-  return getArtistImage(artist, "square");
+export const getArtistClearImage = (artist: Artist) => {
+  return getArtistImage(artist, "clear");
 };

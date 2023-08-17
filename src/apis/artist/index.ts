@@ -6,7 +6,7 @@ import { SongSortType } from "@templates/song";
 type ArtistListResponse = Artist[];
 
 export const fetchArtistList = async (): Promise<ArtistListResponse> => {
-  const { data } = await instance.get(`/artist/list`);
+  const { data } = await instance.get(`/v2/artist`);
   return data;
 };
 

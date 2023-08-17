@@ -33,4 +33,3 @@ dist-ssr
 
 .vite
 out
-src/electron.js

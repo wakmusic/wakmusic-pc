@@ -8,7 +8,7 @@ import { ReactComponent as QuestionSVG } from "@assets/icons/ic_40_question.svg"
 export const blocks: {
   title: string;
   description: string;
-  endPoint?: string;
+  endPoint: string;
   svg: FunctionComponent;
 }[] = [
   {
@@ -36,6 +36,13 @@ export const blocks: {
     title: "서비스 정보",
     description: `개인정보 처리방침 및
                   서비스 내 이용 정보를 확인 가능합니다.`,
+    endPoint: "/about",
     svg: DocumentSVG,
   },
+];
+
+export const buttonList = [
+  "서비스 이용약관",
+  "개인정보 처리방침",
+  "오픈소스 라이선스",
 ];

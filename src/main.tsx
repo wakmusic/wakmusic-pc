@@ -17,6 +17,7 @@ import CreateListModal from "@components/modals/CreateListModal";
 import LoadListModal from "@components/modals/LoadListModal";
 import LoginModal from "@components/modals/LoginModal";
 import SelectProfileModal from "@components/modals/SelectProfileModal";
+import ServiceInfoModal from "@components/modals/ServiceInfoModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
@@ -82,6 +83,15 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/user/*" element={<User />} />
               <Route path="/playlist/:playlistid" element={<Playlist />} />
               <Route path="/mypage" element={<MyPage />} />
+              <Route
+                path="/about"
+                element={
+                  <div>
+                    <MyPage />
+                    <ServiceInfoModal />
+                  </div>
+                }
+              />
               <Route path="/faq" element={<Faq />} />
 
               <Route path="/player" element={null} />

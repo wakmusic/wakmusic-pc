@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { ReactComponent as AppIconSVG } from "@assets/svgs/AppIconWithBorder.svg";
@@ -5,35 +6,18 @@ import { ReactComponent as AppIconSVG } from "@assets/svgs/AppIconWithBorder.svg
 import { T3Medium, T5Light, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
-
-import { useServiceInfoModalState } from "@hooks/serviceInfoModal";
+import { buttonList } from "@constants/myPage";
 
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
 
 interface ServiceInfoModalProps {}
 
 const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
-  const [modalState, setModalState] = useServiceInfoModalState();
-
-  const buttonList = [
-    "서비스 이용약관",
-    "개인정보 처리방침",
-    "오픈소스 라이선스",
-  ];
-
-  if (!modalState.isOpen) return null;
+  const navigate = useNavigate();
 
   return (
-    <ModalOverlay
-      onClick={() => {
-        setModalState({ isOpen: false });
-      }}
-    >
-      <Container
-        onClick={(event) => {
-          event.stopPropagation();
-        }}
-      >
+    <ModalOverlay onClick={() => navigate("/mypage")}>
+      <Container onClick={(event) => event.stopPropagation()}>
         <AppIconSVG />
         <Title>왁타버스 뮤직</Title>
         <Version>현재 버전 0.1.0 (5b6c01b3)</Version>

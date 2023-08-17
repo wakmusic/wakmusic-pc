@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
@@ -11,6 +12,7 @@ import {
   T6Medium,
   T7Medium,
 } from "@components/Typography";
+import ServiceInfoModal from "@components/modals/ServiceInfoModal";
 import Block from "@components/mypage/Block";
 
 import PageLayout from "@layouts/PageLayout";
@@ -22,8 +24,11 @@ import { blocks } from "@constants/myPage";
 interface MyPageProps {}
 
 const MyPage = ({}: MyPageProps) => {
+  const location = useLocation();
+
   return (
     <PageLayout>
+      {location.pathname === "/about" ? <ServiceInfoModal /> : undefined}
       <Container>
         <ProfileBlock>
           <FlexDiv>

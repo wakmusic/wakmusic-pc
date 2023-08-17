@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
-import { ReactComponent as AppIconSVG } from "@assets/svgs/AppIconWithBorder.svg";
+import { ReactComponent as AppIconSVG } from "@assets/svgs/AppIcon.svg";
 
 import { T3Medium, T5Light, T6Medium } from "@components/Typography";
 
@@ -18,7 +18,7 @@ const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
   return (
     <ModalOverlay onClick={() => navigate("/mypage")}>
       <Container onClick={(event) => event.stopPropagation()}>
-        <AppIconSVG />
+        <AppIcon />
         <Title>왁타버스 뮤직</Title>
         <Version>현재 버전 0.1.0 (5b6c01b3)</Version>
         <ButtonGroup>
@@ -40,6 +40,14 @@ const Container = styled(ModalContainer)`
   border-radius: 24px;
 
   background-color: ${colors.blueGray25};
+`;
+
+const AppIcon = styled(AppIconSVG)`
+  border: 1px solid ${colors.blueGray100};
+  border-radius: 20px;
+
+  width: 100px;
+  height: 100px;
 `;
 
 const Title = styled(T3Medium)`

@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { T4Bold, T6Medium } from "@components/Typography";
@@ -14,8 +14,10 @@ interface BlockProps {
 }
 
 const Block = ({ title, description, endPoint, svg }: BlockProps) => {
+  const navigate = useNavigate();
+
   return (
-    <Container to={endPoint}>
+    <Container onClick={() => navigate(endPoint)}>
       <Title>{title}</Title>
       <Description>{description}</Description>
       {svg}
@@ -23,7 +25,7 @@ const Block = ({ title, description, endPoint, svg }: BlockProps) => {
   );
 };
 
-const Container = styled(Link)`
+const Container = styled.div`
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
   background: ${colors.whiteAlpha40};
@@ -32,7 +34,6 @@ const Container = styled(Link)`
   padding: 20px 24px;
 
   cursor: pointer;
-  text-decoration: none;
 
   & svg {
     position: absolute;

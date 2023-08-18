@@ -10,6 +10,7 @@ export interface WAKMU {
 
 declare global {
   interface Window {
+    // ipcRenderer를 사용하기 위한 모시깽이
     require: NodeRequire;
     WAKMU: WAKMU;
   }

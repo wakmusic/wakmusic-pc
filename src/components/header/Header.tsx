@@ -8,8 +8,6 @@ import ArrowIcon from "@components/icons/Arrow";
 
 import colors from "@constants/colors";
 
-import { ipcRenderer } from "@utils/modules";
-
 import Search from "./Search";
 
 interface HeaderProps {}
@@ -23,8 +21,8 @@ const Header = ({}: HeaderProps) => {
       <LogoContainer>
         <Logo
           onClick={() => {
-            if (ipcRenderer && location.pathname == "/player") {
-              ipcRenderer.send("mode:default");
+            if (window.ipcRenderer && location.pathname == "/player") {
+              window.ipcRenderer.send("mode:default");
             }
 
             navigate("/");

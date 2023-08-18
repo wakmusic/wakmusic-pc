@@ -14,7 +14,7 @@ export const isObject = (object: unknown): object is object => {
   return typeof object === "object";
 };
 
-export const isNil = (item: unknown): item is null | undefined => {
+export const isNil = (item: unknown): boolean => {
   return typeof item === null || typeof item === undefined;
 };
 

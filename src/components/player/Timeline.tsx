@@ -106,7 +106,7 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
         <Handle />
       </HandleContainer>
       <TimelinePopover
-        progress={(current / length) * 100}
+        $progress={(current / length) * 100}
         $isSeparated={isSeparated}
       >
         <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
@@ -205,9 +205,9 @@ const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
     `}
 `;
 
-const Line = styled.div.attrs<{ progress: number }>(({ progress }) => ({
+const Line = styled.div.attrs<{ $progress: number }>(({ $progress }) => ({
   style: {
-    width: `${progress}%`,
+    width: `${$progress}%`,
   },
 }))<{ $isSeparated: boolean }>`
   height: 100%;

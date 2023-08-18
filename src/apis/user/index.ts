@@ -1,6 +1,16 @@
 import instance from "@apis/axios";
 
+import { User } from "@templates/user";
+
 const USER_URL = "/user";
+
+export const fetchUser = async (): Promise<User | null> => {
+  const { data, status } = await instance.get(`/auth`);
+
+  if (status === 200) return data;
+
+  return null;
+};
 
 export const fetchProfileList = async () => {
   const { data } = await instance.get(`${USER_URL}/profile/list`);

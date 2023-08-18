@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
@@ -12,6 +13,7 @@ import {
   T6Medium,
   T7Medium,
 } from "@components/Typography";
+import ServiceInfoModal from "@components/modals/ServiceInfoModal";
 import Block from "@components/mypage/Block";
 
 import PageLayout from "@layouts/PageLayout";
@@ -28,6 +30,8 @@ import { getProfileImg } from "@utils/staticUtill";
 interface MyPageProps {}
 
 const MyPage = ({}: MyPageProps) => {
+  const location = useLocation();
+
   const [user] = useUserState();
   const loginModalOpener = useLoginModalOpener();
 
@@ -39,6 +43,8 @@ const MyPage = ({}: MyPageProps) => {
 
   return (
     <PageLayout>
+      {location.pathname === "/about" && <ServiceInfoModal />}
+
       <Container>
         <ProfileBlock>
           <FlexDiv>

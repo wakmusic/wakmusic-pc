@@ -29,32 +29,34 @@ const All = ({ query, res }: AllProps) => {
   return (
     <PageItemContainer height={142}>
       <Wrapper>
-        {(Object.keys(res) as Array<"song" | "artist" | "remix">)
-          .filter((key) => res[key].length !== 0)
-          .map((key, index) => (
+        {(Object.keys(res) as Array<"song" | "artist" | "remix">).map(
+          (key, index) => (
             <CategoryContainer key={index}>
               <CategoryHeader>
                 <T5Medium color={colors.gray900}>{Category[key]}</T5Medium>
                 <T5Medium color={colors.point}>{res[key].length}</T5Medium>
 
-                <CategoryHeaderButton
-                  onClick={() => {
-                    setSearchParams({
-                      query: query,
-                      tab: key,
-                    });
-                  }}
-                >
-                  <T7Medium color={colors.gray500}>전체보기</T7Medium>
-                  <ArrowRightSVG />
-                </CategoryHeaderButton>
+                {res[key].length > 3 && (
+                  <CategoryHeaderButton
+                    onClick={() => {
+                      setSearchParams({
+                        query: query,
+                        tab: key,
+                      });
+                    }}
+                  >
+                    <T7Medium color={colors.gray500}>전체보기</T7Medium>
+                    <ArrowRightSVG />
+                  </CategoryHeaderButton>
+                )}
               </CategoryHeader>
 
               {res[key].slice(-3).map((song, index) => (
                 <SongItem key={index} song={song} noPadding forceWidth={650} />
               ))}
             </CategoryContainer>
-          ))}
+          )
+        )}
       </Wrapper>
     </PageItemContainer>
   );

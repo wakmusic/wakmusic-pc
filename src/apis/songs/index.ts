@@ -21,6 +21,12 @@ interface FetchSearchTabParams {
   limit?: number;
 }
 
+export const fetchSong = async (id: string): Promise<SongTotal> => {
+  const { data } = await instance.get(`/v2/songs/${id}`);
+
+  return data;
+};
+
 export const fetchSearchAll = async (
   keyword: string,
   sort: SongSortType = "popular"

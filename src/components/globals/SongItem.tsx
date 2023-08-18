@@ -8,6 +8,7 @@ import { T7_1Light } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { Song } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 import { formatDate, formatNumber } from "@utils/formatting";
 import getChartData from "@utils/getChartData";
@@ -30,13 +31,6 @@ interface SongItemProps {
   useIncrease?: boolean;
   noPadding?: boolean;
   forceWidth?: number;
-}
-
-export enum SongItemFeature {
-  last,
-  date,
-  views,
-  like,
 }
 
 const featureBuilder = (
@@ -101,31 +95,36 @@ const SongItem = ({
       $selected={selected}
       $noPadding={noPadding}
     >
-      {rank && <Rank now={rank} last={chartData.last} />}
-      {editMode && (
-        <MoveButton
-          onMouseDown={(e) => {
-            onEdit && onEdit(e);
-          }}
-        />
-      )}
+      <Info>
+        {rank && <Rank now={rank} last={chartData.last} />}
+        {editMode && (
+          <MoveButton
+            onMouseDown={(e) => {
+              onEdit && onEdit(e);
+            }}
+          />
+        )}
 
-      <TrackWrapper $width={width}>
-        <Track
-          item={song}
-          maxWidth={isNumber(width) ? width - 80 : undefined}
-        />
-      </TrackWrapper>
+        <TrackWrapper>
+          <Track
+            item={song}
+            maxWidth={isNumber(width) ? width - 80 : undefined}
+          />
+        </TrackWrapper>
+      </Info>
 
-      {featureTexts.map((text, index) => (
-        <Feature key={index}>{text}</Feature>
-      ))}
+      <Features>
+        {featureTexts.map((text, index) => (
+          <Feature key={index}>{text}</Feature>
+        ))}
+      </Features>
     </Container>
   );
 };
 
 const Container = styled.div<{ $selected?: boolean; $noPadding?: boolean }>`
   height: 64px;
+  width: 100%;
 
   display: flex;
   align-items: center;
@@ -143,17 +142,26 @@ const Container = styled.div<{ $selected?: boolean; $noPadding?: boolean }>`
   cursor: pointer;
 `;
 
-const MoveButton = styled(MoveSVG)`
-  margin-left: 8px;
-  margin-right: 16px;
+const Info = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 `;
 
-const TrackWrapper = styled.div<{ $width: string | number }>`
-  width: ${({ $width }) => (isNumber($width) ? `${$width}px` : $width)};
+const MoveButton = styled(MoveSVG)`
+  margin-right: 8px;
+`;
 
+const TrackWrapper = styled.div`
   margin-left: -1px;
+`;
 
+const Features = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
 `;
 
 const Feature = styled(T7_1Light)`

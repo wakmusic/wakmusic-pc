@@ -3,7 +3,6 @@ import styled from "styled-components/macro";
 
 import CustomSongs from "@components/globals/CustomSongs";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
-import { SongItemFeature } from "@components/globals/SongItem";
 import MusicController from "@components/globals/musicControllers/MusicController";
 
 import { myListSongs } from "@constants/dummys";
@@ -12,6 +11,7 @@ import { useLikesState } from "@hooks/likes";
 import { useSelectSongs } from "@hooks/selectSongs";
 
 import { Song } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 interface LikesProps {}
 

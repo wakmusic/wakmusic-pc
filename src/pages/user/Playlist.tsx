@@ -17,7 +17,6 @@ import { T3Medium, T6Light } from "@components/Typography";
 import CustomSongs from "@components/globals/CustomSongs";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import IconButton from "@components/globals/IconButton";
-import { SongItemFeature } from "@components/globals/SongItem";
 import TextButton from "@components/globals/TextButton";
 import MusicController from "@components/globals/musicControllers/MusicController";
 
@@ -29,6 +28,7 @@ import { useSelectSongs } from "@hooks/selectSongs";
 import { useShareListModal } from "@hooks/shareListModal";
 
 import { BasePlaylist, PlaylistType } from "@templates/playlist";
+import { SongItemFeature } from "@templates/songItem";
 
 import { getPlaylistIcon, getRecommendSquareImage } from "@utils/staticUtill";
 

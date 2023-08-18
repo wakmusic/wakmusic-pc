@@ -9,10 +9,11 @@ import { useInterval } from "@hooks/interval";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { Song } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 import { isNull } from "@utils/isTypes";
 
-import SongItem, { SongItemFeature } from "./SongItem";
+import SongItem from "./SongItem";
 
 interface CustomSongsProps {
   height: number;

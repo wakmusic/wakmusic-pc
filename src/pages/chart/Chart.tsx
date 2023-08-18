@@ -6,7 +6,7 @@ import { ChartsType, fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
 
 import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import SongItem from "@components/globals/SongItem";
 import UpdatedText from "@components/globals/UpdatedText";
 import MusicController from "@components/globals/musicControllers/MusicController";
 
@@ -22,6 +22,8 @@ import { usePlaySongs } from "@hooks/player";
 import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
+
+import { SongItemFeature } from "@templates/songItem";
 
 interface ChartProps {}
 

@@ -7,7 +7,7 @@ import { NewSongsType, fetchNewSongs } from "@apis/songs";
 
 import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import SongItem from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
 import UpdatedText from "@components/globals/UpdatedText";
 import MusicController from "@components/globals/musicControllers/MusicController";
@@ -26,6 +26,7 @@ import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { SongTotal } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 interface NewProps {}
 

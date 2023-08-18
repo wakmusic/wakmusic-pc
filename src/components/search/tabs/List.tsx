@@ -5,7 +5,7 @@ import styled from "styled-components/macro";
 import { fetchSearchTab } from "@apis/songs";
 
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import SongItem from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
 import MusicController from "@components/globals/musicControllers/MusicController";
 
@@ -19,6 +19,7 @@ import useVirtualizer from "@hooks/virtualizer";
 
 import { SearchTabType } from "@templates/search";
 import { SongTotal } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 import NotFound from "../NotFound";
 

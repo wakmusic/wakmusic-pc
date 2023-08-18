@@ -8,8 +8,6 @@ import { ReactComponent as LeastSVG } from "@assets/icons/ic_20_least.svg";
 import { ReactComponent as MaxSVG } from "@assets/icons/ic_20_max.svg";
 import { ReactComponent as RestoreSVG } from "@assets/icons/ic_20_restore.svg";
 
-import { ipcRenderer } from "@utils/modules";
-
 import SimpleIconButton from "./SimpleIconButton";
 
 interface ControlBarProps {
@@ -22,7 +20,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
 
   const [isMax, setIsMax] = useState(false);
 
-  if (!ipcRenderer) {
+  if (!window.ipcRenderer) {
     return null;
   }
 
@@ -31,7 +29,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
       <SimpleIconButton
         icon={LeastSVG}
         onClick={() => {
-          ipcRenderer?.send("window:least");
+          window.ipcRenderer?.send("window:least");
         }}
       />
       <SimpleIconButton
@@ -43,18 +41,18 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
             : DivideSVG // 그 외에는 분리만 가능
         }
         onClick={() => {
-          if (!ipcRenderer) return;
+          if (!window.ipcRenderer) return;
 
           if (isVisualMode) {
             setIsMax((prev) => !prev);
-            ipcRenderer.send("window:max");
+            window.ipcRenderer.send("window:max");
           } else {
             if (location.pathname !== "/player") {
               navigate("/player");
-              ipcRenderer.send("mode:separate");
+              window.ipcRenderer.send("mode:separate");
             } else {
               navigate(-1);
-              ipcRenderer.send("mode:default");
+              window.ipcRenderer.send("mode:default");
             }
           }
         }}
@@ -62,7 +60,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
       <SimpleIconButton
         icon={CloseSVG}
         onClick={() => {
-          ipcRenderer?.send("window:close");
+          window.ipcRenderer?.send("window:close");
         }}
       />
     </Container>

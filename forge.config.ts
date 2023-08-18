@@ -18,12 +18,6 @@ const config: ForgeConfig = {
     */
 
     ignore: [/.yarn/],
-    protocols: [
-      {
-        name: "왁타버스 뮤직",
-        schemes: ["wakmusic"],
-      },
-    ],
   },
   rebuildConfig: {},
   makers: [new MakerSquirrel({})],

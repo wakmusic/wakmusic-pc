@@ -20,7 +20,6 @@ import {
   useVisualModeState,
 } from "@hooks/player";
 
-import { ipcRenderer } from "@utils/modules";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
 
 import Lyrics from "../Lyrics";
@@ -75,9 +74,9 @@ const Display = ({}: DisplayProps) => {
                   setVisualModeState(true);
                 };
 
-                if (ipcRenderer && location.pathname == "/player") {
+                if (window.ipcRenderer && location.pathname == "/player") {
                   navigate(-1);
-                  ipcRenderer.send("mode:default");
+                  window.ipcRenderer.send("mode:default");
 
                   setTimeout(() => {
                     animate();

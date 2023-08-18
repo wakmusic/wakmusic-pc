@@ -11,7 +11,6 @@ import { useConfirmModal } from "@hooks/confirmModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
 import { useUserState } from "@hooks/user";
 
-import { ipcRenderer } from "@utils/modules";
 import { getProfileImg } from "@utils/staticUtill";
 
 interface UserProps {}
@@ -32,8 +31,6 @@ const User = ({}: UserProps) => {
 
     if (!res) return;
 
-    if (ipcRenderer) ipcRenderer.send("logout");
-
     setUser(null);
     navigate("/");
   };
@@ -42,10 +39,7 @@ const User = ({}: UserProps) => {
     navigate("/mypage");
   };
 
-  if (
-    user &&
-    (location.pathname === "/mypage" || location.pathname === "/about")
-  ) {
+  if (user && location.pathname === "/mypage") {
     return (
       <Container onClick={logout}>
         <Text>로그아웃</Text>

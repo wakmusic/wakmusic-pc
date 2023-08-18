@@ -1,13 +1,17 @@
+import { FunctionComponent } from "react";
+
 import { ReactComponent as DocumentSVG } from "@assets/icons/ic_40_document.svg";
 import { ReactComponent as NotiSVG } from "@assets/icons/ic_40_noti.svg";
 import { ReactComponent as QnaSVG } from "@assets/icons/ic_40_qna.svg";
 import { ReactComponent as QuestionSVG } from "@assets/icons/ic_40_question.svg";
 
+import { getDocument } from "@utils/staticUtill";
+
 export const blocks: {
   title: string;
   description: string;
   endPoint: string;
-  svg: React.FunctionComponent;
+  svg: FunctionComponent;
 }[] = [
   {
     title: "공지사항",
@@ -36,5 +40,22 @@ export const blocks: {
                   서비스 내 이용 정보를 확인 가능합니다.`,
     endPoint: "/about",
     svg: DocumentSVG,
+  },
+];
+
+export const buttonList = [
+  {
+    name: "서비스 이용약관",
+    path: getDocument("terms"),
+  },
+  {
+    name: "개인정보 처리방침",
+    path: getDocument("privacy"),
+  },
+  {
+    name: "오픈소스 라이선스",
+
+    // TODO
+    path: "https://wakmusic.xyz",
   },
 ];

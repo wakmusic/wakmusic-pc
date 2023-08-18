@@ -11,6 +11,7 @@ import { useConfirmModal } from "@hooks/confirmModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
 import { useUserState } from "@hooks/user";
 
+import { ipcRenderer } from "@utils/modules";
 import { getProfileImg } from "@utils/staticUtill";
 
 interface UserProps {}
@@ -30,6 +31,8 @@ const User = ({}: UserProps) => {
     const res = await confirmModal("로그아웃 하시겠습니까?", null);
 
     if (!res) return;
+
+    if (ipcRenderer) ipcRenderer.send("logout");
 
     setUser(null);
     navigate("/");

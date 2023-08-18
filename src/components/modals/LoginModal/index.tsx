@@ -10,9 +10,10 @@ import { T4Bold, T5Light } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useLoginModalState } from "@hooks/loginModal";
-import { useUserState } from "@hooks/user";
 
 import { LoginPlatform } from "@templates/user";
+
+import { openExternal } from "@utils/modules";
 
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
 import Button from "./Button";
@@ -21,26 +22,21 @@ interface LoginModalProps {}
 
 const LoginModal = ({}: LoginModalProps) => {
   const [loginModalState, setLoginModalState] = useLoginModalState();
-  const [, setUser] = useUserState();
 
   if (!loginModalState) return null;
 
   const handleLogin = (platform: LoginPlatform) => {
-    setUser({
-      displayName: "왁타버스 뮤직",
-      profile: {
-        type: "panchi",
-        version: 2,
-      },
-      platform,
-    });
+    // TODO: 추후 웹 환경에서도 로그인 가능하도록 패치 필요
+    const openFn = openExternal || ((url: string) => open(url, "_blank"));
+
+    openFn(`${import.meta.env.VITE_API_URL}/v2/auth/pc/login/${platform}`);
 
     setLoginModalState(false);
   };
 
   return (
-    <ModalOverlay>
-      <Modal>
+    <ModalOverlay onClick={() => setLoginModalState(false)}>
+      <Modal onClick={(e) => e.stopPropagation()}>
         <Header>
           <AppIconSVG />
 

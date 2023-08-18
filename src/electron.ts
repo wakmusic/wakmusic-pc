@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain, nativeImage } from "electron";
+import { BrowserWindow, app, ipcMain, nativeImage, session } from "electron";
 import { join, resolve } from "path";
 
 import { SongInfo } from "@templates/player";
@@ -9,6 +9,7 @@ import {
   setProgress,
   showPlaying,
 } from "./electron/discord";
+import { schemeHandler } from "./electron/scheme";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 
@@ -63,15 +64,6 @@ app.whenReady().then(() => {
     client.login();
   });
 });
-
-const schemeHandler = (url: string) => {
-  const win = BrowserWindow.getAllWindows()[0];
-
-  if (win.isMinimized()) win.restore();
-  win.focus();
-
-  win.webContents.send("scheme", url);
-};
 
 app.on("open-url", function (_, url) {
   schemeHandler(url);
@@ -165,4 +157,8 @@ ipcMain.on("rpc:playing", (_event, isPlaying: boolean) => {
 
 ipcMain.on("rpc:track", (_event, current: SongInfo | null) => {
   changePresence(current);
+});
+
+ipcMain.on("logout", () => {
+  session.defaultSession.cookies.remove(import.meta.env.VITE_API_URL, "token");
 });

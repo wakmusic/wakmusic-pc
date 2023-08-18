@@ -40,7 +40,7 @@ import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
 import CheckPlayerMode from "@utils/checkPlayerMode";
-import "@utils/loadIpcRenderer";
+import SchemeHandler from "@utils/schemeHandler";
 
 import "./index.css";
 
@@ -48,7 +48,7 @@ import "./index.css";
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       keepPreviousData: true,
@@ -57,13 +57,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-// 스키마 테스트
-if (window.ipcRenderer) {
-  window.ipcRenderer.on("scheme", (_event, url: string) => {
-    console.log(url);
-  });
-}
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
@@ -112,6 +105,8 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <LoadListModal />
           <ShareListModal />
         </ModalPortal>
+
+        <SchemeHandler />
       </QueryClientProvider>
     </RecoilRoot>
   </StrictMode>

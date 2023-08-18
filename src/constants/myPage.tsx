@@ -5,6 +5,8 @@ import { ReactComponent as NotiSVG } from "@assets/icons/ic_40_noti.svg";
 import { ReactComponent as QnaSVG } from "@assets/icons/ic_40_qna.svg";
 import { ReactComponent as QuestionSVG } from "@assets/icons/ic_40_question.svg";
 
+import { getDocument } from "@utils/staticUtill";
+
 export const blocks: {
   title: string;
   description: string;
@@ -44,14 +46,16 @@ export const blocks: {
 export const buttonList = [
   {
     name: "서비스 이용약관",
-    path: "https://google.com",
+    path: getDocument("terms"),
   },
   {
     name: "개인정보 처리방침",
-    path: "https://github.com",
+    path: getDocument("privacy"),
   },
   {
     name: "오픈소스 라이선스",
-    path: "https://theuselessweb.com",
+
+    // TODO
+    path: "https://wakmusic.xyz",
   },
 ];

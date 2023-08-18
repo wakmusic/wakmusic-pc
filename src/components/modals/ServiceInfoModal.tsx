@@ -9,10 +9,9 @@ import colors from "@constants/colors";
 import { buttonList } from "@constants/myPage";
 import { version } from "@constants/version";
 
-import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
+import { openExternal } from "@utils/modules";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const shell = require("electron").shell;
+import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
 
 interface ServiceInfoModalProps {}
 
@@ -27,7 +26,10 @@ const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
         <Version>현재 버전 {version}</Version>
         <ButtonGroup>
           {buttonList.map((button, index) => (
-            <Button key={index} onClick={() => shell.openExternal(button.path)}>
+            <Button
+              key={index}
+              onClick={() => openExternal && openExternal(button.path)}
+            >
               <ButtonText>{button.name}</ButtonText>
             </Button>
           ))}

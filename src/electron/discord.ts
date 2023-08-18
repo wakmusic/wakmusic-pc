@@ -10,7 +10,6 @@ export const client = new Client({
 });
 
 const reconnect = () => {
-  console.log("Discord RPC is reconnecting...");
   client.login();
 };
 
@@ -22,15 +21,12 @@ client.on("ready", () => {
     reconnectInterval = undefined;
   }
 
-  console.log("Discord RPC is ready");
-
   if (last) {
     changePresence(last, true);
   }
 });
 
 client.on("disconnected", () => {
-  console.log("Discord RPC is disconnected");
   client.destroy();
 
   reconnectInterval = setInterval(reconnect, 5000);

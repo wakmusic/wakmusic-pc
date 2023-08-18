@@ -40,7 +40,7 @@ import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
 import CheckPlayerMode from "@utils/checkPlayerMode";
-import "@utils/loadIpcRenderer";
+import SchemeHandler from "@utils/schemeHandler";
 
 import "./index.css";
 
@@ -48,7 +48,7 @@ import "./index.css";
 const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       keepPreviousData: true,
@@ -82,6 +82,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/user/*" element={<User />} />
               <Route path="/playlist/:playlistid" element={<Playlist />} />
               <Route path="/mypage" element={<MyPage />} />
+              <Route path="/about" element={<MyPage />} />
               <Route path="/faq" element={<Faq />} />
 
               <Route path="/player" element={null} />
@@ -105,6 +106,8 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <LoadListModal />
           <ShareListModal />
         </ModalPortal>
+
+        <SchemeHandler />
       </QueryClientProvider>
     </RecoilRoot>
   </StrictMode>

@@ -8,6 +8,8 @@ import {
   RepeatType,
 } from "@templates/player";
 
+import { ipcRenderer } from "@utils/modules";
+
 export const visualModeState = atom<boolean>({
   key: "visualMode",
   default: false,
@@ -26,7 +28,7 @@ export const controlState = atom<ControlStateType>({
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
         if (newValue.isPlaying !== (oldValue as ControlStateType).isPlaying) {
-          window.ipcRenderer?.send("rpc:playing", newValue.isPlaying);
+          ipcRenderer?.send("rpc:playing", newValue.isPlaying);
         }
 
         if (newValue.volume !== (oldValue as ControlStateType).volume) {
@@ -53,7 +55,7 @@ export const playingProgress = atom<number>({
   effects: [
     ({ onSet }) => {
       onSet((value) => {
-        window.ipcRenderer?.send("rpc:progress", value);
+        ipcRenderer?.send("rpc:progress", value);
       });
     },
   ],
@@ -80,7 +82,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
     ({ onSet }) => {
       onSet((value, oldValue) => {
         const current = value.playlist[value.current];
-        window.ipcRenderer?.send("rpc:track", current);
+        ipcRenderer?.send("rpc:track", current);
 
         if (value.playlist !== (oldValue as PlayingInfoStateType).playlist) {
           localStorage.setItem("playlist", JSON.stringify(value.playlist));

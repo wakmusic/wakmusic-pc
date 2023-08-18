@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
@@ -18,33 +19,48 @@ import Block from "@components/mypage/Block";
 import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
-import { userInfo } from "@constants/dummys";
 import { blocks } from "@constants/myPage";
+import platforms from "@constants/platforms";
+
+import { useLoginModalOpener } from "@hooks/loginModal";
+import { useUserState } from "@hooks/user";
+
+import { getProfileImg } from "@utils/staticUtill";
 
 interface MyPageProps {}
 
 const MyPage = ({}: MyPageProps) => {
   const location = useLocation();
 
+  const [user] = useUserState();
+  const loginModalOpener = useLoginModalOpener();
+
+  useEffect(() => {
+    if (!user) loginModalOpener();
+  }, [user, loginModalOpener]);
+
+  if (!user) return <PageLayout />;
+
   return (
     <PageLayout>
-      {location.pathname === "/about" ? <ServiceInfoModal /> : undefined}
+      {location.pathname === "/about" && <ServiceInfoModal />}
+
       <Container>
         <ProfileBlock>
           <FlexDiv>
             <ImageContainer>
-              <ProfileImage src="https://static.wakmusic.xyz/static/profile/bat.png"></ProfileImage>
+              <ProfileImage src={getProfileImg(user.profile)} />
               <Setting />
             </ImageContainer>
             <InfoContainer>
               <UserContainer>
-                <Username>{userInfo.username}</Username>
+                <Username>{user.displayName}</Username>
                 <Designation>님</Designation>
                 <IconCotainer>
                   <EditSVG />
                 </IconCotainer>
               </UserContainer>
-              <Via>{userInfo.via}으로 로그인 중</Via>
+              <Via>{platforms[user.platform]}로 로그인 중</Via>
             </InfoContainer>
           </FlexDiv>
           <QuitButton>

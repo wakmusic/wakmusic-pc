@@ -39,7 +39,7 @@ const ArtistInfo = ({ artist, controls, small }: ArtistInfoProps) => {
 
   return (
     <Container animate={controls} initial="square" variants={containerVariants}>
-      <Background $color={artist.color} />
+      <Background $color={artist.color.background} />
 
       <InnerContainer>
         <ArtistImage artist={artist} controls={controls} />
@@ -71,7 +71,7 @@ const ArtistInfo = ({ artist, controls, small }: ArtistInfoProps) => {
                   {artist.graduated && " · 졸업"}
                 </GroupText>
 
-                <Description>{artist.appTitle}</Description>
+                <Description>{artist.title.web}</Description>
               </motion.div>
             </>
           )}
@@ -106,8 +106,9 @@ const Background = styled.div<{ $color: string[][] }>`
   ${({ $color: color }) => css`
     background: linear-gradient(
       180deg,
-      #${addAlpha(color[0][0], Number(color[0][1]) / 100)} ${color[0][2]}%,
-      #${addAlpha(color[1][0], Number(color[1][1]) / 100)} ${color[1][2]}%
+      ${color
+        .map((c) => `#${addAlpha(c[0], Number(c[1]) / 100)} ${c[2]}%`)
+        .join(", ")}
     );
   `}
 `;

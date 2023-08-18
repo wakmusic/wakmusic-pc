@@ -23,17 +23,17 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
   const [isMax, setIsMax] = useState(false);
 
   useEffect(() => {
-    window.ipcRenderer?.on("window:maximized", () => {
+    ipcRenderer?.on("window:maximized", () => {
       setIsMax(true);
     });
 
-    window.ipcRenderer?.on("window:unmaximized", () => {
+    ipcRenderer?.on("window:unmaximized", () => {
       setIsMax(false);
     });
 
     return () => {
-      window.ipcRenderer?.removeAllListeners("window:maximized");
-      window.ipcRenderer?.removeAllListeners("window:unmaximized");
+      ipcRenderer?.removeAllListeners("window:maximized");
+      ipcRenderer?.removeAllListeners("window:unmaximized");
     };
   }, []);
 

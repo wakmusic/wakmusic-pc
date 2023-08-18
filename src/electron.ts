@@ -3,12 +3,7 @@ import { join, resolve } from "path";
 
 import { SongInfo } from "@templates/player";
 
-import {
-  changePresence,
-  client,
-  setProgress,
-  showPlaying,
-} from "./electron/discord";
+import { changePresence, setProgress, showPlaying } from "./electron/discord";
 import { schemeHandler } from "./electron/scheme";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
@@ -61,7 +56,6 @@ app.whenReady().then(() => {
 
   win.once("ready-to-show", () => {
     win.show();
-    client.login();
   });
 });
 

@@ -9,6 +9,33 @@ export const client = new Client({
   clientId: "1130044110837923890",
 });
 
+const reconnect = () => {
+  console.log("Discord RPC is reconnecting...");
+  client.login();
+};
+
+let reconnectInterval: NodeJS.Timer | undefined = setInterval(reconnect, 5000);
+
+client.on("ready", () => {
+  if (reconnectInterval) {
+    clearInterval(reconnectInterval);
+    reconnectInterval = undefined;
+  }
+
+  console.log("Discord RPC is ready");
+
+  if (last) {
+    changePresence(last, true);
+  }
+});
+
+client.on("disconnected", () => {
+  console.log("Discord RPC is disconnected");
+  client.destroy();
+
+  reconnectInterval = setInterval(reconnect, 5000);
+});
+
 export const setProgress = (progress: number) => {
   if (!last || !startTimestamp) return;
 

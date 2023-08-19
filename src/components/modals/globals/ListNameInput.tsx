@@ -8,12 +8,24 @@ import colors from "@constants/colors";
 import BaseInput from "../globals/BaseInput";
 import InputCancelButton from "../globals/InputCancelButton";
 
-interface InputProps {
+interface ListNameInputProps {
   value: string;
   onChange: (value: string) => void;
+
+  onCancel?: () => void;
+  onEnter?: () => void;
 }
 
-const Input = ({ value, onChange }: InputProps) => {
+const ListNameInput = ({
+  value,
+  onChange,
+  onCancel,
+  onEnter,
+}: ListNameInputProps) => {
+  const enable = useMemo(() => {
+    return value.length > 0 && value.length <= 12;
+  }, [value]);
+
   const color = useMemo(() => {
     if (value.length === 0) {
       return colors.blueGray500;
@@ -45,11 +57,15 @@ const Input = ({ value, onChange }: InputProps) => {
         onChange={onChange}
         borderColor={color}
         placeholder="리스트 명을 입력해주세요."
+        onKeyDown={(e) => {
+          if (enable && e.key === "Enter") onEnter?.();
+        }}
       />
 
       {value && (
         <InputCancelButton
           onClick={() => {
+            if (onCancel) onCancel();
             onChange("");
           }}
         />
@@ -94,4 +110,4 @@ const MaxLength = styled(T7Light)`
   color: ${colors.blueGray400};
 `;
 
-export default Input;
+export default ListNameInput;

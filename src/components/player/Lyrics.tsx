@@ -15,6 +15,7 @@ import {
 } from "@hooks/player";
 
 import { isNull } from "@utils/isTypes";
+import { ipcRenderer } from "@utils/modules";
 
 type LyricsSize = "large" | "small";
 
@@ -60,24 +61,32 @@ const Lyrics = ({ size }: LyricsProps) => {
     return lyrics.findIndex((line) => current < line.start) - 1;
   }, [current, lyrics]);
 
+  const setPosition = useCallback(
+    (isSmooth: boolean) => {
+      if (!ref.current || !currentRef.current) return;
+
+      const index = getIndex();
+
+      const target = ref.current.children[index] as HTMLDivElement;
+      if (!target) return;
+
+      const padding = ref.current.offsetHeight / 2;
+      const top =
+        target.offsetTop -
+        ref.current.offsetTop -
+        padding +
+        currentRef.current.offsetHeight / 2;
+
+      ref.current.scrollTo({ top, behavior: isSmooth ? "smooth" : "instant" });
+    },
+    [getIndex, ref, currentRef]
+  );
+
   useEffect(() => {
-    if (!ref.current || !currentRef.current) return;
     if (timeout !== 0) return;
 
-    const index = getIndex();
-
-    const target = ref.current.children[index] as HTMLDivElement;
-    if (!target) return;
-
-    const padding = ref.current.offsetHeight / 2;
-    const top =
-      target.offsetTop -
-      ref.current.offsetTop -
-      padding +
-      currentRef.current.offsetHeight / 2;
-
-    ref.current.scrollTo({ top, behavior: "smooth" });
-  }, [getIndex, timeout]);
+    setPosition(true);
+  }, [setPosition, timeout]);
 
   useInterval(() => {
     setTimeout((prev) => {
@@ -86,6 +95,16 @@ const Lyrics = ({ size }: LyricsProps) => {
       return prev - 1;
     });
   }, 1000);
+
+  useEffect(() => {
+    ipcRenderer?.on("window:resize", () => {
+      setPosition(false);
+    });
+
+    return () => {
+      ipcRenderer?.removeAllListeners("window:resize");
+    };
+  }, [setPosition]);
 
   if (!lyrics) {
     return (

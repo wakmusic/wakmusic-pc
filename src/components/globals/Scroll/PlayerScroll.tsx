@@ -25,8 +25,9 @@ const PlayerScroll = forwardRef<HTMLDivElement, PlayerScrollProps>(
       if (
         !osRef.current ||
         !((ref || viewportRef) as RefObject<HTMLDivElement>).current
-      )
+      ) {
         return;
+      }
 
       initialize({
         target: osRef.current,

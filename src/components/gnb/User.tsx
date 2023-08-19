@@ -59,7 +59,7 @@ const User = ({}: UserProps) => {
         <LogoutButton onClick={logout} />
         <Avatar src={getProfileImg(user.profile)} />
         <NameText>
-          <Name>{user.displayName}</Name> 님
+          <Name>{user.name}</Name> 님
         </NameText>
       </Container>
     );

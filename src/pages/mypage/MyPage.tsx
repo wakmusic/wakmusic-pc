@@ -54,7 +54,7 @@ const MyPage = ({}: MyPageProps) => {
             </ImageContainer>
             <InfoContainer>
               <UserContainer>
-                <Username>{user.displayName}</Username>
+                <Username>{user.name}</Username>
                 <Designation>님</Designation>
                 <IconCotainer>
                   <EditSVG />

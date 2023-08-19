@@ -1,8 +1,6 @@
 import instance from "@apis/axios";
 
-import { User } from "@templates/user";
-
-const USER_URL = "/user";
+import { User, UserProfile } from "@templates/user";
 
 export const fetchUser = async (): Promise<User | null> => {
   const { data, status } = await instance.get(`/v2/user/profile`);
@@ -12,47 +10,32 @@ export const fetchUser = async (): Promise<User | null> => {
   return null;
 };
 
-export const fetchProfileList = async () => {
-  const { data } = await instance.get(`${USER_URL}/profile/list`);
+export const fetchProfileImages = async (): Promise<UserProfile[]> => {
+  const { data } = await instance.get(`/v2/user/profile/list`);
+
   return data;
 };
 
-export const postSetProfile = async (body: any) => {
-  const { data } = await instance.post(`${USER_URL}/profile/set`, body);
-  return data;
+export const setProfileImage = async (
+  profile: UserProfile
+): Promise<boolean> => {
+  const { status } = await instance.patch(`/v2/user/profile`, {
+    type: profile.type,
+  });
+
+  return status === 201;
 };
 
-export const postSetNickname = async (body: any) => {
-  const { data } = await instance.post(`${USER_URL}/username`, body);
-  return data;
+export const setUsername = async (name: string): Promise<boolean> => {
+  const { status } = await instance.patch(`/v2/user/name`, {
+    name,
+  });
+
+  return status === 201;
 };
 
-export const fetchMyPlaylist = async () => {
-  const { data } = await instance.get(`${USER_URL}/playlists`);
-  return data;
-};
+export const removeUser = async (): Promise<boolean> => {
+  const { status } = await instance.delete(`/v2/user/remove`);
 
-export const fetchLikeSongs = async () => {
-  const { data } = await instance.get(`${USER_URL}/likes`);
-  return data;
-};
-
-export const patchEditLikeSongs = async (body: any) => {
-  const { data } = await instance.patch(`${USER_URL}/likes/edit`, body);
-  return data;
-};
-
-export const patchEditMyPlaylist = async (body: any) => {
-  const { data } = await instance.patch(`${USER_URL}/playlists/edit`, body);
-  return data;
-};
-
-export const deleteLikeSongs = async (body: any) => {
-  const { data } = await instance.delete(`${USER_URL}/likes/delete`, body);
-  return data;
-};
-
-export const deleteMyPlaylist = async (body: any) => {
-  const { data } = await instance.delete(`${USER_URL}/playlists/delete`, body);
-  return data;
+  return status === 200;
 };

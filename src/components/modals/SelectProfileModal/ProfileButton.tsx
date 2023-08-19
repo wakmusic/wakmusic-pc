@@ -9,12 +9,12 @@ import { getProfileImg } from "@utils/staticUtill";
 interface ProfileButtonProps {
   profile: UserProfile;
   selected: boolean;
-  onClick: (type: string) => void;
+  onClick: (type: UserProfile) => void;
 }
 
 const ProfileButton = ({ profile, selected, onClick }: ProfileButtonProps) => {
   return (
-    <Container onClick={() => onClick(profile.type)}>
+    <Container onClick={() => onClick(profile)}>
       <Image src={getProfileImg(profile)} selected={selected} />
     </Container>
   );

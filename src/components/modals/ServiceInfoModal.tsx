@@ -7,7 +7,6 @@ import { T3Medium, T5Light, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 import { buttonList } from "@constants/myPage";
-import { version } from "@constants/version";
 
 import { openExternal } from "@utils/modules";
 
@@ -18,12 +17,17 @@ interface ServiceInfoModalProps {}
 const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
   const navigate = useNavigate();
 
+  const appVersion = import.meta.env.VITE_VERSION;
+  const commitHash = import.meta.env.VITE_COMMIT_HASH ?? "dev";
+
   return (
     <ModalOverlay onClick={() => navigate("/mypage")}>
       <Container onClick={(event) => event.stopPropagation()}>
         <AppIcon />
         <Title>왁타버스 뮤직</Title>
-        <Version>현재 버전 {version}</Version>
+        <Version>
+          현재 버전 {appVersion} ({commitHash})
+        </Version>
         <ButtonGroup>
           {buttonList.map((button, index) => (
             <Button

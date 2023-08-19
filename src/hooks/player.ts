@@ -53,6 +53,12 @@ export const useSetVolumeState = () => {
   return (value: number) => setState({ ...state, volume: value });
 };
 
+export const useSetIsmuteState = () => {
+  const [state, setState] = useRecoilState(controlState);
+
+  return (value: boolean) => setState({ ...state, isMute: value });
+};
+
 export const useToggleRepeatTypeState = () => {
   const [state, setState] = useRecoilState(controlState);
 

@@ -5,7 +5,7 @@ import { User } from "@templates/user";
 const USER_URL = "/user";
 
 export const fetchUser = async (): Promise<User | null> => {
-  const { data, status } = await instance.get(`/auth`);
+  const { data, status } = await instance.get(`/v2/user/profile`);
 
   if (status === 200) return data;
 

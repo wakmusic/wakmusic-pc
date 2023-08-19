@@ -4,6 +4,8 @@ import macrosPlugin from "vite-plugin-babel-macros";
 import svgr from "vite-plugin-svgr";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+import { version } from "./package.json";
+
 // https://vitejs.dev/config/
 export default defineConfig({
   root: "./src",
@@ -22,4 +24,7 @@ export default defineConfig({
     },
   },
   plugins: [react(), tsconfigPaths(), svgr(), macrosPlugin()],
+  define: {
+    "import.meta.env.VITE_VERSION": JSON.stringify(version),
+  },
 });

@@ -50,13 +50,8 @@ export const useIsSpaceDisabled = () => {
 export const useSetVolumeState = () => {
   const [state, setState] = useRecoilState(controlState);
 
-  return (value: number) => setState({ ...state, volume: value });
-};
-
-export const useSetIsmuteState = () => {
-  const [state, setState] = useRecoilState(controlState);
-
-  return (value: boolean) => setState({ ...state, isMute: value });
+  return (volume: number, isMute: boolean) =>
+    setState({ ...state, volume, isMute });
 };
 
 export const useToggleRepeatTypeState = () => {

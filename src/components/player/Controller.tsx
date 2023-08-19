@@ -20,7 +20,6 @@ import {
   useIsSpaceDisabled,
   useNextSong,
   usePrevSong,
-  useSetIsmuteState,
   useSetVolumeState,
   useToggleIsLyricsOnState,
   useToggleIsPlayingState,
@@ -38,7 +37,6 @@ const Controller = ({}: ControllerProps) => {
   const [controlState] = useControlState();
 
   const setVolumeState = useSetVolumeState();
-  const setIsMuteState = useSetIsmuteState();
   const toggleRepeatTypeState = useToggleRepeatTypeState();
   const toggleIsPlayingState = useToggleIsPlayingState();
   const toggleIsRandomState = useToggleIsRandomState();
@@ -80,7 +78,6 @@ const Controller = ({}: ControllerProps) => {
         volume={controlState.volume}
         isMute={controlState.isMute}
         onChange={setVolumeState}
-        onIsMuteChange={setIsMuteState}
       />
       <SimpleIconButton
         icon={getRepeatIcon()}

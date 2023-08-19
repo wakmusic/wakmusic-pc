@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as SoundOffSvg } from "@assets/icons/ic_20_sound_off.svg";
@@ -12,19 +13,34 @@ import colors from "@constants/colors";
 interface VolumeProps {
   volume: number;
   isMute: boolean;
-  onChange: (value: number) => void;
-  onIsMuteChange: (value: boolean) => void;
+  onChange: (volume: number, isMute: boolean) => void;
 }
 
-const Volume = ({ volume, isMute, onChange, onIsMuteChange }: VolumeProps) => {
+const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
+  const [isChanging, setIsChanging] = useState(false);
+  const [prvVolume, setPrvVolume] = useState(50);
+
+  function onClick() {
+    onChange(volume, !isMute);
+  }
+
   function onValueChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = parseInt(e.target.value);
 
-    onChange(value);
-
-    if (isMute && value !== 0) {
-      onIsMuteChange(false);
+    if (!isChanging) {
+      setIsChanging(true);
+      setPrvVolume(volume);
     }
+
+    if (value === 0) {
+      onChange(prvVolume, true);
+    } else {
+      onChange(value, false);
+    }
+  }
+
+  function onMouseUp() {
+    setIsChanging(false);
   }
 
   function getVolumeIcon() {
@@ -41,10 +57,7 @@ const Volume = ({ volume, isMute, onChange, onIsMuteChange }: VolumeProps) => {
 
   return (
     <Container>
-      <SimpleIconButton
-        icon={getVolumeIcon()}
-        onClick={() => onIsMuteChange(!isMute)}
-      />
+      <SimpleIconButton icon={getVolumeIcon()} onClick={onClick} />
       <Popover>
         <VolumeSvg />
         <Input
@@ -53,6 +66,8 @@ const Volume = ({ volume, isMute, onChange, onIsMuteChange }: VolumeProps) => {
           max={100}
           value={isMute ? 0 : volume}
           onChange={onValueChange}
+          onInput={onValueChange}
+          onMouseUp={onMouseUp}
         />
       </Popover>
     </Container>

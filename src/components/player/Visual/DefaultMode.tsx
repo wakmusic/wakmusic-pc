@@ -87,10 +87,6 @@ const SongContainer = styled.div`
 
 const MainContainer = styled.div`
   width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 `;
 
 const Thumbnail = styled.img`
@@ -105,7 +101,7 @@ const LyricsContainer = styled.div`
   width: 100%;
   height: 90px;
 
-  margin: 24px 0 48px 0;
+  margin: 24px 0 44px 0;
 `;
 
 const TimelineContainer = styled.div`
@@ -116,7 +112,7 @@ const ControllerContainer = styled.div`
   display: flex;
   justify-content: center;
 
-  margin: 40px 0 73px 0;
+  margin-top: 40px;
 `;
 
 export default DefaultMode;

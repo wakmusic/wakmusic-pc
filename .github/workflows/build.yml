@@ -32,12 +32,10 @@ jobs:
 
       - name: Write Commit Hash
         id: write_commit_hash
-        run: echo "${{ github.sha }}" | cut -c1-7
+        run: echo "VITE_COMMIT_HASH=$(echo "${{ github.sha }}" | cut -c1-7)" >> .env
 
       - name: Build
         run: yarn build:web
-        env:
-          VITE_COMMIT_HASH: ${{ steps.write_commit_hash.outputs.stdout }}
 
       - name: Push
         uses: cpina/github-action-push-to-another-repository@main

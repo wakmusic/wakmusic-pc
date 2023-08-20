@@ -8,7 +8,7 @@ import VirtualItem from "@layouts/VirtualItem";
 import { useInterval } from "@hooks/interval";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { OrderdSong, Song } from "@templates/song";
+import { OrderdSongType, Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 import { isNull } from "@utils/isTypes";
@@ -24,7 +24,7 @@ interface CustomSongsProps {
   selectedIncludes: (song: Song, index: number) => boolean;
   onEdit?: (newSongs: Song[]) => void;
 
-  selectedSongs: OrderdSong[];
+  selectedSongs: OrderdSongType[];
   children: Song[];
 }
 

@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
 
-import { OrderdSong, Song } from "@templates/song";
+import { OrderdSongType, Song } from "@templates/song";
 
 import { isUndefined } from "@utils/isTypes";
 
 export const useSelectSongs = () => {
-  const [selected, setSelected] = useState<OrderdSong[]>([]);
+  const [selected, setSelected] = useState<OrderdSongType[]>([]);
 
   const selectCallback = (song: Song | Song[], index?: number) => {
     if (Array.isArray(song)) {
@@ -17,7 +17,7 @@ export const useSelectSongs = () => {
       ) {
         setSelected([]);
       } else {
-        const newSelected: OrderdSong[] = song.map((item, index) => ({
+        const newSelected: OrderdSongType[] = song.map((item, index) => ({
           ...item,
           index: index,
         }));
@@ -30,7 +30,7 @@ export const useSelectSongs = () => {
 
     if (isUndefined(index)) return;
 
-    const item: OrderdSong = {
+    const item: OrderdSongType = {
       ...song,
       index: index,
     };

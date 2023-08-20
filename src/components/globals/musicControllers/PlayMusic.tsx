@@ -2,17 +2,23 @@ import styled from "styled-components/macro";
 
 import { ReactComponent as Play } from "@assets/icons/ic_24_play_25.svg";
 
-import { T7Medium } from "@components/Typography/Medium";
+import { T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface PlayMusicProps {}
+interface PlayMusicProps {
+  onClick?: () => void;
+}
 
-const PlayMusic = ({}: PlayMusicProps) => {
+const PlayMusic = ({ onClick }: PlayMusicProps) => {
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={() => {
+        onClick && onClick();
+      }}
+    >
       <Play />
-      <T7Medium color={colors.blueGray25}>재생</T7Medium>
+      <T7Light color={colors.blueGray25}>재생</T7Light>
     </Wrapper>
   );
 };

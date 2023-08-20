@@ -5,8 +5,9 @@ import styled from "styled-components/macro";
 import { fetchSearchTab } from "@apis/songs";
 
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import SongItem from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 import VirtualItem from "@layouts/VirtualItem";
@@ -18,6 +19,7 @@ import useVirtualizer from "@hooks/virtualizer";
 
 import { SearchTabType } from "@templates/search";
 import { SongTotal } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 import NotFound from "../NotFound";
 
@@ -27,7 +29,8 @@ interface ListProps {
 }
 
 const List = ({ tab, query }: ListProps) => {
-  const { selected, setSelected, selectCallback } = useSelectSongs();
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
 
   const {
     data: songsData,
@@ -100,7 +103,8 @@ const List = ({ tab, query }: ListProps) => {
               ) : (
                 <SongItem
                   song={item}
-                  selected={selected.includes(item)}
+                  index={virtualItem.index}
+                  selected={selectedIncludes(item, virtualItem.index)}
                   features={[
                     SongItemFeature.date,
                     SongItemFeature.views,
@@ -113,6 +117,12 @@ const List = ({ tab, query }: ListProps) => {
           );
         })}
       </PageItemContainer>
+
+      <MusicController
+        songs={songs}
+        selectedSongs={selected}
+        dispatchSelectedSongs={selectCallback}
+      />
     </Container>
   );
 };

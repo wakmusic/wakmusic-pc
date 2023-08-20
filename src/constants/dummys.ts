@@ -114,6 +114,19 @@ export const userInfo = {
   via: "카카오톡",
 };
 
+export const dummySong = {
+  songId: "dummySongId",
+  title: "dummy'",
+  artist: "dummy",
+  remix: "",
+  reaction: "",
+  date: 230525,
+  start: 0,
+  end: 0,
+  like: 0,
+  total: { views: 580998, increase: 333, last: 21 },
+};
+
 export const hourlyChart = [
   {
     songId: "XqAKiaxAdu0",
@@ -2023,7 +2036,42 @@ export const songList: SongsSearchResponse = {
   ],
 };
 
-const myListSongs = [
+export const profileList = [
+  {
+    type: "panchi",
+    version: 2,
+  },
+  {
+    type: "ifari",
+    version: 2,
+  },
+  {
+    type: "dulgi",
+    version: 2,
+  },
+  {
+    type: "bat",
+    version: 2,
+  },
+  {
+    type: "segyun",
+    version: 2,
+  },
+  {
+    type: "gorani",
+    version: 2,
+  },
+  {
+    type: "jupock",
+    version: 2,
+  },
+  {
+    type: "ddong",
+    version: 2,
+  },
+];
+
+export const myListSongs = [
   {
     songId: "QgMFpuos4Rg",
     title: "LOCKDOWN",

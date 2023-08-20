@@ -14,22 +14,21 @@ import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";
 import { ReactComponent as RandomPlay } from "@assets/icons/ic_24_random_900.svg";
 
 import { T3Medium, T6Light } from "@components/Typography";
+import CustomSongs from "@components/globals/CustomSongs";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import IconButton from "@components/globals/IconButton";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import TextButton from "@components/globals/TextButton";
-
-import PageItemContainer from "@layouts/PageItemContainer";
-import VirtualItem from "@layouts/VirtualItem";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import colors from "@constants/colors";
 
 import { usePlaySongs } from "@hooks/player";
 import { usePlaylistState } from "@hooks/playlist";
+import { useSelectSongs } from "@hooks/selectSongs";
 import { useShareListModal } from "@hooks/shareListModal";
-import useVirtualizer from "@hooks/virtualizer";
 
 import { BasePlaylist, PlaylistType } from "@templates/playlist";
+import { SongItemFeature } from "@templates/songItem";
 
 import { getPlaylistIcon, getRecommendSquareImage } from "@utils/staticUtill";
 
@@ -73,9 +72,7 @@ const Playlist = ({}: PlaylistProps) => {
   const shareListModal = useShareListModal();
   const playSongs = usePlaySongs();
 
-  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
-    playlist.songs ?? []
-  );
+  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
 
   // TODO
   if (!playlist) return <div>loading...</div>;
@@ -141,25 +138,26 @@ const Playlist = ({}: PlaylistProps) => {
         ]}
       />
 
-      <PageItemContainer
+      <CustomSongs
         height={281}
-        ref={viewportRef}
-        totalSize={getTotalSize()}
+        onSongClick={selectCallback}
+        selectedIncludes={selectedIncludes}
+        selectedSongs={selected}
+        songFeatures={[
+          SongItemFeature.date,
+          SongItemFeature.views,
+          SongItemFeature.like,
+        ]}
       >
-        {virtualMap((virtualItem, item) => (
-          <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
-            <SongItem
-              song={item}
-              selected={false}
-              features={[
-                SongItemFeature.date,
-                SongItemFeature.views,
-                SongItemFeature.like,
-              ]}
-            />
-          </VirtualItem>
-        ))}
-      </PageItemContainer>
+        {playlist.songs ?? []}
+      </CustomSongs>
+
+      <MusicController
+        displayDefault={false}
+        songs={playlist.songs ?? []}
+        selectedSongs={selected}
+        dispatchSelectedSongs={selectCallback}
+      />
     </Container>
   );
 };

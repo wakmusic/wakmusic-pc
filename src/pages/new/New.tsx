@@ -7,9 +7,10 @@ import { NewSongsType, fetchNewSongs } from "@apis/songs";
 
 import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import SongItem from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
 import UpdatedText from "@components/globals/UpdatedText";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -25,6 +26,7 @@ import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { SongTotal } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 interface NewProps {}
 
@@ -35,7 +37,8 @@ const New = ({}: NewProps) => {
     [searchParams]
   );
 
-  const { selected, setSelected, selectCallback } = useSelectSongs();
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
   const playSongs = usePlaySongs();
 
   const {
@@ -126,7 +129,8 @@ const New = ({}: NewProps) => {
                 ) : (
                   <SongItem
                     song={item}
-                    selected={selected.includes(item)}
+                    index={virtualItem.index}
+                    selected={selectedIncludes(item, virtualItem.index)}
                     features={[
                       SongItemFeature.last,
                       SongItemFeature.date,
@@ -139,6 +143,12 @@ const New = ({}: NewProps) => {
             );
           })}
         </PageItemContainer>
+
+        <MusicController
+          songs={songs}
+          selectedSongs={selected}
+          dispatchSelectedSongs={selectCallback}
+        />
       </PageContainer>
     </PageLayout>
   );

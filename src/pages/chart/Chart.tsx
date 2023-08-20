@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 
@@ -6,8 +6,9 @@ import { ChartsType, fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
 
 import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import SongItem from "@components/globals/SongItem";
 import UpdatedText from "@components/globals/UpdatedText";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -18,14 +19,18 @@ import { chartTabs } from "@constants/tabs";
 import { lastTextMap } from "@constants/textMap";
 
 import { usePlaySongs } from "@hooks/player";
+import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
+
+import { SongItemFeature } from "@templates/songItem";
 
 interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
   const [searchParams] = useSearchParams();
-  const { selected, setSelected, selectCallback } = useSelectSongs();
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
   const tab = useMemo(
     () => (searchParams.get("type") ?? "hourly") as ChartsType,
     [searchParams]
@@ -55,10 +60,7 @@ const Chart = ({}: ChartProps) => {
     charts ?? []
   );
 
-  useEffect(() => {
-    setSelected([]);
-    viewportRef.current?.scrollTo(0, 0);
-  }, [tab, viewportRef, setSelected]);
+  useScrollToTop(tab, viewportRef, setSelected);
 
   // TODO
   if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)
@@ -98,7 +100,8 @@ const Chart = ({}: ChartProps) => {
               <SongItem
                 rank={virtualItem.index + 1}
                 song={item}
-                selected={selected.includes(item)}
+                index={virtualItem.index}
+                selected={selectedIncludes(item, virtualItem.index)}
                 features={[
                   tab !== "total" ? SongItemFeature.last : undefined,
                   SongItemFeature.date,
@@ -110,6 +113,12 @@ const Chart = ({}: ChartProps) => {
             </VirtualItem>
           ))}
         </PageItemContainer>
+
+        <MusicController
+          songs={charts ?? []}
+          selectedSongs={selected}
+          dispatchSelectedSongs={selectCallback}
+        />
       </PageContainer>
     </PageLayout>
   );

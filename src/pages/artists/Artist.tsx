@@ -13,10 +13,11 @@ import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg"
 import ArtistInfo from "@components/artists/ArtistInfo";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import IconButton from "@components/globals/IconButton";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import SongItem from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -32,11 +33,13 @@ import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { SongSortType, SongTotal } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 interface ArtistProps {}
 
 const Artist = ({}: ArtistProps) => {
-  const { selected, setSelected, selectCallback } = useSelectSongs();
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
   const [searchParams] = useSearchParams();
   const tab = (searchParams.get("tab") as SongSortType) ?? "new";
 
@@ -181,7 +184,8 @@ const Artist = ({}: ArtistProps) => {
                 ) : (
                   <SongItem
                     song={item}
-                    selected={selected.includes(item)}
+                    index={virtualItem.index}
+                    selected={selectedIncludes(item, virtualItem.index)}
                     features={[
                       SongItemFeature.date,
                       SongItemFeature.views,
@@ -194,6 +198,12 @@ const Artist = ({}: ArtistProps) => {
             );
           })}
         </PageItemContainer>
+
+        <MusicController
+          songs={albums}
+          selectedSongs={selected}
+          dispatchSelectedSongs={selectCallback}
+        />
       </PageContainer>
     </PageLayout>
   );

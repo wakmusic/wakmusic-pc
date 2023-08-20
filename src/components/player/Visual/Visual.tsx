@@ -110,31 +110,38 @@ const Container = styled(motion.div)<{ $image: string; $on: boolean }>`
     `}
 `;
 
-const Wrapper = styled.div<{ $zoom: number }>`
+const Wrapper = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
+  style: {
+    backdropFilter: `blur(calc(35px * ${$zoom}))`,
+  },
+}))`
   width: 100%;
   height: 100%;
 
   background-color: rgba(25, 26, 28, 0.6);
-  backdrop-filter: blur(calc(35px * ${({ $zoom }) => $zoom}));
 `;
 
-const InnerContainer = styled.div<{ $zoom: number }>`
+const InnerContainer = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
+  style: {
+    zoom: $zoom,
+  },
+}))`
   width: 100%;
   height: 100%;
 
   display: flex;
   justify-content: center;
   align-items: center;
-
-  zoom: ${({ $zoom }) => $zoom};
 `;
 
-const InnerWrapper = styled.div<{ $zoom: number }>`
+const InnerWrapper = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
+  style: {
+    marginBottom: `calc(74px / ${$zoom})`,
+  },
+}))`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  margin-bottom: calc(74px / ${({ $zoom }) => $zoom});
 `;
 
 export default Visual;

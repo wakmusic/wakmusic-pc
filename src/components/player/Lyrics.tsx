@@ -97,9 +97,12 @@ const Lyrics = ({ size }: LyricsProps) => {
   }, 1000);
 
   useEffect(() => {
-    ipcRenderer?.on("window:resize", () => {
-      setPosition(false);
-    });
+    ipcRenderer?.on(
+      "window:resize",
+      throttle(() => {
+        setPosition(false);
+      })
+    );
 
     return () => {
       ipcRenderer?.removeAllListeners("window:resize");

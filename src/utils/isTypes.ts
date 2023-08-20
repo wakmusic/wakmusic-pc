@@ -15,13 +15,13 @@ export const isObject = (object: unknown): object is object => {
 };
 
 export const isNil = (item: unknown): item is null | undefined => {
-  return typeof item === null || typeof item === undefined;
+  return item === null || item === undefined;
 };
 
 export const isUndefined = (item: unknown): item is undefined => {
-  return typeof item === undefined;
+  return item === undefined;
 };
 
 export const isNull = (item: unknown): item is null => {
-  return typeof item === null;
+  return item === null;
 };

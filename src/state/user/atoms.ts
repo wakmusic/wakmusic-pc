@@ -23,7 +23,7 @@ export const dragAndDropState = atom<dragAndDropStatetype>({
   },
 });
 
-export const userState = atom<User | null>({
+export const userState = atom<User | null | undefined>({
   key: "userState",
   default: null,
 });

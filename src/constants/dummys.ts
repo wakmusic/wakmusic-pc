@@ -2023,41 +2023,6 @@ export const songList: SongsSearchResponse = {
   ],
 };
 
-export const profileList = [
-  {
-    type: "panchi",
-    version: 2,
-  },
-  {
-    type: "ifari",
-    version: 2,
-  },
-  {
-    type: "dulgi",
-    version: 2,
-  },
-  {
-    type: "bat",
-    version: 2,
-  },
-  {
-    type: "segyun",
-    version: 2,
-  },
-  {
-    type: "gorani",
-    version: 2,
-  },
-  {
-    type: "jupock",
-    version: 2,
-  },
-  {
-    type: "ddong",
-    version: 2,
-  },
-];
-
 const myListSongs = [
   {
     songId: "QgMFpuos4Rg",

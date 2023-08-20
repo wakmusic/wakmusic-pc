@@ -18,7 +18,7 @@ import { PlaylistType } from "@templates/playlist";
 
 import { getPlaylistIcon } from "@utils/staticUtill";
 
-import ListNameInput from "../globals/ListNameInput";
+import Input from "../globals/Input";
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
 
 interface AddListModalProps {}
@@ -49,6 +49,7 @@ const AddListModal = ({}: AddListModalProps) => {
     setOpen(false);
     setName("");
 
+    // TODO
     setLists([
       ...lists,
       {
@@ -56,11 +57,13 @@ const AddListModal = ({}: AddListModalProps) => {
         title: name,
         createAt: 1684622625731,
         user: {
-          displayName: "이름",
+          name: "이름",
           profile: {
             type: "gorani",
             version: 2,
           },
+          platform: "google",
+          userId: "",
         },
         image: {
           name: "1",
@@ -91,7 +94,7 @@ const AddListModal = ({}: AddListModalProps) => {
 
         <InputContainer>
           {open ? (
-            <ListNameInput
+            <Input
               value={name}
               onChange={setName}
               onCancel={() => setOpen(false)}

@@ -18,6 +18,7 @@ import CreateListModal from "@components/modals/CreateListModal";
 import LoadListModal from "@components/modals/LoadListModal";
 import LoginModal from "@components/modals/LoginModal";
 import SelectProfileModal from "@components/modals/SelectProfileModal";
+import SetUsernameModal from "@components/modals/SetUsernameModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
@@ -107,6 +108,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <LoadListModal />
           <ShareListModal />
           <AddListModal />
+          <SetUsernameModal />
         </ModalPortal>
 
         <SchemeHandler />

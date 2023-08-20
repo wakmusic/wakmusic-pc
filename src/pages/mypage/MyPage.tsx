@@ -1,6 +1,8 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
+
+import { removeUser, setProfileImage, setUsername } from "@apis/user";
 
 import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
 import { ReactComponent as EditSVG } from "@assets/icons/ic_24_edit.svg";
@@ -22,22 +24,66 @@ import colors from "@constants/colors";
 import { blocks } from "@constants/myPage";
 import platforms from "@constants/platforms";
 
+import { useConfirmModal } from "@hooks/confirmModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
+import { useSelectProfileModal } from "@hooks/profileModal";
+import { useSetUsernameModal } from "@hooks/setUsernameModal";
 import { useUserState } from "@hooks/user";
 
+import { isNull } from "@utils/isTypes";
+import { ipcRenderer } from "@utils/modules";
 import { getProfileImg } from "@utils/staticUtill";
 
 interface MyPageProps {}
 
 const MyPage = ({}: MyPageProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const [user] = useUserState();
+  const [user, setUser] = useUserState();
   const loginModalOpener = useLoginModalOpener();
+  const selectProfileModal = useSelectProfileModal();
+  const setUsernameModal = useSetUsernameModal();
+  const confirmModal = useConfirmModal();
 
   useEffect(() => {
-    if (!user) loginModalOpener();
+    if (isNull(user)) loginModalOpener();
   }, [user, loginModalOpener]);
+
+  const setProfileHandler = async () => {
+    if (!user) return;
+
+    const newProfile = await selectProfileModal(user.profile);
+
+    if (newProfile) {
+      await setProfileImage(newProfile);
+      setUser({ ...user, profile: newProfile });
+    }
+  };
+
+  const setUsernameHandler = async () => {
+    if (!user) return;
+
+    const newUsername = await setUsernameModal(user.name);
+
+    if (newUsername) {
+      await setUsername(newUsername);
+      setUser({ ...user, name: newUsername });
+    }
+  };
+
+  const quitHandler = async () => {
+    const res = await confirmModal("정말로 회원탈퇴 하시겠습니까?", null);
+
+    if (res) {
+      await removeUser();
+
+      if (ipcRenderer) ipcRenderer.send("logout");
+
+      navigate("/");
+      setUser(undefined);
+    }
+  };
 
   if (!user) return <PageLayout />;
 
@@ -50,20 +96,20 @@ const MyPage = ({}: MyPageProps) => {
           <FlexDiv>
             <ImageContainer>
               <ProfileImage src={getProfileImg(user.profile)} />
-              <Setting />
+              <Setting onClick={setProfileHandler} />
             </ImageContainer>
             <InfoContainer>
               <UserContainer>
                 <Username>{user.name}</Username>
                 <Designation>님</Designation>
-                <IconCotainer>
+                <IconCotainer onClick={setUsernameHandler}>
                   <EditSVG />
                 </IconCotainer>
               </UserContainer>
               <Via>{platforms[user.platform]}로 로그인 중</Via>
             </InfoContainer>
           </FlexDiv>
-          <QuitButton>
+          <QuitButton onClick={quitHandler}>
             <T6Medium>회원탈퇴</T6Medium>
           </QuitButton>
         </ProfileBlock>

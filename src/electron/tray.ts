@@ -69,7 +69,11 @@ export const initTray = () => {
   tray.setToolTip("왁타버스 뮤직");
 
   return (label: string) => {
-    template[1].label = label;
+    const templateIndex = template.findIndex(
+      (item) => item.label === "로그인" || item.label === "로그아웃"
+    );
+
+    template[templateIndex].label = label;
     const contextMenu = Menu.buildFromTemplate(template);
     tray.setContextMenu(contextMenu);
   };

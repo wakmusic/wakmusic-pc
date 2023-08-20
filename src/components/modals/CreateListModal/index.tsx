@@ -8,9 +8,9 @@ import colors from "@constants/colors";
 import { useCreateListModalState } from "@hooks/createListModal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
+import ListNameInput from "../globals/ListNameInput";
 import TwoButton from "../globals/TwoButton";
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
-import Input from "./Input";
 
 interface CreateListModalProps {}
 
@@ -38,7 +38,7 @@ const CreateListModal = ({}: CreateListModalProps) => {
         <InputContainer>
           <T5Light color={colors.blueGray400}>리스트 명</T5Light>
 
-          <Input value={value} onChange={setValue} />
+          <ListNameInput value={value} onChange={setValue} />
         </InputContainer>
 
         <ButtonsWrapper>

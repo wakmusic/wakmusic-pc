@@ -4,11 +4,14 @@ import styled from "styled-components/macro";
 import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
+import platforms from "@constants/platforms";
+
+import { LoginPlatform } from "@templates/user";
 
 interface ButtonProps {
-  platform: string;
+  platform: LoginPlatform;
   children: ReactNode;
-  onClick: (platform: string) => void;
+  onClick: (platform: LoginPlatform) => void;
 }
 
 const Button = ({ platform, children, onClick }: ButtonProps) => {
@@ -19,7 +22,9 @@ const Button = ({ platform, children, onClick }: ButtonProps) => {
       }}
     >
       <IconContainer>{children}</IconContainer>
-      <T6Medium color={colors.gray900}>{platform}로 로그인하기</T6Medium>
+      <T6Medium color={colors.gray900}>
+        {platforms[platform]}로 로그인하기
+      </T6Medium>
     </Container>
   );
 };

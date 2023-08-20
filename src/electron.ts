@@ -1,59 +1,73 @@
-import { BrowserWindow, app, ipcMain, nativeImage } from "electron";
-import * as isDev from "electron-is-dev";
-import { join } from "path";
+import { BrowserWindow, app, ipcMain, nativeImage, session } from "electron";
+import { join, resolve } from "path";
 
-import {
-  changePresence,
-  client,
-  setProgress,
-  showPlaying,
-} from "./electron/discord";
-import { SongInfo } from "./templates/player";
+import { SongInfo } from "@templates/player";
+
+import { changePresence, setProgress, showPlaying } from "./electron/discord";
+import { schemeHandler } from "./electron/scheme";
+
+declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
+
+if (require("electron-squirrel-startup")) {
+  app.quit();
+}
+
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+}
 
 app.commandLine.appendSwitch("disable-site-isolation-trials");
 
-(async () => {
-  // Initialize the Electron application
-  app.whenReady().then(() => {
-    const win = new BrowserWindow({
-      width: 1250,
-      height: 714,
-      minWidth: 1250,
-      minHeight: 714,
-      frame: false,
-      show: false,
-      backgroundColor: "#FFF",
-      icon: nativeImage.createFromPath(
-        join(__dirname, "../public/favicon.ico")
-      ),
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        webSecurity: false,
-        allowRunningInsecureContent: false,
-      },
-    });
+if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+  app.setAsDefaultProtocolClient("wakmusic", process.execPath, [
+    resolve(process.argv[1]),
+  ]);
+} else {
+  app.setAsDefaultProtocolClient("wakmusic");
+}
 
-    win.setMenuBarVisibility(false);
-
-    if (isDev) {
-      win.webContents.openDevTools();
-
-      if (process.env.BUILD_TYPE === "1") {
-        win.loadFile(join(__dirname, "../dist/index.html"));
-      } else {
-        win.loadURL(`http://localhost:3000`);
-      }
-    } else {
-      win.loadFile(join(__dirname, "../dist/index.html"));
-    }
-
-    win.once("ready-to-show", () => {
-      win.show();
-      client.login();
-    });
+app.whenReady().then(() => {
+  const win = new BrowserWindow({
+    width: 1250,
+    height: 714,
+    minWidth: 1250,
+    minHeight: 714,
+    frame: false,
+    show: false,
+    backgroundColor: "#FFF",
+    icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+      webSecurity: false,
+      allowRunningInsecureContent: false,
+    },
   });
-})();
+
+  win.setMenuBarVisibility(false);
+
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    win.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+  } else {
+    win.loadURL(import.meta.env.VITE_PUBLISH_URL);
+  }
+
+  win.once("ready-to-show", () => {
+    win.show();
+  });
+});
+
+app.on("open-url", function (_, url) {
+  schemeHandler(url);
+});
+
+app.on("second-instance", (_, argv, __) => {
+  if (process.platform === "win32") {
+    schemeHandler(argv[argv.length - 1]);
+  }
+});
 
 ipcMain.on("window:least", () => {
   const win = BrowserWindow.getFocusedWindow();
@@ -137,4 +151,8 @@ ipcMain.on("rpc:playing", (_event, isPlaying: boolean) => {
 
 ipcMain.on("rpc:track", (_event, current: SongInfo | null) => {
   changePresence(current);
+});
+
+ipcMain.on("logout", () => {
+  session.defaultSession.cookies.remove(import.meta.env.VITE_API_URL, "token");
 });

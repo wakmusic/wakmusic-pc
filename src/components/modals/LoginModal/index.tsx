@@ -11,6 +11,10 @@ import colors from "@constants/colors";
 
 import { useLoginModalState } from "@hooks/loginModal";
 
+import { LoginPlatform } from "@templates/user";
+
+import { openExternal } from "@utils/modules";
+
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
 import Button from "./Button";
 
@@ -21,14 +25,18 @@ const LoginModal = ({}: LoginModalProps) => {
 
   if (!loginModalState) return null;
 
-  const handleLogin = (platform: string) => {
-    alert(`${platform}로 로그인합니다.`);
+  const handleLogin = (platform: LoginPlatform) => {
+    // TODO: 추후 웹 환경에서도 로그인 가능하도록 패치 필요
+    const openFn = openExternal || ((url: string) => open(url, "_blank"));
+
+    openFn(`${import.meta.env.VITE_API_URL}/v2/auth/pc/login/${platform}`);
+
     setLoginModalState(false);
   };
 
   return (
-    <ModalOverlay>
-      <Modal>
+    <ModalOverlay onClick={() => setLoginModalState(false)}>
+      <Modal onClick={(e) => e.stopPropagation()}>
         <Header>
           <AppIconSVG />
 
@@ -39,15 +47,15 @@ const LoginModal = ({}: LoginModalProps) => {
         </Header>
 
         <Buttons>
-          <Button platform="네이버" onClick={handleLogin}>
+          <Button platform="naver" onClick={handleLogin}>
             <NaverIconSVG />
           </Button>
 
-          <Button platform="구글" onClick={handleLogin}>
+          <Button platform="google" onClick={handleLogin}>
             <GoogleIconSVG />
           </Button>
 
-          <Button platform="애플" onClick={handleLogin}>
+          <Button platform="apple" onClick={handleLogin}>
             <AppleIconSVG />
           </Button>
         </Buttons>

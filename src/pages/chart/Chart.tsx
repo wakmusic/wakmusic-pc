@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 
@@ -15,17 +15,17 @@ import PageLayout from "@layouts/PageLayout";
 import VirtualItem from "@layouts/VirtualItem";
 
 import { chartTabs } from "@constants/tabs";
+import { lastTextMap } from "@constants/textMap";
 
 import { usePlaySongs } from "@hooks/player";
+import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
-
-import { Song } from "@templates/song";
 
 interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
   const [searchParams] = useSearchParams();
-  const [selected, setSelected] = useState<Song[]>([]);
+  const { selected, setSelected, selectCallback } = useSelectSongs();
   const tab = useMemo(
     () => (searchParams.get("type") ?? "hourly") as ChartsType,
     [searchParams]
@@ -58,7 +58,7 @@ const Chart = ({}: ChartProps) => {
   useEffect(() => {
     setSelected([]);
     viewportRef.current?.scrollTo(0, 0);
-  }, [tab, viewportRef]);
+  }, [tab, viewportRef, setSelected]);
 
   // TODO
   if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)
@@ -78,10 +78,11 @@ const Chart = ({}: ChartProps) => {
         <UpdatedText updated={chartUpdated} marginTop={12} marginLeft={20} />
 
         <GuideBar
+          lastText={tab !== "total" ? lastTextMap[tab] : undefined}
           features={[
             GuideBarFeature.rank,
             GuideBarFeature.info,
-            GuideBarFeature.last,
+            tab !== "total" ? GuideBarFeature.last : undefined,
             GuideBarFeature.date,
             GuideBarFeature.views,
           ]}
@@ -99,17 +100,12 @@ const Chart = ({}: ChartProps) => {
                 song={item}
                 selected={selected.includes(item)}
                 features={[
-                  SongItemFeature.last,
+                  tab !== "total" ? SongItemFeature.last : undefined,
                   SongItemFeature.date,
                   SongItemFeature.views,
                 ]}
-                onClick={(song) => {
-                  if (selected.includes(song)) {
-                    setSelected(selected.filter((item) => item !== song));
-                  } else {
-                    setSelected([...selected, song]);
-                  }
-                }}
+                onClick={selectCallback}
+                useIncrease={tab !== "total"}
               />
             </VirtualItem>
           ))}

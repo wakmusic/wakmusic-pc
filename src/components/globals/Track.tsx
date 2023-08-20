@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components/macro";
+import styled from "styled-components/macro";
 
 import { ReactComponent as PlaySVG } from "@assets/icons/ic_30_play_point.svg";
 
@@ -11,6 +11,8 @@ import { usePlaySong } from "@hooks/player";
 import { Song } from "@templates/song";
 
 import { getYoutubeThumbnail } from "@utils/staticUtill";
+
+import Marquee from "./Marquee";
 
 interface TrackProps {
   item: Song;
@@ -33,9 +35,18 @@ const Track = ({ item, maxWidth }: TrackProps) => {
 
       <Thumbnail src={getYoutubeThumbnail(item.songId)} />
 
-      <TrackInfo>
-        <TrackTitle $maxWidth={maxWidth}>{item.title}</TrackTitle>
-        <TrackArtist $maxWidth={maxWidth}>{item.artist}</TrackArtist>
+      <TrackInfo $maxWidth={maxWidth}>
+        <Marquee width={maxWidth || 356} hoverOnPlay>
+          <T5Medium title={item.title} color={colors.gray700}>
+            {item.title}
+          </T5Medium>
+        </Marquee>
+
+        <Marquee width={maxWidth || 356} hoverOnPlay>
+          <T6Medium title={item.artist} color={colors.blueGray500}>
+            {item.artist}
+          </T6Medium>
+        </Marquee>
       </TrackInfo>
     </Container>
   );
@@ -78,24 +89,8 @@ const Container = styled.div`
   }
 `;
 
-const TrackInfo = styled.div``;
-
-const TrackStyle = css<{ $maxWidth?: number }>`
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-
-  max-width: ${({ $maxWidth }) => $maxWidth ?? 206}px;
-`;
-
-const TrackTitle = styled(T5Medium)<{ $maxWidth?: number }>`
-  ${TrackStyle};
-  color: ${colors.gray700};
-`;
-
-const TrackArtist = styled(T6Medium)<{ $maxWidth?: number }>`
-  ${TrackStyle};
-  color: ${colors.blueGray500};
+const TrackInfo = styled.div<{ $maxWidth?: number }>`
+  max-width: ${({ $maxWidth }) => $maxWidth ?? 356}px;
 `;
 
 export default Track;

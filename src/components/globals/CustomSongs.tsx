@@ -185,7 +185,7 @@ const CustomSongs = ({
     if (!editMode) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (isMouseDown) {
+      if (editMode) {
         setMouseY(e.clientY);
       }
     };

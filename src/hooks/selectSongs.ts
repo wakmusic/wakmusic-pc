@@ -1,41 +1,74 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-import { Song } from "@templates/song";
+import { OrderdSong, Song } from "@templates/song";
+
+import { isUndefined } from "@utils/isTypes";
 
 export const useSelectSongs = () => {
-  const [selected, setSelected] = useState<Song[]>([]);
+  const [selected, setSelected] = useState<OrderdSong[]>([]);
 
-  const selectCallback = (song: Song | Song[]) => {
+  const selectCallback = (song: Song | Song[], index?: number) => {
     if (Array.isArray(song)) {
-      const _song = song
-        .slice()
-        .sort((a, b) =>
-          a.songId < b.songId ? -1 : a.songId == b.songId ? 0 : 1
-        );
-      const _selected = selected
-        .slice()
-        .sort((a, b) =>
-          a.songId < b.songId ? -1 : a.songId == b.songId ? 0 : 1
-        );
-
       if (
-        _selected.length === _song.length &&
-        _selected.every((value, index) => value === _song[index])
+        selected.length === song.length &&
+        selected.every((value, index) =>
+          selectedIncludes(song[index], value.index)
+        )
       ) {
         setSelected([]);
       } else {
-        setSelected(song);
+        const newSelected: OrderdSong[] = song.map((item, index) => ({
+          ...item,
+          index: index,
+        }));
+
+        setSelected(newSelected);
       }
 
       return;
     }
 
-    if (selected.includes(song)) {
-      setSelected(selected.filter((s) => s !== song));
+    if (isUndefined(index)) return;
+
+    const item: OrderdSong = {
+      ...song,
+      index: index,
+    };
+
+    if (selectedIncludes(song, index)) {
+      const newSelected = selected.slice();
+      let selectedIndex = -1;
+
+      selected.forEach((value, index) => {
+        if (JSON.stringify(value) === JSON.stringify(item)) {
+          selectedIndex = index;
+        }
+      });
+
+      newSelected.splice(selectedIndex, 1);
+
+      setSelected(newSelected);
     } else {
-      setSelected([...selected, song]);
+      const newSelected = selected.slice();
+      newSelected.push(item);
+      newSelected.sort((a, b) => a.index - b.index);
+
+      setSelected(newSelected);
     }
   };
 
-  return { selected, setSelected, selectCallback };
+  const selectedIncludes = useCallback(
+    (song: Song, index: number) =>
+      !selected.every(
+        (value) =>
+          JSON.stringify(value) !==
+          JSON.stringify({
+            ...song,
+            index: index,
+          })
+      ),
+    [selected]
+  );
+
+  return { selected, setSelected, selectCallback, selectedIncludes };
 };

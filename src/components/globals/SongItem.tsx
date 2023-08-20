@@ -19,13 +19,14 @@ import Track from "./Track";
 
 interface SongItemProps {
   song: Song;
+  index?: number;
 
   rank?: number;
   editMode?: boolean;
   features?: (SongItemFeature | undefined)[];
   selected?: boolean;
 
-  onClick?: (song: Song) => void;
+  onClick?: (song: Song, index?: number) => void;
   onEdit?: (event: React.MouseEvent) => void;
 
   useIncrease?: boolean;
@@ -61,6 +62,7 @@ const featureBuilder = (
 
 const SongItem = ({
   song,
+  index,
   rank,
   editMode,
   features,
@@ -91,7 +93,7 @@ const SongItem = ({
 
   return (
     <Container
-      onClick={() => onClick && onClick(song)}
+      onClick={() => onClick && onClick(song, index)}
       $selected={selected}
       $noPadding={noPadding}
     >

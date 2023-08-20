@@ -29,7 +29,8 @@ interface ListProps {
 }
 
 const List = ({ tab, query }: ListProps) => {
-  const { selected, setSelected, selectCallback } = useSelectSongs();
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
 
   const {
     data: songsData,
@@ -102,7 +103,8 @@ const List = ({ tab, query }: ListProps) => {
               ) : (
                 <SongItem
                   song={item}
-                  selected={selected.includes(item)}
+                  index={virtualItem.index}
+                  selected={selectedIncludes(item, virtualItem.index)}
                   features={[
                     SongItemFeature.date,
                     SongItemFeature.views,

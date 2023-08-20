@@ -37,7 +37,8 @@ const New = ({}: NewProps) => {
     [searchParams]
   );
 
-  const { selected, setSelected, selectCallback } = useSelectSongs();
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
   const playSongs = usePlaySongs();
 
   const {
@@ -128,7 +129,8 @@ const New = ({}: NewProps) => {
                 ) : (
                   <SongItem
                     song={item}
-                    selected={selected.includes(item)}
+                    index={virtualItem.index}
+                    selected={selectedIncludes(item, virtualItem.index)}
                     features={[
                       SongItemFeature.last,
                       SongItemFeature.date,

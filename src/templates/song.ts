@@ -46,3 +46,7 @@ export type Song =
   | SongTotal;
 
 export type SongSortType = "popular" | "new" | "old";
+
+export type OrderdSong = Song & {
+  index: number;
+};

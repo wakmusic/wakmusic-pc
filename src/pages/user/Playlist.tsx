@@ -72,7 +72,7 @@ const Playlist = ({}: PlaylistProps) => {
   const shareListModal = useShareListModal();
   const playSongs = usePlaySongs();
 
-  const { selected, selectCallback } = useSelectSongs();
+  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
 
   // TODO
   if (!playlist) return <div>loading...</div>;
@@ -141,6 +141,7 @@ const Playlist = ({}: PlaylistProps) => {
       <CustomSongs
         height={281}
         onSongClick={selectCallback}
+        selectedIncludes={selectedIncludes}
         selectedSongs={selected}
         songFeatures={[
           SongItemFeature.date,

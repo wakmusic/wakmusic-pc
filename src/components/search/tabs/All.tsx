@@ -37,7 +37,7 @@ const All = ({ query, res }: AllProps) => {
       ),
     [res]
   );
-  const { selected, selectCallback } = useSelectSongs();
+  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
 
   return (
     <PageItemContainer height={142}>
@@ -65,7 +65,8 @@ const All = ({ query, res }: AllProps) => {
               <SongItem
                 key={index}
                 song={song}
-                selected={selected.includes(song)}
+                index={index}
+                selected={selectedIncludes(song, index)}
                 onClick={selectCallback}
                 noPadding
                 forceWidth={650}

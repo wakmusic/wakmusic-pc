@@ -38,7 +38,8 @@ import { SongItemFeature } from "@templates/songItem";
 interface ArtistProps {}
 
 const Artist = ({}: ArtistProps) => {
-  const { selected, setSelected, selectCallback } = useSelectSongs();
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
   const [searchParams] = useSearchParams();
   const tab = (searchParams.get("tab") as SongSortType) ?? "new";
 
@@ -183,7 +184,8 @@ const Artist = ({}: ArtistProps) => {
                 ) : (
                   <SongItem
                     song={item}
-                    selected={selected.includes(item)}
+                    index={virtualItem.index}
+                    selected={selectedIncludes(item, virtualItem.index)}
                     features={[
                       SongItemFeature.date,
                       SongItemFeature.views,

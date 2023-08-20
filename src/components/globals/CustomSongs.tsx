@@ -8,7 +8,7 @@ import VirtualItem from "@layouts/VirtualItem";
 import { useInterval } from "@hooks/interval";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { Song } from "@templates/song";
+import { OrderdSong, Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 import { isNull } from "@utils/isTypes";
@@ -20,10 +20,11 @@ interface CustomSongsProps {
   editMode?: boolean;
   songFeatures?: SongItemFeature[];
 
-  onSongClick: (song: Song | Song[]) => void;
+  onSongClick: (song: Song | Song[], index: number) => void;
+  selectedIncludes: (song: Song, index: number) => boolean;
   onEdit?: (newSongs: Song[]) => void;
 
-  selectedSongs: Song[];
+  selectedSongs: OrderdSong[];
   children: Song[];
 }
 
@@ -44,8 +45,8 @@ const CustomSongs = ({
   editMode = false,
   songFeatures,
   onSongClick,
+  selectedIncludes,
   onEdit,
-  selectedSongs,
   children,
 }: CustomSongsProps) => {
   const [songs, setSongs] = useState(children);
@@ -101,11 +102,12 @@ const CustomSongs = ({
           <SongPadding style={margin} $transition={animateDrag}>
             <SongItem
               song={item}
+              index={virtualItem.index}
               editMode={editMode}
-              selected={selectedSongs.includes(item)}
+              selected={selectedIncludes(item, virtualItem.index)}
               features={songFeatures}
               onClick={(song) => {
-                onSongClick(song);
+                onSongClick(song, virtualItem.index);
               }}
               onEdit={(e) => {
                 setIsMouseDown(true);
@@ -139,9 +141,9 @@ const CustomSongs = ({
       editMode,
       getSongItemY,
       isMouseDown,
-      selectedSongs,
       songFeatures,
       onSongClick,
+      selectedIncludes,
     ]
   );
 
@@ -344,7 +346,7 @@ const CustomSongs = ({
             song={dragTarget.song}
             features={songFeatures}
             editMode={true}
-            selected={selectedSongs.includes(dragTarget.song)}
+            selected={selectedIncludes(dragTarget.song, dragTarget.index)}
           />
         )}
       </PseuduSongItem>

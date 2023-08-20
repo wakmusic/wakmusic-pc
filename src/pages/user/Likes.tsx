@@ -19,7 +19,7 @@ const Likes = ({}: LikesProps) => {
   const [editMode] = useLikesState();
   const [likes, setLikes] = useState<Song[]>(myListSongs);
 
-  const { selected, selectCallback } = useSelectSongs();
+  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
 
   const dispatchLikes = (songs: Song[]) => {
     setLikes(songs);
@@ -41,6 +41,7 @@ const Likes = ({}: LikesProps) => {
         height={181}
         editMode={editMode}
         onEdit={dispatchLikes}
+        selectedIncludes={selectedIncludes}
         onSongClick={selectCallback}
         selectedSongs={selected}
         songFeatures={[

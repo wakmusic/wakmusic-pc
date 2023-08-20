@@ -29,7 +29,8 @@ interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
   const [searchParams] = useSearchParams();
-  const { selected, setSelected, selectCallback } = useSelectSongs();
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
   const tab = useMemo(
     () => (searchParams.get("type") ?? "hourly") as ChartsType,
     [searchParams]
@@ -99,7 +100,8 @@ const Chart = ({}: ChartProps) => {
               <SongItem
                 rank={virtualItem.index + 1}
                 song={item}
-                selected={selected.includes(item)}
+                index={virtualItem.index}
+                selected={selectedIncludes(item, virtualItem.index)}
                 features={[
                   tab !== "total" ? SongItemFeature.last : undefined,
                   SongItemFeature.date,

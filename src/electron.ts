@@ -1,11 +1,4 @@
-import {
-  BrowserWindow,
-  Notification,
-  app,
-  ipcMain,
-  nativeImage,
-  session,
-} from "electron";
+import { BrowserWindow, app, ipcMain, nativeImage, session } from "electron";
 import { join, resolve } from "path";
 
 import { SongInfo } from "@templates/player";
@@ -113,12 +106,6 @@ ipcMain.on("window:max", () => {
 ipcMain.on("window:close", () => {
   const win = BrowserWindow.getFocusedWindow();
   if (win) win.hide();
-
-  new Notification({
-    title: "왁타버스 뮤직",
-    body: "프로그램이 최소화되었습니다.\n트레이에서 다시 열 수 있습니다.",
-    icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
-  }).show();
 });
 
 ipcMain.on("mode:default", () => {

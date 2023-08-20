@@ -377,7 +377,7 @@ const SongPadding = styled.div<{ $transition: boolean }>`
   ${({ $transition }) =>
     $transition &&
     css`
-      transition: padding 0.1s linear 0s;
+      transition: padding 0.1s ease-in;
     `}
 `;
 

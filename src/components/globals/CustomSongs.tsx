@@ -84,7 +84,7 @@ const CustomSongs = ({
 
   const mapSongComponent = useCallback(
     (virtualItem: VirtualItemType, item: Song) => {
-      const index = songs.indexOf(item);
+      const index = virtualItem.index;
 
       const margin = { paddingTop: "", paddingBottom: "" };
       const songHeight = "64px";
@@ -102,12 +102,12 @@ const CustomSongs = ({
           <SongPadding style={margin} $transition={animateDrag}>
             <SongItem
               song={item}
-              index={virtualItem.index}
+              index={index}
               editMode={editMode}
-              selected={selectedIncludes(item, virtualItem.index)}
+              selected={selectedIncludes(item, index)}
               features={songFeatures}
               onClick={(song) => {
-                onSongClick(song, virtualItem.index);
+                onSongClick(song, index);
               }}
               onEdit={(e) => {
                 setIsMouseDown(true);
@@ -124,6 +124,7 @@ const CustomSongs = ({
                   absolute: e.clientY,
                 });
                 setDropTarget(index);
+                setMouseY(e.clientY);
 
                 const temp = songs.slice();
                 temp.splice(index, 1);
@@ -276,7 +277,7 @@ const CustomSongs = ({
 
     if (newDropTarget === dropTarget) return;
 
-    if (!animateDrag) {
+    if (dropTarget !== -1 && !animateDrag) {
       // 최초 클릭이 아닌 경우에 애니메이션 재생
       setAnimateDrag(true);
     }

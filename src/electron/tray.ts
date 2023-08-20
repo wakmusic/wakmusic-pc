@@ -25,17 +25,13 @@ const processLogin = (menu: MenuItem) => {
   win.focus();
 
   switch (menu.label) {
-    case "로그인": {
+    case "로그인":
       win.webContents.send("scheme", "wakmusic://open-login/");
-
       break;
-    }
 
-    case "로그아웃": {
+    case "로그아웃":
       win.webContents.send("scheme", "wakmusic://logout/");
-
       break;
-    }
   }
 };
 

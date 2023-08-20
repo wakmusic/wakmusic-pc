@@ -56,6 +56,8 @@ const MusicController = ({
   const [, setPlayingInfo] = usePlayingInfoState();
   const [, setControlState] = useControlState();
 
+  const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
+
   const addSongs = useCallback(
     (list: Song[], play?: boolean) => {
       // 재생목록에 노래 추가
@@ -149,16 +151,15 @@ const MusicController = ({
     }
   }, [showControllerState, setPopdown, displayDefault, selectedSongs, hide]);
 
+  useEffect(() => {
+    if (selectedSongs.length < 1 && !displayDefault) return;
+
+    setSelectedLength(selectedSongs.length);
+  }, [displayDefault, selectedSongs.length]);
+
   return (
     <Container $display={showControllerState}>
-      <Controller
-        count={
-          selectedSongs.length <= 1 && !displayDefault
-            ? 1
-            : selectedSongs.length
-        }
-        popdown={popdown}
-      >
+      <Controller count={selectedLength} popdown={popdown}>
         {features.map(getControllerComponent)}
         {onDelete && getControllerComponent(ControllerFeature.delete, -1)}
       </Controller>

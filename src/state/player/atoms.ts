@@ -19,6 +19,7 @@ export const controlState = atom<ControlStateType>({
   key: "control",
   default: {
     volume: Number(localStorage.getItem("volume")) || 50,
+    isMute: localStorage.getItem("isMute") === "true" || false,
     repeatType: RepeatType.Off,
     isPlaying: false,
     isRandom: false,
@@ -33,6 +34,10 @@ export const controlState = atom<ControlStateType>({
 
         if (newValue.volume !== (oldValue as ControlStateType).volume) {
           localStorage.setItem("volume", newValue.volume.toString());
+        }
+
+        if (newValue.isMute !== (oldValue as ControlStateType).isMute) {
+          localStorage.setItem("isMute", newValue.isMute.toString());
         }
       });
     },

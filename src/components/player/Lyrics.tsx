@@ -32,6 +32,7 @@ const Lyrics = ({ size }: LyricsProps) => {
   const [timeout, setTimeout] = useState<number>(0);
 
   const ref = useRef<HTMLDivElement>(null);
+  const currentRef = useRef<HTMLDivElement>(null);
 
   function onLineClick(index: number) {
     if (isNull(lyrics)) return;
@@ -60,7 +61,7 @@ const Lyrics = ({ size }: LyricsProps) => {
   }, [current, lyrics]);
 
   useEffect(() => {
-    if (!ref.current) return;
+    if (!ref.current || !currentRef.current) return;
     if (timeout !== 0) return;
 
     const index = getIndex();
@@ -69,7 +70,11 @@ const Lyrics = ({ size }: LyricsProps) => {
     if (!target) return;
 
     const padding = ref.current.offsetHeight / 2;
-    const top = target.offsetTop - ref.current.offsetTop - padding + 12;
+    const top =
+      target.offsetTop -
+      ref.current.offsetTop -
+      padding +
+      currentRef.current.offsetHeight / 2;
 
     ref.current.scrollTo({ top, behavior: "smooth" });
   }, [getIndex, timeout]);
@@ -99,12 +104,14 @@ const Lyrics = ({ size }: LyricsProps) => {
       }}
     >
       {lyrics.map((line, i) => {
-        const Line = i === getIndex() ? CurrentLine : DefaultLine;
+        const isCurrent = i === getIndex();
+        const Line = isCurrent ? CurrentLine : DefaultLine;
 
         return (
           <Line
             key={i}
             $size={size}
+            ref={isCurrent ? currentRef : null}
             color={colors.blueGray25}
             onClick={() => onLineClick(i)}
           >

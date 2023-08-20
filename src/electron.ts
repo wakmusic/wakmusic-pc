@@ -57,6 +57,14 @@ app.whenReady().then(() => {
   win.once("ready-to-show", () => {
     win.show();
   });
+
+  win.on("maximize", () => {
+    win.webContents.send("window:maximized");
+  });
+
+  win.on("unmaximize", () => {
+    win.webContents.send("window:unmaximized");
+  });
 });
 
 app.on("open-url", function (_, url) {

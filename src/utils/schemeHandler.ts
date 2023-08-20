@@ -4,6 +4,8 @@ import { queryClient } from "src/main";
 import { fetchSong } from "@apis/songs";
 import { fetchUser } from "@apis/user";
 
+import { IPCMain, IPCRenderer } from "@constants/ipc";
+
 import { useAlertModal } from "@hooks/alertModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
 import { usePlayingInfoState } from "@hooks/player";
@@ -26,7 +28,7 @@ const SchemeHandler = (): null => {
       if (isNull(user)) return;
 
       if (ipcRenderer) {
-        ipcRenderer.send("user:login");
+        ipcRenderer.send(IPCRenderer.USER_LOGIN);
       }
 
       setUser(user);
@@ -107,14 +109,14 @@ const SchemeHandler = (): null => {
 
   useEffect(() => {
     if (ipcRenderer) {
-      ipcRenderer.on("scheme", (_event, url: string) => {
+      ipcRenderer.on(IPCMain.SCHEME, (_event, url: string) => {
         handler(url);
       });
     }
 
     return () => {
       if (ipcRenderer) {
-        ipcRenderer.removeAllListeners("scheme");
+        ipcRenderer.removeAllListeners(IPCMain.SCHEME);
       }
     };
   }, [handler]);

@@ -1,5 +1,7 @@
 import { BrowserWindow } from "electron";
 
+import { IPCMain } from "@constants/ipc";
+
 export const schemeHandler = async (url: string) => {
   const win = BrowserWindow.getAllWindows()[0];
 
@@ -25,5 +27,5 @@ export const schemeHandler = async (url: string) => {
     }
   }
 
-  win.webContents.send("scheme", url);
+  win.webContents.send(IPCMain.SCHEME, url);
 };

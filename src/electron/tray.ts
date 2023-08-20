@@ -8,6 +8,8 @@ import {
 } from "electron";
 import { join } from "path";
 
+import { IPCMain } from "@constants/ipc";
+
 const openWindow = () => {
   const win = BrowserWindow.getAllWindows()[0];
 
@@ -26,11 +28,11 @@ const processLogin = (menu: MenuItem) => {
 
   switch (menu.label) {
     case "로그인":
-      win.webContents.send("scheme", "wakmusic://open-login/");
+      win.webContents.send(IPCMain.SCHEME, "wakmusic://open-login/");
       break;
 
     case "로그아웃":
-      win.webContents.send("scheme", "wakmusic://logout/");
+      win.webContents.send(IPCMain.SCHEME, "wakmusic://logout/");
       break;
   }
 };

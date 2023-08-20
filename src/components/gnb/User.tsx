@@ -6,6 +6,7 @@ import { ReactComponent as Logout } from "@assets/icons/ic_24_logout.svg";
 import { T6Bold, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
+import { IPCRenderer } from "@constants/ipc";
 
 import { useConfirmModal } from "@hooks/confirmModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
@@ -32,7 +33,7 @@ const User = ({}: UserProps) => {
 
     if (!res) return;
 
-    if (ipcRenderer) ipcRenderer.send("logout");
+    if (ipcRenderer) ipcRenderer.send(IPCRenderer.USER_LOGOUT);
 
     setUser(null);
     navigate("/");

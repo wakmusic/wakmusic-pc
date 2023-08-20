@@ -1,5 +1,7 @@
 import { atom } from "recoil";
 
+import { IPCRenderer } from "@constants/ipc";
+
 import {
   ChangeProgressStateType,
   ControlStateType,
@@ -29,7 +31,7 @@ export const controlState = atom<ControlStateType>({
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
         if (newValue.isPlaying !== (oldValue as ControlStateType).isPlaying) {
-          ipcRenderer?.send("rpc:playing", newValue.isPlaying);
+          ipcRenderer?.send(IPCRenderer.RPC_PLAYING, newValue.isPlaying);
         }
 
         if (newValue.volume !== (oldValue as ControlStateType).volume) {
@@ -60,7 +62,7 @@ export const playingProgress = atom<number>({
   effects: [
     ({ onSet }) => {
       onSet((value) => {
-        ipcRenderer?.send("rpc:progress", value);
+        ipcRenderer?.send(IPCRenderer.RPC_PROGRESS, value);
       });
     },
   ],
@@ -87,7 +89,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
     ({ onSet }) => {
       onSet((value, oldValue) => {
         const current = value.playlist[value.current];
-        ipcRenderer?.send("rpc:track", current);
+        ipcRenderer?.send(IPCRenderer.RPC_TRACK, current);
 
         if (value.playlist !== (oldValue as PlayingInfoStateType).playlist) {
           localStorage.setItem("playlist", JSON.stringify(value.playlist));

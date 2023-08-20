@@ -1,12 +1,17 @@
 import { BrowserWindow, app, ipcMain, nativeImage, session } from "electron";
 import { join, resolve } from "path";
 
+import { IPCMain, IPCRenderer } from "@constants/ipc";
+
 import { SongInfo } from "@templates/player";
 
 import { changePresence, setProgress, showPlaying } from "./electron/discord";
 import { schemeHandler } from "./electron/scheme";
+import { initTray } from "./electron/tray";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
+
+let tray: ((label: string) => void) | null = null;
 
 if (require("electron-squirrel-startup")) {
   app.quit();
@@ -18,7 +23,12 @@ if (!gotTheLock) {
   app.quit();
 }
 
+app.setName("왁타버스 뮤직");
 app.commandLine.appendSwitch("disable-site-isolation-trials");
+
+if (process.platform === "win32") {
+  app.setAppUserModelId(app.name);
+}
 
 if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
   app.setAsDefaultProtocolClient("wakmusic", process.execPath, [
@@ -46,6 +56,8 @@ app.whenReady().then(() => {
     },
   });
 
+  tray = initTray();
+
   win.setMenuBarVisibility(false);
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -59,11 +71,11 @@ app.whenReady().then(() => {
   });
 
   win.on("maximize", () => {
-    win.webContents.send("window:maximized");
+    win.webContents.send(IPCMain.WINDOW_MAXIMIZED);
   });
 
   win.on("unmaximize", () => {
-    win.webContents.send("window:unmaximized");
+    win.webContents.send(IPCMain.WINDOW_UNMAXIMIZED);
   });
 
   win.on("resize", () => {
@@ -81,12 +93,12 @@ app.on("second-instance", (_, argv, __) => {
   }
 });
 
-ipcMain.on("window:least", () => {
+ipcMain.on(IPCRenderer.WINDOW_LEAST, () => {
   const win = BrowserWindow.getFocusedWindow();
   if (win) win.minimize();
 });
 
-ipcMain.on("window:max", () => {
+ipcMain.on(IPCRenderer.WINDOW_MAX, () => {
   const win = BrowserWindow.getFocusedWindow();
 
   if (win)
@@ -97,12 +109,12 @@ ipcMain.on("window:max", () => {
     }
 });
 
-ipcMain.on("window:close", () => {
+ipcMain.on(IPCRenderer.WINDOW_CLOSE, () => {
   const win = BrowserWindow.getFocusedWindow();
-  if (win) win.close();
+  if (win) win.hide();
 });
 
-ipcMain.on("mode:default", () => {
+ipcMain.on(IPCRenderer.MODE_DEFAULT, () => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
@@ -121,7 +133,7 @@ ipcMain.on("mode:default", () => {
   );
 });
 
-ipcMain.on("mode:separate", () => {
+ipcMain.on(IPCRenderer.MODE_SEPARATE, () => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
@@ -144,27 +156,37 @@ ipcMain.on("mode:separate", () => {
   );
 });
 
-ipcMain.on("query:isSeparate", () => {
+ipcMain.on(IPCRenderer.QUERY_IS_SEPARATE, () => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
   const bounds = win.getBounds();
 
-  win.webContents.send("reply:isSeparate", bounds.width === 290);
+  win.webContents.send(IPCMain.REPLY_IS_SEPARATE, bounds.width === 290);
 });
 
-ipcMain.on("rpc:progress", (_event, progress: number) => {
+ipcMain.on(IPCRenderer.RPC_PROGRESS, (_event, progress: number) => {
   setProgress(progress);
 });
 
-ipcMain.on("rpc:playing", (_event, isPlaying: boolean) => {
+ipcMain.on(IPCRenderer.RPC_PLAYING, (_event, isPlaying: boolean) => {
   showPlaying(isPlaying);
 });
 
-ipcMain.on("rpc:track", (_event, current: SongInfo | null) => {
+ipcMain.on(IPCRenderer.RPC_TRACK, (_event, current: SongInfo | null) => {
   changePresence(current);
 });
 
-ipcMain.on("logout", () => {
+ipcMain.on(IPCRenderer.USER_LOGIN, () => {
+  if (tray) {
+    tray("로그아웃");
+  }
+});
+
+ipcMain.on(IPCRenderer.USER_LOGOUT, () => {
+  if (tray) {
+    tray("로그인");
+  }
+
   session.defaultSession.cookies.remove(import.meta.env.VITE_API_URL, "token");
 });

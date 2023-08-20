@@ -1,6 +1,8 @@
 import { useCallback, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { IPCMain, IPCRenderer } from "@constants/ipc";
+
 import { useInterval } from "@hooks/interval";
 
 import { ipcRenderer } from "./modules";
@@ -29,21 +31,24 @@ const CheckPlayerMode = (): null => {
   useEffect(() => {
     if (!ipcRenderer) return;
 
-    ipcRenderer.on("reply:isSeparate", (_event, isSeparated: boolean) => {
-      callback(isSeparated);
-    });
+    ipcRenderer.on(
+      IPCMain.REPLY_IS_SEPARATE,
+      (_event, isSeparated: boolean) => {
+        callback(isSeparated);
+      }
+    );
 
     return () => {
       if (!ipcRenderer) return;
 
-      ipcRenderer.removeAllListeners("reply:isSeparate");
+      ipcRenderer.removeAllListeners(IPCMain.REPLY_IS_SEPARATE);
     };
   }, [callback]);
 
   useInterval(() => {
     if (!ipcRenderer) return;
 
-    ipcRenderer.send("query:isSeparate");
+    ipcRenderer.send(IPCRenderer.QUERY_IS_SEPARATE);
   }, 1000);
 
   return null;

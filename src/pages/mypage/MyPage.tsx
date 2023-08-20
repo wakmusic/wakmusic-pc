@@ -21,6 +21,7 @@ import Block from "@components/mypage/Block";
 import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
+import { IPCRenderer } from "@constants/ipc";
 import { blocks } from "@constants/myPage";
 import platforms from "@constants/platforms";
 
@@ -78,7 +79,7 @@ const MyPage = ({}: MyPageProps) => {
     if (res) {
       await removeUser();
 
-      if (ipcRenderer) ipcRenderer.send("logout");
+      if (ipcRenderer) ipcRenderer.send(IPCRenderer.USER_LOGOUT);
 
       navigate("/");
       setUser(undefined);

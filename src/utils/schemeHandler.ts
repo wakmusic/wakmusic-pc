@@ -4,7 +4,10 @@ import { queryClient } from "src/main";
 import { fetchSong } from "@apis/songs";
 import { fetchUser } from "@apis/user";
 
+import { IPCMain, IPCRenderer } from "@constants/ipc";
+
 import { useAlertModal } from "@hooks/alertModal";
+import { useLoginModalOpener } from "@hooks/loginModal";
 import { usePlayingInfoState } from "@hooks/player";
 import { useUserState } from "@hooks/user";
 
@@ -16,12 +19,17 @@ const SchemeHandler = (): null => {
   const [, setPlayingInfo] = usePlayingInfoState();
 
   const alertModal = useAlertModal();
+  const openLoginModal = useLoginModalOpener();
 
   useEffect(() => {
     (async () => {
       const user = await fetchUser();
 
       if (isNull(user)) return;
+
+      if (ipcRenderer) {
+        ipcRenderer.send(IPCRenderer.USER_LOGIN);
+      }
 
       setUser(user);
     })();
@@ -74,25 +82,41 @@ const SchemeHandler = (): null => {
             return;
           }
 
+          if (ipcRenderer) {
+            ipcRenderer.send("user:login");
+          }
+
           setUser(user);
 
           break;
         }
+
+        case "open-login": {
+          openLoginModal();
+
+          break;
+        }
+
+        case "logout": {
+          if (ipcRenderer) ipcRenderer.send("user:logout");
+
+          setUser(null);
+        }
       }
     },
-    [alertModal, setPlayingInfo, setUser]
+    [alertModal, openLoginModal, setPlayingInfo, setUser]
   );
 
   useEffect(() => {
     if (ipcRenderer) {
-      ipcRenderer.on("scheme", (_event, url: string) => {
+      ipcRenderer.on(IPCMain.SCHEME, (_event, url: string) => {
         handler(url);
       });
     }
 
     return () => {
       if (ipcRenderer) {
-        ipcRenderer.removeAllListeners("scheme");
+        ipcRenderer.removeAllListeners(IPCMain.SCHEME);
       }
     };
   }, [handler]);

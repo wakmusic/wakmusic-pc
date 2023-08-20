@@ -25,8 +25,9 @@ const DefaultScroll = forwardRef<HTMLDivElement, DefaultScrollProps>(
       if (
         !osRef.current ||
         !((ref || viewportRef) as RefObject<HTMLDivElement>).current
-      )
+      ) {
         return;
+      }
 
       initialize({
         target: osRef.current,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
@@ -21,6 +21,21 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
   const location = useLocation();
 
   const [isMax, setIsMax] = useState(false);
+
+  useEffect(() => {
+    ipcRenderer?.on("window:maximized", () => {
+      setIsMax(true);
+    });
+
+    ipcRenderer?.on("window:unmaximized", () => {
+      setIsMax(false);
+    });
+
+    return () => {
+      ipcRenderer?.removeAllListeners("window:maximized");
+      ipcRenderer?.removeAllListeners("window:unmaximized");
+    };
+  }, []);
 
   if (!ipcRenderer) {
     return null;
@@ -46,7 +61,6 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
           if (!ipcRenderer) return;
 
           if (isVisualMode) {
-            setIsMax((prev) => !prev);
             ipcRenderer.send("window:max");
           } else {
             if (location.pathname !== "/player") {

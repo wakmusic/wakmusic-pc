@@ -14,6 +14,7 @@ export type SongInfo = {
 };
 export type ControlStateType = {
   volume: number;
+  isMute: boolean;
   repeatType: RepeatType;
   isPlaying: boolean;
   isRandom: boolean;

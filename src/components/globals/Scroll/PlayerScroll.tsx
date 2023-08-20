@@ -1,36 +1,56 @@
-import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import { useOverlayScrollbars } from "overlayscrollbars-react";
+import { RefObject, forwardRef, useEffect, useRef } from "react";
 import styled from "styled-components/macro";
 
 import colors from "@constants/colors";
 
 interface PlayerScrollProps {
   children: React.ReactNode;
-  initialize?: (scrollbar: HTMLElement) => void;
+  initialize?: (scrollbar: HTMLElement | null) => void;
   scroll?: () => void;
 }
 
-const PlayerScroll = ({ children, initialize, scroll }: PlayerScrollProps) => {
-  return (
-    <ScrollWrapper>
-      <OverlayScrollbarsComponent
-        events={{
-          initialized: (instance) => {
-            if (!initialize) return;
+const PlayerScroll = forwardRef<HTMLDivElement, PlayerScrollProps>(
+  ({ children, scroll, initialize: initialized }: PlayerScrollProps, ref) => {
+    const viewportRef = useRef<HTMLDivElement>(null);
+    const osRef = useRef<HTMLDivElement>(null);
 
-            initialize(instance.elements().scrollOffsetElement);
-          },
-          scroll: () => {
-            if (!scroll) return;
+    const [initialize] = useOverlayScrollbars({
+      options: {},
+      events: {},
+      defer: true,
+    });
 
-            scroll();
-          },
-        }}
-      >
-        {children}
-      </OverlayScrollbarsComponent>
-    </ScrollWrapper>
-  );
-};
+    useEffect(() => {
+      if (
+        !osRef.current ||
+        !((ref || viewportRef) as RefObject<HTMLDivElement>).current
+      ) {
+        return;
+      }
+
+      initialize({
+        target: osRef.current,
+        elements: {
+          viewport: ((ref || viewportRef) as RefObject<HTMLDivElement>).current,
+        },
+      });
+
+      initialized &&
+        initialized(
+          ((ref || viewportRef) as RefObject<HTMLDivElement>).current
+        );
+    }, [initialize, ref, initialized]);
+
+    return (
+      <ScrollWrapper ref={osRef}>
+        <ScrollBar ref={ref || viewportRef} onScroll={scroll}>
+          {children}
+        </ScrollBar>
+      </ScrollWrapper>
+    );
+  }
+);
 
 const ScrollWrapper = styled.div`
   & .os-scrollbar {
@@ -46,5 +66,9 @@ const ScrollWrapper = styled.div`
     height: 100%;
   }
 `;
+
+const ScrollBar = styled.div``;
+
+PlayerScroll.displayName = "PlayerScroll";
 
 export default PlayerScroll;

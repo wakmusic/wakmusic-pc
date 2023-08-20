@@ -32,7 +32,7 @@ const User = ({}: UserProps) => {
 
     if (!res) return;
 
-    if (ipcRenderer) ipcRenderer.send("logout");
+    if (ipcRenderer) ipcRenderer.send("user:logout");
 
     setUser(null);
     navigate("/");

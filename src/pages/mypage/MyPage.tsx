@@ -78,7 +78,7 @@ const MyPage = ({}: MyPageProps) => {
     if (res) {
       await removeUser();
 
-      if (ipcRenderer) ipcRenderer.send("logout");
+      if (ipcRenderer) ipcRenderer.send("user:logout");
 
       navigate("/");
       setUser(undefined);

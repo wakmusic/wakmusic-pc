@@ -1,12 +1,22 @@
-import { BrowserWindow, app, ipcMain, nativeImage, session } from "electron";
+import {
+  BrowserWindow,
+  Notification,
+  app,
+  ipcMain,
+  nativeImage,
+  session,
+} from "electron";
 import { join, resolve } from "path";
 
 import { SongInfo } from "@templates/player";
 
 import { changePresence, setProgress, showPlaying } from "./electron/discord";
 import { schemeHandler } from "./electron/scheme";
+import { initTray } from "./electron/tray";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
+
+let tray: ((label: string) => void) | null = null;
 
 if (require("electron-squirrel-startup")) {
   app.quit();
@@ -18,7 +28,12 @@ if (!gotTheLock) {
   app.quit();
 }
 
+app.setName("왁타버스 뮤직");
 app.commandLine.appendSwitch("disable-site-isolation-trials");
+
+if (process.platform === "win32") {
+  app.setAppUserModelId(app.name);
+}
 
 if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
   app.setAsDefaultProtocolClient("wakmusic", process.execPath, [
@@ -45,6 +60,8 @@ app.whenReady().then(() => {
       allowRunningInsecureContent: false,
     },
   });
+
+  tray = initTray();
 
   win.setMenuBarVisibility(false);
 
@@ -95,7 +112,13 @@ ipcMain.on("window:max", () => {
 
 ipcMain.on("window:close", () => {
   const win = BrowserWindow.getFocusedWindow();
-  if (win) win.close();
+  if (win) win.hide();
+
+  new Notification({
+    title: "왁타버스 뮤직",
+    body: "프로그램이 최소화되었습니다.\n트레이에서 다시 열 수 있습니다.",
+    icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
+  }).show();
 });
 
 ipcMain.on("mode:default", () => {
@@ -161,6 +184,16 @@ ipcMain.on("rpc:track", (_event, current: SongInfo | null) => {
   changePresence(current);
 });
 
-ipcMain.on("logout", () => {
+ipcMain.on("user:login", () => {
+  if (tray) {
+    tray("로그아웃");
+  }
+});
+
+ipcMain.on("user:logout", () => {
+  if (tray) {
+    tray("로그인");
+  }
+
   session.defaultSession.cookies.remove(import.meta.env.VITE_API_URL, "token");
 });

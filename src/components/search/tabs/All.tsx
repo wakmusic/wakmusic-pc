@@ -48,17 +48,19 @@ const All = ({ query, res }: AllProps) => {
               <T5Medium color={colors.gray900}>{Category[key]}</T5Medium>
               <T5Medium color={colors.point}>{res[key].length}</T5Medium>
 
-              <CategoryHeaderButton
-                onClick={() => {
-                  setSearchParams({
-                    query: query,
-                    tab: key,
-                  });
-                }}
-              >
-                <T7Medium color={colors.gray500}>전체보기</T7Medium>
-                <ArrowRightSVG />
-              </CategoryHeaderButton>
+              {res[key].length > 3 && (
+                <CategoryHeaderButton
+                  onClick={() => {
+                    setSearchParams({
+                      query: query,
+                      tab: key,
+                    });
+                  }}
+                >
+                  <T7Medium color={colors.gray500}>전체보기</T7Medium>
+                  <ArrowRightSVG />
+                </CategoryHeaderButton>
+              )}
             </CategoryHeader>
 
             {res[key].slice(-3).map((song, index) => (

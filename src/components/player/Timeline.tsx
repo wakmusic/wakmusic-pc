@@ -96,14 +96,17 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
       $isSeparated={isSeparated ?? false}
     >
       <Line
-        progress={(current / length) * 100}
+        $progress={(current / length) * 100}
         $isSeparated={isSeparated ?? false}
       />
-      <HandleContainer progress={(current / length) * 100}>
+      <HandleContainer
+        $progress={(current / length) * 100}
+        $isSeparated={isSeparated}
+      >
         <Handle />
       </HandleContainer>
       <TimelinePopover
-        progress={(current / length) * 100}
+        $progress={(current / length) * 100}
         $isSeparated={isSeparated}
       >
         <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
@@ -116,10 +119,13 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
 };
 
 const HandleContainer = styled.div.attrs<{
-  progress: number;
-}>(({ progress }) => ({
+  $progress: number;
+  $isSeparated: boolean;
+}>(({ $progress, $isSeparated }) => ({
   style: {
-    left: `calc(${progress}% - 3px)`,
+    left: $isSeparated
+      ? `calc(${$progress}% - 6px)`
+      : `min(calc(100% - 12px), max(0px, calc(${$progress}% - 6px)))`,
   },
 }))`
   position: relative;
@@ -128,13 +134,13 @@ const HandleContainer = styled.div.attrs<{
 `;
 
 const TimelinePopover = styled.div.attrs<{
-  progress: number;
+  $progress: number;
   $isSeparated: boolean;
-}>(({ progress, $isSeparated }) => ({
+}>(({ $progress, $isSeparated }) => ({
   style: {
     left: $isSeparated
-      ? `calc(${progress}%)`
-      : `min(calc(100% - 38px), max(32px, calc(${progress}%)))`,
+      ? `calc(${$progress}%)`
+      : `min(calc(100% - 38px), max(32px, calc(${$progress}%)))`,
   },
 }))`
   height: 18px;
@@ -199,9 +205,9 @@ const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
     `}
 `;
 
-const Line = styled.div.attrs<{ progress: number }>(({ progress }) => ({
+const Line = styled.div.attrs<{ $progress: number }>(({ $progress }) => ({
   style: {
-    width: `${progress}%`,
+    width: `${$progress}%`,
   },
 }))<{ $isSeparated: boolean }>`
   height: 100%;

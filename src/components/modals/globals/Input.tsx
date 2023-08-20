@@ -11,32 +11,52 @@ import InputCancelButton from "../globals/InputCancelButton";
 interface InputProps {
   value: string;
   onChange: (value: string) => void;
+  onCancel?: () => void;
+  onEnter?: () => void;
+
+  helpTextOk?: string;
+  helpTextError?: string;
+  placeholder?: string;
+  maxLength?: number;
 }
 
-const Input = ({ value, onChange }: InputProps) => {
+const Input = ({
+  value,
+  onChange,
+  onCancel,
+  onEnter,
+  helpTextOk,
+  helpTextError,
+  placeholder,
+  maxLength = 12,
+}: InputProps) => {
+  const enable = useMemo(() => {
+    return value.length > 0 && value.length <= 12;
+  }, [value]);
+
   const color = useMemo(() => {
     if (value.length === 0) {
       return colors.blueGray500;
     }
 
-    if (value.length > 12) {
+    if (value.length > maxLength) {
       return colors.up;
     }
 
     return colors.down;
-  }, [value]);
+  }, [maxLength, value.length]);
 
   const helpText = useMemo(() => {
-    if (value.length > 0 && value.length <= 12) {
-      return "사용할 수 있는 제목입니다.";
+    if (value.length > 0 && value.length <= maxLength) {
+      return helpTextOk ?? "사용할 수 있는 제목입니다.";
     }
 
-    if (value.length > 12) {
-      return "글자 수를 초과하였습니다.";
+    if (value.length > maxLength) {
+      return helpTextError ?? "글자 수를 초과하였습니다.";
     }
 
     return "";
-  }, [value]);
+  }, [helpTextError, helpTextOk, maxLength, value.length]);
 
   return (
     <Container>
@@ -44,12 +64,16 @@ const Input = ({ value, onChange }: InputProps) => {
         value={value}
         onChange={onChange}
         borderColor={color}
-        placeholder="리스트 명을 입력해주세요."
+        placeholder={placeholder ?? "리스트 명을 입력해주세요."}
+        onKeyDown={(e) => {
+          if (enable && e.key === "Enter") onEnter?.();
+        }}
       />
 
       {value && (
         <InputCancelButton
           onClick={() => {
+            if (onCancel) onCancel();
             onChange("");
           }}
         />
@@ -59,7 +83,7 @@ const Input = ({ value, onChange }: InputProps) => {
         <HelpText color={color}>{helpText}</HelpText>
         <LengthContainer>
           <NowLength color={color}>{value.length}자</NowLength>
-          <MaxLength> / 12자</MaxLength>
+          <MaxLength> / {maxLength}자</MaxLength>
         </LengthContainer>
       </Texts>
     </Container>

@@ -2,22 +2,20 @@ import styled, { css } from "styled-components/macro";
 
 import colors from "@constants/colors";
 
+import { UserProfile } from "@templates/user";
+
+import { getProfileImg } from "@utils/staticUtill";
+
 interface ProfileButtonProps {
-  profile: {
-    type: string;
-    version: number;
-  };
+  profile: UserProfile;
   selected: boolean;
-  onClick: (type: string) => void;
+  onClick: (type: UserProfile) => void;
 }
 
 const ProfileButton = ({ profile, selected, onClick }: ProfileButtonProps) => {
   return (
-    <Container onClick={() => onClick(profile.type)}>
-      <Image
-        src={`https://static.wakmusic.xyz/static/profile/${profile.type}.png?v=${profile.version}`}
-        selected={selected}
-      />
+    <Container onClick={() => onClick(profile)}>
+      <Image src={getProfileImg(profile)} selected={selected} />
     </Container>
   );
 };

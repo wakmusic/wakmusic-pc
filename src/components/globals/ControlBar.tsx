@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
@@ -7,6 +7,8 @@ import { ReactComponent as DivideSVG } from "@assets/icons/ic_20_divide.svg";
 import { ReactComponent as LeastSVG } from "@assets/icons/ic_20_least.svg";
 import { ReactComponent as MaxSVG } from "@assets/icons/ic_20_max.svg";
 import { ReactComponent as RestoreSVG } from "@assets/icons/ic_20_restore.svg";
+
+import { ipcRenderer } from "@utils/modules";
 
 import SimpleIconButton from "./SimpleIconButton";
 
@@ -20,7 +22,22 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
 
   const [isMax, setIsMax] = useState(false);
 
-  if (!window.ipcRenderer) {
+  useEffect(() => {
+    ipcRenderer?.on("window:maximized", () => {
+      setIsMax(true);
+    });
+
+    ipcRenderer?.on("window:unmaximized", () => {
+      setIsMax(false);
+    });
+
+    return () => {
+      ipcRenderer?.removeAllListeners("window:maximized");
+      ipcRenderer?.removeAllListeners("window:unmaximized");
+    };
+  }, []);
+
+  if (!ipcRenderer) {
     return null;
   }
 
@@ -29,7 +46,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
       <SimpleIconButton
         icon={LeastSVG}
         onClick={() => {
-          window.ipcRenderer?.send("window:least");
+          ipcRenderer?.send("window:least");
         }}
       />
       <SimpleIconButton
@@ -41,18 +58,17 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
             : DivideSVG // 그 외에는 분리만 가능
         }
         onClick={() => {
-          if (!window.ipcRenderer) return;
+          if (!ipcRenderer) return;
 
           if (isVisualMode) {
-            setIsMax((prev) => !prev);
-            window.ipcRenderer.send("window:max");
+            ipcRenderer.send("window:max");
           } else {
             if (location.pathname !== "/player") {
               navigate("/player");
-              window.ipcRenderer.send("mode:separate");
+              ipcRenderer.send("mode:separate");
             } else {
               navigate(-1);
-              window.ipcRenderer.send("mode:default");
+              ipcRenderer.send("mode:default");
             }
           }
         }}
@@ -60,7 +76,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
       <SimpleIconButton
         icon={CloseSVG}
         onClick={() => {
-          window.ipcRenderer?.send("window:close");
+          ipcRenderer?.send("window:close");
         }}
       />
     </Container>

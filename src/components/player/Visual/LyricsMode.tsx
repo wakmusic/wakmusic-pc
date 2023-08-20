@@ -48,15 +48,9 @@ const LyricsMode = ({}: LyricsModeProps) => {
 const Container = styled.div<{ $on: boolean }>`
   width: 419px;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
   position: absolute;
 
   visibility: hidden;
-
-  margin-top: -73px;
 
   ${({ $on }) =>
     $on &&
@@ -76,13 +70,13 @@ const LyricsContainer = styled.div`
   width: 100%;
   height: 243px;
 
-  margin-top: 34px;
+  margin-top: 38px;
 `;
 
 const TimelineContainer = styled.div`
   width: 100%;
 
-  margin: 64px 0 40px 0;
+  margin: 62px 0 40px 0;
   padding-top: 1px;
 `;
 

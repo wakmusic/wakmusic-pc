@@ -1,14 +1,10 @@
-import { BrowserWindow, app, ipcMain, nativeImage } from "electron";
-import { join } from "path";
+import { BrowserWindow, app, ipcMain, nativeImage, session } from "electron";
+import { join, resolve } from "path";
 
 import { SongInfo } from "@templates/player";
 
-import {
-  changePresence,
-  client,
-  setProgress,
-  showPlaying,
-} from "./electron/discord";
+import { changePresence, setProgress, showPlaying } from "./electron/discord";
+import { schemeHandler } from "./electron/scheme";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 
@@ -16,7 +12,21 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit();
+}
+
 app.commandLine.appendSwitch("disable-site-isolation-trials");
+
+if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+  app.setAsDefaultProtocolClient("wakmusic", process.execPath, [
+    resolve(process.argv[1]),
+  ]);
+} else {
+  app.setAsDefaultProtocolClient("wakmusic");
+}
 
 app.whenReady().then(() => {
   const win = new BrowserWindow({
@@ -46,8 +56,29 @@ app.whenReady().then(() => {
 
   win.once("ready-to-show", () => {
     win.show();
-    client.login();
   });
+
+  win.on("maximize", () => {
+    win.webContents.send("window:maximized");
+  });
+
+  win.on("unmaximize", () => {
+    win.webContents.send("window:unmaximized");
+  });
+
+  win.on("resize", () => {
+    win.webContents.send("window:resize");
+  });
+});
+
+app.on("open-url", function (_, url) {
+  schemeHandler(url);
+});
+
+app.on("second-instance", (_, argv, __) => {
+  if (process.platform === "win32") {
+    schemeHandler(argv[argv.length - 1]);
+  }
 });
 
 ipcMain.on("window:least", () => {
@@ -132,4 +163,8 @@ ipcMain.on("rpc:playing", (_event, isPlaying: boolean) => {
 
 ipcMain.on("rpc:track", (_event, current: SongInfo | null) => {
   changePresence(current);
+});
+
+ipcMain.on("logout", () => {
+  session.defaultSession.cookies.remove(import.meta.env.VITE_API_URL, "token");
 });

@@ -1,11 +1,13 @@
 import { profileModalState } from "@state/profileModal/atoms";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
+import { UserProfile } from "@templates/user";
+
 export const useSelectProfileModal = () => {
   const setState = useSetRecoilState(profileModalState);
 
-  const openProfileModal = (profile?: string) => {
-    return new Promise<string>((resolve) => {
+  const openProfileModal = (profile?: UserProfile) => {
+    return new Promise<UserProfile | null>((resolve) => {
       setState({
         isOpen: true,
         profile,

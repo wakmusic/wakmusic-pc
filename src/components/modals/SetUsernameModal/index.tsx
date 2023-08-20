@@ -5,17 +5,17 @@ import { T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useCreateListModalState } from "@hooks/createListModal";
 import { useIsSpaceDisabled } from "@hooks/player";
+import { useSetUsernameModalState } from "@hooks/setUsernameModal";
 
 import Input from "../globals/Input";
 import TwoButton from "../globals/TwoButton";
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
 
-interface CreateListModalProps {}
+interface SetUsernameModalProps {}
 
-const CreateListModal = ({}: CreateListModalProps) => {
-  const [modalState, setModalState] = useCreateListModalState();
+const SetUsernameModal = ({}: SetUsernameModalProps) => {
+  const [modalState, setModalState] = useSetUsernameModalState();
   const [value, setValue] = useState("");
 
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
@@ -33,19 +33,25 @@ const CreateListModal = ({}: CreateListModalProps) => {
   return (
     <ModalOverlay>
       <Container>
-        <Title>리스트 만들기</Title>
+        <Title>닉네임 수정</Title>
 
         <InputContainer>
-          <T5Light color={colors.blueGray400}>리스트 명</T5Light>
+          <T5Light color={colors.blueGray400}>닉네임</T5Light>
 
-          <Input value={value} onChange={setValue} />
+          <Input
+            value={value}
+            onChange={setValue}
+            maxLength={8}
+            helpTextOk="사용할 수 있는 닉네임입니다."
+            placeholder="닉네임을 입력해주세요."
+          />
         </InputContainer>
 
         <ButtonsWrapper>
           <TwoButton
             ok={() => resolve()}
             cancel={() => resolve(true)}
-            okText="리스트 생성"
+            okText="완료"
             disabled={value.length === 0 || value.length > 12}
           />
         </ButtonsWrapper>
@@ -74,4 +80,4 @@ const ButtonsWrapper = styled.div`
   margin-top: 40px;
 `;
 
-export default CreateListModal;
+export default SetUsernameModal;

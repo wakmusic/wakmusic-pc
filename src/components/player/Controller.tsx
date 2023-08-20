@@ -47,10 +47,6 @@ const Controller = ({}: ControllerProps) => {
 
   const [isSpaceDisabled] = useIsSpaceDisabled();
 
-  function onVolumeChange(value: number) {
-    setVolumeState(value);
-  }
-
   function getRepeatIcon() {
     switch (controlState.repeatType) {
       case RepeatType.All:
@@ -79,7 +75,11 @@ const Controller = ({}: ControllerProps) => {
 
   return (
     <Container>
-      <Volume volume={controlState.volume} onChange={onVolumeChange} />
+      <Volume
+        volume={controlState.volume}
+        isMute={controlState.isMute}
+        onChange={setVolumeState}
+      />
       <SimpleIconButton
         icon={getRepeatIcon()}
         onClick={toggleRepeatTypeState}

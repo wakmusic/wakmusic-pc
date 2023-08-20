@@ -15,6 +15,7 @@ import {
 } from "@hooks/player";
 
 import { isNull } from "@utils/isTypes";
+import { ipcRenderer } from "@utils/modules";
 
 type LyricsSize = "large" | "small";
 
@@ -32,6 +33,7 @@ const Lyrics = ({ size }: LyricsProps) => {
   const [timeout, setTimeout] = useState<number>(0);
 
   const ref = useRef<HTMLDivElement>(null);
+  const currentRef = useRef<HTMLDivElement>(null);
 
   function onLineClick(index: number) {
     if (isNull(lyrics)) return;
@@ -59,20 +61,32 @@ const Lyrics = ({ size }: LyricsProps) => {
     return lyrics.findIndex((line) => current < line.start) - 1;
   }, [current, lyrics]);
 
+  const setPosition = useCallback(
+    (isSmooth: boolean) => {
+      if (!ref.current || !currentRef.current) return;
+
+      const index = getIndex();
+
+      const target = ref.current.children[index] as HTMLDivElement;
+      if (!target) return;
+
+      const padding = ref.current.offsetHeight / 2;
+      const top =
+        target.offsetTop -
+        ref.current.offsetTop -
+        padding +
+        currentRef.current.offsetHeight / 2;
+
+      ref.current.scrollTo({ top, behavior: isSmooth ? "smooth" : "instant" });
+    },
+    [getIndex, ref, currentRef]
+  );
+
   useEffect(() => {
-    if (!ref.current) return;
     if (timeout !== 0) return;
 
-    const index = getIndex();
-
-    const target = ref.current.children[index] as HTMLDivElement;
-    if (!target) return;
-
-    const padding = ref.current.offsetHeight / 2;
-    const top = target.offsetTop - ref.current.offsetTop - padding + 12;
-
-    ref.current.scrollTo({ top, behavior: "smooth" });
-  }, [getIndex, timeout]);
+    setPosition(true);
+  }, [setPosition, timeout]);
 
   useInterval(() => {
     setTimeout((prev) => {
@@ -81,6 +95,19 @@ const Lyrics = ({ size }: LyricsProps) => {
       return prev - 1;
     });
   }, 1000);
+
+  useEffect(() => {
+    ipcRenderer?.on(
+      "window:resize",
+      throttle(() => {
+        setPosition(false);
+      })
+    );
+
+    return () => {
+      ipcRenderer?.removeAllListeners("window:resize");
+    };
+  }, [setPosition]);
 
   if (!lyrics) {
     return (
@@ -99,12 +126,14 @@ const Lyrics = ({ size }: LyricsProps) => {
       }}
     >
       {lyrics.map((line, i) => {
-        const Line = i === getIndex() ? CurrentLine : DefaultLine;
+        const isCurrent = i === getIndex();
+        const Line = isCurrent ? CurrentLine : DefaultLine;
 
         return (
           <Line
             key={i}
             $size={size}
+            ref={isCurrent ? currentRef : null}
             color={colors.blueGray25}
             onClick={() => onLineClick(i)}
           >

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { getLyrics } from "@apis/lyrics";
@@ -46,6 +46,11 @@ const Youtube = ({}: YoutubeProps) => {
   const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
+  const getVolume = useCallback(
+    () => (controlState.isMute ? 0 : controlState.volume),
+    [controlState]
+  );
+
   const gainNode = useRef<GainNode>();
   const player = useRef<YT.Player>();
   const playerState = useRef<{
@@ -56,7 +61,7 @@ const Youtube = ({}: YoutubeProps) => {
   }>({
     current: null,
     loaded: false,
-    volume: controlState.volume,
+    volume: getVolume(),
     isFirst: true,
   });
 
@@ -69,7 +74,7 @@ const Youtube = ({}: YoutubeProps) => {
 
   playerState.current.current = playingInfo.playlist[playingInfo.current];
   playerState.current.loaded = loaded;
-  playerState.current.volume = controlState.volume;
+  playerState.current.volume = getVolume();
 
   const onStateChange = (e: YT.OnStateChangeEvent) => {
     if (
@@ -286,9 +291,9 @@ const Youtube = ({}: YoutubeProps) => {
     const video = iframe.contentWindow?.document.querySelector("video");
 
     if (video) {
-      video.volume = controlState.volume / 100;
+      video.volume = getVolume() / 100;
     }
-  }, [controlState.volume]);
+  }, [getVolume]);
 
   return <Container id="wakmu-youtube" />;
 };

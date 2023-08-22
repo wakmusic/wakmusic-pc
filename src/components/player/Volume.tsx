@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { MouseEvent, useCallback, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
-import { ReactComponent as SoundOffSvg } from "@assets/icons/ic_20_sound_off.svg";
-import { ReactComponent as SoundOn50Svg } from "@assets/icons/ic_20_sound_on_50.svg";
-import { ReactComponent as SoundOn100Svg } from "@assets/icons/ic_20_sound_on_100.svg";
+import { ReactComponent as SoundOffActivateSvg } from "@assets/icons/ic_20_sound_off_activate.svg";
+import { ReactComponent as SoundOffDefaultSvg } from "@assets/icons/ic_20_sound_off_default.svg";
+import { ReactComponent as SoundOn50ActivateSvg } from "@assets/icons/ic_20_sound_on_50_activate.svg";
+import { ReactComponent as SoundOn50DefaultSvg } from "@assets/icons/ic_20_sound_on_50_default.svg";
+import { ReactComponent as SoundOn100ActivateSvg } from "@assets/icons/ic_20_sound_on_100_activate.svg";
+import { ReactComponent as SoundOn100DefaultSvg } from "@assets/icons/ic_20_sound_on_100_default.svg";
 import { ReactComponent as VolumeSvg } from "@assets/svgs/volume.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
@@ -20,8 +23,27 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
   const [isChanging, setIsChanging] = useState(false);
   const [prvVolume, setPrvVolume] = useState(50);
 
+  const [isHover, setIsHover] = useState(false);
+  const [isActivate, setIsActivate] = useState(false);
+
   function onClick() {
-    onChange(volume, !isMute);
+    if (isActivate) {
+      onChange(volume, !isMute);
+    } else {
+      setIsActivate(true);
+    }
+  }
+
+  function onHandleMouseUp() {
+    setIsChanging(false);
+  }
+
+  function onContainerMouseUp(e: MouseEvent) {
+    e.stopPropagation();
+  }
+
+  function handleGlobalMouseUp() {
+    setIsActivate(false);
   }
 
   function onValueChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -39,26 +61,37 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
     }
   }
 
-  function onMouseUp() {
-    setIsChanging(false);
-  }
-
   function getVolumeIcon() {
+    const activate = isHover || isActivate;
+
     if (isMute || volume === 0) {
-      return SoundOffSvg;
+      return activate ? SoundOffActivateSvg : SoundOffDefaultSvg;
     }
 
     if (volume < 50) {
-      return SoundOn50Svg;
+      return activate ? SoundOn50ActivateSvg : SoundOn50DefaultSvg;
     }
 
-    return SoundOn100Svg;
+    return activate ? SoundOn100ActivateSvg : SoundOn100DefaultSvg;
   }
 
+  useEffect(() => {
+    window.addEventListener("mouseup", handleGlobalMouseUp);
+
+    return () => {
+      window.removeEventListener("mouseup", handleGlobalMouseUp);
+    };
+  }, []);
+
   return (
-    <Container>
-      <SimpleIconButton icon={getVolumeIcon()} onClick={onClick} />
-      <Popover>
+    <Container onMouseUp={onContainerMouseUp}>
+      <IconWrapper
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+      >
+        <SimpleIconButton icon={getVolumeIcon()} onClick={onClick} />
+      </IconWrapper>
+      <Popover $activate={isActivate}>
         <VolumeSvg />
         <Input
           type="range"
@@ -67,22 +100,12 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
           value={isMute ? 0 : volume}
           onChange={onValueChange}
           onInput={onValueChange}
-          onMouseUp={onMouseUp}
+          onMouseUp={onHandleMouseUp}
         />
       </Popover>
     </Container>
   );
 };
-
-const Popover = styled.div`
-  position: absolute;
-  transform: translateY(-100%);
-
-  align-items: center;
-  justify-content: center;
-
-  display: none;
-`;
 
 const Container = styled.div`
   height: 100%;
@@ -93,11 +116,19 @@ const Container = styled.div`
   display: flex;
   justify-items: center;
   align-items: center;
-
-  &:hover ${Popover} {
-    display: inherit;
-  }
 `;
+
+const Popover = styled.div<{ $activate: boolean }>`
+  position: absolute;
+  transform: translateY(-100%);
+
+  align-items: center;
+  justify-content: center;
+
+  display: ${({ $activate }) => ($activate ? "inherit" : "none")};
+`;
+
+const IconWrapper = styled.div``;
 
 const Input = styled.input<{ value: number }>`
   position: absolute;

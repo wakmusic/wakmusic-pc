@@ -109,9 +109,6 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
 
 const Container = styled.div`
   height: 100%;
-  width: 38px;
-
-  margin-right: -18px;
 
   display: flex;
   justify-items: center;

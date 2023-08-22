@@ -1,5 +1,5 @@
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { visualVariants } from "src/animations/toggleVisualMode";
 import styled, { css } from "styled-components/macro";
 
@@ -26,6 +26,29 @@ const Visual = ({}: VisualProps) => {
 
   const controls = useAnimation();
 
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [zoom, setZoom] = useState(1);
+
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      setZoom(
+        Math.min(
+          (ref.current?.clientHeight ?? 714) / 714,
+          (ref.current?.clientWidth ?? 600) / 600
+        )
+      );
+    });
+    resizeObserver.observe(ref.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [ref]);
+
   useEffect(() => {
     if (!visualMode) {
       controls.set("initial");
@@ -39,17 +62,20 @@ const Visual = ({}: VisualProps) => {
 
   return (
     <Container
+      ref={ref}
       $image={img}
       $on={visualMode}
       animate={controls}
       variants={visualVariants}
       initial="initial"
     >
-      <Wrapper>
+      <Wrapper $zoom={zoom}>
         <Header />
-        <InnerContainer>
-          <LyricsMode />
-          <DefaultMode />
+        <InnerContainer $zoom={zoom}>
+          <InnerWrapper $zoom={zoom}>
+            <LyricsMode />
+            <DefaultMode />
+          </InnerWrapper>
         </InnerContainer>
       </Wrapper>
     </Container>
@@ -84,18 +110,35 @@ const Container = styled(motion.div)<{ $image: string; $on: boolean }>`
     `}
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
+  style: {
+    backdropFilter: `blur(calc(35px * ${$zoom}))`,
+  },
+}))`
   width: 100%;
   height: 100%;
 
   background-color: rgba(25, 26, 28, 0.6);
-  backdrop-filter: blur(35px);
 `;
 
-const InnerContainer = styled.div`
+const InnerContainer = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
+  style: {
+    zoom: $zoom,
+  },
+}))`
   width: 100%;
   height: 100%;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const InnerWrapper = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
+  style: {
+    marginBottom: `calc(74px / ${$zoom})`,
+  },
+}))`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,12 +1,35 @@
 import { Client } from "@xhayper/discord-rpc";
 
-import { SongInfo } from "../templates/player";
+import { SongInfo } from "@templates/player";
 
 let last: SongInfo | undefined;
 let startTimestamp: number | undefined;
 
 export const client = new Client({
   clientId: "1130044110837923890",
+});
+
+const reconnect = () => {
+  client.login();
+};
+
+let reconnectInterval: NodeJS.Timer | undefined = setInterval(reconnect, 5000);
+
+client.on("ready", () => {
+  if (reconnectInterval) {
+    clearInterval(reconnectInterval);
+    reconnectInterval = undefined;
+  }
+
+  if (last) {
+    changePresence(last, true);
+  }
+});
+
+client.on("disconnected", () => {
+  client.destroy();
+
+  reconnectInterval = setInterval(reconnect, 5000);
 });
 
 export const setProgress = (progress: number) => {

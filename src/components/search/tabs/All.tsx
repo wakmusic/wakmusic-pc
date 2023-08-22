@@ -1,17 +1,20 @@
+import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { ReactComponent as ArrowRightSVG } from "@assets/icons/ic_16_arrow_right.svg";
 
 import { T5Medium, T7Medium } from "@components/Typography";
+import SongItem from "@components/globals/SongItem";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 
-import { SongsSearchResponse } from "@templates/search.ts";
+import { useSelectSongs } from "@hooks/selectSongs";
 
-import SongCard from "../SongCard";
+import { SearchAllResponse } from "@templates/search.ts";
 
 enum Category {
   song = "노래",
@@ -21,23 +24,31 @@ enum Category {
 
 interface AllProps {
   query: string;
-  res: SongsSearchResponse;
+  res: SearchAllResponse;
 }
 
 const All = ({ query, res }: AllProps) => {
   const [, setSearchParams] = useSearchParams();
 
+  const resKeys = useMemo(
+    () =>
+      (Object.keys(res) as Array<"song" | "artist" | "remix">).filter(
+        (key) => res[key].length !== 0
+      ),
+    [res]
+  );
+  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
+
   return (
     <PageItemContainer height={142}>
       <Wrapper>
-        {(Object.keys(res) as Array<"song" | "artist" | "remix">)
-          .filter((key) => res[key].length !== 0)
-          .map((key, index) => (
-            <CategoryContainer key={index}>
-              <CategoryHeader>
-                <T5Medium color={colors.gray900}>{Category[key]}</T5Medium>
-                <T5Medium color={colors.point}>{res[key].length}</T5Medium>
+        {resKeys.map((key, index) => (
+          <CategoryContainer key={index}>
+            <CategoryHeader>
+              <T5Medium color={colors.gray900}>{Category[key]}</T5Medium>
+              <T5Medium color={colors.point}>{res[key].length}</T5Medium>
 
+              {res[key].length > 3 && (
                 <CategoryHeaderButton
                   onClick={() => {
                     setSearchParams({
@@ -49,12 +60,29 @@ const All = ({ query, res }: AllProps) => {
                   <T7Medium color={colors.gray500}>전체보기</T7Medium>
                   <ArrowRightSVG />
                 </CategoryHeaderButton>
-              </CategoryHeader>
+              )}
+            </CategoryHeader>
 
-              <SongCard songs={res[key]} />
-            </CategoryContainer>
-          ))}
+            {res[key].slice(-3).map((song, index) => (
+              <SongItem
+                key={index}
+                song={song}
+                index={index}
+                selected={selectedIncludes(song, index)}
+                onClick={selectCallback}
+                noPadding
+                forceWidth={650}
+              />
+            ))}
+          </CategoryContainer>
+        ))}
       </Wrapper>
+
+      <MusicController
+        songs={resKeys.map((key) => res[key].slice(-3)).flat()}
+        selectedSongs={selected}
+        dispatchSelectedSongs={selectCallback}
+      />
     </PageItemContainer>
   );
 };

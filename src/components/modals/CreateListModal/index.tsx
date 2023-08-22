@@ -8,9 +8,9 @@ import colors from "@constants/colors";
 import { useCreateListModalState } from "@hooks/createListModal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
+import Input from "../globals/Input";
 import TwoButton from "../globals/TwoButton";
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
-import Input from "./Input";
 
 interface CreateListModalProps {}
 

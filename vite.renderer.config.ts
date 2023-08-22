@@ -4,15 +4,27 @@ import macrosPlugin from "vite-plugin-babel-macros";
 import svgr from "vite-plugin-svgr";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+import { version } from "./package.json";
+
 // https://vitejs.dev/config/
 export default defineConfig({
   root: "./src",
   publicDir: "./../public",
-  cacheDir: "./../.yarn/.vite",
   base: "./",
   envDir: "./../",
   build: {
     outDir: "./../dist",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "lottie-web": ["lottie-web"],
+          firebase: ["firebase/analytics", "firebase/app"],
+        },
+      },
+    },
   },
   plugins: [react(), tsconfigPaths(), svgr(), macrosPlugin()],
+  define: {
+    "import.meta.env.VITE_VERSION": JSON.stringify(version),
+  },
 });

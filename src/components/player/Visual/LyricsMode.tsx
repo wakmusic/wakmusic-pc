@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components/macro";
 
 import { T4Medium, T5Light } from "@components/Typography";
+import Marquee from "@components/globals/Marquee";
 
 import colors from "@constants/colors";
 
@@ -20,8 +21,13 @@ const LyricsMode = ({}: LyricsModeProps) => {
   return (
     <Container $on={controlState.isLyricsOn}>
       <TitleContainer>
-        <T4Medium color={colors.blueGray25}>{song?.title}</T4Medium>
-        <T5Light color={colors.blueGray100}>{song?.artist}</T5Light>
+        <Marquee width={419}>
+          <T4Medium color={colors.blueGray25}>{song?.title}</T4Medium>
+        </Marquee>
+
+        <Marquee width={419}>
+          <T5Light color={colors.blueGray100}>{song?.artist}</T5Light>
+        </Marquee>
       </TitleContainer>
 
       <LyricsContainer>
@@ -42,15 +48,9 @@ const LyricsMode = ({}: LyricsModeProps) => {
 const Container = styled.div<{ $on: boolean }>`
   width: 419px;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
   position: absolute;
 
   visibility: hidden;
-
-  margin-top: -73px;
 
   ${({ $on }) =>
     $on &&
@@ -70,13 +70,13 @@ const LyricsContainer = styled.div`
   width: 100%;
   height: 243px;
 
-  margin-top: 34px;
+  margin-top: 38px;
 `;
 
 const TimelineContainer = styled.div`
   width: 100%;
 
-  margin: 64px 0 40px 0;
+  margin: 62px 0 40px 0;
   padding-top: 1px;
 `;
 

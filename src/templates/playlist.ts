@@ -1,3 +1,4 @@
+import { Image } from "./Image";
 import { SongTotal } from "./song";
 import { User } from "./user";
 
@@ -12,11 +13,6 @@ export type BasePlaylist = playlistMeta & {
   songs: SongTotal[];
 };
 
-type defaultImage = {
-  name: string;
-  version: number;
-};
-
 type recommendImage = {
   round: boolean;
   square: boolean;
@@ -28,7 +24,7 @@ export type RecommendListMetaType = playlistMeta & {
 };
 
 export type PlaylistType = BasePlaylist & {
-  image: defaultImage;
+  image: Image;
 };
 
 export type RecommendListType = RecommendListMetaType & BasePlaylist;

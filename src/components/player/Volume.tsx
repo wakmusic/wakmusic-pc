@@ -2,7 +2,8 @@ import { useState } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as SoundOffSvg } from "@assets/icons/ic_20_sound_off.svg";
-import { ReactComponent as SoundOnSvg } from "@assets/icons/ic_20_sound_on.svg";
+import { ReactComponent as SoundOn50Svg } from "@assets/icons/ic_20_sound_on_50.svg";
+import { ReactComponent as SoundOn100Svg } from "@assets/icons/ic_20_sound_on_100.svg";
 import { ReactComponent as VolumeSvg } from "@assets/svgs/volume.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
@@ -11,30 +12,62 @@ import colors from "@constants/colors";
 
 interface VolumeProps {
   volume: number;
-  onChange: (value: number) => void;
+  isMute: boolean;
+  onChange: (volume: number, isMute: boolean) => void;
 }
 
-const Volume = ({ volume, onChange }: VolumeProps) => {
-  const [isHover, setIsHover] = useState(false);
+const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
+  const [isChanging, setIsChanging] = useState(false);
+  const [prvVolume, setPrvVolume] = useState(50);
+
+  function onClick() {
+    onChange(volume, !isMute);
+  }
 
   function onValueChange(e: React.ChangeEvent<HTMLInputElement>) {
-    onChange(parseInt(e.target.value));
+    const value = parseInt(e.target.value);
+
+    if (!isChanging) {
+      setIsChanging(true);
+      setPrvVolume(volume);
+    }
+
+    if (value === 0) {
+      onChange(prvVolume, true);
+    } else {
+      onChange(value, false);
+    }
+  }
+
+  function onMouseUp() {
+    setIsChanging(false);
+  }
+
+  function getVolumeIcon() {
+    if (isMute || volume === 0) {
+      return SoundOffSvg;
+    }
+
+    if (volume < 50) {
+      return SoundOn50Svg;
+    }
+
+    return SoundOn100Svg;
   }
 
   return (
-    <Container
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-    >
-      <SimpleIconButton icon={isHover ? SoundOnSvg : SoundOffSvg} />
+    <Container>
+      <SimpleIconButton icon={getVolumeIcon()} onClick={onClick} />
       <Popover>
         <VolumeSvg />
         <Input
           type="range"
           min={0}
           max={100}
-          value={volume}
+          value={isMute ? 0 : volume}
           onChange={onValueChange}
+          onInput={onValueChange}
+          onMouseUp={onMouseUp}
         />
       </Popover>
     </Container>

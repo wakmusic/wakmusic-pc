@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 
 import { T1Bold, T5Medium } from "@components/Typography";
 
@@ -6,7 +6,7 @@ import colors from "@constants/colors";
 
 import { useConfirmModalState } from "@hooks/confirmModal";
 
-import { isString } from "@utils/isTypes";
+import { isNull, isString } from "@utils/isTypes";
 
 import TwoButton from "./globals/TwoButton";
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
@@ -21,7 +21,9 @@ const ConfirmModal = ({}: ConfirmModalProps) => {
   return (
     <ModalOverlay>
       <Container>
-        <Title>{modalState.title}</Title>
+        <Title $hasChildren={!isNull(modalState.children)}>
+          {modalState.title}
+        </Title>
 
         {isString(modalState.children) ? (
           <T5Medium color={colors.blueGray500}>{modalState.children}</T5Medium>
@@ -48,11 +50,16 @@ const Container = styled(ModalContainer)`
   background: ${colors.blueGray25};
 `;
 
-const Title = styled(T1Bold)`
+const Title = styled(T1Bold)<{ $hasChildren: boolean }>`
   color: ${colors.primary900};
 
   margin-top: 52px;
-  margin-bottom: 8px;
+
+  ${({ $hasChildren }) =>
+    $hasChildren &&
+    css`
+      margin-bottom: 8px;
+    `}
 `;
 
 const ButtonsWrapper = styled.div`

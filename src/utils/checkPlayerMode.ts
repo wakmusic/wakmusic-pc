@@ -1,7 +1,11 @@
 import { useCallback, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { IPCMain, IPCRenderer } from "@constants/ipc";
+
 import { useInterval } from "@hooks/interval";
+
+import { ipcRenderer } from "./modules";
 
 /**
  * 매 초마다 플레이어 모드가 분리되었는지 확인하고, 이상이 있을 시 복구하는 컴포넌트입니다.
@@ -13,7 +17,7 @@ const CheckPlayerMode = (): null => {
 
   const callback = useCallback(
     (isSeparated: boolean) => {
-      if (!window.ipcRenderer) return;
+      if (!ipcRenderer) return;
 
       if (isSeparated && location.pathname !== "/player") {
         navigate("/player");
@@ -25,26 +29,26 @@ const CheckPlayerMode = (): null => {
   );
 
   useEffect(() => {
-    if (!window.ipcRenderer) return;
+    if (!ipcRenderer) return;
 
-    window.ipcRenderer.on(
-      "reply:isSeparate",
+    ipcRenderer.on(
+      IPCMain.REPLY_IS_SEPARATE,
       (_event, isSeparated: boolean) => {
         callback(isSeparated);
       }
     );
 
     return () => {
-      if (!window.ipcRenderer) return;
+      if (!ipcRenderer) return;
 
-      window.ipcRenderer.removeAllListeners("reply:isSeparate");
+      ipcRenderer.removeAllListeners(IPCMain.REPLY_IS_SEPARATE);
     };
   }, [callback]);
 
   useInterval(() => {
-    if (!window.ipcRenderer) return;
+    if (!ipcRenderer) return;
 
-    window.ipcRenderer.send("query:isSeparate");
+    ipcRenderer.send(IPCRenderer.QUERY_IS_SEPARATE);
   }, 1000);
 
   return null;

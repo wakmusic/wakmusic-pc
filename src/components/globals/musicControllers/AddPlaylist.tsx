@@ -2,17 +2,23 @@ import styled from "styled-components/macro";
 
 import { ReactComponent as AddPL } from "@assets/icons/ic_24_play_add.svg";
 
-import { T7Medium } from "@components/Typography/Medium";
+import { T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface AddPlaylistProps {}
+interface AddPlaylistProps {
+  onClick?: () => void;
+}
 
-const AddPlaylist = ({}: AddPlaylistProps) => {
+const AddPlaylist = ({ onClick }: AddPlaylistProps) => {
   return (
-    <Wrapper>
+    <Wrapper
+      onClick={() => {
+        onClick && onClick();
+      }}
+    >
       <AddPL />
-      <T7Medium color={colors.blueGray25}>재생목록추가</T7Medium>
+      <T7Light color={colors.blueGray25}>재생목록추가</T7Light>
     </Wrapper>
   );
 };

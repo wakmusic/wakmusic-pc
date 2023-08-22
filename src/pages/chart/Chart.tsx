@@ -1,32 +1,42 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 
 import { ChartsType, fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
 
-import FunctionSection from "@components/chart/FunctionSection";
+import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
+import SongItem from "@components/globals/SongItem";
 import UpdatedText from "@components/globals/UpdatedText";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
 import VirtualItem from "@layouts/VirtualItem";
 
+import { chartTabs } from "@constants/tabs";
+import { lastTextMap } from "@constants/textMap";
+
+import { usePlaySongs } from "@hooks/player";
+import { useScrollToTop } from "@hooks/scrollToTop";
+import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { Song } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
   const [searchParams] = useSearchParams();
-  const [selected, setSelected] = useState<Song[]>([]);
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
   const tab = useMemo(
     () => (searchParams.get("type") ?? "hourly") as ChartsType,
     [searchParams]
   );
+
+  const playSongs = usePlaySongs();
 
   const {
     isLoading: chartsIsLoading,
@@ -50,10 +60,7 @@ const Chart = ({}: ChartProps) => {
     charts ?? []
   );
 
-  useEffect(() => {
-    setSelected([]);
-    viewportRef.current?.scrollTo(0, 0);
-  }, [tab, viewportRef]);
+  useScrollToTop(tab, viewportRef, setSelected);
 
   // TODO
   if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)
@@ -63,14 +70,21 @@ const Chart = ({}: ChartProps) => {
   return (
     <PageLayout>
       <PageContainer>
-        <FunctionSection />
+        <FunctionSection
+          tabs={chartTabs}
+          play={(shuffle) => {
+            playSongs(charts, shuffle);
+          }}
+        />
+
         <UpdatedText updated={chartUpdated} marginTop={12} marginLeft={20} />
 
         <GuideBar
+          lastText={tab !== "total" ? lastTextMap[tab] : undefined}
           features={[
             GuideBarFeature.rank,
             GuideBarFeature.info,
-            GuideBarFeature.last,
+            tab !== "total" ? GuideBarFeature.last : undefined,
             GuideBarFeature.date,
             GuideBarFeature.views,
           ]}
@@ -86,23 +100,25 @@ const Chart = ({}: ChartProps) => {
               <SongItem
                 rank={virtualItem.index + 1}
                 song={item}
-                selected={selected.includes(item)}
+                index={virtualItem.index}
+                selected={selectedIncludes(item, virtualItem.index)}
                 features={[
-                  SongItemFeature.last,
+                  tab !== "total" ? SongItemFeature.last : undefined,
                   SongItemFeature.date,
                   SongItemFeature.views,
                 ]}
-                onClick={(song) => {
-                  if (selected.includes(song)) {
-                    setSelected(selected.filter((item) => item !== song));
-                  } else {
-                    setSelected([...selected, song]);
-                  }
-                }}
+                onClick={selectCallback}
+                useIncrease={tab !== "total"}
               />
             </VirtualItem>
           ))}
         </PageItemContainer>
+
+        <MusicController
+          songs={charts ?? []}
+          selectedSongs={selected}
+          dispatchSelectedSongs={selectCallback}
+        />
       </PageContainer>
     </PageLayout>
   );

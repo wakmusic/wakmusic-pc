@@ -1,5 +1,7 @@
 import { atom } from "recoil";
 
+import { IPCRenderer } from "@constants/ipc";
+
 import {
   ChangeProgressStateType,
   ControlStateType,
@@ -7,6 +9,8 @@ import {
   PlayingInfoStateType,
   RepeatType,
 } from "@templates/player";
+
+import { ipcRenderer } from "@utils/modules";
 
 export const visualModeState = atom<boolean>({
   key: "visualMode",
@@ -17,6 +21,7 @@ export const controlState = atom<ControlStateType>({
   key: "control",
   default: {
     volume: Number(localStorage.getItem("volume")) || 50,
+    isMute: localStorage.getItem("isMute") === "true" || false,
     repeatType: RepeatType.Off,
     isPlaying: false,
     isRandom: false,
@@ -26,10 +31,14 @@ export const controlState = atom<ControlStateType>({
     ({ onSet }) => {
       onSet((newValue, oldValue) => {
         if (newValue.isPlaying !== (oldValue as ControlStateType).isPlaying) {
-          window.ipcRenderer?.send("rpc:playing", newValue.isPlaying);
+          ipcRenderer?.send(IPCRenderer.RPC_PLAYING, newValue.isPlaying);
         }
         if (newValue.volume !== (oldValue as ControlStateType).volume) {
           localStorage.setItem("volume", newValue.volume.toString());
+        }
+
+        if (newValue.isMute !== (oldValue as ControlStateType).isMute) {
+          localStorage.setItem("isMute", newValue.isMute.toString());
         }
       });
     },
@@ -52,7 +61,7 @@ export const playingProgress = atom<number>({
   effects: [
     ({ onSet }) => {
       onSet((value) => {
-        window.ipcRenderer?.send("rpc:progress", value);
+        ipcRenderer?.send(IPCRenderer.RPC_PROGRESS, value);
       });
     },
   ],
@@ -79,7 +88,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
     ({ onSet }) => {
       onSet((value, oldValue) => {
         const current = value.playlist[value.current];
-        window.ipcRenderer?.send("rpc:track", current);
+        ipcRenderer?.send(IPCRenderer.RPC_TRACK, current);
 
         if (value.playlist !== (oldValue as PlayingInfoStateType).playlist) {
           localStorage.setItem("playlist", JSON.stringify(value.playlist));

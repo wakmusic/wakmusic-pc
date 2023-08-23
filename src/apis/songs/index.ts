@@ -1,7 +1,9 @@
 import instance from "@apis/axios";
 
 import { SearchAllResponse, SearchTabType } from "@templates/search";
-import { Song, SongSortType } from "@templates/song";
+import { RawSong, Song, SongSortType } from "@templates/song";
+
+import processSong from "@utils/processSong";
 
 export type NewSongsType =
   | "all"
@@ -41,7 +43,8 @@ export const fetchSearchTab = async (
   const { data } = await instance.get(`/v2/songs/search/${type}`, {
     params: { sort, keyword, start, limit },
   });
-  return data;
+
+  return data.map((item: RawSong) => processSong("total", item));
 };
 
 export const fetchNewSongs = async (
@@ -53,5 +56,5 @@ export const fetchNewSongs = async (
     params: { start, limit },
   });
 
-  return data;
+  return data.map((item: RawSong) => processSong("total", item));
 };

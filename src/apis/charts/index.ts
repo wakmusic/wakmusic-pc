@@ -2,7 +2,7 @@ import instance from "@apis/axios";
 
 import { ChartType, RawSong, Song } from "@templates/song";
 
-import getChartData from "@utils/getChartData";
+import processSong from "@utils/processSong";
 
 const CHARTS_UPDATE_URL = "/charts";
 
@@ -17,23 +17,7 @@ export const fetchCharts = async <T extends ChartType>(
     },
   });
 
-  const processedData: Song[] = [];
-
-  data.forEach((item: RawSong) => {
-    const chartData = getChartData(item);
-
-    processedData.push({
-      ...item,
-      views: chartData.views,
-      chart: {
-        type: type,
-        increase: chartData.increase,
-        last: chartData.last,
-      },
-    });
-  });
-
-  return processedData;
+  return data.map((item: RawSong) => processSong(type, item));
 };
 
 export const fetchChartsUpdateTypes = async (

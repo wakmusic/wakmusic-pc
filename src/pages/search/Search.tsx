@@ -33,13 +33,12 @@ const Search = ({}: SearchProps) => {
 
   const query = useMemo(() => searchParams.get("query") ?? "", [searchParams]);
 
-  const { isLoading, error, data } = useQuery({
+  const { isFetching, error, data } = useQuery({
     queryKey: ["search", query],
     queryFn: async () => await fetchSearchAll(query),
   });
 
   // TODO
-  if (isLoading || !data) return <div>로딩중...</div>;
   if (error) return <div>에러...</div>;
 
   return (
@@ -53,7 +52,7 @@ const Search = ({}: SearchProps) => {
           ))}
         </TabBar>
 
-        <Result tab={tab} query={query} all={data} />
+        <Result tab={tab} query={query} all={data} isFetching={isFetching} />
       </Container>
     </PageLayout>
   );

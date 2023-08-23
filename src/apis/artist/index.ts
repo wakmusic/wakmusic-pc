@@ -1,7 +1,9 @@
 import instance from "@apis/axios";
 
 import { Artist } from "@templates/artists";
-import { SongSortType } from "@templates/song";
+import { RawSong, Song, SongSortType } from "@templates/song";
+
+import processSong from "@utils/processSong";
 
 type ArtistListResponse = Artist[];
 
@@ -14,7 +16,7 @@ export const fetchArtistAlbums = async (
   artistId: string,
   sort: SongSortType,
   start: number
-) => {
+): Promise<Song[]> => {
   const { data } = await instance.get(`v2/artist/albums`, {
     params: {
       id: artistId,
@@ -22,5 +24,6 @@ export const fetchArtistAlbums = async (
       start,
     },
   });
-  return data;
+
+  return data.map((item: RawSong) => processSong("total", item));
 };

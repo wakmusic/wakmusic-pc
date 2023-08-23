@@ -18,7 +18,7 @@ import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { SearchTabType } from "@templates/search";
-import { SongTotal } from "@templates/song";
+import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 import NotFound from "../NotFound";
@@ -39,7 +39,7 @@ const List = ({ tab, query }: ListProps) => {
     hasNextPage,
     isLoading,
     error,
-  } = useInfiniteQuery<SongTotal[]>({
+  } = useInfiniteQuery<Song[]>({
     queryKey: ["searchTab", tab, query],
     queryFn: async ({ pageParam = 0 }) =>
       tab !== "all"

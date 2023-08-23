@@ -129,8 +129,6 @@ const List = ({ tab, query }: ListProps) => {
   );
 };
 
-const Container = styled.div`
-  margin-left: -20px;
-`;
+const Container = styled.div``;
 
 export default List;

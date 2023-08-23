@@ -44,13 +44,18 @@ const Search = ({}: SearchProps) => {
   return (
     <PageLayout>
       <Container>
-        <TabBar>
-          {searchTabs.map((item, index) => (
-            <Tab to={{ query: query, tab: (item.to as Query).tab }} key={index}>
-              {item.text}
-            </Tab>
-          ))}
-        </TabBar>
+        <TabBarWrapper>
+          <TabBar>
+            {searchTabs.map((item, index) => (
+              <Tab
+                to={{ query: query, tab: (item.to as Query).tab }}
+                key={index}
+              >
+                {item.text}
+              </Tab>
+            ))}
+          </TabBar>
+        </TabBarWrapper>
 
         <Result tab={tab} query={query} all={data} isFetching={isFetching} />
       </Container>
@@ -60,6 +65,9 @@ const Search = ({}: SearchProps) => {
 
 const Container = styled(PageContainer)`
   padding-top: 16px;
+`;
+
+const TabBarWrapper = styled.div`
   padding-left: 20px;
 `;
 

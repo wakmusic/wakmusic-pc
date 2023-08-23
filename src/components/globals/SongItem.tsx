@@ -30,7 +30,6 @@ interface SongItemProps {
   onEdit?: (event: React.MouseEvent) => void;
 
   useIncrease?: boolean;
-  noPadding?: boolean;
   forceWidth?: number;
 
   isLoading?: boolean;
@@ -69,7 +68,6 @@ const SongItem = ({
   selected,
   onClick,
   onEdit,
-  noPadding,
   useIncrease,
   forceWidth,
   isLoading,
@@ -96,7 +94,6 @@ const SongItem = ({
     <Container
       onClick={() => onClick && song && onClick(song, index)}
       $selected={selected}
-      $noPadding={noPadding}
     >
       <Info>
         {rank && (
@@ -128,7 +125,7 @@ const SongItem = ({
   );
 };
 
-const Container = styled.div<{ $selected?: boolean; $noPadding?: boolean }>`
+const Container = styled.div<{ $selected?: boolean }>`
   height: 64px;
   width: 100%;
 
@@ -136,11 +133,7 @@ const Container = styled.div<{ $selected?: boolean; $noPadding?: boolean }>`
   align-items: center;
   justify-content: space-between;
 
-  ${({ $noPadding }) =>
-    !$noPadding &&
-    css`
-      padding: 0px 20px;
-    `}
+  padding: 0px 20px;
 
   background-color: ${({ $selected }) =>
     $selected ? colors.blueGray200 : "transparent"};

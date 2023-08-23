@@ -39,7 +39,7 @@ const Chart = ({}: ChartProps) => {
   const playSongs = usePlaySongs();
 
   const {
-    isLoading: chartsIsLoading,
+    isFetching: chartsIsLoading,
     error: chartsError,
     data: charts,
   } = useQuery({
@@ -48,7 +48,7 @@ const Chart = ({}: ChartProps) => {
   });
 
   const {
-    isLoading: chartUpdatedIsLoading,
+    isFetching: chartUpdatedIsLoading,
     error: chartUpdatedError,
     data: chartUpdated,
   } = useQuery({
@@ -57,14 +57,12 @@ const Chart = ({}: ChartProps) => {
   });
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
-    charts ?? []
+    chartsIsLoading ? Array(100).fill(null) : charts ?? []
   );
 
   useScrollToTop(tab, viewportRef, setSelected);
 
   // TODO
-  if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)
-    return <div>로딩중...</div>;
   if (chartsError || chartUpdatedError) return <div>에러...</div>;
 
   return (
@@ -73,11 +71,16 @@ const Chart = ({}: ChartProps) => {
         <FunctionSection
           tabs={chartTabs}
           play={(shuffle) => {
-            playSongs(charts, shuffle);
+            charts?.every((s) => s) && playSongs(charts, shuffle);
           }}
         />
 
-        <UpdatedText updated={chartUpdated} marginTop={12} marginLeft={20} />
+        <UpdatedText
+          updated={chartUpdated}
+          marginTop={12}
+          marginLeft={20}
+          isLoading={chartUpdatedIsLoading}
+        />
 
         <GuideBar
           lastText={tab !== "total" ? lastTextMap[tab] : undefined}
@@ -109,6 +112,7 @@ const Chart = ({}: ChartProps) => {
                 ]}
                 onClick={selectCallback}
                 useIncrease={tab !== "total"}
+                isLoading={chartsIsLoading}
               />
             </VirtualItem>
           ))}

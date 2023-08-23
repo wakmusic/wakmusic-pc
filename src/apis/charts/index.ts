@@ -1,33 +1,15 @@
 import instance from "@apis/axios";
 
-import {
-  SongDaily,
-  SongHourly,
-  SongMonthly,
-  SongTotal,
-  SongWeekly,
-} from "@templates/song";
+import { ChartType, RawSong, Song } from "@templates/song";
+
+import processSong from "@utils/processSong";
 
 const CHARTS_UPDATE_URL = "/charts";
 
-export type ChartsType = "monthly" | "weekly" | "daily" | "hourly" | "total";
-
-export type SongByChartsType<T extends ChartsType> = T extends "monthly"
-  ? SongMonthly
-  : T extends "weekly"
-  ? SongWeekly
-  : T extends "daily"
-  ? SongDaily
-  : T extends "hourly"
-  ? SongHourly
-  : T extends "total"
-  ? SongTotal
-  : never;
-
-export const fetchCharts = async <T extends ChartsType>(
+export const fetchCharts = async <T extends ChartType>(
   type: T,
   limit = 10
-): Promise<SongByChartsType<T>[]> => {
+): Promise<Song[]> => {
   const { data } = await instance.get(`/v2/charts`, {
     params: {
       type,
@@ -35,11 +17,11 @@ export const fetchCharts = async <T extends ChartsType>(
     },
   });
 
-  return data;
+  return data.map((item: RawSong) => processSong(type, item));
 };
 
 export const fetchChartsUpdateTypes = async (
-  chartType: ChartsType
+  chartType: ChartType
 ): Promise<string> => {
   const { data } = await instance.get(
     `${CHARTS_UPDATE_URL}/updated/${chartType}`

@@ -7,11 +7,10 @@ import { T7_1Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { ChartData, Song } from "@templates/song";
+import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 import { formatDate, formatNumber } from "@utils/formatting";
-import getChartData from "@utils/getChartData";
 import { isNumber } from "@utils/isTypes";
 
 import Rank from "./Rank";
@@ -38,20 +37,19 @@ interface SongItemProps {
 
 const featureBuilder = (
   song: Song | undefined,
-  chartData: ChartData | undefined,
   feature: SongItemFeature | undefined,
   useIncrease?: boolean
 ) => {
-  if (!song || !chartData) return null;
+  if (!song) return null;
 
   switch (feature) {
     case SongItemFeature.last:
-      return chartData.last ? `${chartData.last}위` : "-";
+      return song.chart.last ? `${song.chart.last}위` : "-";
     case SongItemFeature.date:
       return formatDate(song.date);
     case SongItemFeature.views:
       return `${formatNumber(
-        useIncrease ? chartData.increase : chartData.views
+        useIncrease ? song.chart.increase : song.views
       )}회`;
     case SongItemFeature.like:
       return formatNumber(song.like);
@@ -74,13 +72,11 @@ const SongItem = ({
   forceWidth,
   isLoading,
 }: SongItemProps) => {
-  const chartData = useMemo(() => song && getChartData(song), [song]);
   const featureTexts = useMemo(
     () =>
-      features?.map((feature) =>
-        featureBuilder(song, chartData, feature, useIncrease)
-      ) ?? [],
-    [song, chartData, features, useIncrease]
+      features?.map((feature) => featureBuilder(song, feature, useIncrease)) ??
+      [],
+    [song, features, useIncrease]
   );
 
   const width = useMemo(() => {
@@ -100,7 +96,7 @@ const SongItem = ({
     >
       <Info>
         {rank && (
-          <Rank now={rank} last={chartData?.last} isLoading={isLoading} />
+          <Rank now={rank} last={song?.chart?.last} isLoading={isLoading} />
         )}
         {editMode && (
           <MoveButton

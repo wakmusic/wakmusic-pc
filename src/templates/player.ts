@@ -1,17 +1,11 @@
+import { Song } from "./song";
+
 export enum RepeatType {
   Off,
   All,
   One,
 }
 
-export type SongInfo = {
-  songId: string;
-  title: string;
-  artist: string;
-  views: number;
-  start: number;
-  end: number;
-};
 export type ControlStateType = {
   volume: number;
   isMute: boolean;
@@ -22,7 +16,7 @@ export type ControlStateType = {
 };
 
 export type PlayingInfoStateType = {
-  playlist: SongInfo[];
+  playlist: Song[];
   history: string[];
   current: number;
 };

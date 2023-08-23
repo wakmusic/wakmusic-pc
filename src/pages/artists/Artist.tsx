@@ -32,7 +32,7 @@ import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { SongSortType, SongTotal } from "@templates/song";
+import { Song, SongSortType } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 interface ArtistProps {}
@@ -74,7 +74,7 @@ const Artist = ({}: ArtistProps) => {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<SongTotal[]>({
+  } = useInfiniteQuery<Song[]>({
     queryKey: ["artistsAlbums", tab, artistId],
     queryFn: async ({ pageParam = 0 }) => {
       if (!artistId || !tab) return [];

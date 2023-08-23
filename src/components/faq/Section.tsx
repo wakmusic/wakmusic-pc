@@ -8,10 +8,10 @@ import { T6Bold, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { FaqType } from "@templates/faq";
+import { FAQ } from "@templates/faq";
 
 interface SectionProps {
-  article: FaqType;
+  article: FAQ;
 }
 
 const Section = ({ article }: SectionProps) => {
@@ -20,7 +20,7 @@ const Section = ({ article }: SectionProps) => {
   return (
     <Container>
       <Grid $open={isOpened} onClick={() => setIsOpened(!isOpened)}>
-        <Category>{article.category.category}</Category>
+        <Category>{article.category}</Category>
         {isOpened ? (
           <HighlightedQuestion>{article.question}</HighlightedQuestion>
         ) : (

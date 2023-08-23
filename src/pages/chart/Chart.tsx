@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 
-import { ChartsType, fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
+import { fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
 
 import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
@@ -23,6 +23,7 @@ import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
+import { ChartType } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 interface ChartProps {}
@@ -32,7 +33,7 @@ const Chart = ({}: ChartProps) => {
   const { selected, setSelected, selectCallback, selectedIncludes } =
     useSelectSongs();
   const tab = useMemo(
-    () => (searchParams.get("type") ?? "hourly") as ChartsType,
+    () => (searchParams.get("type") ?? "hourly") as ChartType,
     [searchParams]
   );
 

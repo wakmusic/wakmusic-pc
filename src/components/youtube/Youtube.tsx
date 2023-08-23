@@ -20,7 +20,7 @@ import {
 } from "@hooks/player";
 import { usePrevious } from "@hooks/previous";
 
-import { SongInfo } from "@templates/player";
+import { Song } from "@templates/song";
 
 import { applyHook } from "@utils/consoleApi";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
@@ -36,7 +36,7 @@ const Youtube = ({}: YoutubeProps) => {
   const [isControlling] = useIsControllingState();
   const [, setLyrics] = useLyricsState();
 
-  const [nowPlaying, setNowPlaying] = useState<SongInfo | null>(null);
+  const [nowPlaying, setNowPlaying] = useState<Song | null>(null);
   const [loaded, setLoaded] = useState(false);
 
   const prevSongId = usePrevious(nowPlaying?.songId);
@@ -54,7 +54,7 @@ const Youtube = ({}: YoutubeProps) => {
   const gainNode = useRef<GainNode>();
   const player = useRef<YT.Player>();
   const playerState = useRef<{
-    current: SongInfo | null;
+    current: Song | null;
     loaded: boolean;
     volume: number;
     isFirst: boolean;

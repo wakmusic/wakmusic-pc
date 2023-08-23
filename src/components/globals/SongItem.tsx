@@ -11,7 +11,6 @@ import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 import { formatDate, formatNumber } from "@utils/formatting";
-import getChartData from "@utils/getChartData";
 import { isNumber } from "@utils/isTypes";
 
 import Rank from "./Rank";
@@ -36,22 +35,17 @@ interface SongItemProps {
 
 const featureBuilder = (
   song: Song,
-  chartData: {
-    views: number;
-    increase: number;
-    last: number;
-  },
   feature: SongItemFeature | undefined,
   useIncrease?: boolean
 ) => {
   switch (feature) {
     case SongItemFeature.last:
-      return chartData.last ? `${chartData.last}위` : "-";
+      return song.chart.last ? `${song.chart.last}위` : "-";
     case SongItemFeature.date:
       return formatDate(song.date);
     case SongItemFeature.views:
       return `${formatNumber(
-        useIncrease ? chartData.increase : chartData.views
+        useIncrease ? song.chart.increase : song.views
       )}회`;
     case SongItemFeature.like:
       return formatNumber(song.like);
@@ -73,13 +67,11 @@ const SongItem = ({
   useIncrease,
   forceWidth,
 }: SongItemProps) => {
-  const chartData = useMemo(() => getChartData(song), [song]);
   const featureTexts = useMemo(
     () =>
-      features?.map((feature) =>
-        featureBuilder(song, chartData, feature, useIncrease)
-      ) ?? [],
-    [song, chartData, features, useIncrease]
+      features?.map((feature) => featureBuilder(song, feature, useIncrease)) ??
+      [],
+    [song, features, useIncrease]
   );
 
   const width = useMemo(() => {
@@ -98,7 +90,7 @@ const SongItem = ({
       $noPadding={noPadding}
     >
       <Info>
-        {rank && <Rank now={rank} last={chartData.last} />}
+        {rank && <Rank now={rank} last={song.chart.last} />}
         {editMode && (
           <MoveButton
             onMouseDown={(e) => {

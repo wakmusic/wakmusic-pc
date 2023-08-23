@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { T7Light } from "@components/Typography";
@@ -12,14 +12,14 @@ import { useInterval } from "@hooks/interval";
 import { usePlayingInfoState } from "@hooks/player";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { SongInfo } from "@templates/player";
+import { Song } from "@templates/song";
 
 interface PlaylistProps {}
 
 const Playlist = ({}: PlaylistProps) => {
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
   const [playlistData, setPlaylisData] = useState<
-    (SongInfo & {
+    (Song & {
       isPlaying: boolean;
       isSelected: boolean;
     })[]
@@ -110,14 +110,7 @@ const Playlist = ({}: PlaylistProps) => {
     );
 
     setPlayingInfo((prev) => ({
-      playlist: playlistData.map((song) => ({
-        songId: song.songId,
-        title: song.title,
-        artist: song.artist,
-        views: song.views,
-        start: song.start,
-        end: song.end,
-      })),
+      playlist: playlistData,
       current: playlistData.findIndex((song) => song.isPlaying),
       history: prev.history,
     }));

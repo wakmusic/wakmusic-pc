@@ -6,8 +6,6 @@ import { useControlState, usePlayingInfoState } from "@hooks/player";
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
 
-import getChartData from "@utils/getChartData";
-
 import AddMusic from "./AddMusic";
 import AddPlaylist from "./AddPlaylist";
 import DeleteMusic from "./DeleteMusic";
@@ -62,13 +60,7 @@ const MusicController = ({
     (list: Song[], play?: boolean) => {
       // 재생목록에 노래 추가
       setPlayingInfo((prev) => ({
-        playlist: [
-          ...prev.playlist,
-          ...list.map((item) => ({
-            ...item,
-            views: getChartData(item).views,
-          })),
-        ],
+        playlist: [...prev.playlist, ...list],
         history: [],
         current: play ? prev.playlist.length : prev.current,
       }));

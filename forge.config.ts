@@ -1,6 +1,8 @@
-import { MakerSquirrel } from "@electron-forge/maker-squirrel";
+import { MakerZIP } from "@electron-forge/maker-zip";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import type { ForgeConfig } from "@electron-forge/shared-types";
+import { readdir, unlink } from "fs/promises";
+import { join } from "path";
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -8,25 +10,52 @@ const config: ForgeConfig = {
     icon: "public/favicon.ico",
     asar: true,
 
-    /*
-      나중에 실제 퍼블리싱을 위해서 필요 없는 라이브러리들과
-      개발에 쓰이는 파일들을 제외하는 등의 asar 경량화와 같은 설정이 필요
+    ignore: [
+      /.github/,
+      /.vscode/,
+      /.yarn/,
+      /.dist/,
+      /public/,
+      /src/,
+      /.env/,
+      /.editorconfig/,
+      /.eslintrc/,
+      /.gitignore/,
+      /.gitmodules/,
+      /.prettierrc/,
+      /.forge.config.ts/,
+      /README.md/,
+      /tsconfig.json/,
+      /tsconfig.node.json/,
+      /vite.main.config.ts/,
+      /vite.renderer.config.ts/,
+      /node_modules\/.vite/,
+    ],
 
-      메모)
-        - 엄청난 include, exclude 설정을 하여서 알잘딱 빌드를 구성하기
-        - prebuiltAsar 옵션을 이용하여서 미리 라이브러리만 빌드해두기
-    */
-
-    ignore: [/.yarn/],
     protocols: [
       {
         name: "왁타버스 뮤직",
         schemes: ["wakmusic"],
       },
     ],
+
+    afterCopy: [
+      async (buildPath, _electronVersion, _platform, _arch, callback) => {
+        const localeDir = join(buildPath, "../../locales");
+
+        const files = await readdir(localeDir);
+
+        for (const file of files) {
+          if (file !== "en-US.pak") {
+            await unlink(join(localeDir, file));
+          }
+        }
+
+        callback();
+      },
+    ],
   },
-  rebuildConfig: {},
-  makers: [new MakerSquirrel({})],
+  makers: [new MakerZIP({})],
   plugins: [
     new VitePlugin({
       build: [

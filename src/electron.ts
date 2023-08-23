@@ -13,10 +13,6 @@ declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 
 let tray: ((label: string) => void) | null = null;
 
-if (require("electron-squirrel-startup")) {
-  app.quit();
-}
-
 const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
@@ -25,6 +21,7 @@ if (!gotTheLock) {
 
 app.setName("왁타버스 뮤직");
 app.commandLine.appendSwitch("disable-site-isolation-trials");
+app.commandLine.appendSwitch("lang", "en-US");
 
 if (process.platform === "win32") {
   app.setAppUserModelId(app.name);

@@ -13,8 +13,20 @@ const Marquee = ({ width, children, hoverOnPlay }: MarqueeProps) => {
   const [elementWidth, setElementWidth] = useState(0);
   const running = useMemo(() => elementWidth > width, [elementWidth, width]);
 
+  const getTextWidth = (text?: string | null) => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+
+    if (context) {
+      context.font = getComputedStyle(document.body).font;
+      return context.measureText(text ?? "").width;
+    }
+
+    return 0;
+  };
+
   useEffect(() => {
-    setElementWidth(ref.current?.clientWidth || 0);
+    setElementWidth(getTextWidth(ref.current?.textContent) || 0);
   }, [children]);
 
   return (
@@ -50,8 +62,13 @@ const Wrapper = styled.div<{ $running: boolean }>`
   ${({ $running }) =>
     $running &&
     css`
-      width: fit-content;
-      animation: ${MarqueeKeyframes} 10s linear infinite;
+      width: 100%;
+      animation: none;
+
+      &:hover {
+        width: fit-content;
+        animation: ${MarqueeKeyframes} 10s linear infinite;
+      }
     `}
 `;
 
@@ -74,13 +91,26 @@ const Container = styled.div<{ $running: boolean; $hoverOnPlay?: boolean }>`
 
 const Element = styled.div<{ $running: boolean }>`
   display: inline-block;
+  overflow: hidden;
+  width: 100%;
 
   ${({ $running }) =>
     $running &&
     css`
-      text-indent: 60px;
-      transform: translateX(-60px);
+      &:hover {
+        text-indent: 60px;
+        transform: translateX(-60px);
+        width: auto;
+      }
     `};
+
+  & p {
+    width: 100%;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
 export default Marquee;

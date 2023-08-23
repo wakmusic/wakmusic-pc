@@ -7,7 +7,7 @@ import { T7_1Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { Song } from "@templates/song";
+import { ChartData, Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 import { formatDate, formatNumber } from "@utils/formatting";
@@ -18,7 +18,7 @@ import Rank from "./Rank";
 import Track from "./Track";
 
 interface SongItemProps {
-  song: Song;
+  song?: Song;
   index?: number;
 
   rank?: number;
@@ -32,18 +32,18 @@ interface SongItemProps {
   useIncrease?: boolean;
   noPadding?: boolean;
   forceWidth?: number;
+
+  isLoading?: boolean;
 }
 
 const featureBuilder = (
-  song: Song,
-  chartData: {
-    views: number;
-    increase: number;
-    last: number;
-  },
+  song: Song | undefined,
+  chartData: ChartData | undefined,
   feature: SongItemFeature | undefined,
   useIncrease?: boolean
 ) => {
+  if (!song || !chartData) return null;
+
   switch (feature) {
     case SongItemFeature.last:
       return chartData.last ? `${chartData.last}위` : "-";
@@ -72,8 +72,9 @@ const SongItem = ({
   noPadding,
   useIncrease,
   forceWidth,
+  isLoading,
 }: SongItemProps) => {
-  const chartData = useMemo(() => getChartData(song), [song]);
+  const chartData = useMemo(() => song && getChartData(song), [song]);
   const featureTexts = useMemo(
     () =>
       features?.map((feature) =>
@@ -93,12 +94,14 @@ const SongItem = ({
 
   return (
     <Container
-      onClick={() => onClick && onClick(song, index)}
+      onClick={() => onClick && song && onClick(song, index)}
       $selected={selected}
       $noPadding={noPadding}
     >
       <Info>
-        {rank && <Rank now={rank} last={chartData.last} />}
+        {rank && (
+          <Rank now={rank} last={chartData?.last} isLoading={isLoading} />
+        )}
         {editMode && (
           <MoveButton
             onMouseDown={(e) => {
@@ -111,6 +114,7 @@ const SongItem = ({
           <Track
             item={song}
             maxWidth={isNumber(width) ? width - 80 : undefined}
+            isLoading={isLoading}
           />
         </TrackWrapper>
       </Info>

@@ -9,12 +9,18 @@ import { T4Bold, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import Skeleton from "./Skeleton";
+
 interface RankProps {
   now: number;
-  last: number;
+  last?: number;
+
+  isLoading?: boolean;
 }
 
 const RankInfo = ({ now, last }: RankProps) => {
+  if (!last) return <ZeroSVG />;
+
   // 새로 올라온 곡
   if (last === 0) {
     return (
@@ -53,7 +59,15 @@ const RankInfo = ({ now, last }: RankProps) => {
   );
 };
 
-const Rank = ({ now, last }: RankProps) => {
+const Rank = ({ now, last, isLoading }: RankProps) => {
+  if (isLoading) {
+    return (
+      <Container>
+        <Skeleton width={30} height={46} borderRadius={4} />
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <T4Bold color={colors.gray900}>{now}</T4Bold>

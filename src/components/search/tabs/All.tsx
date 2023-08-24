@@ -60,12 +60,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
               </CategoryHeader>
 
               {[...Array(3)].map((_, index) => (
-                <SongItem
-                  key={index}
-                  noPadding
-                  forceWidth={650}
-                  isLoading={isFetching}
-                />
+                <SongItem key={index} forceWidth={650} isLoading={isFetching} />
               ))}
             </CategoryContainer>
           ))}
@@ -105,7 +100,6 @@ const All = ({ query, res, isFetching }: AllProps) => {
                 index={index}
                 selected={selectedIncludes(song, index)}
                 onClick={selectCallback}
-                noPadding
                 forceWidth={650}
               />
             ))}
@@ -138,6 +132,9 @@ const CategoryHeader = styled.div`
   align-items: center;
 
   gap: 4px;
+
+  padding-bottom: 9px;
+  padding-left: 20px;
 `;
 
 const CategoryHeaderButton = styled.div`

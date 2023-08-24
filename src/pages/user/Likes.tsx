@@ -22,7 +22,7 @@ const Likes = ({}: LikesProps) => {
 
   const dispatchLikes = async (songs: Song[]) => {
     const removedSongs = likes.filter(
-      (like) => !songs.find((song) => song.songId === like.songId)
+      (like) => !songs.find((song) => song.songId === like.songId),
     );
 
     if (removedSongs.length > 0) {

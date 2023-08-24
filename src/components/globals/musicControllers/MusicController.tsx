@@ -45,7 +45,7 @@ const MusicController = ({
 }: MusicControllerProps) => {
   const Controller = useMemo(
     () => (player ? MusicControllerPlayer : MusicControllerBar),
-    [player]
+    [player],
   );
   const [showControllerState, setShowControllerState] =
     useState(displayDefault);
@@ -71,7 +71,7 @@ const MusicController = ({
         isPlaying: true,
       }));
     },
-    [setControlState, setPlayingInfo]
+    [setControlState, setPlayingInfo],
   );
 
   const getControllerComponent = useCallback(
@@ -119,7 +119,7 @@ const MusicController = ({
                 selectedSongs.forEach((item) => {
                   newSongs.splice(
                     newSongs.findIndex((song) => song.songId === item.songId),
-                    1
+                    1,
                   );
                 });
 
@@ -131,7 +131,7 @@ const MusicController = ({
           );
       }
     },
-    [addSongs, songs, selectedSongs, dispatchSelectedSongs, onDelete]
+    [addSongs, songs, selectedSongs, dispatchSelectedSongs, onDelete],
   );
 
   useEffect(() => {

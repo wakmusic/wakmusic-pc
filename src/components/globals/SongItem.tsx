@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import styled, { css } from "styled-components/macro";
+import styled from "styled-components/macro";
 
 import { ReactComponent as MoveSVG } from "@assets/icons/ic_24_move.svg";
 

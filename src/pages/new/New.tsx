@@ -25,7 +25,7 @@ import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { SongTotal } from "@templates/song";
+import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 interface NewProps {}
@@ -48,7 +48,7 @@ const New = ({}: NewProps) => {
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<SongTotal[]>({
+  } = useInfiniteQuery<Song[]>({
     queryKey: ["new", tab],
     queryFn: async ({ pageParam = 0 }) => await fetchNewSongs(tab, pageParam),
     getNextPageParam: (lastPage, allPages) => {

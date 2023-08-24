@@ -5,8 +5,6 @@ import CustomSongs from "@components/globals/CustomSongs";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import MusicController from "@components/globals/musicControllers/MusicController";
 
-import { myListSongs } from "@constants/dummys";
-
 import { useLikesState } from "@hooks/likes";
 import { useSelectSongs } from "@hooks/selectSongs";
 
@@ -17,7 +15,7 @@ interface LikesProps {}
 
 const Likes = ({}: LikesProps) => {
   const [editMode] = useLikesState();
-  const [likes, setLikes] = useState<Song[]>(myListSongs);
+  const [likes, setLikes] = useState<Song[]>([]); // TODO: API 연결
 
   const { selected, selectCallback, selectedIncludes } = useSelectSongs();
 

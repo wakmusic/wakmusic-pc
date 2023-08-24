@@ -1,10 +1,9 @@
-import { LyricType, SongInfo } from "@templates/player";
+import { LyricType } from "@templates/player";
+import { Song } from "@templates/song";
 
 import instance from "../axios";
 
-export const getLyrics = async (
-  song: SongInfo
-): Promise<LyricType[] | null> => {
+export const getLyrics = async (song: Song): Promise<LyricType[] | null> => {
   try {
     const { data } = await instance.get(
       `https://wakmusic.xyz/api/songs/lyrics/${song.songId}`

@@ -3,7 +3,7 @@ import { join, resolve } from "path";
 
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
-import { SongInfo } from "@templates/player";
+import { Song } from "@templates/song";
 
 import { changePresence, setProgress, showPlaying } from "./electron/discord";
 import { schemeHandler } from "./electron/scheme";
@@ -173,7 +173,7 @@ ipcMain.on(IPCRenderer.RPC_PLAYING, (_event, isPlaying: boolean) => {
   showPlaying(isPlaying);
 });
 
-ipcMain.on(IPCRenderer.RPC_TRACK, (_event, current: SongInfo | null) => {
+ipcMain.on(IPCRenderer.RPC_TRACK, (_event, current: Song | null) => {
   changePresence(current);
 });
 

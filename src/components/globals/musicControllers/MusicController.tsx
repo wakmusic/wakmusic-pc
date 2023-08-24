@@ -117,8 +117,12 @@ const MusicController = ({
                 const newSongs = songs.slice();
 
                 selectedSongs.forEach((item) => {
-                  newSongs.splice(newSongs.indexOf(item), 1);
+                  newSongs.splice(
+                    newSongs.findIndex((song) => song.songId === item.songId),
+                    1
+                  );
                 });
+
                 dispatchSelectedSongs([]);
 
                 onDelete && onDelete(newSongs);

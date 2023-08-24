@@ -1,6 +1,13 @@
 import { atom } from "recoil";
 
-export const likesState = atom({
+import { Song } from "@templates/song";
+
+export const likesEditModeState = atom({
   key: "isLikesEditMode",
   default: false,
+});
+
+export const likesStake = atom<Song[]>({
+  key: "likesStake",
+  default: [],
 });

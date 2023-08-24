@@ -1,18 +1,21 @@
 import instance from "@apis/axios";
 
-const LIKE_URL = "/like";
+const LIKE_URL = "/v2/like";
 
-export const fetchSongsLikeCount = async (songId: string) => {
+export const fetchSongLikeCount = async (songId: string): Promise<number> => {
   const { data } = await instance.get(`${LIKE_URL}/${songId}`);
-  return data;
+
+  return data.like;
 };
 
-export const addSongsLike = async (songId: string) => {
-  const { data } = await instance.post(`${LIKE_URL}/${songId}/addLike`);
-  return data;
+export const addSongLike = async (songId: string): Promise<boolean> => {
+  const { status } = await instance.post(`${LIKE_URL}/${songId}`);
+
+  return status === 201;
 };
 
-export const removeSongsLike = async (songId: string) => {
-  const { data } = await instance.post(`${LIKE_URL}/${songId}/removeLike`);
-  return data;
+export const removeSongLike = async (songId: string): Promise<boolean> => {
+  const { status } = await instance.delete(`${LIKE_URL}/${songId}`);
+
+  return status === 200;
 };

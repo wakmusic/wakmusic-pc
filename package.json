@@ -13,7 +13,9 @@
     "dev:web": "vite --port 3000",
     "build:web": "vite build -c vite.renderer.config.ts",
     "lint": "eslint src --ext .ts,.tsx",
-    "format": "eslint src --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\""
+    "format": "eslint src --ext .ts,.tsx --fix && prettier --write \"src/**/*.{ts,tsx}\"",
+    "check:types": "tsc --noEmit",
+    "check:eslint": "yarn lint"
   },
   "dependencies": {
     "@xhayper/discord-rpc": "^1.0.21"

@@ -1,0 +1,25 @@
+name: Check Code
+
+on: [push, pull_request]
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Check Types
+        run: yarn check:type
+
+      - name: Check EsLint
+        run: yarn check:eslint

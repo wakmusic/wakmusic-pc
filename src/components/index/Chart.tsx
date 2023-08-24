@@ -39,9 +39,6 @@ const Chart = ({}: ChartProps) => {
     queryFn: async () => await fetchChartsUpdateTypes("hourly"),
   });
 
-  // TODO
-  if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)
-    return <div>로딩중...</div>;
   if (chartsError || chartUpdatedError) return <div>에러...</div>;
 
   return (
@@ -49,22 +46,37 @@ const Chart = ({}: ChartProps) => {
       <Header>
         <HeaderTexts>
           <Title color={colors.primary900}>왁뮤차트 TOP100</Title>
-          <UpdatedText updated={chartUpdated} marginTop={9} />
+          <UpdatedText
+            updated={chartUpdated}
+            marginTop={9}
+            isLoading={chartUpdatedIsLoading}
+          />
         </HeaderTexts>
 
         <HeaderButtons>
-          <IconButton icon={PlayAllSVG} onClick={() => playSongs(charts)}>
+          <IconButton
+            icon={PlayAllSVG}
+            onClick={() => charts && playSongs(charts)}
+          >
             전체재생
           </IconButton>
-          <IconButton icon={RandomSVG} onClick={() => playSongs(charts, true)}>
+          <IconButton
+            icon={RandomSVG}
+            onClick={() => charts && playSongs(charts, true)}
+          >
             랜덤재생
           </IconButton>
         </HeaderButtons>
       </Header>
 
       <Items>
-        {charts.slice(0, 8).map((item, index) => (
-          <ChartItem key={index} rank={index + 1} item={item} />
+        {(charts ?? Array(8).fill(null)).slice(0, 8).map((item, index) => (
+          <ChartItem
+            key={index}
+            rank={index + 1}
+            item={item}
+            isLoading={chartsIsLoading}
+          />
         ))}
       </Items>
     </Container>

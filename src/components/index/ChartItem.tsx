@@ -8,14 +8,16 @@ interface ChartItemProps {
 
   // TODO: Interface 작업 예정
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  item: any;
+  item: any | null;
+
+  isLoading?: boolean;
 }
 
-const ChartItem = ({ rank, item }: ChartItemProps) => {
+const ChartItem = ({ rank, item, isLoading }: ChartItemProps) => {
   return (
     <Container>
-      <Rank now={rank} last={item.hourly.last} />
-      <Track item={item} />
+      <Rank now={rank} last={item && item.hourly.last} isLoading={isLoading} />
+      <Track item={item} maxWidth={220} isLoading={isLoading} />
     </Container>
   );
 };

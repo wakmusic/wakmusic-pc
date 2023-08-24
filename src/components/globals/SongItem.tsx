@@ -17,7 +17,7 @@ import Rank from "./Rank";
 import Track from "./Track";
 
 interface SongItemProps {
-  song: Song;
+  song?: Song;
   index?: number;
 
   rank?: number;
@@ -31,13 +31,17 @@ interface SongItemProps {
   useIncrease?: boolean;
   noPadding?: boolean;
   forceWidth?: number;
+
+  isLoading?: boolean;
 }
 
 const featureBuilder = (
-  song: Song,
+  song: Song | undefined,
   feature: SongItemFeature | undefined,
   useIncrease?: boolean
 ) => {
+  if (!song) return null;
+
   switch (feature) {
     case SongItemFeature.last:
       return song.chart.last ? `${song.chart.last}위` : "-";
@@ -66,6 +70,7 @@ const SongItem = ({
   noPadding,
   useIncrease,
   forceWidth,
+  isLoading,
 }: SongItemProps) => {
   const featureTexts = useMemo(
     () =>
@@ -85,12 +90,14 @@ const SongItem = ({
 
   return (
     <Container
-      onClick={() => onClick && onClick(song, index)}
+      onClick={() => onClick && song && onClick(song, index)}
       $selected={selected}
       $noPadding={noPadding}
     >
       <Info>
-        {rank && <Rank now={rank} last={song.chart.last} />}
+        {rank && (
+          <Rank now={rank} last={song?.chart?.last} isLoading={isLoading} />
+        )}
         {editMode && (
           <MoveButton
             onMouseDown={(e) => {
@@ -103,6 +110,7 @@ const SongItem = ({
           <Track
             item={song}
             maxWidth={isNumber(width) ? width - 80 : undefined}
+            isLoading={isLoading}
           />
         </TrackWrapper>
       </Info>

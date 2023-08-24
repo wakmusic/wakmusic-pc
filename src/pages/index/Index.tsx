@@ -19,11 +19,7 @@ import listChunk from "@utils/listChunk";
 interface IndexProps {}
 
 const Index = ({}: IndexProps) => {
-  const {
-    isLoading: recommendIsLoading,
-    error: recommendError,
-    data: recommendLists,
-  } = useQuery({
+  const { error: recommendError, data: recommendLists } = useQuery({
     queryKey: "recommendLists",
     queryFn: fetchRecommendedPlaylist,
     staleTime: Infinity,
@@ -32,7 +28,6 @@ const Index = ({}: IndexProps) => {
   const [page, setPage] = useState<number>(0);
 
   // TODO
-  if (recommendIsLoading || !recommendLists) return <div>loading...</div>;
   if (recommendError) return <div>error...</div>;
 
   function changePage(condition: boolean, change: number) {
@@ -60,8 +55,12 @@ const Index = ({}: IndexProps) => {
             />
             <NavigatorArrow
               direction="right"
-              $disabled={page >= Math.ceil(recommendLists.length / 8) - 1}
+              $disabled={
+                recommendLists &&
+                page >= Math.ceil(recommendLists.length / 8) - 1
+              }
               onClick={() =>
+                recommendLists &&
                 changePage(page < Math.ceil(recommendLists.length / 8) - 1, 1)
               }
             />
@@ -69,13 +68,15 @@ const Index = ({}: IndexProps) => {
         </HeaderContainer>
 
         <RecommentItemContainer>
-          {listChunk(recommendLists, 8).map((item, index) => (
-            <RecommendItems key={index} $page={page}>
-              {item.map((item, index) => (
-                <RecommendItem key={index} item={item} />
-              ))}
-            </RecommendItems>
-          ))}
+          {listChunk(recommendLists ?? Array(8).fill(null), 8).map(
+            (item, index) => (
+              <RecommendItems key={index} $page={page}>
+                {item.map((item, index) => (
+                  <RecommendItem key={index} item={item} />
+                ))}
+              </RecommendItems>
+            )
+          )}
         </RecommentItemContainer>
       </RecommandContainer>
     </Container>

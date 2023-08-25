@@ -4,8 +4,7 @@ import styled from "styled-components/macro";
 import { ReactComponent as CloseIcon } from "@assets/icons/ic_30_close.svg";
 
 import { T3Medium, T5Light } from "@components/Typography";
-
-import PageItemContainer from "@layouts/PageItemContainer";
+import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 
 import colors from "@constants/colors";
 
@@ -58,17 +57,19 @@ const NoticeDetailModal = ({}: NoticeDetailModalProps) => {
           <Line />
         </Header>
 
-        <PageItemContainer height={223}>
-          <ContentContainer>
-            <TextContent>{notice.mainText}</TextContent>
+        <DefaultScroll>
+          <ContentContainerWrapper>
+            <ContentContainer>
+              <TextContent>{notice.mainText}</TextContent>
 
-            <ImageContainer>
-              {notice.images.map((image, index) => (
-                <Image src={getNoticeImage(image)} key={index} />
-              ))}
-            </ImageContainer>
-          </ContentContainer>
-        </PageItemContainer>
+              <ImageContainer>
+                {notice.images.map((image, index) => (
+                  <Image src={getNoticeImage(image)} key={index} />
+                ))}
+              </ImageContainer>
+            </ContentContainer>
+          </ContentContainerWrapper>
+        </DefaultScroll>
       </Container>
     </ModalOverlay>
   );
@@ -95,6 +96,8 @@ const CloseButton = styled(CloseIcon)`
 `;
 
 const Header = styled.div`
+  width: 100%;
+
   padding-top: 20px;
   padding-left: 30px;
   padding-right: 30px;
@@ -131,6 +134,10 @@ const Line = styled.div`
   height: 1px;
 
   background-color: ${colors.blueGray200};
+`;
+
+const ContentContainerWrapper = styled.div`
+  height: 491px;
 `;
 
 const ContentContainer = styled.div`

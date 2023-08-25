@@ -57,17 +57,7 @@ const SchemeHandler = (): null => {
 
           setPlayingInfo((prev) => ({
             ...prev,
-            playlist: [
-              ...prev.playlist,
-              {
-                songId: song.songId,
-                title: song.title,
-                artist: song.artist,
-                start: song.start,
-                end: song.end,
-                views: song.total.views,
-              },
-            ],
+            playlist: [...prev.playlist, song],
             current: prev.playlist.length,
           }));
 

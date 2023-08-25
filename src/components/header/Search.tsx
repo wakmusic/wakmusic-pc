@@ -92,19 +92,22 @@ const Search = ({}: SearchProps) => {
     [items, setValue]
   );
 
-  const focusHandler = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-    switch (e.type) {
-      case "focus":
-        setIsFocusing(true);
-        setIsSpaceDisabled(true);
-        break;
-      case "blur":
-        if (e.relatedTarget === null) {
-          setIsFocusing(false);
-          setIsSpaceDisabled(false);
-        }
-    }
-  }, []);
+  const focusHandler = useCallback(
+    (e: React.FocusEvent<HTMLInputElement>) => {
+      switch (e.type) {
+        case "focus":
+          setIsFocusing(true);
+          setIsSpaceDisabled(true);
+          break;
+        case "blur":
+          if (e.relatedTarget === null) {
+            setIsFocusing(false);
+            setIsSpaceDisabled(false);
+          }
+      }
+    },
+    [setIsSpaceDisabled]
+  );
 
   const onBlurCallback = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {

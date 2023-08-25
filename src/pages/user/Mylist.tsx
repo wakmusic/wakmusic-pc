@@ -69,7 +69,7 @@ const getPlaylistInitialPosition = (targetIndex: number): XY => {
 
 const Mylist = ({}: MylistProps) => {
   const [isEditMode] = useMylistState();
-  const [shuffledList, dispatchMyList] = useReducer(shuffleMyList, myList);
+  const [shuffledList, dispatchMyList] = useReducer(shuffleMyList, []);
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseDownPosition, setmouseDownPosition] = useState<XY>({
     x: 0,

@@ -1,3 +1,5 @@
+import { LoginPlatform } from "@templates/user";
+
 export const chartUpdated = "1688630567";
 
 export const faq = {
@@ -715,7 +717,9 @@ export const dumyListItem = {
   title: "리스트제목열두글자자자자",
   createAt: 1684622625731,
   user: {
-    displayName: "이름",
+    userId: "a",
+    name: "이름",
+    platform: "naver" as LoginPlatform,
     profile: {
       type: "gorani",
       version: 2,
@@ -725,195 +729,7 @@ export const dumyListItem = {
     name: "1",
     version: 11,
   },
-  songs: myListSongs,
+  songs: [],
 };
 
-export const myList = [
-  {
-    key: "key1",
-    title: "플레이리스트 1",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 1,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key2",
-    title: "플레이리스트 2",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 7,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key3",
-    title: "플레이리스트 3",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 3,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key4",
-    title: "플레이리스트 4",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 11,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key5",
-    title: "플레이리스트 5",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 5,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key6",
-    title: "플레이리스트 6",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 6,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key7",
-    title: "플레이리스트 7",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 7,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key8",
-    title: "플레이리스트 8",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 8,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key9",
-    title: "플레이리스트 9",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 9,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key10",
-    title: "플레이리스트 10",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 10,
-    },
-    songs: myListSongs,
-  },
-  {
-    key: "key11",
-    title: "플레이리스트 11",
-    createAt: 1684622625731,
-    user: {
-      displayName: "이름",
-      profile: {
-        type: "gorani",
-        version: 2,
-      },
-    },
-    image: {
-      name: "1",
-      version: 11,
-    },
-    songs: myListSongs,
-  },
-];
+export const myList = [dumyListItem, dumyListItem, dumyListItem];

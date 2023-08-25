@@ -3,7 +3,7 @@ name: Check Code
 on: [push, pull_request]
 
 jobs:
-  build-and-publish:
+  check-code:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,7 +19,7 @@ jobs:
         run: yarn install
 
       - name: Check Types
-        run: yarn check:type
+        run: yarn check:types
 
       - name: Check EsLint
         run: yarn check:eslint

@@ -1,0 +1,28 @@
+name: Check Code
+
+on: [push, pull_request]
+
+jobs:
+  check-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Check Types
+        run: yarn check:types
+
+      - name: Check EsLint
+        run: yarn check:eslint

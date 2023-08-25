@@ -1,4 +1,4 @@
-import { MouseEvent, useCallback, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as SoundOffActivateSvg } from "@assets/icons/ic_20_sound_off_activate.svg";

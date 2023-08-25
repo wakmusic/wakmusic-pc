@@ -22,7 +22,7 @@ const Notice = ({}: NoticeProps) => {
   const tab = useMemo(() => searchParams.get("tab") ?? "전체", [searchParams]);
 
   const { data: category, error: categoryError } = useQuery({
-    queryKey: "category",
+    queryKey: "noticeCategory",
     queryFn: fetchNoticeCategories,
   });
 

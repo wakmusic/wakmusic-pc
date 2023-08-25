@@ -8,7 +8,7 @@ import TextButton from "@components/globals/TextButton";
 
 import { userTabs } from "@constants/tabs";
 
-import { useLikesState } from "@hooks/likes";
+import { useLikesEditState } from "@hooks/likes";
 import { useMylistState } from "@hooks/mylist";
 
 interface HeaderProps {}
@@ -16,7 +16,7 @@ interface HeaderProps {}
 const Header = ({}: HeaderProps) => {
   const location = useLocation();
   const [isMylistEditMode, setMylistEditMode] = useMylistState();
-  const [isLikesEditMode, setLikesEditMode] = useLikesState();
+  const [isLikesEditMode, setLikesEditMode] = useLikesEditState();
 
   const toggleEditMode = () => {
     if (location.pathname === "/user/playlists") {

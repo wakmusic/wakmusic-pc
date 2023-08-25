@@ -10,6 +10,7 @@ import colors from "@constants/colors";
 
 import { useNoticeDetailModalState } from "@hooks/noticeDetailModal";
 
+import { formatDateAndTime } from "@utils/formatting";
 import { getNoticeImage } from "@utils/staticUtill";
 
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
@@ -20,20 +21,10 @@ const NoticeDetailModal = ({}: NoticeDetailModalProps) => {
   const [modalState, setModalState] = useNoticeDetailModalState();
   const notice = modalState.notice;
 
-  const date = useMemo(() => {
-    if (!notice) return [];
-
-    const date = new Date(notice.createdAt);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    const hour = String(date.getHours()).padStart(2, "0");
-    const minute = String(date.getMinutes()).padStart(2, "0");
-
-    return [`${year}.${month}.${day}`, `${hour}:${minute}`];
-  }, [notice]);
+  const date = useMemo(
+    () => (notice ? formatDateAndTime(notice.createdAt) : []),
+    [notice]
+  );
 
   const close = () => {
     setModalState({ isOpen: false });

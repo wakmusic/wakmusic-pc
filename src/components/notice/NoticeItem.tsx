@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import styled from "styled-components/macro";
 
 import { T6Medium, T7_1Light } from "@components/Typography";
@@ -10,15 +9,16 @@ import { useNoticeDetailModal } from "@hooks/noticeDetailModal";
 
 import { Notice } from "@templates/notice";
 
+import { formatDateAndTime } from "@utils/formatting";
+
 interface NoticeItemProps {
   notice?: Notice;
 }
 
 const NoticeItem = ({ notice }: NoticeItemProps) => {
-  const date = useMemo(() => notice && new Date(notice.createdAt), [notice]);
   const openNoticeDetailModal = useNoticeDetailModal();
 
-  if (!notice || !date) {
+  if (!notice) {
     return (
       <Container>
         <Content>
@@ -41,10 +41,7 @@ const NoticeItem = ({ notice }: NoticeItemProps) => {
       <Content>
         <CategoryText>{notice.category}</CategoryText>
         <TitleText>{notice.title}</TitleText>
-        <DateText>
-          {date.getFullYear()}.{String(date.getMonth() + 1).padStart(2, "0")}.
-          {String(date.getDay()).padStart(2, "0")}
-        </DateText>
+        <DateText>{formatDateAndTime(notice.createdAt)[0]}</DateText>
       </Content>
 
       <Line />

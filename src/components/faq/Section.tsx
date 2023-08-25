@@ -5,17 +5,34 @@ import { ReactComponent as ArrowDownSVG } from "@assets/icons/ic_20_arrow_down.s
 import { ReactComponent as ArrowUpSVG } from "@assets/icons/ic_20_arrow_up.svg";
 
 import { T6Bold, T6Medium } from "@components/Typography";
+import Skeleton from "@components/globals/Skeleton";
 
 import colors from "@constants/colors";
 
 import { FAQ } from "@templates/faq";
 
 interface SectionProps {
-  article: FAQ;
+  article?: FAQ;
 }
 
 const Section = ({ article }: SectionProps) => {
   const [isOpened, setIsOpened] = useState(false);
+
+  if (!article) {
+    return (
+      <Container>
+        <Grid $open={false}>
+          <Category>
+            <Skeleton width={50} height={20} />
+          </Category>
+          <Question>
+            <Skeleton width={450} height={20} />
+          </Question>
+          <DownSVG />
+        </Grid>
+      </Container>
+    );
+  }
 
   return (
     <Container>

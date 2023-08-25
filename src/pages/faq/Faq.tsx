@@ -6,6 +6,7 @@ import styled from "styled-components/macro";
 import { fetchAllFAQ, fetchFAQCategories } from "@apis/faq";
 
 import Section from "@components/faq/Section";
+import Skeleton from "@components/globals/Skeleton";
 import Tab from "@components/globals/Tab";
 import TabBar from "@components/globals/TabBar";
 
@@ -20,36 +21,29 @@ const Faq = ({}: FaqProps) => {
   const [searchParams] = useSearchParams();
   const tab = useMemo(() => searchParams.get("tab") ?? "전체", [searchParams]);
 
-  const {
-    data: category,
-    error: categoryError,
-    isLoading: categoryIsLoading,
-  } = useQuery({
-    queryKey: "category",
+  const { data: category, error: categoryError } = useQuery({
+    queryKey: "faqCategory",
     queryFn: fetchFAQCategories,
   });
 
-  const {
-    data: faq,
-    error: faqError,
-    isLoading: faqIsLoading,
-  } = useQuery({
+  const { data: faq, error: faqError } = useQuery({
     queryKey: "faq",
     queryFn: fetchAllFAQ,
   });
 
   if (categoryError || faqError) return <div>오류</div>;
-  if (categoryIsLoading || faqIsLoading || !category || !faq)
-    return <div>로딩중</div>;
 
   return (
     <PageLayout>
       <Container>
         <TabContainer>
           <TabBar>
-            {["전체", ...category.categories].map((item, index) => (
+            {[
+              "전체",
+              ...(category?.categories || Array(3).fill(undefined)),
+            ].map((item, index) => (
               <Tab to={item === "전체" ? null : { tab: item }} key={index}>
-                {item}
+                {item || <Skeleton width={35} height={20} />}
               </Tab>
             ))}
           </TabBar>
@@ -57,7 +51,7 @@ const Faq = ({}: FaqProps) => {
 
         <ScrollContainer>
           <PageItemContainer>
-            {faq
+            {(faq || Array(20).fill(null))
               .filter((article) => tab === "전체" || article.category === tab)
               .map((article, index) => (
                 <Section key={tab + index} article={article} />

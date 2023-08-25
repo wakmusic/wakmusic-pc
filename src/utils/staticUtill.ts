@@ -61,3 +61,7 @@ export const getArtistRoundImage = (artist: Artist) => {
 export const getArtistClearImage = (artist: Artist) => {
   return getArtistImage(artist, "clear");
 };
+
+export const getNoticeImage = (filename: string) => {
+  return `${staticURL}/notice/${filename}`;
+};

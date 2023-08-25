@@ -10640,6 +10640,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swiper@npm:^10.2.0":
+  version: 10.2.0
+  resolution: "swiper@npm:10.2.0"
+  checksum: b81fe81c72b92d0c7d0ba0eb1ea96a7e29de6b67d059fc9d01a0c5285dcadd66f25d258f32c05f87bf54663cf8b09d26b38be5029c064c4822768782772cc025
+  languageName: node
+  linkType: hard
+
 "synckit@npm:^0.8.5":
   version: 0.8.5
   resolution: "synckit@npm:0.8.5"
@@ -11287,6 +11294,7 @@ __metadata:
     react-router-dom: ^6.13.0
     recoil: ^0.7.7
     styled-components: ^6.0.0-rc.3
+    swiper: ^10.2.0
     ts-node: ^10.9.1
     typescript: 5.0.4
     vite: ^4.3.9

@@ -9,15 +9,20 @@ import Lottie from "@components/globals/Lottie";
 
 import colors from "@constants/colors";
 
-interface LogoProps {}
+import { useNoticeModalState } from "@hooks/noticeModal";
 
-const Logo = ({}: LogoProps) => {
+interface SplashProps {}
+
+const Splash = ({}: SplashProps) => {
   const controls = useAnimation();
   const [disable, setDisable] = useState(false);
+
+  const [, setIsNoticeModalOpen] = useNoticeModalState();
 
   const onCompleteHandler = async () => {
     await controls.start("close");
     setDisable(true);
+    setIsNoticeModalOpen(true);
   };
 
   if (disable) {
@@ -59,4 +64,4 @@ const LottieContainer = styled.div`
   height: 250px;
 `;
 
-export default Logo;
+export default Splash;

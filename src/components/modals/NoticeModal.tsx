@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components/macro";
 import "swiper/css";
+import { Mousewheel } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Swiper as SwiperType } from "swiper/types";
 
@@ -68,7 +69,13 @@ const NoticeModal = ({}: NoticeModalProps) => {
   return (
     <ModalOverlay>
       <Container>
-        <Swiper width={375} height={375} onSlideChange={onSlideChangeHandler}>
+        <Swiper
+          modules={[Mousewheel]}
+          width={375}
+          height={375}
+          onSlideChange={onSlideChangeHandler}
+          mousewheel
+        >
           {notices.map((notice, index) => (
             <SwiperSlide key={index}>
               <Thumbnail

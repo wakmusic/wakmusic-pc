@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import styled, { css } from "styled-components/macro";
 
@@ -11,7 +12,7 @@ import { isString } from "@utils/isTypes";
 
 interface TabProps {
   to: string | Query | null; // 라우트 또는 쿼리 파라미터
-  children: string;
+  children: string | ReactNode;
   onClick?: () => void;
 }
 

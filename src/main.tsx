@@ -17,6 +17,8 @@ import ConfirmModal from "@components/modals/ConfirmModal";
 import CreateListModal from "@components/modals/CreateListModal";
 import LoadListModal from "@components/modals/LoadListModal";
 import LoginModal from "@components/modals/LoginModal";
+import NoticeDetailModal from "@components/modals/NoticeDetailModal";
+import NoticeModal from "@components/modals/NoticeModal";
 import SelectProfileModal from "@components/modals/SelectProfileModal";
 import SetUsernameModal from "@components/modals/SetUsernameModal";
 import ShareListModal from "@components/modals/ShareListModal";
@@ -36,6 +38,7 @@ import Faq from "@pages/faq/Faq";
 import Index from "@pages/index/Index";
 import MyPage from "@pages/mypage/MyPage";
 import New from "@pages/new/New";
+import Notice from "@pages/notice/Notice";
 import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
 import Playlist from "@pages/user/Playlist";
@@ -86,6 +89,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/about" element={<MyPage />} />
               <Route path="/faq" element={<Faq />} />
+              <Route path="/notice" element={<Notice />} />
 
               <Route path="/player" element={null} />
             </Routes>
@@ -109,6 +113,8 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <ShareListModal />
           <AddListModal />
           <SetUsernameModal />
+          <NoticeDetailModal />
+          <NoticeModal />
         </ModalPortal>
 
         <SchemeHandler />

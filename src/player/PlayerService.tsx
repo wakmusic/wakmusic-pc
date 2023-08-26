@@ -63,7 +63,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
   }, [currentSongState, setLyrics]);
 
   useEffect(() => {
-    if (currentSongState.songId === previousSong?.songId) return;
+    if (currentSongState?.songId === previousSong?.songId) return;
 
     requestPlaySong(
       currentSongState.songId,

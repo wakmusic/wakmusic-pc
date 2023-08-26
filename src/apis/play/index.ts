@@ -24,7 +24,5 @@ export const requestPlaySong = async (
     os: "pc",
   });
 
-  console.log(data);
-
   return processSong("total", data);
 };

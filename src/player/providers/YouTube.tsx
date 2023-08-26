@@ -57,7 +57,15 @@ const YouTube = ({
 
     if (!contentWindow) return;
 
-    return contentWindow.document.querySelector("video") as HTMLVideoElement;
+    let video: HTMLVideoElement | undefined;
+
+    try {
+      video = contentWindow.document.querySelector("video") as HTMLVideoElement;
+    } catch {
+      /* empty */
+    }
+
+    return video;
   };
 
   const applySoundBoost = () => {
@@ -253,8 +261,6 @@ const YouTube = ({
 
   useEffect(() => {
     if (!player.current) return;
-
-    console.log("progress", progress);
 
     player.current.seekTo(progress, true);
   }, [progress]);

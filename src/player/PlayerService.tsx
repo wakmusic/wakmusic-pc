@@ -65,25 +65,14 @@ const PlayerService = ({}: PlayerServiceProps) => {
   useEffect(() => {
     if (currentSongState.songId === previousSong?.songId) return;
 
-    console.log(
-      currentSongState.songId,
-      previousSong && {
-        songId: previousSong.songId,
-        stopedAt: previousProgress || 0,
-        songLength: length,
-      }
-    );
-
     requestPlaySong(
       currentSongState.songId,
       previousSong && {
         songId: previousSong.songId,
         stopedAt: previousProgress || 0,
-        songLength: length,
+        songLength: previousLength || 0,
       }
     ).then((upToDateSong) => {
-      console.log({ upToDateSong });
-
       setInfo((prev) => ({
         ...prev,
         playlist: prev.playlist.map((song) =>
@@ -91,7 +80,13 @@ const PlayerService = ({}: PlayerServiceProps) => {
         ),
       }));
     });
-  }, [currentSongState, previousSong, previousProgress, length, setInfo]);
+  }, [
+    currentSongState,
+    previousSong,
+    previousProgress,
+    previousLength,
+    setInfo,
+  ]);
 
   useEffect(() => {
     if (!currentSong.current) return;

@@ -7,7 +7,7 @@ const instance = axios.create({
   timeout: 10000,
   withCredentials: true,
   headers: {
-    "Access-Control-Allow-Credentials": "dev.wakmusic.xyz",
+    "Access-Control-Allow-Credentials": "*",
   },
 });
 

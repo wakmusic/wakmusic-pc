@@ -1,6 +1,6 @@
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   buttonVariants,
   thumbnailVariants,
@@ -96,7 +96,9 @@ const Display = ({}: DisplayProps) => {
             variants={buttonVariants}
             initial="close"
           >
-            <SimpleIconButton icon={PlayListSVG} />
+            <Link to="/player/playlist">
+              <SimpleIconButton icon={PlayListSVG} />
+            </Link>
           </PlaylistButtonContainer>
 
           <CenterWrapper>

@@ -2,39 +2,24 @@ import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { T4Medium } from "@components/Typography/Medium";
+import CustomSongs from "@components/globals/CustomSongs";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
-import SongItem, { SongItemFeature } from "@components/globals/SongItem";
 import TextButton from "@components/globals/TextButton";
 
 import PageContainer from "@layouts/PageContainer";
-import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
-import VirtualItem from "@layouts/VirtualItem";
 
 import { usePlayingInfoState } from "@hooks/player";
-import useVirtualizer from "@hooks/virtualizer";
+import { useSelectSongs } from "@hooks/selectSongs";
 
-import { Song } from "@templates/song";
+import { SongItemFeature } from "@templates/songItem";
 
 interface PlayerPlaylistProps {}
 
 const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [selected, setSelected] = useState<Song[]>([]);
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
-  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer([]);
-
-  const handleSeleted = (song: Song) => {
-    if (selected.includes(song)) {
-      setSelected(selected.filter((item) => item !== song));
-    } else {
-      setSelected([...selected, song]);
-    }
-  };
-
-  useEffect(() => {
-    viewportRef.current?.scrollTo(0, 0);
-  }, [viewportRef]);
+  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
 
   return (
     <PageLayout>
@@ -55,27 +40,21 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
             GuideBarFeature.views,
           ]}
         />
-        <PageItemContainer
-          height={533}
-          ref={viewportRef}
-          totalSize={getTotalSize()}
+
+        <CustomSongs
+          height={181}
+          editMode={isEdit}
+          selectedIncludes={selectedIncludes}
+          onSongClick={selectCallback}
+          selectedSongs={selected}
+          songFeatures={[
+            SongItemFeature.date,
+            SongItemFeature.views,
+            SongItemFeature.like,
+          ]}
         >
-          {virtualMap((virtualItem, item) => (
-            <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
-              <SongItem
-                editMode={isEdit}
-                song={item}
-                selected={selected.includes(item)}
-                features={[
-                  SongItemFeature.date,
-                  SongItemFeature.views,
-                  SongItemFeature.like,
-                ]}
-                onClick={handleSeleted}
-              />
-            </VirtualItem>
-          ))}
-        </PageItemContainer>
+          {playingInfo.playlist}
+        </CustomSongs>
       </PageContainer>
     </PageLayout>
   );

@@ -12,7 +12,7 @@ import {
 import { useRef } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
-import { hourlyChart } from "@constants/dummys";
+import { fetchCharts } from "@apis/charts";
 
 import {
   ControlStateType,
@@ -20,8 +20,6 @@ import {
   RepeatType,
 } from "@templates/player";
 import { Song } from "@templates/song";
-
-import getChartData from "@utils/getChartData";
 
 export const usePlayingLengthState = () => {
   return useRecoilState(playingLength);
@@ -66,24 +64,16 @@ export const useToggleIsPlayingState = () => {
 
   return () => {
     if (playingInfo.playlist.length === 0) {
-      setPlayingInfo((prev) => ({
-        ...prev,
-        playlist: hourlyChart.map((song) => {
-          const chartData = getChartData(song);
-
-          return {
-            songId: song.songId,
-            title: song.title,
-            artist: song.artist,
-            views: chartData.views,
-            start: song.start,
-            end: song.end,
-          };
-        }),
-      }));
+      fetchCharts("hourly").then((chart) => {
+        setPlayingInfo((prev) => ({
+          ...prev,
+          playlist: chart,
+        }));
+        setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
+      });
+    } else {
+      setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
     }
-
-    setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
   };
 };
 
@@ -317,7 +307,6 @@ export const usePlaySong = () => {
   const setPlayingChangeProgress = useSetRecoilState(playingChangeProgress);
 
   return (song: Song) => {
-    const chartData = getChartData(song);
     const current = playingInfo.playlist[playingInfo.current];
 
     if (current?.songId === song.songId) {
@@ -332,17 +321,7 @@ export const usePlaySong = () => {
     setPlayingInfo((prev) => ({
       ...prev,
       current: prev.playlist.length,
-      playlist: [
-        ...prev.playlist,
-        {
-          songId: song.songId,
-          title: song.title,
-          artist: song.artist,
-          views: chartData.views,
-          start: song.start,
-          end: song.end,
-        },
-      ],
+      playlist: [...prev.playlist, song],
     }));
   };
 };
@@ -356,14 +335,7 @@ export const usePlaySongs = () => {
     }
 
     setPlayingInfo({
-      playlist: songs.map((song) => ({
-        songId: song.songId,
-        title: song.title,
-        artist: song.artist,
-        views: getChartData(song).views,
-        start: song.start,
-        end: song.end,
-      })),
+      playlist: songs,
       history: [],
       current: 0,
     });

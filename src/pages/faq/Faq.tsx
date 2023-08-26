@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
+import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 import styled from "styled-components/macro";
+
+import { fetchAllFAQ, fetchFAQCategories } from "@apis/faq";
 
 import Section from "@components/faq/Section";
 import Tab from "@components/globals/Tab";
@@ -10,43 +13,55 @@ import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
-import { faq } from "@constants/dummys";
 
 interface FaqProps {}
 
 const Faq = ({}: FaqProps) => {
   const [searchParams] = useSearchParams();
-  const [tab, setTab] = useState("전체");
+  const tab = useMemo(() => searchParams.get("tab") ?? "전체", [searchParams]);
 
-  useEffect(() => {
-    const category = searchParams.get("tab");
+  const {
+    data: category,
+    error: categoryError,
+    isLoading: categoryIsLoading,
+  } = useQuery({
+    queryKey: "category",
+    queryFn: fetchFAQCategories,
+  });
 
-    setTab(category ?? "전체");
-  }, [searchParams]);
+  const {
+    data: faq,
+    error: faqError,
+    isLoading: faqIsLoading,
+  } = useQuery({
+    queryKey: "faq",
+    queryFn: fetchAllFAQ,
+  });
+
+  if (categoryError || faqError) return <div>오류</div>;
+  if (categoryIsLoading || faqIsLoading || !category || !faq)
+    return <div>로딩중</div>;
 
   return (
     <PageLayout>
       <Container>
         <TabContainer>
           <TabBar>
-            {faq.category.map((item, index) => (
-              <Tab to={{ tab: item.category }} key={index}>
-                {item.category}
+            {["전체", ...category.categories].map((item, index) => (
+              <Tab to={item === "전체" ? null : { tab: item }} key={index}>
+                {item}
               </Tab>
             ))}
           </TabBar>
         </TabContainer>
+
         <ScrollContainer>
           <PageItemContainer>
-            {tab === "전체"
-              ? faq.article.map((article, index) => (
-                  <Section key={tab + index} article={article} />
-                ))
-              : faq.article
-                  .filter((article) => article.category.category === tab)
-                  .map((article, index) => (
-                    <Section key={tab + index} article={article} />
-                  ))}
+            {faq
+              .filter((article) => tab === "전체" || article.category === tab)
+              .map((article, index) => (
+                <Section key={tab + index} article={article} />
+              ))}
           </PageItemContainer>
         </ScrollContainer>
       </Container>

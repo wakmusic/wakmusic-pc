@@ -4,16 +4,6 @@ import { UserProfile } from "@templates/user";
 
 const staticURL = import.meta.env.VITE_STATIC_URL;
 
-type profileImgType =
-  | "bat"
-  | "dulgi"
-  | "ddong"
-  | "gorani"
-  | "jupock"
-  | "panchi"
-  | "segyun"
-  | "ifari";
-
 type documentType = "privacy" | "terms";
 
 type RoundOrSquare = "round" | "square";
@@ -70,4 +60,8 @@ export const getArtistRoundImage = (artist: Artist) => {
 
 export const getArtistClearImage = (artist: Artist) => {
   return getArtistImage(artist, "clear");
+};
+
+export const getNoticeImage = (filename: string) => {
+  return `${staticURL}/notice/${filename}`;
 };

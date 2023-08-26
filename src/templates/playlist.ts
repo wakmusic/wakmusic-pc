@@ -1,5 +1,5 @@
-import { Image } from "./Image";
-import { SongTotal } from "./song";
+import { Image } from "./image";
+import { Song } from "./song";
 import { User } from "./user";
 
 type playlistMeta = {
@@ -10,7 +10,7 @@ type playlistMeta = {
 };
 
 export type BasePlaylist = playlistMeta & {
-  songs: SongTotal[];
+  songs: Song[];
 };
 
 type recommendImage = {

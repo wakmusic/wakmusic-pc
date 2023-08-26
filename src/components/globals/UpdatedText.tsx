@@ -7,15 +7,26 @@ import { T7Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import Skeleton from "./Skeleton";
+
 interface UpdatedTextProps {
-  updated: string;
+  updated?: string;
 
   marginTop?: number;
   marginLeft?: number;
+
+  isLoading?: boolean;
 }
 
-const UpdatedText = ({ updated, marginTop, marginLeft }: UpdatedTextProps) => {
+const UpdatedText = ({
+  updated,
+  marginTop,
+  marginLeft,
+  isLoading,
+}: UpdatedTextProps) => {
   const text = useMemo(() => {
+    if (!updated) return null;
+
     const date = new Date(Number(updated) * 1000);
 
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -25,6 +36,14 @@ const UpdatedText = ({ updated, marginTop, marginLeft }: UpdatedTextProps) => {
 
     return `${month}월 ${day}일 ${ampm} ${hour}시 업데이트`;
   }, [updated]);
+
+  if (isLoading) {
+    return (
+      <Container $marginTop={marginTop} $marginLeft={marginLeft}>
+        <Skeleton width={160} height={18} />
+      </Container>
+    );
+  }
 
   return (
     <Container $marginTop={marginTop} $marginLeft={marginLeft}>

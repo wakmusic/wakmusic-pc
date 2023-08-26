@@ -4,7 +4,7 @@
 
 export interface WAKMU {
   __setPlayingInfo?: SetterOrUpdater<PlayingInfoStateType>;
-  playSong: (song: SongInfo) => void;
+  playSong: (song: Song) => void;
   playYoutube: (youtubeId: string, title?: string, artist?: string) => void;
 }
 

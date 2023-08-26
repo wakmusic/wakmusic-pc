@@ -1,13 +1,12 @@
-import { useState } from "react";
 import styled from "styled-components/macro";
+
+import { editLikes, removeLikes } from "@apis/user";
 
 import CustomSongs from "@components/globals/CustomSongs";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import MusicController from "@components/globals/musicControllers/MusicController";
 
-import { myListSongs } from "@constants/dummys";
-
-import { useLikesState } from "@hooks/likes";
+import { useLikesEditState, useLikesState } from "@hooks/likes";
 import { useSelectSongs } from "@hooks/selectSongs";
 
 import { Song } from "@templates/song";
@@ -16,12 +15,22 @@ import { SongItemFeature } from "@templates/songItem";
 interface LikesProps {}
 
 const Likes = ({}: LikesProps) => {
-  const [editMode] = useLikesState();
-  const [likes, setLikes] = useState<Song[]>(myListSongs);
+  const [editMode] = useLikesEditState();
+  const [likes, setLikes] = useLikesState();
 
   const { selected, selectCallback, selectedIncludes } = useSelectSongs();
 
-  const dispatchLikes = (songs: Song[]) => {
+  const dispatchLikes = async (songs: Song[]) => {
+    const removedSongs = likes.filter(
+      (like) => !songs.find((song) => song.songId === like.songId),
+    );
+
+    if (removedSongs.length > 0) {
+      await removeLikes(removedSongs.map((song) => song.songId));
+    }
+
+    await editLikes(songs.map((song) => song.songId));
+
     setLikes(songs);
   };
 

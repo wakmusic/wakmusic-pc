@@ -6,8 +6,6 @@ import { useControlState, usePlayingInfoState } from "@hooks/player";
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
 
-import getChartData from "@utils/getChartData";
-
 import AddMusic from "./AddMusic";
 import AddPlaylist from "./AddPlaylist";
 import DeleteMusic from "./DeleteMusic";
@@ -47,7 +45,7 @@ const MusicController = ({
 }: MusicControllerProps) => {
   const Controller = useMemo(
     () => (player ? MusicControllerPlayer : MusicControllerBar),
-    [player]
+    [player],
   );
   const [showControllerState, setShowControllerState] =
     useState(displayDefault);
@@ -62,13 +60,7 @@ const MusicController = ({
     (list: Song[], play?: boolean) => {
       // 재생목록에 노래 추가
       setPlayingInfo((prev) => ({
-        playlist: [
-          ...prev.playlist,
-          ...list.map((item) => ({
-            ...item,
-            views: getChartData(item).views,
-          })),
-        ],
+        playlist: [...prev.playlist, ...list],
         history: [],
         current: play ? prev.playlist.length : prev.current,
       }));
@@ -79,7 +71,7 @@ const MusicController = ({
         isPlaying: true,
       }));
     },
-    [setControlState, setPlayingInfo]
+    [setControlState, setPlayingInfo],
   );
 
   const getControllerComponent = useCallback(
@@ -125,8 +117,12 @@ const MusicController = ({
                 const newSongs = songs.slice();
 
                 selectedSongs.forEach((item) => {
-                  newSongs.splice(newSongs.indexOf(item), 1);
+                  newSongs.splice(
+                    newSongs.findIndex((song) => song.songId === item.songId),
+                    1,
+                  );
                 });
+
                 dispatchSelectedSongs([]);
 
                 onDelete && onDelete(newSongs);
@@ -135,7 +131,7 @@ const MusicController = ({
           );
       }
     },
-    [addSongs, songs, selectedSongs, dispatchSelectedSongs, onDelete]
+    [addSongs, songs, selectedSongs, dispatchSelectedSongs, onDelete],
   );
 
   useEffect(() => {

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { T6Medium } from "@components/Typography";
+import Skeleton from "@components/globals/Skeleton";
 
 import colors from "@constants/colors";
 
@@ -10,15 +11,24 @@ import { RecommendListMetaType } from "@templates/playlist";
 import { getRecommendRoundImage } from "@utils/staticUtill";
 
 interface RecommendItemProps {
-  item: RecommendListMetaType;
+  item: RecommendListMetaType | null;
 }
 
 const RecommendItem = ({ item }: RecommendItemProps) => {
   const navigate = useNavigate();
 
+  if (!item) {
+    return (
+      <Container>
+        <Skeleton width={85} height={20} />
+        <Skeleton width={48} height={48} borderRadius="50%" />
+      </Container>
+    );
+  }
+
   return (
     <Container
-      onClick={() => navigate(`/playlist/${item.key}`, { state: item })} // api 작업 후에 state 제거
+      onClick={() => navigate(`/playlist/${item.key}`, { state: item })} // TODO: api 작업 후에 state 제거
     >
       <Title>{item.title}</Title>
       <Icon src={getRecommendRoundImage(item)} />

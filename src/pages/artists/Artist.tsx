@@ -32,7 +32,7 @@ import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { SongSortType, SongTotal } from "@templates/song";
+import { Song, SongSortType } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 interface ArtistProps {}
@@ -68,12 +68,13 @@ const Artist = ({}: ArtistProps) => {
   });
 
   const {
+    isFetching: albumsIsLoading,
     error: albumsError,
     data: albumsData,
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<SongTotal[]>({
+  } = useInfiniteQuery<Song[]>({
     queryKey: ["artistsAlbums", tab, artistId],
     queryFn: async ({ pageParam = 0 }) => {
       if (!artistId || !tab) return [];
@@ -93,10 +94,11 @@ const Artist = ({}: ArtistProps) => {
   );
 
   const albums = useMemo(() => {
+    if (albumsIsLoading && !isFetchingNextPage) return Array(50).fill(null);
     if (!albumsData) return [];
 
     return albumsData.pages.flat();
-  }, [albumsData]);
+  }, [albumsData, albumsIsLoading, isFetchingNextPage]);
 
   const { viewportRef, getTotalSize, virtualMap, getVirtualItems } =
     useVirtualizer(albums ?? [], {
@@ -125,14 +127,17 @@ const Artist = ({}: ArtistProps) => {
   }, [animationState, controls, scroll]);
 
   // TODO: 스켈레톤, 오류
-  if (artistsIsLoading) return <div>로딩중...</div>;
-  if (artistsError || albumsError || !artists || !artist)
-    return <div>에러 발생!</div>;
+  if (artistsError || albumsError) return <div>에러 발생!</div>;
 
   return (
     <PageLayout>
       <PageContainer>
-        <ArtistInfo artist={artist} controls={controls} small={scroll > 0} />
+        <ArtistInfo
+          artist={artist}
+          controls={controls}
+          small={scroll > 0}
+          isLoading={artistsIsLoading}
+        />
 
         <TabBarWrapper>
           <TabBar>
@@ -192,6 +197,7 @@ const Artist = ({}: ArtistProps) => {
                       SongItemFeature.like,
                     ]}
                     onClick={selectCallback}
+                    isLoading={albumsIsLoading && !isFetchingNextPage}
                   />
                 )}
               </VirtualItem>

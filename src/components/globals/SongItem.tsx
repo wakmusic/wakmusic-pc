@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import styled, { css } from "styled-components/macro";
+import styled from "styled-components/macro";
 
 import { ReactComponent as MoveSVG } from "@assets/icons/ic_24_move.svg";
 
@@ -11,14 +11,13 @@ import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 import { formatDate, formatNumber } from "@utils/formatting";
-import getChartData from "@utils/getChartData";
 import { isNumber } from "@utils/isTypes";
 
 import Rank from "./Rank";
 import Track from "./Track";
 
 interface SongItemProps {
-  song: Song;
+  song?: Song;
   index?: number;
 
   rank?: number;
@@ -30,28 +29,26 @@ interface SongItemProps {
   onEdit?: (event: React.MouseEvent) => void;
 
   useIncrease?: boolean;
-  noPadding?: boolean;
   forceWidth?: number;
+
+  isLoading?: boolean;
 }
 
 const featureBuilder = (
-  song: Song,
-  chartData: {
-    views: number;
-    increase: number;
-    last: number;
-  },
+  song: Song | undefined,
   feature: SongItemFeature | undefined,
   useIncrease?: boolean
 ) => {
+  if (!song) return null;
+
   switch (feature) {
     case SongItemFeature.last:
-      return chartData.last ? `${chartData.last}위` : "-";
+      return song.chart.last ? `${song.chart.last}위` : "-";
     case SongItemFeature.date:
       return formatDate(song.date);
     case SongItemFeature.views:
       return `${formatNumber(
-        useIncrease ? chartData.increase : chartData.views
+        useIncrease ? song.chart.increase : song.views
       )}회`;
     case SongItemFeature.like:
       return formatNumber(song.like);
@@ -69,17 +66,15 @@ const SongItem = ({
   selected,
   onClick,
   onEdit,
-  noPadding,
   useIncrease,
   forceWidth,
+  isLoading,
 }: SongItemProps) => {
-  const chartData = useMemo(() => getChartData(song), [song]);
   const featureTexts = useMemo(
     () =>
-      features?.map((feature) =>
-        featureBuilder(song, chartData, feature, useIncrease)
-      ) ?? [],
-    [song, chartData, features, useIncrease]
+      features?.map((feature) => featureBuilder(song, feature, useIncrease)) ??
+      [],
+    [song, features, useIncrease]
   );
 
   const width = useMemo(() => {
@@ -93,12 +88,13 @@ const SongItem = ({
 
   return (
     <Container
-      onClick={() => onClick && onClick(song, index)}
+      onClick={() => onClick && song && onClick(song, index)}
       $selected={selected}
-      $noPadding={noPadding}
     >
       <Info>
-        {rank && <Rank now={rank} last={chartData.last} />}
+        {rank && (
+          <Rank now={rank} last={song?.chart?.last} isLoading={isLoading} />
+        )}
         {editMode && (
           <MoveButton
             onMouseDown={(e) => {
@@ -111,6 +107,7 @@ const SongItem = ({
           <Track
             item={song}
             maxWidth={isNumber(width) ? width - 80 : undefined}
+            isLoading={isLoading}
           />
         </TrackWrapper>
       </Info>
@@ -124,7 +121,7 @@ const SongItem = ({
   );
 };
 
-const Container = styled.div<{ $selected?: boolean; $noPadding?: boolean }>`
+const Container = styled.div<{ $selected?: boolean }>`
   height: 64px;
   width: 100%;
 
@@ -132,11 +129,7 @@ const Container = styled.div<{ $selected?: boolean; $noPadding?: boolean }>`
   align-items: center;
   justify-content: space-between;
 
-  ${({ $noPadding }) =>
-    !$noPadding &&
-    css`
-      padding: 0px 20px;
-    `}
+  padding: 0px 20px;
 
   background-color: ${({ $selected }) =>
     $selected ? colors.blueGray200 : "transparent"};

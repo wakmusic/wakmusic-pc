@@ -18,7 +18,7 @@ import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
 import { SearchTabType } from "@templates/search";
-import { SongTotal } from "@templates/song";
+import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 import NotFound from "../NotFound";
@@ -34,12 +34,12 @@ const List = ({ tab, query }: ListProps) => {
 
   const {
     data: songsData,
+    isFetching,
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-    isLoading,
     error,
-  } = useInfiniteQuery<SongTotal[]>({
+  } = useInfiniteQuery<Song[]>({
     queryKey: ["searchTab", tab, query],
     queryFn: async ({ pageParam = 0 }) =>
       tab !== "all"
@@ -55,10 +55,11 @@ const List = ({ tab, query }: ListProps) => {
   });
 
   const songs = useMemo(() => {
+    if (isFetching && !isFetchingNextPage) return Array(30).fill(null);
     if (!songsData) return [];
 
     return songsData.pages.flat();
-  }, [songsData]);
+  }, [isFetching, isFetchingNextPage, songsData]);
 
   const { viewportRef, getTotalSize, virtualMap, getVirtualItems } =
     useVirtualizer(songs, {
@@ -75,7 +76,7 @@ const List = ({ tab, query }: ListProps) => {
   });
 
   if (error) return <div>오류</div>;
-  if (!isLoading && songs.length === 0) return <NotFound />;
+  if (songs.length === 0) return <NotFound />;
 
   return (
     <Container>
@@ -111,6 +112,7 @@ const List = ({ tab, query }: ListProps) => {
                     SongItemFeature.like,
                   ]}
                   onClick={selectCallback}
+                  isLoading={isFetching && !isFetchingNextPage}
                 />
               )}
             </VirtualItem>
@@ -127,8 +129,6 @@ const List = ({ tab, query }: ListProps) => {
   );
 };
 
-const Container = styled.div`
-  margin-left: -20px;
-`;
+const Container = styled.div``;
 
 export default List;

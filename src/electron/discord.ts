@@ -1,8 +1,8 @@
 import { Client } from "@xhayper/discord-rpc";
 
-import { SongInfo } from "@templates/player";
+import { Song } from "@templates/song";
 
-let last: SongInfo | undefined;
+let last: Song | undefined;
 let startTimestamp: number | undefined;
 
 export const client = new Client({
@@ -54,7 +54,7 @@ export const showPlaying = (isPlaying: boolean) => {
 };
 
 export const changePresence = (
-  current: SongInfo | null,
+  current: Song | null,
   force = false,
   timestamp: number | null = null
 ) => {

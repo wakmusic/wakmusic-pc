@@ -13,21 +13,44 @@ import { Song } from "@templates/song";
 import { getYoutubeThumbnail } from "@utils/staticUtill";
 
 import Marquee from "./Marquee";
+import Skeleton from "./Skeleton";
 
 interface TrackProps {
-  item: Song;
+  item?: Song;
 
   maxWidth?: number;
+  isLoading?: boolean;
 }
 
-const Track = ({ item, maxWidth }: TrackProps) => {
+const Track = ({ item, maxWidth, isLoading }: TrackProps) => {
   const playSong = usePlaySong();
 
   const onClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
 
-    playSong(item);
+    item && playSong(item);
   };
+
+  if (isLoading || !item) {
+    return (
+      <Container>
+        <Skeleton width={78} height={46} borderRadius={4} />
+        <TrackInfo $maxWidth={maxWidth}>
+          <Skeleton
+            width={(maxWidth || 356) / 1.2}
+            height={22}
+            marginLeft={8}
+          />
+          <Skeleton
+            width={(maxWidth || 356) / 2}
+            height={20}
+            marginLeft={8}
+            marginTop={4}
+          />
+        </TrackInfo>
+      </Container>
+    );
+  }
 
   return (
     <Container onClick={onClickHandler}>

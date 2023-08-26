@@ -12,6 +12,7 @@ import { ReactComponent as DocumentOn } from "@assets/icons/ic_30_document_on.sv
 
 import { T3Medium, T6Light, T6Medium } from "@components/Typography";
 import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
+import Skeleton from "@components/globals/Skeleton";
 
 import colors from "@constants/colors";
 
@@ -23,12 +24,19 @@ import { addAlpha } from "@utils/utils";
 import ArtistImage from "./ArtistImage";
 
 interface ArtistInfoProps {
-  artist: Artist;
+  artist?: Artist;
   controls: AnimationControls;
   small: boolean;
+
+  isLoading?: boolean;
 }
 
-const ArtistInfo = ({ artist, controls, small }: ArtistInfoProps) => {
+const ArtistInfo = ({
+  artist,
+  controls,
+  small,
+  isLoading,
+}: ArtistInfoProps) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
   useEffect(() => {
@@ -36,6 +44,26 @@ const ArtistInfo = ({ artist, controls, small }: ArtistInfoProps) => {
       setDescriptionOpen(false);
     }
   }, [small]);
+
+  if (!artist || isLoading) {
+    return (
+      <Container>
+        <InnerContainer>
+          <Skeleton width={140} height={180} />
+          <Content>
+            <Skeleton width={100} height={32} />
+            <Skeleton width={100} height={20} marginTop={2} />
+
+            <Skeleton width={100} height={20} marginTop={16} />
+          </Content>
+
+          <DocumentButton>
+            <DocumentOff />
+          </DocumentButton>
+        </InnerContainer>
+      </Container>
+    );
+  }
 
   return (
     <Container animate={controls} initial="square" variants={containerVariants}>

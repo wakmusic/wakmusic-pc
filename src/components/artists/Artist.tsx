@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { T7Medium } from "@components/Typography";
+import Skeleton from "@components/globals/Skeleton";
 
 import colors from "@constants/colors";
 
@@ -12,10 +13,20 @@ interface ArtistProps {
   // TODO: Interface 작업 예정
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   artist: any;
+
+  isLoading?: boolean;
 }
 
-const Artist = ({ artist }: ArtistProps) => {
+const Artist = ({ artist, isLoading }: ArtistProps) => {
   const navigate = useNavigate();
+
+  if (isLoading)
+    return (
+      <Container>
+        <Skeleton width={84} height={84} marginTop={20} borderRadius="50%" />
+        <Skeleton width={40} height={18} />
+      </Container>
+    );
 
   return (
     <Container

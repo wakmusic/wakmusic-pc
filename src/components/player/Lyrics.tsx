@@ -77,7 +77,10 @@ const Lyrics = ({ size }: LyricsProps) => {
         padding +
         currentRef.current.offsetHeight / 2;
 
-      ref.current.scrollTo({ top, behavior: isSmooth ? "smooth" : "instant" });
+      ref.current.scrollTo({
+        top,
+        behavior: (isSmooth ? "smooth" : "instant") as ScrollBehavior,
+      });
     },
     [getIndex, ref, currentRef]
   );

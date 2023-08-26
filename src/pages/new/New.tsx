@@ -25,7 +25,7 @@ import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
-import { SongTotal } from "@templates/song";
+import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 interface NewProps {}
@@ -42,13 +42,13 @@ const New = ({}: NewProps) => {
   const playSongs = usePlaySongs();
 
   const {
-    isLoading: songsIsLoading,
+    isFetching: songsIsLoading,
     error: songsError,
     data: songsData,
     isFetchingNextPage,
     fetchNextPage,
     hasNextPage,
-  } = useInfiniteQuery<SongTotal[]>({
+  } = useInfiniteQuery<Song[]>({
     queryKey: ["new", tab],
     queryFn: async ({ pageParam = 0 }) => await fetchNewSongs(tab, pageParam),
     getNextPageParam: (lastPage, allPages) => {
@@ -59,10 +59,11 @@ const New = ({}: NewProps) => {
   });
 
   const songs = useMemo(() => {
+    if (songsIsLoading && !isFetchingNextPage) return Array(50).fill(null);
     if (!songsData) return [];
 
     return songsData.pages.flat();
-  }, [songsData]);
+  }, [songsIsLoading, isFetchingNextPage, songsData]);
 
   const {
     isLoading: updatedIsLoading,
@@ -88,8 +89,6 @@ const New = ({}: NewProps) => {
   });
 
   // TODO
-  if (songsIsLoading || updatedIsLoading || !songs || !updated)
-    return <div>로딩중...</div>;
   if (songsError || updatedError) return <div>에러...</div>;
 
   return (
@@ -102,7 +101,12 @@ const New = ({}: NewProps) => {
           }}
         />
 
-        <UpdatedText updated={updated} marginTop={12} marginLeft={20} />
+        <UpdatedText
+          updated={updated}
+          marginTop={12}
+          marginLeft={20}
+          isLoading={updatedIsLoading}
+        />
 
         <GuideBar
           features={[
@@ -137,6 +141,7 @@ const New = ({}: NewProps) => {
                       SongItemFeature.views,
                     ]}
                     onClick={selectCallback}
+                    isLoading={songsIsLoading && !isFetchingNextPage}
                   />
                 )}
               </VirtualItem>

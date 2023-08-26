@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
 
-import { ChartsType, fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
+import { fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
 
 import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
@@ -23,6 +23,7 @@ import { useScrollToTop } from "@hooks/scrollToTop";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
+import { ChartType } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 interface ChartProps {}
@@ -32,14 +33,14 @@ const Chart = ({}: ChartProps) => {
   const { selected, setSelected, selectCallback, selectedIncludes } =
     useSelectSongs();
   const tab = useMemo(
-    () => (searchParams.get("type") ?? "hourly") as ChartsType,
+    () => (searchParams.get("type") ?? "hourly") as ChartType,
     [searchParams]
   );
 
   const playSongs = usePlaySongs();
 
   const {
-    isLoading: chartsIsLoading,
+    isFetching: chartsIsLoading,
     error: chartsError,
     data: charts,
   } = useQuery({
@@ -48,7 +49,7 @@ const Chart = ({}: ChartProps) => {
   });
 
   const {
-    isLoading: chartUpdatedIsLoading,
+    isFetching: chartUpdatedIsLoading,
     error: chartUpdatedError,
     data: chartUpdated,
   } = useQuery({
@@ -57,14 +58,12 @@ const Chart = ({}: ChartProps) => {
   });
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
-    charts ?? []
+    chartsIsLoading ? Array(100).fill(null) : charts ?? []
   );
 
   useScrollToTop(tab, viewportRef, setSelected);
 
   // TODO
-  if (chartsIsLoading || chartUpdatedIsLoading || !charts || !chartUpdated)
-    return <div>로딩중...</div>;
   if (chartsError || chartUpdatedError) return <div>에러...</div>;
 
   return (
@@ -73,11 +72,16 @@ const Chart = ({}: ChartProps) => {
         <FunctionSection
           tabs={chartTabs}
           play={(shuffle) => {
-            playSongs(charts, shuffle);
+            charts?.every((s) => s) && playSongs(charts, shuffle);
           }}
         />
 
-        <UpdatedText updated={chartUpdated} marginTop={12} marginLeft={20} />
+        <UpdatedText
+          updated={chartUpdated}
+          marginTop={12}
+          marginLeft={20}
+          isLoading={chartUpdatedIsLoading}
+        />
 
         <GuideBar
           lastText={tab !== "total" ? lastTextMap[tab] : undefined}
@@ -109,6 +113,7 @@ const Chart = ({}: ChartProps) => {
                 ]}
                 onClick={selectCallback}
                 useIncrease={tab !== "total"}
+                isLoading={chartsIsLoading}
               />
             </VirtualItem>
           ))}

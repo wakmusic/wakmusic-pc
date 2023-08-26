@@ -3,7 +3,7 @@ import { join, resolve } from "path";
 
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
-import { SongInfo } from "@templates/player";
+import { Song } from "@templates/song";
 
 import { changePresence, setProgress, showPlaying } from "./electron/discord";
 import { schemeHandler } from "./electron/scheme";
@@ -13,10 +13,6 @@ declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 
 let tray: ((label: string) => void) | null = null;
 
-if (require("electron-squirrel-startup")) {
-  app.quit();
-}
-
 const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
@@ -25,6 +21,7 @@ if (!gotTheLock) {
 
 app.setName("왁타버스 뮤직");
 app.commandLine.appendSwitch("disable-site-isolation-trials");
+app.commandLine.appendSwitch("lang", "en-US");
 
 if (process.platform === "win32") {
   app.setAppUserModelId(app.name);
@@ -173,7 +170,7 @@ ipcMain.on(IPCRenderer.RPC_PLAYING, (_event, isPlaying: boolean) => {
   showPlaying(isPlaying);
 });
 
-ipcMain.on(IPCRenderer.RPC_TRACK, (_event, current: SongInfo | null) => {
+ipcMain.on(IPCRenderer.RPC_TRACK, (_event, current: Song | null) => {
   changePresence(current);
 });
 

@@ -24,15 +24,10 @@ const Artists = ({}: ArtistsProps) => {
     error,
   } = useQuery({
     queryKey: "artists",
-    queryFn: async () => {
-      const artists = fetchArtistList();
-      return artists;
-    },
+    queryFn: fetchArtistList,
   });
 
-  // TODO: 스켈레톤, 오류
-  if (isLoading) return <div>로딩중...</div>;
-  if (error || !artists) return <div>에러 발생!</div>;
+  if (error) return <div>에러 발생!</div>;
 
   return (
     <PageLayout>
@@ -49,13 +44,13 @@ const Artists = ({}: ArtistsProps) => {
 
         <PageItemContainer>
           <ArtistsContainer>
-            {artists
+            {(artists ?? Array(20).fill(null))
               .filter((artist) => {
                 if (searchParams.get("type") === null) return true;
                 else return artist.group.en === searchParams.get("type");
               })
               .map((artist, index) => (
-                <Artist key={index} artist={artist} />
+                <Artist key={index} artist={artist} isLoading={isLoading} />
               ))}
           </ArtistsContainer>
         </PageItemContainer>

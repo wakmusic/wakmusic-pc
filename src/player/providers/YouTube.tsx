@@ -6,7 +6,6 @@ import soundBoosts from "@constants/soundBoosts";
 import { PlayerProviderProps } from "@templates/player";
 import { Song } from "@templates/song";
 
-import { isNil } from "@utils/isTypes";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
 
 type PlayerState = {
@@ -94,19 +93,6 @@ const YouTube = ({
       } else {
         gainNode.current.gain.value = 1;
       }
-    }
-  };
-
-  const changeVolume = (volume: number) => {
-    const video = getVideoElement();
-
-    if (isNil(video)) {
-      player.current?.setVolume(volume);
-    } else {
-      player.current?.setVolume(volume);
-      setTimeout(() => {
-        video.volume = volume / 100;
-      }, 500);
     }
   };
 
@@ -201,7 +187,7 @@ const YouTube = ({
 
           if (song) {
             playerState.current.current = song;
-            changeVolume(volume);
+            player.current.setVolume(volume);
             player.current.cueVideoById(song?.songId, song?.start);
           }
         },
@@ -219,7 +205,7 @@ const YouTube = ({
   useEffect(() => {
     if (!player.current) return;
 
-    changeVolume(volume);
+    player.current.setVolume(volume);
 
     const prevSong = playerState.current.current;
     const nowSong: Song | null = song;
@@ -242,9 +228,7 @@ const YouTube = ({
   useEffect(() => {
     if (!player.current) return;
 
-    changeVolume(volume);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    player.current.setVolume(volume);
   }, [volume]);
 
   useEffect(() => {

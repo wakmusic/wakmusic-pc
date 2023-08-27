@@ -29,9 +29,7 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
       Boolean(songs.find((song) => song.songId === playerSong.songId))
     );
 
-    console.log(removedSongs);
-
-    if (removedSongs.length > 0) {
+    if (removedSongs.length !== playingInfo.playlist.length) {
       setPlayingInfo({ ...playingInfo, playlist: removedSongs });
     } else {
       setPlayingInfo({ ...playingInfo, playlist: songs });
@@ -52,12 +50,11 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
         <GuideBar
           features={[
             GuideBarFeature.info,
-            GuideBarFeature.last,
             GuideBarFeature.date,
+            GuideBarFeature.views,
             GuideBarFeature.like,
           ]}
         />
-
         <CustomSongs
           height={181}
           editMode={isEdit}

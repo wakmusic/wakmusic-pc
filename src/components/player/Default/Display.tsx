@@ -10,6 +10,7 @@ import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
 import { ReactComponent as PlayListSVG } from "@assets/icons/ic_20_play_list.svg";
+import { ReactComponent as PlayListOnSVG } from "@assets/icons/ic_20_play_list_on.svg";
 import dummyThumbnail from "@assets/svgs/MediumDummy.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
@@ -96,9 +97,16 @@ const Display = ({}: DisplayProps) => {
             variants={buttonVariants}
             initial="close"
           >
-            <Link to="/player/playlist">
-              <SimpleIconButton icon={PlayListSVG} />
-            </Link>
+            {location.pathname === "/player/playlist" ? (
+              <SimpleIconButton
+                icon={PlayListOnSVG}
+                onClick={() => navigate(-1)}
+              />
+            ) : (
+              <Link to="/player/playlist">
+                <SimpleIconButton icon={PlayListSVG} />{" "}
+              </Link>
+            )}
           </PlaylistButtonContainer>
 
           <CenterWrapper>

@@ -1,4 +1,4 @@
-import { MakerZIP } from "@electron-forge/maker-zip";
+import { MakerAppX } from "@electron-forge/maker-appx";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import type { ForgeConfig } from "@electron-forge/shared-types";
 import { readdir, unlink } from "fs/promises";
@@ -55,7 +55,18 @@ const config: ForgeConfig = {
       },
     ],
   },
-  makers: [new MakerZIP({})],
+  makers: [
+    new MakerAppX({
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+
+      identityName: "55390B70E4627.1221F2615847",
+      publisher: "CN=CFF2F2B0-3997-40A5-9513-E927980AC814",
+      publisherDisplayName: "왁타버스 뮤직",
+
+      assets: "./build/appx",
+    }),
+  ],
   plugins: [
     new VitePlugin({
       build: [

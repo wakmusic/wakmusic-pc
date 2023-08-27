@@ -1,5 +1,5 @@
 import { motion, useAnimation } from "framer-motion";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { spalshVariants } from "src/animations/splash";
 import styled from "styled-components/macro";
 
@@ -19,11 +19,12 @@ const Splash = ({}: SplashProps) => {
 
   const [, setIsNoticeModalOpen] = useNoticeModalState();
 
-  const onCompleteHandler = async () => {
+  const onCompleteHandler = useCallback(async () => {
     await controls.start("close");
+
     setDisable(true);
     setIsNoticeModalOpen(true);
-  };
+  }, [controls, setIsNoticeModalOpen]);
 
   if (disable) {
     return null;

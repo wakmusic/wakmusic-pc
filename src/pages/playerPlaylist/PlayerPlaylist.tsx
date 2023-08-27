@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components/macro";
 
 import { T4Medium } from "@components/Typography/Medium";
 import CustomSongs from "@components/globals/CustomSongs";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import TextButton from "@components/globals/TextButton";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import PageContainer from "@layouts/PageContainer";
 import PageLayout from "@layouts/PageLayout";
@@ -12,6 +13,8 @@ import PageLayout from "@layouts/PageLayout";
 import { usePlayingInfoState } from "@hooks/player";
 import { useSelectSongs } from "@hooks/selectSongs";
 
+import { ControllerFeature } from "@templates/musicController";
+import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 interface PlayerPlaylistProps {}
@@ -20,6 +23,20 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
   const { selected, selectCallback, selectedIncludes } = useSelectSongs();
+
+  const dispatchPlayerListInfo = async (songs: Song[]) => {
+    const removedSongs = playingInfo.playlist.filter((playerSong) =>
+      Boolean(songs.find((song) => song.songId === playerSong.songId))
+    );
+
+    console.log(removedSongs);
+
+    if (removedSongs.length > 0) {
+      setPlayingInfo({ ...playingInfo, playlist: removedSongs });
+    } else {
+      setPlayingInfo({ ...playingInfo, playlist: songs });
+    }
+  };
 
   return (
     <PageLayout>
@@ -37,13 +54,14 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
             GuideBarFeature.info,
             GuideBarFeature.last,
             GuideBarFeature.date,
-            GuideBarFeature.views,
+            GuideBarFeature.like,
           ]}
         />
 
         <CustomSongs
           height={181}
           editMode={isEdit}
+          onEdit={dispatchPlayerListInfo}
           selectedIncludes={selectedIncludes}
           onSongClick={selectCallback}
           selectedSongs={selected}
@@ -55,6 +73,13 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
         >
           {playingInfo.playlist}
         </CustomSongs>
+        <MusicController
+          songs={playingInfo.playlist}
+          selectedSongs={selected}
+          dispatchSelectedSongs={selectCallback}
+          features={[ControllerFeature.selectAll, ControllerFeature.addMusic]}
+          onDelete={isEdit ? undefined : dispatchPlayerListInfo}
+        />
       </PageContainer>
     </PageLayout>
   );

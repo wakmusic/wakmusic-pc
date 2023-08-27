@@ -157,9 +157,9 @@ ipcMain.on(IPCRenderer.QUERY_IS_SEPARATE, () => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
-  const bounds = win.getBounds();
+  const [width] = win.getMinimumSize();
 
-  win.webContents.send(IPCMain.REPLY_IS_SEPARATE, bounds.width === 290);
+  win.webContents.send(IPCMain.REPLY_IS_SEPARATE, width === 290);
 });
 
 ipcMain.on(IPCRenderer.RPC_PROGRESS, (_event, progress: number) => {

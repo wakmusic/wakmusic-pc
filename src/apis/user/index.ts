@@ -20,7 +20,7 @@ export const fetchProfileImages = async (): Promise<ProfileListResponse> => {
 export const fetchUser = async (): Promise<UserProfileResponse> => {
   const { data, status } = await instance.get(
     `/v2/user/profile`,
-    validateStatus,
+    validateStatus
   );
 
   if (status === 200) return data;
@@ -29,14 +29,14 @@ export const fetchUser = async (): Promise<UserProfileResponse> => {
 };
 
 export const setProfileImage = async (
-  profile: UserProfile,
+  profile: UserProfile
 ): Promise<boolean> => {
   const { status } = await instance.patch(
     `/v2/user/profile`,
     {
       type: profile.type,
     },
-    validateStatus,
+    validateStatus
   );
 
   return status === 201;
@@ -48,7 +48,7 @@ export const setUsername = async (name: string): Promise<boolean> => {
     {
       name,
     },
-    validateStatus,
+    validateStatus
   );
 
   return status === 201;
@@ -61,28 +61,28 @@ export const fetchPlaylists = async (): Promise<PlaylistsResponse> => {
 };
 
 export const editPlaylists = async (
-  playlistKeys: string[],
+  playlistKeys: string[]
 ): Promise<boolean> => {
   const { status } = await instance.put(
     `/v2/user/playlists`,
     {
       playlistKeys,
     },
-    validateStatus,
+    validateStatus
   );
 
   return status === 200;
 };
 
 export const removePlaylists = async (
-  playlistKeys: string[],
+  playlistKeys: string[]
 ): Promise<boolean> => {
   const { status } = await instance.post(
     `/v2/user/playlists/delete`,
     {
       playlistKeys,
     },
-    validateStatus,
+    validateStatus
   );
 
   return status === 202;
@@ -100,7 +100,7 @@ export const editLikes = async (songIds: string[]): Promise<boolean> => {
     {
       songIds,
     },
-    validateStatus,
+    validateStatus
   );
 
   return status === 200;
@@ -112,7 +112,7 @@ export const removeLikes = async (songIds: string[]): Promise<boolean> => {
     {
       songIds,
     },
-    validateStatus,
+    validateStatus
   );
 
   return status === 202;

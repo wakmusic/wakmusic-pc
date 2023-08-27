@@ -16,7 +16,7 @@ export const useLikes = (song: Song | undefined) => {
   const [likes, setLikes] = useRecoilState(likesStake);
   const liked = useMemo(
     () => (song ? likes.find((like) => like.songId === song?.songId) : false),
-    [likes, song],
+    [likes, song]
   );
 
   const openLoginModal = useLoginModalOpener();

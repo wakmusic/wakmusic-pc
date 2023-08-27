@@ -25,7 +25,6 @@ import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
 import Visual from "@components/player/Visual/Visual";
-import Youtube from "@components/youtube/Youtube";
 
 import RootOverlay from "@layouts/RootOverlay";
 
@@ -48,6 +47,7 @@ import CheckPlayerMode from "@utils/checkPlayerMode";
 import SchemeHandler from "@utils/schemeHandler";
 
 import "./index.css";
+import PlayerService from "./player/PlayerService";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -68,7 +68,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
         <Splash />
-
         <HashRouter>
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
           <Header />
@@ -101,8 +100,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <CheckPlayerMode />
         </HashRouter>
 
-        <Youtube />
-
+        <PlayerService />
         <ModalPortal>
           <LoginModal />
           <SelectProfileModal />
@@ -116,7 +114,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <NoticeDetailModal />
           <NoticeModal />
         </ModalPortal>
-
         <SchemeHandler />
       </QueryClientProvider>
     </RecoilRoot>

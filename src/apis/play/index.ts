@@ -6,7 +6,7 @@ import processSong from "@utils/processSong";
 
 type PrevData = {
   songId: string;
-  stopedAt: number;
+  stoppedAt: number;
   songLength: number;
 };
 

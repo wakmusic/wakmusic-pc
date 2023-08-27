@@ -69,7 +69,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
       currentSongState.songId,
       previousSong && {
         songId: previousSong.songId,
-        stopedAt: previousProgress || 0,
+        stoppedAt: previousProgress || 0,
         songLength: previousLength || 0,
       }
     ).then((upToDateSong) => {

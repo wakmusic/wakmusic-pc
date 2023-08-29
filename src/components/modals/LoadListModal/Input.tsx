@@ -26,7 +26,7 @@ const Input = ({ value, onChange }: InputProps) => {
         />
       )}
 
-      <HelpText />
+      <HelpText>리스트 코드로 리스트를 가져올 수 있습니다.</HelpText>
     </Container>
   );
 };

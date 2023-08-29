@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { ReactComponent as CopySVG } from "@assets/icons/ic_24_copy.svg";
@@ -6,48 +7,44 @@ import { T3Medium, T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useShareListModalState } from "@hooks/shareListModal";
-
 import HelpText from "./globals/HelpText";
 import OkButton from "./globals/OkButton";
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
 
-interface LoadListModalProps {}
+interface ContactModalProps {}
 
-const LoadListModal = ({}: LoadListModalProps) => {
-  const [modalState, setModalState] = useShareListModalState();
-
-  const resolve = () => {
-    if (modalState.resolve) modalState.resolve();
-    setModalState({ isOpen: false });
-  };
-
-  if (!modalState.isOpen) return null;
+const ContactModal = ({}: ContactModalProps) => {
+  const navigate = useNavigate();
 
   return (
     <ModalOverlay>
       <Container>
-        <Title>리스트 공유하기</Title>
+        <Title>문의하기</Title>
 
         <InputContainer>
-          <T5Light color={colors.blueGray400}>리스트 코드</T5Light>
+          <T5Light color={colors.blueGray400}>
+            아래 이메일로 문의해 주시기 바랍니다.
+          </T5Light>
           <Input>
-            <CodeText>{modalState.code}</CodeText>
+            <CodeText>{import.meta.env.VITE_CONTACT_MAIL}</CodeText>
             <CopyButton
               onClick={() => {
-                if (!modalState.code) return;
-                navigator.clipboard.writeText(modalState.code);
+                navigator.clipboard.writeText(
+                  import.meta.env.VITE_CONTACT_MAIL
+                );
               }}
             >
               <CopySVG />
             </CopyButton>
           </Input>
 
-          <HelpText>리스트 코드로 리스트를 가져올 수 있습니다.</HelpText>
+          <HelpText>
+            앞으로 더 발전하는 왁타버스 뮤직이 되겠습니다. 감사합니다.
+          </HelpText>
         </InputContainer>
 
         <ButtonsWrapper>
-          <OkButton onClick={resolve} />
+          <OkButton onClick={() => navigate("/mypage")} />
         </ButtonsWrapper>
       </Container>
     </ModalOverlay>
@@ -96,4 +93,4 @@ const ButtonsWrapper = styled.div`
   margin-top: 40px;
 `;
 
-export default LoadListModal;
+export default ContactModal;

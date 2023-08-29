@@ -32,3 +32,21 @@ export type ChangeProgressStateType = {
   force: boolean;
   progress: number;
 };
+
+export type PlayerProviderProps = {
+  song: Song | null;
+  isPlaying: boolean;
+  volume: number;
+  progress: number;
+
+  onProgressChange: (progress: number) => void;
+  onStart: (length: number) => void;
+  onEnd: () => void;
+  onResume: () => void;
+  onPause: () => void;
+
+  nextSong?: () => void;
+  prevSong?: () => void;
+  toggleIsPlaying?: () => void;
+  setProgress?: (progress: number) => void;
+};

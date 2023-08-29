@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { T4Bold, T5Light } from "@components/Typography";
@@ -7,6 +7,8 @@ import colors from "@constants/colors";
 
 import { useCreateListModalState } from "@hooks/createListModal";
 import { useIsSpaceDisabled } from "@hooks/player";
+
+import { isUndefined } from "@utils/isTypes";
 
 import Input from "../globals/Input";
 import TwoButton from "../globals/TwoButton";
@@ -19,6 +21,12 @@ const CreateListModal = ({}: CreateListModalProps) => {
   const [value, setValue] = useState("");
 
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
+
+  useEffect(() => {
+    if (modalState.originalTitle) {
+      setValue(modalState.originalTitle);
+    }
+  }, [modalState.originalTitle]);
 
   const resolve = (cancel?: boolean) => {
     if (modalState.resolve) modalState.resolve(cancel ? undefined : value);
@@ -33,7 +41,9 @@ const CreateListModal = ({}: CreateListModalProps) => {
   return (
     <ModalOverlay>
       <Container>
-        <Title>리스트 {modalState.isEdit ? "수정" : "만들기"}</Title>
+        <Title>
+          리스트 {isUndefined(modalState.originalTitle) ? "만들기" : "수정"}
+        </Title>
 
         <InputContainer>
           <T5Light color={colors.blueGray400}>리스트 명</T5Light>
@@ -45,7 +55,11 @@ const CreateListModal = ({}: CreateListModalProps) => {
           <TwoButton
             ok={() => resolve()}
             cancel={() => resolve(true)}
-            okText={modalState.isEdit ? "리스트 수정하기" : "리스트 생성"}
+            okText={
+              isUndefined(modalState.originalTitle)
+                ? "리스트 생성"
+                : "리스트 수정하기"
+            }
             disabled={value.length === 0 || value.length > 12}
           />
         </ButtonsWrapper>

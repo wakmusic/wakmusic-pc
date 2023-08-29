@@ -113,7 +113,7 @@ const Playlist = ({}: PlaylistProps) => {
   }, [changePlaylist, isEditmode, playlist, prevPlaylist?.songs, refetch]);
 
   const editPlaylistNameHandler = async () => {
-    const name = await openEditPlaylistNameModal(true);
+    const name = await openEditPlaylistNameModal(playlist?.title);
 
     if (!name) return;
 

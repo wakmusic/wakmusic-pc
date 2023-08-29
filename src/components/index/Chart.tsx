@@ -48,7 +48,7 @@ const Chart = ({}: ChartProps) => {
           <Title color={colors.primary900}>왁뮤차트 TOP100</Title>
           <UpdatedText
             updated={chartUpdated}
-            marginTop={9}
+            marginTop={4}
             isLoading={chartUpdatedIsLoading}
           />
         </HeaderTexts>
@@ -89,6 +89,7 @@ const Container = styled.div`
 
   margin-top: 20px;
   padding: 20px;
+  padding-top: 22px;
 
   border-radius: 16px;
   border: 1px solid ${colors.blueGray25};
@@ -105,16 +106,14 @@ const HeaderTexts = styled.div``;
 
 const HeaderButtons = styled.div`
   margin-left: auto;
-  margin-top: -4px;
+  margin-top: -6px;
 
   display: flex;
   align-items: center;
   gap: 4px;
 `;
 
-const Title = styled(T4Medium)`
-  margin-top: -4px;
-`;
+const Title = styled(T4Medium)``;
 
 const Items = styled.div`
   margin-top: 8px;

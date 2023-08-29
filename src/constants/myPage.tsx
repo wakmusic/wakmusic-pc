@@ -54,8 +54,6 @@ export const buttonList = [
   },
   {
     name: "오픈소스 라이선스",
-
-    // TODO
-    path: "https://wakmusic.xyz",
+    path: new URL(import.meta.env.VITE_PUBLISH_URL) + "license.html",
   },
 ];

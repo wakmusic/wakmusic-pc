@@ -33,7 +33,7 @@ const ConfirmModal = ({}: ConfirmModalProps) => {
 
         <ButtonsWrapper>
           <TwoButton
-            success={() => {
+            ok={() => {
               setModalState({ ...modalState, isOpen: false, value: true });
             }}
             cancel={() => {

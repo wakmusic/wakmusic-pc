@@ -104,7 +104,7 @@ const Display = ({}: DisplayProps) => {
               />
             ) : (
               <Link to="/player/playlist">
-                <SimpleIconButton icon={PlayListSVG} />{" "}
+                <SimpleIconButton icon={PlayListSVG} />
               </Link>
             )}
           </PlaylistButtonContainer>

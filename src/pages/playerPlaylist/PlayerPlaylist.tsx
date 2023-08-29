@@ -36,6 +36,8 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
     }
   };
 
+  console.log(playingInfo.playlist);
+
   return (
     <PageLayout>
       <PageContainer>
@@ -75,7 +77,7 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
           selectedSongs={selected}
           dispatchSelectedSongs={selectCallback}
           features={[ControllerFeature.selectAll, ControllerFeature.addMusic]}
-          onDelete={isEdit ? undefined : dispatchPlayerListInfo}
+          onDelete={dispatchPlayerListInfo}
         />
       </PageContainer>
     </PageLayout>
@@ -87,7 +89,7 @@ const TitleLayout = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 26px;
+  margin-top: 20px;
   padding: 0px 20px;
 `;
 

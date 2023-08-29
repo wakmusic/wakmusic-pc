@@ -4,7 +4,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 export const useAlertModal = () => {
   const setState = useSetRecoilState(alertModalState);
 
-  const openAlertModal = (title: string, children: React.ReactNode) => {
+  const openAlertModal = (title: string | null, children: React.ReactNode) => {
     return new Promise<void>((resolve) => {
       setState({
         isOpen: true,

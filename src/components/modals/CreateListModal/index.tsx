@@ -33,7 +33,7 @@ const CreateListModal = ({}: CreateListModalProps) => {
   return (
     <ModalOverlay>
       <Container>
-        <Title>리스트 만들기</Title>
+        <Title>리스트 {modalState.isEdit ? "수정" : "만들기"}</Title>
 
         <InputContainer>
           <T5Light color={colors.blueGray400}>리스트 명</T5Light>
@@ -45,7 +45,7 @@ const CreateListModal = ({}: CreateListModalProps) => {
           <TwoButton
             ok={() => resolve()}
             cancel={() => resolve(true)}
-            okText="리스트 생성"
+            okText={modalState.isEdit ? "리스트 수정하기" : "리스트 생성"}
             disabled={value.length === 0 || value.length > 12}
           />
         </ButtonsWrapper>

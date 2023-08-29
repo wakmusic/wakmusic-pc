@@ -62,3 +62,48 @@ export const addSongToPlaylist = async (
 
   return data?.status === 200;
 };
+
+export const editPlaylistName = async (
+  playlistKey: string,
+  title: string
+): Promise<boolean> => {
+  const { data } = await instance.patch(
+    `/v2/playlist/${playlistKey}`,
+    {
+      title,
+    },
+    validateStatus
+  );
+
+  return data?.status === 200;
+};
+
+export const removeSongsFromPlaylist = async (
+  playlistKey: string,
+  songIds: string[]
+): Promise<boolean> => {
+  const { data } = await instance.post(
+    `/v2/playlist/${playlistKey}/songs/remove`,
+    {
+      songIds,
+    },
+    validateStatus
+  );
+
+  return data?.status === 200;
+};
+
+export const editOrderOfPlaylist = async (
+  playlistKey: string,
+  songIds: string[]
+): Promise<boolean> => {
+  const { data } = await instance.patch(
+    `/v2/playlist/${playlistKey}/songs`,
+    {
+      songIds,
+    },
+    validateStatus
+  );
+
+  return data?.status === 200;
+};

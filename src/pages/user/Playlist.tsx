@@ -1,11 +1,14 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 import { styled } from "styled-components/macro";
 
 import {
+  editOrderOfPlaylist,
+  editPlaylistName,
   fetchRecommendedPlaylist,
   fetchRecommendedPlaylistDetail,
+  removeSongsFromPlaylist,
 } from "@apis/playlist";
 import { fetchPlaylists } from "@apis/user";
 
@@ -23,20 +26,27 @@ import MusicController from "@components/globals/musicControllers/MusicControlle
 
 import colors from "@constants/colors";
 
+import { useCreateListModal } from "@hooks/createListModal";
 import { usePlaySongs } from "@hooks/player";
-import { usePlaylistState } from "@hooks/playlist";
+import { usePrevious } from "@hooks/previous";
 import { useSelectSongs } from "@hooks/selectSongs";
 import { useShareListModal } from "@hooks/shareListModal";
 
 import { BasePlaylist, PlaylistType } from "@templates/playlist";
+import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
 import { getPlaylistIcon, getRecommendSquareImage } from "@utils/staticUtill";
+import { isSameArray } from "@utils/utils";
 
 interface PlaylistProps {}
 
 const Playlist = ({}: PlaylistProps) => {
-  const { data: playlists } = useQuery({
+  const openEditPlaylistNameModal = useCreateListModal();
+  const shareListModal = useShareListModal();
+  const playSongs = usePlaySongs();
+
+  const { data: playlists, refetch } = useQuery({
     queryKey: "playlists",
     queryFn: fetchPlaylists,
   });
@@ -47,7 +57,7 @@ const Playlist = ({}: PlaylistProps) => {
     staleTime: Infinity,
   });
 
-  const [isEditmode] = usePlaylistState();
+  const [isEditmode, setEditmode] = useState(false);
   const location = useLocation();
   const playlistId = useMemo(
     () => location.pathname.split("/")[2],
@@ -74,10 +84,66 @@ const Playlist = ({}: PlaylistProps) => {
     return (playlists ?? []).find((item) => item.key === playlistId);
   }, [playlistId, playlists, recommendList]);
 
-  const shareListModal = useShareListModal();
-  const playSongs = usePlaySongs();
-
   const { selected, selectCallback, selectedIncludes } = useSelectSongs();
+
+  const prevPlaylist = usePrevious(playlist);
+  const [changePlaylist, setChangePlaylist] = useState<Song[]>([]);
+
+  useEffect(() => {
+    if (
+      !playlist ||
+      isEditmode ||
+      changePlaylist.length === 0 ||
+      !isSameArray(prevPlaylist?.songs ?? [], playlist?.songs ?? []) ||
+      isSameArray(playlist?.songs ?? [], changePlaylist)
+    ) {
+      return;
+    }
+
+    (async () => {
+      const ok = await editOrderOfPlaylist(
+        playlist.key,
+        changePlaylist.map((song) => song.songId)
+      );
+
+      if (ok) {
+        refetch();
+      }
+    })();
+  }, [changePlaylist, isEditmode, playlist, prevPlaylist?.songs, refetch]);
+
+  const editPlaylistNameHandler = async () => {
+    const name = await openEditPlaylistNameModal(true);
+
+    if (!name) return;
+
+    const ok = await editPlaylistName(playlist?.key ?? "", name);
+
+    if (ok) {
+      refetch();
+    }
+  };
+
+  const dispatchSongs = async (songs: Song[]) => {
+    if (!playlist) return;
+
+    const removedSongs = playlist.songs.filter(
+      (plSong) => !songs.find((song) => song.songId === plSong.songId)
+    );
+
+    if (removedSongs.length > 0) {
+      const ok = await removeSongsFromPlaylist(
+        playlist.key,
+        removedSongs.map((song) => song.songId)
+      );
+
+      if (ok) {
+        refetch();
+      }
+    }
+
+    setChangePlaylist(songs);
+  };
 
   // TODO
   if (!playlist) return <div>loading...</div>;
@@ -96,7 +162,7 @@ const Playlist = ({}: PlaylistProps) => {
           <Details>
             <Title>
               <T3Medium color={colors.gray700}>{playlist.title}</T3Medium>
-              {isEditmode && <EditTitle />}
+              {isEditmode && <EditButton onClick={editPlaylistNameHandler} />}
             </Title>
             <T6Light color={colors.blueGray500}>
               {playlist.songs?.length}곡
@@ -130,6 +196,7 @@ const Playlist = ({}: PlaylistProps) => {
           <TextButton
             text={{ default: "편집", activated: "완료" }}
             activated={isEditmode}
+            onClick={() => setEditmode(!isEditmode)}
           />
         )}
       </Header>
@@ -141,10 +208,13 @@ const Playlist = ({}: PlaylistProps) => {
           GuideBarFeature.views,
           GuideBarFeature.like,
         ]}
+        editMode={isEditmode}
       />
 
       <CustomSongs
         height={281}
+        editMode={isEditmode}
+        onEdit={dispatchSongs}
         onSongClick={selectCallback}
         selectedIncludes={selectedIncludes}
         selectedSongs={selected}
@@ -162,6 +232,7 @@ const Playlist = ({}: PlaylistProps) => {
         songs={playlist.songs ?? []}
         selectedSongs={selected}
         dispatchSelectedSongs={selectCallback}
+        onDelete={isEditmode ? dispatchSongs : undefined}
       />
     </Container>
   );
@@ -212,6 +283,10 @@ const Title = styled.div`
   gap: 4px;
 
   margin-bottom: 4px;
+`;
+
+const EditButton = styled(EditTitle)`
+  cursor: pointer;
 `;
 
 const Functions = styled.div`

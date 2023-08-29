@@ -7,11 +7,12 @@ export const useCreateListModal = () => {
   const setState = useSetRecoilState(createListModalState);
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
-  const openCreateListModal = () => {
+  const openCreateListModal = (isEdit = false) => {
     return new Promise<string | undefined>((resolve) => {
       setIsSpaceDisabled(true);
       setState({
         isOpen: true,
+        isEdit,
         resolve,
       });
     });

@@ -39,7 +39,6 @@ import MyPage from "@pages/mypage/MyPage";
 import New from "@pages/new/New";
 import Notice from "@pages/notice/Notice";
 import PlayerPlaylist from "@pages/playerPlaylist/PlayerPlaylist";
-import Playground from "@pages/playground/Playground";
 import Search from "@pages/search/Search";
 import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";

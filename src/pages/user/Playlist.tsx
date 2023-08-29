@@ -36,7 +36,7 @@ import { getPlaylistIcon, getRecommendSquareImage } from "@utils/staticUtill";
 interface PlaylistProps {}
 
 const Playlist = ({}: PlaylistProps) => {
-  const { data: playlists, refetch } = useQuery({
+  const { data: playlists } = useQuery({
     queryKey: "playlists",
     queryFn: fetchPlaylists,
   });

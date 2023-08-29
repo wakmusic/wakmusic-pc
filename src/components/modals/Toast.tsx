@@ -75,6 +75,7 @@ const Overlay = styled.div`
   height: 100vh;
 
   pointer-events: none;
+  z-index: 1001;
 `;
 
 const ToastContainer = styled(motion.div)`

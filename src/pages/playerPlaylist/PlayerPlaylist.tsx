@@ -36,8 +36,6 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
     }
   };
 
-  console.log(playingInfo.playlist);
-
   return (
     <PageLayout>
       <PageContainer>

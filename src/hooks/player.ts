@@ -11,6 +11,7 @@ import {
 } from "@state/player/atoms";
 import { useRef } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { queryClient } from "src/main";
 
 import { fetchCharts } from "@apis/charts";
 
@@ -64,13 +65,18 @@ export const useToggleIsPlayingState = () => {
 
   return () => {
     if (playingInfo.playlist.length === 0) {
-      fetchCharts("hourly").then((chart) => {
-        setPlayingInfo((prev) => ({
-          ...prev,
-          playlist: chart,
-        }));
-        setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
-      });
+      queryClient
+        .fetchQuery({
+          queryKey: ["charts", "hourly"],
+          queryFn: async () => await fetchCharts("hourly", 100),
+        })
+        .then((chart) => {
+          setPlayingInfo((prev) => ({
+            ...prev,
+            playlist: chart,
+          }));
+          setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
+        });
     } else {
       setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
     }

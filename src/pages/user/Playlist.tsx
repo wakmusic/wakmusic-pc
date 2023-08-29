@@ -7,6 +7,7 @@ import {
   fetchRecommendedPlaylist,
   fetchRecommendedPlaylistDetail,
 } from "@apis/playlist";
+import { fetchPlaylists } from "@apis/user";
 
 import { ReactComponent as EditTitle } from "@assets/icons/ic_24_edit_filled.svg";
 import { ReactComponent as Share } from "@assets/icons/ic_24_export.svg";
@@ -35,6 +36,11 @@ import { getPlaylistIcon, getRecommendSquareImage } from "@utils/staticUtill";
 interface PlaylistProps {}
 
 const Playlist = ({}: PlaylistProps) => {
+  const { data: playlists, refetch } = useQuery({
+    queryKey: "playlists",
+    queryFn: fetchPlaylists,
+  });
+
   const { data: recommendLists } = useQuery({
     queryKey: "recommendLists",
     queryFn: fetchRecommendedPlaylist,
@@ -63,11 +69,10 @@ const Playlist = ({}: PlaylistProps) => {
     staleTime: 24 * 60 * 60 * 1000,
   });
 
-  const playlist: BasePlaylist = useMemo(() => {
+  const playlist: BasePlaylist | undefined = useMemo(() => {
     if (recommendList) return recommendList;
-
-    return location.state as BasePlaylist;
-  }, [location.state, recommendList]);
+    return (playlists ?? []).find((item) => item.key === playlistId);
+  }, [playlistId, playlists, recommendList]);
 
   const shareListModal = useShareListModal();
   const playSongs = usePlaySongs();
@@ -85,7 +90,7 @@ const Playlist = ({}: PlaylistProps) => {
             src={
               recommendList
                 ? getRecommendSquareImage(recommendList)
-                : getPlaylistIcon((playlist as PlaylistType).image.version)
+                : getPlaylistIcon((playlist as PlaylistType).image)
             }
           />
           <Details>

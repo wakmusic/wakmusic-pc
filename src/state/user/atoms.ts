@@ -18,6 +18,7 @@ export const myListState = atom({
 export const dragAndDropState = atom<dragAndDropStatetype>({
   key: "dragAndDropState",
   default: {
+    // TODO: 더미 사용 안하기
     drag: dumyListItem,
     drop: -1,
   },

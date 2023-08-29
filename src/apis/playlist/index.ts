@@ -1,4 +1,4 @@
-import instance from "@apis/axios";
+import instance, { validateStatus } from "@apis/axios";
 
 import { RecommendListMetaType, RecommendListType } from "@templates/playlist";
 import { RawSong } from "@templates/song";
@@ -21,4 +21,44 @@ export const fetchRecommendedPlaylistDetail = async (
     ...data,
     songs: data.songs.map((item: RawSong) => processSong("total", item)),
   };
+};
+
+export const createPlaylist = async (title: string): Promise<boolean> => {
+  const { data } = await instance.post(
+    `/v2/playlist/create`,
+    {
+      title,
+      image: `${Math.floor(Math.random() * 10) + 1}`,
+    },
+    validateStatus
+  );
+
+  return data?.status === 200;
+};
+
+export const copyPlaylist = async (key: string): Promise<boolean> => {
+  const { data } = await instance.post(
+    `/v2/playlist/copy`,
+    {
+      key,
+    },
+    validateStatus
+  );
+
+  return data?.status === 200;
+};
+
+export const addSongToPlaylist = async (
+  playlistKey: string,
+  songIds: string[]
+): Promise<boolean> => {
+  const { data } = await instance.post(
+    `/v2/playlist/${playlistKey}/songs/add`,
+    {
+      songIds,
+    },
+    validateStatus
+  );
+
+  return data?.status === 200;
 };

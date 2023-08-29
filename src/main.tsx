@@ -85,10 +85,12 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/new" element={<New />} />
               <Route path="/user/*" element={<User />} />
               <Route path="/playlist/:playlistid" element={<Playlist />} />
-              <Route path="/mypage" element={<MyPage />} />
-              <Route path="/about" element={<MyPage />} />
               <Route path="/faq" element={<Faq />} />
               <Route path="/notice" element={<Notice />} />
+
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/support" element={<MyPage />} />
+              <Route path="/about" element={<MyPage />} />
 
               <Route path="/player" element={null} />
             </Routes>

@@ -43,10 +43,7 @@ const User = ({}: UserProps) => {
     navigate("/mypage");
   };
 
-  if (
-    user &&
-    (location.pathname === "/mypage" || location.pathname === "/about")
-  ) {
+  if (user && ["/mypage", "/about", "/support"].includes(location.pathname)) {
     return (
       <Container onClick={logout}>
         <Text>로그아웃</Text>

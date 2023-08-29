@@ -1,5 +1,3 @@
-import { getAnalytics } from "firebase/analytics";
-import { initializeApp } from "firebase/app";
 import "overlayscrollbars/overlayscrollbars.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -28,8 +26,6 @@ import Visual from "@components/player/Visual/Visual";
 
 import RootOverlay from "@layouts/RootOverlay";
 
-import firebaseConfig from "@constants/firebaseConfig";
-
 import Artist from "@pages/artists/Artist";
 import Artists from "@pages/artists/Artists";
 import Chart from "@pages/chart/Chart";
@@ -47,10 +43,6 @@ import SchemeHandler from "@utils/schemeHandler";
 
 import "./index.css";
 import PlayerService from "./player/PlayerService";
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-getAnalytics(app);
 
 export const queryClient = new QueryClient({
   defaultOptions: {

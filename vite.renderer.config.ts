@@ -18,7 +18,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           "lottie-web": ["lottie-web"],
-          firebase: ["firebase/analytics", "firebase/app"],
         },
       },
     },

@@ -119,7 +119,7 @@ export const removeLikes = async (songIds: string[]): Promise<boolean> => {
     validateStatus
   );
 
-  return status === 202;
+  return status === 201;
 };
 
 export const removeUser = async (): Promise<boolean> => {

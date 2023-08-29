@@ -151,9 +151,11 @@ const Mylist = ({}: MylistProps) => {
     queryClient.setQueryData("playlists", shuffledList);
 
     (async () => {
-      const ok = await editPlaylistOrder(shuffledList.map((item) => item.key));
+      const success = await editPlaylistOrder(
+        shuffledList.map((item) => item.key)
+      );
 
-      if (ok) {
+      if (success) {
         refetch();
       } else {
         queryClient.setQueryData("playlists", prevPlaylists);
@@ -193,9 +195,9 @@ const Mylist = ({}: MylistProps) => {
 
     if (!name) return;
 
-    const ok = await createPlaylist(name);
+    const success = await createPlaylist(name);
 
-    if (ok) {
+    if (success) {
       refetch();
     }
   };
@@ -205,9 +207,9 @@ const Mylist = ({}: MylistProps) => {
 
     if (!code) return;
 
-    const ok = await copyPlaylist(code);
+    const success = await copyPlaylist(code);
 
-    if (ok) {
+    if (success) {
       refetch();
     }
   };

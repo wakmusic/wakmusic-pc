@@ -50,17 +50,17 @@ const AddListModal = ({}: AddListModalProps) => {
       return;
     }
 
-    const ok = await addSongToPlaylist(
+    const success = await addSongToPlaylist(
       list.key,
       modalState.selected.map((s) => s.songId)
     );
 
-    if (ok) {
+    if (success) {
       refetch();
     }
 
     if (modalState.resolve) {
-      modalState.resolve(ok);
+      modalState.resolve(success);
     }
 
     setModalState({ ...modalState, isOpen: false });
@@ -80,9 +80,9 @@ const AddListModal = ({}: AddListModalProps) => {
 
     if (!name) return;
 
-    const ok = await createPlaylist(name);
+    const success = await createPlaylist(name);
 
-    if (ok) {
+    if (success) {
       refetch();
     }
   };

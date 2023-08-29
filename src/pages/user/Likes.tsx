@@ -39,9 +39,9 @@ const Likes = ({}: LikesProps) => {
     }
 
     (async () => {
-      const ok = await editLikes(changeLikes.map((song) => song.songId));
+      const success = await editLikes(changeLikes.map((song) => song.songId));
 
-      if (ok) {
+      if (success) {
         setLikes(changeLikes);
       }
     })();
@@ -53,9 +53,11 @@ const Likes = ({}: LikesProps) => {
     );
 
     if (removedSongs.length > 0) {
-      const ok = await removeLikes(removedSongs.map((song) => song.songId));
+      const success = await removeLikes(
+        removedSongs.map((song) => song.songId)
+      );
 
-      if (ok) {
+      if (success) {
         setLikes(
           likes.filter(
             (like) => !removedSongs.find((song) => song.songId === like.songId)

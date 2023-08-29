@@ -101,12 +101,12 @@ const Playlist = ({}: PlaylistProps) => {
     }
 
     (async () => {
-      const ok = await editOrderOfPlaylist(
+      const success = await editOrderOfPlaylist(
         playlist.key,
         changePlaylist.map((song) => song.songId)
       );
 
-      if (ok) {
+      if (success) {
         refetch();
       }
     })();
@@ -117,9 +117,9 @@ const Playlist = ({}: PlaylistProps) => {
 
     if (!name) return;
 
-    const ok = await editPlaylistName(playlist?.key ?? "", name);
+    const success = await editPlaylistName(playlist?.key ?? "", name);
 
-    if (ok) {
+    if (success) {
       refetch();
     }
   };
@@ -132,12 +132,12 @@ const Playlist = ({}: PlaylistProps) => {
     );
 
     if (removedSongs.length > 0) {
-      const ok = await removeSongsFromPlaylist(
+      const success = await removeSongsFromPlaylist(
         playlist.key,
         removedSongs.map((song) => song.songId)
       );
 
-      if (ok) {
+      if (success) {
         refetch();
       }
     }

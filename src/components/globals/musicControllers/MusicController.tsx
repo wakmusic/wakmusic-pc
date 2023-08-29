@@ -96,11 +96,11 @@ const MusicController = ({
             <AddMusic
               key={key}
               onClick={async () => {
-                const ok = await openAddListModal(selectedSongs);
+                const success = await openAddListModal(selectedSongs);
 
-                if (ok === true) {
+                if (success === true) {
                   // TODO: 플레이리스트 추가 성공
-                } else if (ok === false) {
+                } else if (success === false) {
                   // TODO: 플레이리스트 추가 실패
                 }
 

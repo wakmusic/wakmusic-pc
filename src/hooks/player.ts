@@ -330,12 +330,10 @@ export const usePlaySongs = () => {
   const setPlayingInfo = useSetRecoilState(playingInfoState);
 
   return (songs: Song[], shuffle = false) => {
-    if (shuffle) {
-      songs = songs.sort(() => Math.random() - 0.5);
-    }
+    const _songs = shuffle ? [...songs].sort(() => Math.random() - 0.5) : songs;
 
     setPlayingInfo({
-      playlist: songs,
+      playlist: _songs,
       history: [],
       current: 0,
     });

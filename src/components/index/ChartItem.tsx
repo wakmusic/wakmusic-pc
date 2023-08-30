@@ -3,12 +3,11 @@ import styled from "styled-components/macro";
 import Rank from "@components/globals/Rank";
 import Track from "@components/globals/Track";
 
+import { Song } from "@templates/song";
+
 interface ChartItemProps {
   rank: number;
-
-  // TODO: Interface 작업 예정
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  item: any | null;
+  item?: Song;
 
   isLoading?: boolean;
 }
@@ -16,7 +15,7 @@ interface ChartItemProps {
 const ChartItem = ({ rank, item, isLoading }: ChartItemProps) => {
   return (
     <Container>
-      <Rank now={rank} last={item && item.hourly.last} isLoading={isLoading} />
+      <Rank now={rank} last={item && item.chart.last} isLoading={isLoading} />
       <Track item={item} maxWidth={220} isLoading={isLoading} />
     </Container>
   );

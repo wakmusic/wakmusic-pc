@@ -49,7 +49,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "firebase": "^9.23.0",
-    "framer-motion": "^10.13.1",
+    "framer-motion": "^10.16.1",
     "lodash.throttle": "^4.1.1",
     "lottie-web": "^5.12.2",
     "overlayscrollbars": "^2.2.1",

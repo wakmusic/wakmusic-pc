@@ -6509,9 +6509,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"framer-motion@npm:^10.13.1":
-  version: 10.13.1
-  resolution: "framer-motion@npm:10.13.1"
+"framer-motion@npm:^10.16.1":
+  version: 10.16.1
+  resolution: "framer-motion@npm:10.16.1"
   dependencies:
     "@emotion/is-prop-valid": ^0.8.2
     tslib: ^2.4.0
@@ -6526,7 +6526,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 3df72d5ba72312dcec73044bf5478e89e099e7cee7f2996db15305a0e5a799909e6e782770ba8e3cfc44059093dfd06043b9a157e1faa85977930846a0ea4fd1
+  checksum: cce24975992020dbbdf426058a2a067ead262f7f264d28d2ed7570cb59e0f175267d7a05d0a1c1335c7bee486bc9dcf1f3940f474e4ba6fc47bb19eebb9f79d2
   languageName: node
   linkType: hard
 
@@ -11280,7 +11280,7 @@ __metadata:
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
     firebase: ^9.23.0
-    framer-motion: ^10.13.1
+    framer-motion: ^10.16.1
     lodash.throttle: ^4.1.1
     lottie-web: ^5.12.2
     overlayscrollbars: ^2.2.1

@@ -8,7 +8,7 @@ interface BackgroundProps {}
 
 const Background = ({}: BackgroundProps) => {
   const ref = useRef(null);
-  const { x, y } = useFollowPointer(ref, 0.25);
+  const { x, y } = useFollowPointer(ref, 0.3);
 
   return (
     <Container ref={ref}>

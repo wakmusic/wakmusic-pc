@@ -22,6 +22,7 @@ import NoticeModal from "@components/modals/NoticeModal";
 import SelectProfileModal from "@components/modals/SelectProfileModal";
 import SetUsernameModal from "@components/modals/SetUsernameModal";
 import ShareListModal from "@components/modals/ShareListModal";
+import Toast from "@components/modals/Toast";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
 import Visual from "@components/player/Visual/Visual";
@@ -101,7 +102,10 @@ createRoot(document.getElementById("root") as HTMLElement).render(
         </HashRouter>
 
         <PlayerService />
+
         <ModalPortal>
+          <Toast />
+
           <LoginModal />
           <SelectProfileModal />
           <AlertModal />

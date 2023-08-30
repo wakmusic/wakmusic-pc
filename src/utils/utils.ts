@@ -8,3 +8,6 @@ export const addAlpha = (hex: string, alpha: number) =>
   `${hex}${Math.floor(alpha * 255)
     .toString(16)
     .padStart(2, "0")}`;
+
+export const isSameArray = (a: unknown[], b: unknown[]) =>
+  a.length === b.length && a.every((v, i) => v === b[i]);

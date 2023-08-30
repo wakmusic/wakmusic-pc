@@ -1,4 +1,5 @@
 import { Artist } from "@templates/artists";
+import { Image } from "@templates/image";
 import { RecommendListMetaType } from "@templates/playlist";
 import { UserProfile } from "@templates/user";
 
@@ -24,8 +25,8 @@ export const getAudio = (id: string) => {
   return `${staticURL}/audio/${id}.mp3`;
 };
 
-export const getPlaylistIcon = (version: number) => {
-  return `${staticURL}/playlist/${version}.png`;
+export const getPlaylistIcon = (image: Image) => {
+  return `${staticURL}/playlist/${image.name}.png?v=${image.version}`;
 };
 
 export const getDocument = (type: documentType) => {

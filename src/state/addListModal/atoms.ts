@@ -1,6 +1,5 @@
 import { atom } from "recoil";
 
-import { PlaylistType } from "@templates/playlist";
 import { Song } from "@templates/song";
 
 interface AddListModalState {
@@ -8,7 +7,7 @@ interface AddListModalState {
 
   selected: Song[];
 
-  resolve?: (value: PlaylistType | undefined) => void;
+  resolve?: (value: boolean | undefined) => void;
 }
 
 export const addListModalState = atom<AddListModalState>({

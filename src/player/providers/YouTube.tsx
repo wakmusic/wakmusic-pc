@@ -99,7 +99,11 @@ const YouTube = ({
   const onStateChange = (e: YT.OnStateChangeEvent) => {
     switch (e.data) {
       case YT.PlayerState.UNSTARTED: {
-        if (!playerState.current.isLoaded && !playerState.current.isFirst) {
+        if (
+          !playerState.current.isLoaded &&
+          !playerState.current.isFirst &&
+          playerState.current.current
+        ) {
           player.current?.playVideo();
         }
 

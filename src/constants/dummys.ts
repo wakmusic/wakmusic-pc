@@ -726,8 +726,8 @@ export const dumyListItem = {
     },
   },
   image: {
-    name: "1",
-    version: 11,
+    name: "11",
+    version: 1,
   },
   songs: [],
 };

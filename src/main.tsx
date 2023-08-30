@@ -1,5 +1,3 @@
-import { getAnalytics } from "firebase/analytics";
-import { initializeApp } from "firebase/app";
 import "overlayscrollbars/overlayscrollbars.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -22,13 +20,12 @@ import NoticeModal from "@components/modals/NoticeModal";
 import SelectProfileModal from "@components/modals/SelectProfileModal";
 import SetUsernameModal from "@components/modals/SetUsernameModal";
 import ShareListModal from "@components/modals/ShareListModal";
+import Toast from "@components/modals/Toast";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
 import Visual from "@components/player/Visual/Visual";
 
 import RootOverlay from "@layouts/RootOverlay";
-
-import firebaseConfig from "@constants/firebaseConfig";
 
 import Artist from "@pages/artists/Artist";
 import Artists from "@pages/artists/Artists";
@@ -38,6 +35,7 @@ import Index from "@pages/index/Index";
 import MyPage from "@pages/mypage/MyPage";
 import New from "@pages/new/New";
 import Notice from "@pages/notice/Notice";
+import PlayerPlaylist from "@pages/playerPlaylist/PlayerPlaylist";
 import Search from "@pages/search/Search";
 import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
@@ -47,10 +45,6 @@ import SchemeHandler from "@utils/schemeHandler";
 
 import "./index.css";
 import PlayerService from "./player/PlayerService";
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-getAnalytics(app);
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -85,12 +79,11 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/playlist/:playlistid" element={<Playlist />} />
               <Route path="/faq" element={<Faq />} />
               <Route path="/notice" element={<Notice />} />
-
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/support" element={<MyPage />} />
               <Route path="/about" element={<MyPage />} />
-
               <Route path="/player" element={null} />
+              <Route path="/player/playlist" element={<PlayerPlaylist />} />
             </Routes>
 
             <Player />
@@ -101,7 +94,10 @@ createRoot(document.getElementById("root") as HTMLElement).render(
         </HashRouter>
 
         <PlayerService />
+
         <ModalPortal>
+          <Toast />
+
           <LoginModal />
           <SelectProfileModal />
           <AlertModal />

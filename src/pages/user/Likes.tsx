@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { editLikes, removeLikes } from "@apis/user";
@@ -7,10 +8,13 @@ import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import MusicController from "@components/globals/musicControllers/MusicController";
 
 import { useLikesEditState, useLikesState } from "@hooks/likes";
+import { usePrevious } from "@hooks/previous";
 import { useSelectSongs } from "@hooks/selectSongs";
 
 import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
+
+import { isSameArray } from "@utils/utils";
 
 interface LikesProps {}
 
@@ -18,7 +22,30 @@ const Likes = ({}: LikesProps) => {
   const [editMode] = useLikesEditState();
   const [likes, setLikes] = useLikesState();
 
+  const prevLikes = usePrevious(likes);
+  const [changeLikes, setChangeLikes] = useState<Song[]>([]);
+
   const { selected, selectCallback, selectedIncludes } = useSelectSongs();
+
+  useEffect(() => {
+    if (
+      !likes ||
+      editMode ||
+      changeLikes.length === 0 ||
+      !isSameArray(likes, prevLikes ?? []) ||
+      isSameArray(likes, changeLikes)
+    ) {
+      return;
+    }
+
+    (async () => {
+      const success = await editLikes(changeLikes.map((song) => song.songId));
+
+      if (success) {
+        setLikes(changeLikes);
+      }
+    })();
+  }, [changeLikes, editMode, likes, prevLikes, setLikes]);
 
   const dispatchLikes = async (songs: Song[]) => {
     const removedSongs = likes.filter(
@@ -26,12 +53,20 @@ const Likes = ({}: LikesProps) => {
     );
 
     if (removedSongs.length > 0) {
-      await removeLikes(removedSongs.map((song) => song.songId));
+      const success = await removeLikes(
+        removedSongs.map((song) => song.songId)
+      );
+
+      if (success) {
+        setLikes(
+          likes.filter(
+            (like) => !removedSongs.find((song) => song.songId === like.songId)
+          )
+        );
+      }
     }
 
-    await editLikes(songs.map((song) => song.songId));
-
-    setLikes(songs);
+    setChangeLikes(songs);
   };
 
   return (

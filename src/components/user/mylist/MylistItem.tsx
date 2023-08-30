@@ -10,10 +10,13 @@ import { T6Medium, T7Light } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useDragAndDropState, useMylistState } from "@hooks/mylist";
+import { usePlaySongs } from "@hooks/player";
 
 import { XY } from "@pages/user/Mylist";
 
 import { myListItemType } from "@templates/playlist";
+
+import { getPlaylistIcon } from "@utils/staticUtill";
 
 interface MylistItemProps {
   item: myListItemType;
@@ -33,6 +36,8 @@ const MylistItem = ({
   const navigate = useNavigate();
   const [isEditMode] = useMylistState();
   const [dragAndDropTarget] = useDragAndDropState();
+
+  const playSongs = usePlaySongs();
 
   const marginLeft = useMemo(() => {
     if (!mouseDown) return 0;
@@ -120,13 +125,11 @@ const MylistItem = ({
       }}
       onMouseEnter={onMouseEnter}
       onClick={() => {
-        navigate(`/playlist/${item.key}`, { state: item });
+        navigate(`/playlist/${item.key}`);
       }}
     >
       <ShiftContainer>
-        <Icon
-          src={`https://static.wakmusic.xyz/static/playlist/${item.image.version}.png`}
-        />
+        <Icon src={getPlaylistIcon(item.image)} />
         <InfoContainer>
           <Title>{item.title}</Title>
           <Volume>{item.songs.length}곡</Volume>
@@ -138,7 +141,12 @@ const MylistItem = ({
               }}
             ></DragPlaylist>
           ) : (
-            <PlayAll></PlayAll>
+            <PlayAll
+              onClick={(e) => {
+                e.stopPropagation();
+                playSongs(item.songs);
+              }}
+            />
           )}
         </InfoContainer>
       </ShiftContainer>

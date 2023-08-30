@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components/macro";
 
+import { useAddListModal } from "@hooks/addListModal";
 import { useControlState, usePlayingInfoState } from "@hooks/player";
 
 import { ControllerFeature } from "@templates/musicController";
@@ -56,6 +57,8 @@ const MusicController = ({
 
   const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
 
+  const openAddListModal = useAddListModal();
+
   const addSongs = useCallback(
     (list: Song[], play?: boolean) => {
       // 재생목록에 노래 추가
@@ -89,7 +92,22 @@ const MusicController = ({
           );
         case ControllerFeature.addMusic:
           // 플레이리스트에 노래 추가
-          return <AddMusic key={key} />;
+          return (
+            <AddMusic
+              key={key}
+              onClick={async () => {
+                const success = await openAddListModal(selectedSongs);
+
+                if (success === true) {
+                  // TODO: 플레이리스트 추가 성공
+                } else if (success === false) {
+                  // TODO: 플레이리스트 추가 실패
+                }
+
+                dispatchSelectedSongs([]);
+              }}
+            />
+          );
         case ControllerFeature.addToList:
           return (
             <AddPlaylist
@@ -131,7 +149,14 @@ const MusicController = ({
           );
       }
     },
-    [addSongs, songs, selectedSongs, dispatchSelectedSongs, onDelete]
+    [
+      dispatchSelectedSongs,
+      songs,
+      openAddListModal,
+      selectedSongs,
+      addSongs,
+      onDelete,
+    ]
   );
 
   useEffect(() => {

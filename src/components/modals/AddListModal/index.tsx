@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import styled from "styled-components/macro";
+
+import { addSongToPlaylist, createPlaylist } from "@apis/playlist";
+import { fetchPlaylists } from "@apis/user";
 
 import { ReactComponent as AddListSVG } from "@assets/icons/ic_24_playadd_600.svg";
 
 import { T4Bold, T5Medium, T6Medium } from "@components/Typography";
+import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 
-import PageItemContainer from "@layouts/PageItemContainer";
 import VirtualItem from "@layouts/VirtualItem";
 
 import colors from "@constants/colors";
@@ -16,6 +20,7 @@ import useVirtualizer from "@hooks/virtualizer";
 
 import { PlaylistType } from "@templates/playlist";
 
+import { isUndefined } from "@utils/isTypes";
 import { getPlaylistIcon } from "@utils/staticUtill";
 
 import Input from "../globals/Input";
@@ -31,54 +36,62 @@ const AddListModal = ({}: AddListModalProps) => {
 
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
-  const resolve = (list: PlaylistType | undefined) => {
-    if (modalState.resolve) modalState.resolve(list);
-    setModalState({ ...modalState, isOpen: false });
+  const { data: playlists, refetch } = useQuery({
+    queryKey: "playlists",
+    queryFn: fetchPlaylists,
+  });
 
+  const resolve = async (list: PlaylistType | undefined) => {
+    if (isUndefined(list)) {
+      if (modalState.resolve) {
+        modalState.resolve(undefined);
+      }
+
+      return;
+    }
+
+    const success = await addSongToPlaylist(
+      list.key,
+      modalState.selected.map((s) => s.songId)
+    );
+
+    if (success) {
+      refetch();
+    }
+
+    if (modalState.resolve) {
+      modalState.resolve(success);
+    }
+
+    setModalState({ ...modalState, isOpen: false });
     setIsSpaceDisabled(false);
   };
 
-  // TODO: 실제 API과 연결
-  const [lists, setLists] = useState<PlaylistType[]>([]);
+  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
+    playlists ?? [],
+    {
+      size: 70,
+    }
+  );
 
-  const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(lists, {
-    size: 70,
-  });
-
-  const createList = () => {
+  const createList = async () => {
     setOpen(false);
     setName("");
 
-    // TODO
-    setLists([
-      ...lists,
-      {
-        key: "key1",
-        title: name,
-        createAt: 1684622625731,
-        user: {
-          name: "이름",
-          profile: {
-            type: "gorani",
-            version: 2,
-          },
-          platform: "google",
-          userId: "",
-        },
-        image: {
-          name: "1",
-          version: Math.floor(Math.random() * 7) + 1,
-        },
-        songs: [],
-      },
-    ]);
+    if (!name) return;
+
+    const success = await createPlaylist(name);
+
+    if (success) {
+      refetch();
+    }
   };
 
   useEffect(() => {
     if (viewportRef.current) {
       viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
     }
-  }, [lists, viewportRef]);
+  }, [playlists, viewportRef]);
 
   if (!modalState.isOpen) return null;
 
@@ -109,23 +122,23 @@ const AddListModal = ({}: AddListModalProps) => {
         </InputContainer>
 
         <ListContainer>
-          <PageItemContainer
-            height={435}
-            ref={viewportRef}
-            totalSize={getTotalSize()}
-          >
-            {virtualMap((virtualItem, item) => (
-              <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
-                <List onClick={() => resolve(item)}>
-                  <ListIcon src={getPlaylistIcon(item.image.version)} />
-                  <ListInfo>
-                    <ListTitle>{item.title}</ListTitle>
-                    <ListLength>{item.songs.length}곡</ListLength>
-                  </ListInfo>
-                </List>
-              </VirtualItem>
-            ))}
-          </PageItemContainer>
+          <DefaultScroll ref={viewportRef}>
+            <ItemContainer $isOpen={open}>
+              <VirtualContainer $height={getTotalSize()}>
+                {virtualMap((virtualItem, item) => (
+                  <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
+                    <List onClick={() => resolve(item)}>
+                      <ListIcon src={getPlaylistIcon(item.image)} />
+                      <ListInfo>
+                        <ListTitle>{item.title}</ListTitle>
+                        <ListLength>{item.songs.length}곡</ListLength>
+                      </ListInfo>
+                    </List>
+                  </VirtualItem>
+                ))}
+              </VirtualContainer>
+            </ItemContainer>
+          </DefaultScroll>
         </ListContainer>
       </Container>
     </ModalOverlay>
@@ -133,6 +146,11 @@ const AddListModal = ({}: AddListModalProps) => {
 };
 
 const Container = styled(ModalContainer)`
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-end-start-radius: 15px;
+  border-end-end-radius: 15px;
+
   background: ${colors.blueGray25};
 
   justify-content: flex-start;
@@ -188,6 +206,14 @@ const ListContainer = styled.div`
   width: 100%;
 
   cursor: pointer;
+`;
+
+const ItemContainer = styled.div<{ $isOpen: boolean }>`
+  height: ${({ $isOpen }) => ($isOpen ? "293px" : "312px")};
+`;
+
+const VirtualContainer = styled.div<{ $height: number }>`
+  height: ${({ $height }) => $height}px;
 `;
 
 const List = styled.div`

@@ -50,6 +50,7 @@ const CustomSongs = ({
   children,
 }: CustomSongsProps) => {
   const [songs, setSongs] = useState(children);
+  const [defaultSongs, setDefaultSongs] = useState(children);
 
   const [dragTarget, setDragTarget] = useState<DragTarget>({
     index: -1,
@@ -175,10 +176,18 @@ const CustomSongs = ({
   );
 
   useEffect(() => {
-    if (children.length !== songs.length && !isMouseDown) {
+    // children 동기화
+    if (
+      !(
+        children.length === defaultSongs.length &&
+        children.every((value, index) => value === defaultSongs[index])
+      ) &&
+      !isMouseDown
+    ) {
       setSongs(children);
+      setDefaultSongs(children);
     }
-  }, [children, songs, isMouseDown]);
+  }, [children, songs, isMouseDown, defaultSongs]);
 
   useEffect(() => {
     // mouse 이벤트 핸들러 등록

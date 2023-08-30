@@ -114,15 +114,19 @@ const MusicController = ({
           return (
             <DeleteMusic
               onClick={() => {
-                const newSongs = songs.slice();
+                const newSongs = [...songs];
 
                 selectedSongs.forEach((item) => {
-                  newSongs.splice(newSongs.indexOf(item), 1);
+                  newSongs.splice(
+                    newSongs.findIndex((s) => s.songId === item.songId),
+                    1
+                  );
                 });
                 dispatchSelectedSongs([]);
 
                 onDelete && onDelete(newSongs);
               }}
+              key={key}
             />
           );
       }

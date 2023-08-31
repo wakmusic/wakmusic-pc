@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import styled from "styled-components/macro";
+import styled, { keyframes } from "styled-components/macro";
 
 import { T4Bold } from "@components/Typography/Bold";
 
@@ -28,11 +28,31 @@ const MusicControllerPlayer = ({
   );
 };
 
+const Popup = keyframes`
+  0% {
+    bottom: -75px;
+  }
+
+  100% {
+    bottom: 0;
+  }
+`;
+
+const Popdown = keyframes`
+  0% {
+    bottom: 0;
+  }
+
+  100% {
+    bottom: -75px;
+  }
+`;
+
 const Wrapper = styled.div<{ $popdown: boolean }>`
   position: fixed;
-  bottom: ${({ $popdown }) => ($popdown ? "-75px" : "0px")};
 
-  transition: bottom 0.25s ease-out 0s;
+  animation: ${({ $popdown }) => ($popdown ? Popdown : Popup)} 0.25s ease-out
+    forwards;
 `;
 
 const ButtonContainer = styled.div`

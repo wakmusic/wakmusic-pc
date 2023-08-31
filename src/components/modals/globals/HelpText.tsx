@@ -6,15 +6,15 @@ import { T7Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-interface HelpTextProps {}
+interface HelpTextProps {
+  children: string;
+}
 
-const HelpText = ({}: HelpTextProps) => {
+const HelpText = ({ children }: HelpTextProps) => {
   return (
     <Container>
       <Dot />
-      <T7Medium color={colors.blueGray400}>
-        리스트 코드로 리스트를 가져올 수 있습니다.
-      </T7Medium>
+      <T7Medium color={colors.blueGray400}>{children}</T7Medium>
     </Container>
   );
 };

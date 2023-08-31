@@ -1,23 +1,31 @@
-import instance from "@apis/axios";
+import instance, { validateStatus } from "@apis/axios";
 
-import { User, UserProfile } from "@templates/user";
+import { RawSong, Song } from "@templates/song";
+import { UserProfile } from "@templates/user";
 
-const validateStatus = () => true;
+import processSong from "@utils/processSong";
 
-export const fetchUser = async (): Promise<User | null> => {
-  const { data, status } = await instance.get(`/v2/user/profile`, {
-    validateStatus,
-  });
+import {
+  PlaylistsResponse,
+  ProfileListResponse,
+  UserProfileResponse,
+} from "./dto";
+
+export const fetchProfileImages = async (): Promise<ProfileListResponse> => {
+  const { data } = await instance.get(`/v2/user/profile/list`);
+
+  return data;
+};
+
+export const fetchUser = async (): Promise<UserProfileResponse> => {
+  const { data, status } = await instance.get(
+    `/v2/user/profile`,
+    validateStatus
+  );
 
   if (status === 200) return data;
 
   return null;
-};
-
-export const fetchProfileImages = async (): Promise<UserProfile[]> => {
-  const { data } = await instance.get(`/v2/user/profile/list`);
-
-  return data;
 };
 
 export const setProfileImage = async (
@@ -28,9 +36,7 @@ export const setProfileImage = async (
     {
       type: profile.type,
     },
-    {
-      validateStatus,
-    }
+    validateStatus
   );
 
   return status === 201;
@@ -42,18 +48,78 @@ export const setUsername = async (name: string): Promise<boolean> => {
     {
       name,
     },
-    {
-      validateStatus,
-    }
+    validateStatus
   );
 
   return status === 201;
 };
 
+export const fetchPlaylists = async (): Promise<PlaylistsResponse> => {
+  const { data } = await instance.get(`/v2/user/playlists`);
+
+  return data;
+};
+
+export const editPlaylists = async (
+  playlistKeys: string[]
+): Promise<boolean> => {
+  const { status } = await instance.put(
+    `/v2/user/playlists`,
+    {
+      playlistKeys,
+    },
+    validateStatus
+  );
+
+  return status === 200;
+};
+
+export const removePlaylists = async (
+  playlistKeys: string[]
+): Promise<boolean> => {
+  const { status } = await instance.post(
+    `/v2/user/playlists/delete`,
+    {
+      playlistKeys,
+    },
+    validateStatus
+  );
+
+  return status === 202;
+};
+
+export const fetchLikes = async (): Promise<Song[]> => {
+  const { data } = await instance.get(`/v2/user/likes`);
+
+  return data.map((item: RawSong) => processSong("total", item));
+};
+
+export const editLikes = async (songIds: string[]): Promise<boolean> => {
+  const { status } = await instance.put(
+    `/v2/user/likes`,
+    {
+      songIds,
+    },
+    validateStatus
+  );
+
+  return status === 200;
+};
+
+export const removeLikes = async (songIds: string[]): Promise<boolean> => {
+  const { status } = await instance.post(
+    `/v2/user/likes/delete`,
+    {
+      songIds,
+    },
+    validateStatus
+  );
+
+  return status === 202;
+};
+
 export const removeUser = async (): Promise<boolean> => {
-  const { status } = await instance.delete(`/v2/user/remove`, {
-    validateStatus,
-  });
+  const { status } = await instance.delete(`/v2/user/remove`, validateStatus);
 
   return status === 200;
 };

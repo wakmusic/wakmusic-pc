@@ -15,6 +15,7 @@ import {
   T6Medium,
   T7Medium,
 } from "@components/Typography";
+import ContactModal from "@components/modals/ContactModal";
 import ServiceInfoModal from "@components/modals/ServiceInfoModal";
 import Block from "@components/mypage/Block";
 
@@ -91,6 +92,7 @@ const MyPage = ({}: MyPageProps) => {
   return (
     <PageLayout>
       {location.pathname === "/about" && <ServiceInfoModal />}
+      {location.pathname === "/support" && <ContactModal />}
 
       <Container>
         <ProfileBlock>

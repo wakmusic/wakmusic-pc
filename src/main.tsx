@@ -17,13 +17,14 @@ import ConfirmModal from "@components/modals/ConfirmModal";
 import CreateListModal from "@components/modals/CreateListModal";
 import LoadListModal from "@components/modals/LoadListModal";
 import LoginModal from "@components/modals/LoginModal";
+import NoticeDetailModal from "@components/modals/NoticeDetailModal";
+import NoticeModal from "@components/modals/NoticeModal";
 import SelectProfileModal from "@components/modals/SelectProfileModal";
 import SetUsernameModal from "@components/modals/SetUsernameModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 import Player from "@components/player/Default/Player";
 import Visual from "@components/player/Visual/Visual";
-import Youtube from "@components/youtube/Youtube";
 
 import RootOverlay from "@layouts/RootOverlay";
 
@@ -36,7 +37,7 @@ import Faq from "@pages/faq/Faq";
 import Index from "@pages/index/Index";
 import MyPage from "@pages/mypage/MyPage";
 import New from "@pages/new/New";
-import Playground from "@pages/playground/Playground";
+import Notice from "@pages/notice/Notice";
 import Search from "@pages/search/Search";
 import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
@@ -45,6 +46,7 @@ import CheckPlayerMode from "@utils/checkPlayerMode";
 import SchemeHandler from "@utils/schemeHandler";
 
 import "./index.css";
+import PlayerService from "./player/PlayerService";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -65,7 +67,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
         <Splash />
-
         <HashRouter>
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
           <Header />
@@ -75,7 +76,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
 
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/playground" element={<Playground />} />
               <Route path="/chart" element={<Chart />} />
               <Route path="/artists" element={<Artists />} />
               <Route path="/artists/:artist" element={<Artist />} />
@@ -83,9 +83,12 @@ createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/new" element={<New />} />
               <Route path="/user/*" element={<User />} />
               <Route path="/playlist/:playlistid" element={<Playlist />} />
-              <Route path="/mypage" element={<MyPage />} />
-              <Route path="/about" element={<MyPage />} />
               <Route path="/faq" element={<Faq />} />
+              <Route path="/notice" element={<Notice />} />
+
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/support" element={<MyPage />} />
+              <Route path="/about" element={<MyPage />} />
 
               <Route path="/player" element={null} />
             </Routes>
@@ -97,8 +100,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <CheckPlayerMode />
         </HashRouter>
 
-        <Youtube />
-
+        <PlayerService />
         <ModalPortal>
           <LoginModal />
           <SelectProfileModal />
@@ -109,8 +111,9 @@ createRoot(document.getElementById("root") as HTMLElement).render(
           <ShareListModal />
           <AddListModal />
           <SetUsernameModal />
+          <NoticeDetailModal />
+          <NoticeModal />
         </ModalPortal>
-
         <SchemeHandler />
       </QueryClientProvider>
     </RecoilRoot>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off.svg";
@@ -10,6 +9,7 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import colors from "@constants/colors";
 
+import { useLikes } from "@hooks/likes";
 import { useCurrentSongState } from "@hooks/player";
 
 import Controller from "../Controller";
@@ -20,18 +20,14 @@ interface SongProps {}
 const Song = ({}: SongProps) => {
   const song = useCurrentSongState();
 
-  const [isLiked, setIsLiked] = useState(false);
-
-  function changeIsLikeState() {
-    setIsLiked(!isLiked);
-  }
+  const { liked, toggleLikes } = useLikes(song);
 
   return (
     <Container>
       <UpperContainer>
         <SimpleIconButton
-          icon={isLiked ? HeartOnSvg : HeartOffSvg}
-          onClick={changeIsLikeState}
+          icon={liked ? HeartOnSvg : HeartOffSvg}
+          onClick={toggleLikes}
         />
 
         <TitleContainer>

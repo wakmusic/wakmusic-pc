@@ -1,18 +1,23 @@
 import instance from "@apis/axios";
 
-const NOTICE_URL = "/notice";
+import { Notice } from "@templates/notice";
 
-export const fetchNotice = async () => {
+const NOTICE_URL = "/v2/notice";
+
+export const fetchNotice = async (): Promise<Notice[]> => {
   const { data } = await instance.get(`${NOTICE_URL}`);
   return data;
 };
 
-export const fetchAllNotice = async () => {
+export const fetchAllNotice = async (): Promise<Notice[]> => {
   const { data } = await instance.get(`${NOTICE_URL}/all`);
   return data;
 };
 
-export const fetchNoticeCategories = async () => {
-  const { data } = await instance.post(`${NOTICE_URL}/categories`);
-  return data;
+export const fetchNoticeCategories = async (): Promise<string[]> => {
+  const {
+    data: { categories },
+  } = await instance.get(`${NOTICE_URL}/categories`);
+
+  return categories;
 };

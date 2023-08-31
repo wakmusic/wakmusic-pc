@@ -22,7 +22,7 @@ interface FetchSearchTabParams {
 export const fetchSong = async (id: string): Promise<Song> => {
   const { data } = await instance.get(`/v2/songs/${id}`);
 
-  return data;
+  return processSong("total", data);
 };
 
 export const fetchSearchAll = async (

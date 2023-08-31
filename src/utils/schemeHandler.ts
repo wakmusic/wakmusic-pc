@@ -2,11 +2,12 @@ import { useCallback, useEffect } from "react";
 import { queryClient } from "src/main";
 
 import { fetchSong } from "@apis/songs";
-import { fetchUser } from "@apis/user";
+import { fetchLikes, fetchUser } from "@apis/user";
 
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
 import { useAlertModal } from "@hooks/alertModal";
+import { useLikesState } from "@hooks/likes";
 import { useLoginModalOpener } from "@hooks/loginModal";
 import { usePlayingInfoState } from "@hooks/player";
 import { useUserState } from "@hooks/user";
@@ -16,6 +17,7 @@ import { ipcRenderer } from "./modules";
 
 const SchemeHandler = (): null => {
   const [, setUser] = useUserState();
+  const [, setLikes] = useLikesState();
   const [, setPlayingInfo] = usePlayingInfoState();
 
   const alertModal = useAlertModal();
@@ -32,8 +34,12 @@ const SchemeHandler = (): null => {
       }
 
       setUser(user);
+
+      const likes = await fetchLikes();
+
+      setLikes(likes);
     })();
-  }, [setUser]);
+  }, [setLikes, setUser]);
 
   const handler = useCallback(
     async (url: string) => {

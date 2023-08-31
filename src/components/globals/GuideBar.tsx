@@ -68,7 +68,7 @@ const GuideBar = ({ features, editMode, lastText }: GuideBarProps) => {
 
 const Container = styled.div``;
 
-const WhiteLine = styled.div`
+export const WhiteLine = styled.div`
   margin-top: 14px;
 
   width: 734px;
@@ -83,7 +83,7 @@ const WhiteLine = styled.div`
   );
 `;
 
-const BlackLine = styled.div`
+export const BlackLine = styled.div`
   width: 734px;
   height: 1px;
   border-radius: 99px;

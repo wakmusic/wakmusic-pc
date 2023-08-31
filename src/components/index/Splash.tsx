@@ -1,5 +1,5 @@
 import { motion, useAnimation } from "framer-motion";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { spalshVariants } from "src/animations/splash";
 import styled from "styled-components/macro";
 
@@ -9,16 +9,22 @@ import Lottie from "@components/globals/Lottie";
 
 import colors from "@constants/colors";
 
-interface LogoProps {}
+import { useNoticeModalState } from "@hooks/noticeModal";
 
-const Logo = ({}: LogoProps) => {
+interface SplashProps {}
+
+const Splash = ({}: SplashProps) => {
   const controls = useAnimation();
   const [disable, setDisable] = useState(false);
 
-  const onCompleteHandler = async () => {
+  const [, setIsNoticeModalOpen] = useNoticeModalState();
+
+  const onCompleteHandler = useCallback(async () => {
     await controls.start("close");
+
     setDisable(true);
-  };
+    setIsNoticeModalOpen(true);
+  }, [controls, setIsNoticeModalOpen]);
 
   if (disable) {
     return null;
@@ -59,4 +65,4 @@ const LottieContainer = styled.div`
   height: 250px;
 `;
 
-export default Logo;
+export default Splash;

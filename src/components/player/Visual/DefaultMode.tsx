@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off_bright.svg";
@@ -7,6 +7,7 @@ import dummyThumbnail from "@assets/svgs/BigDummy.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
+import { useLikes } from "@hooks/likes";
 import { useControlState, useCurrentSongState } from "@hooks/player";
 
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
@@ -20,7 +21,6 @@ interface DefaultModeProps {}
 
 const DefaultMode = ({}: DefaultModeProps) => {
   const [controlState] = useControlState();
-  const [isLiked, setIsLiked] = useState(false);
 
   const song = useCurrentSongState();
   const img = useMemo(
@@ -28,16 +28,14 @@ const DefaultMode = ({}: DefaultModeProps) => {
     [song?.songId]
   );
 
-  function changeIsLikeState() {
-    setIsLiked(!isLiked);
-  }
+  const { liked, toggleLikes } = useLikes(song);
 
   return (
     <Container $off={controlState.isLyricsOn}>
       <SongContainer>
         <SimpleIconButton
-          icon={isLiked ? HeartOnSvg : HeartOffSvg}
-          onClick={changeIsLikeState}
+          icon={liked ? HeartOnSvg : HeartOffSvg}
+          onClick={toggleLikes}
         />
         <View isBright={true} />
       </SongContainer>

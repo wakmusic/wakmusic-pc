@@ -56,9 +56,10 @@ const User = ({}: UserProps) => {
       <Container onClick={goMypage}>
         <LogoutButton onClick={logout} />
         <Avatar src={getProfileImg(user.profile)} />
-        <NameText>
-          <Name>{user.name}</Name> 님
-        </NameText>
+        <NameContainer>
+          <Name>{user.name}</Name>
+          <NameText>님</NameText>
+        </NameContainer>
       </Container>
     );
   }
@@ -110,16 +111,21 @@ const Avatar = styled.img`
   border-radius: 50%;
 `;
 
-const NameText = styled(T6Medium)`
+const NameContainer = styled.div`
   margin-top: 4px;
+  margin-bottom: 19px;
 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+`;
+
+const NameText = styled(T6Medium)`
   color: ${colors.blueGray400};
 `;
 
 const Name = styled(T6Bold)`
-  display: inline-block;
-  margin-bottom: 19px;
-
   color: ${colors.gray900};
 `;
 

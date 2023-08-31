@@ -27,9 +27,7 @@ const RecommendItem = ({ item }: RecommendItemProps) => {
   }
 
   return (
-    <Container
-      onClick={() => navigate(`/playlist/${item.key}`, { state: item })} // TODO: api 작업 후에 state 제거
-    >
+    <Container onClick={() => navigate(`/playlist/${item.key}`)}>
       <Title>{item.title}</Title>
       <Icon src={getRecommendRoundImage(item)} />
     </Container>

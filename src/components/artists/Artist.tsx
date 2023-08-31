@@ -7,13 +7,12 @@ import Skeleton from "@components/globals/Skeleton";
 
 import colors from "@constants/colors";
 
+import { Artist as ArtistType } from "@templates/artists";
+
 import { getArtistRoundImage } from "@utils/staticUtill";
 
 interface ArtistProps {
-  // TODO: Interface 작업 예정
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  artist: any;
-
+  artist: ArtistType;
   isLoading?: boolean;
 }
 

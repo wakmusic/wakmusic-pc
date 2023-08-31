@@ -3,7 +3,7 @@ import { atom } from "recoil";
 interface AlertModalState {
   isOpen: boolean;
 
-  title?: string;
+  title?: string | null;
   children?: React.ReactNode;
 
   resolve?: () => void;

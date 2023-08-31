@@ -5,9 +5,7 @@ import instance from "../axios";
 
 export const getLyrics = async (song: Song): Promise<LyricType[] | null> => {
   try {
-    const { data } = await instance.get(
-      `https://wakmusic.xyz/api/songs/lyrics/${song.songId}`
-    );
+    const { data } = await instance.get(`/v2/songs/lyrics/${song.songId}`);
 
     return data.map((lyric: LyricType) => ({
       ...lyric,

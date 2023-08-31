@@ -3,6 +3,7 @@ import { atom } from "recoil";
 interface CreateListModalState {
   isOpen: boolean;
 
+  originalTitle?: string;
   resolve?: (value: string | undefined) => void;
 }
 

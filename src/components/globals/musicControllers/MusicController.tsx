@@ -59,6 +59,8 @@ const MusicController = ({
 
   const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
 
+  const openAddListModal = useAddListModal();
+
   const addSongs = useCallback(
     (list: Song[], play?: boolean) => {
       // 재생목록에 노래 추가
@@ -95,10 +97,14 @@ const MusicController = ({
             <AddMusic
               key={key}
               onClick={async () => {
-                const result = await openAddListModal(selectedSongs);
+                const success = await openAddListModal(selectedSongs);
 
-                if (result) {
+                if (success === true) {
+                  // TODO: 플레이리스트 추가 성공
+                  
                   dispatchSelectedSongs([]);
+                } else if (success === false) {
+                  // TODO: 플레이리스트 추가 실패
                 }
               }}
             />
@@ -145,7 +151,14 @@ const MusicController = ({
           );
       }
     },
-    [addSongs, songs, selectedSongs, dispatchSelectedSongs, onDelete]
+    [
+      dispatchSelectedSongs,
+      songs,
+      openAddListModal,
+      selectedSongs,
+      addSongs,
+      onDelete,
+    ]
   );
 
   useEffect(() => {

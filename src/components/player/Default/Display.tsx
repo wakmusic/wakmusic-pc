@@ -1,6 +1,6 @@
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   buttonVariants,
   thumbnailVariants,
@@ -10,6 +10,7 @@ import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as ExpansionSVG } from "@assets/icons/ic_20_expansion.svg";
 import { ReactComponent as PlayListSVG } from "@assets/icons/ic_20_play_list.svg";
+import { ReactComponent as PlayListOnSVG } from "@assets/icons/ic_20_play_list_on.svg";
 import dummyThumbnail from "@assets/svgs/MediumDummy.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
@@ -96,7 +97,16 @@ const Display = ({}: DisplayProps) => {
             variants={buttonVariants}
             initial="close"
           >
-            <SimpleIconButton icon={PlayListSVG} />
+            {location.pathname === "/player/playlist" ? (
+              <SimpleIconButton
+                icon={PlayListOnSVG}
+                onClick={() => navigate(-1)}
+              />
+            ) : (
+              <Link to="/player/playlist">
+                <SimpleIconButton icon={PlayListSVG} />
+              </Link>
+            )}
           </PlaylistButtonContainer>
 
           <CenterWrapper>

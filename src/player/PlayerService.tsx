@@ -49,7 +49,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
   currentSong.current = info.playlist[info.current];
 
   useInterval(() => {
-    if (!control.isPlaying || isControlling) return;
+    if (!currentSongState || !control.isPlaying || isControlling) return;
 
     setCurrentProgress((prev) => prev + 1);
   }, 1000);
@@ -63,7 +63,8 @@ const PlayerService = ({}: PlayerServiceProps) => {
   }, [currentSongState, setLyrics]);
 
   useEffect(() => {
-    if (currentSongState?.songId === previousSong?.songId) return;
+    if (!currentSongState || currentSongState?.songId === previousSong?.songId)
+      return;
 
     requestPlaySong(
       currentSongState.songId,
@@ -111,6 +112,17 @@ const PlayerService = ({}: PlayerServiceProps) => {
     isControlling,
     setCurrentProgress,
   ]);
+
+  useEffect(() => {
+    if (currentSongState) return;
+
+    setLength(1);
+    setCurrentProgress(0);
+    setControl((prev) => ({
+      ...prev,
+      isPlaying: false,
+    }));
+  }, [currentSongState, setControl, setCurrentProgress, setLength]);
 
   const onProgressChange = (progress: number) => {
     if (!currentSong.current) return;

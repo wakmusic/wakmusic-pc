@@ -1,5 +1,6 @@
 import instance, { validateStatus } from "@apis/axios";
 
+import { RawPlaylist } from "@templates/playlist";
 import { RawSong, Song } from "@templates/song";
 import { UserProfile } from "@templates/user";
 
@@ -57,7 +58,10 @@ export const setUsername = async (name: string): Promise<boolean> => {
 export const fetchPlaylists = async (): Promise<PlaylistsResponse> => {
   const { data } = await instance.get(`/v2/user/playlists`);
 
-  return data;
+  return data.map((item: RawPlaylist) => ({
+    ...item,
+    songs: item.songs.map((song: RawSong) => processSong("total", song)),
+  }));
 };
 
 export const editPlaylists = async (
@@ -115,11 +119,25 @@ export const removeLikes = async (songIds: string[]): Promise<boolean> => {
     validateStatus
   );
 
-  return status === 202;
+  return status === 201;
 };
 
 export const removeUser = async (): Promise<boolean> => {
   const { status } = await instance.delete(`/v2/user/remove`, validateStatus);
 
   return status === 200;
+};
+
+export const editPlaylistOrder = async (
+  playlistKeys: string[]
+): Promise<boolean> => {
+  const { data } = await instance.put(
+    `/v2/user/playlists`,
+    {
+      playlistKeys,
+    },
+    validateStatus
+  );
+
+  return data?.status === 200;
 };

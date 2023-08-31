@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
+import { useQuery } from "react-query";
+import { queryClient } from "src/main";
 import styled from "styled-components/macro";
+
+import { copyPlaylist, createPlaylist } from "@apis/playlist";
+import { editPlaylistOrder, fetchPlaylists } from "@apis/user";
 
 import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
 import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
@@ -10,15 +15,16 @@ import MylistItem from "@components/user/mylist/MylistItem";
 import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
-import { myList } from "@constants/dummys";
 
 import { useCreateListModal } from "@hooks/createListModal";
 import { useLoadListModal } from "@hooks/loadListModal";
 import { useDragAndDropState, useMylistState } from "@hooks/mylist";
+import { usePrevious } from "@hooks/previous";
 
 import { PlaylistType, myListItemType } from "@templates/playlist";
 
 import { isUndefined } from "@utils/isTypes";
+import { isSameArray } from "@utils/utils";
 
 interface XY {
   x: number;
@@ -29,12 +35,14 @@ enum ShuffleActionType {
   relocate,
   insert,
   delete,
+  set,
 }
 
 interface ShuffleAction {
   type: ShuffleActionType;
-  target: number;
+  target?: number;
   to?: number;
+  playlists?: PlaylistType[];
 }
 
 interface MylistProps {}
@@ -44,7 +52,7 @@ const shuffleMyList = (state: PlaylistType[], action: ShuffleAction) => {
 
   switch (action.type) {
     case ShuffleActionType.relocate:
-      if (isUndefined(action.to)) break;
+      if (isUndefined(action.target) || isUndefined(action.to)) break;
 
       newList.splice(action.target, 1);
       newList.splice(action.to, 0, state[action.target]);
@@ -55,6 +63,8 @@ const shuffleMyList = (state: PlaylistType[], action: ShuffleAction) => {
     case ShuffleActionType.delete:
       // 삭제
       break;
+    case ShuffleActionType.set:
+      return action.playlists?.slice() ?? [];
   }
 
   return newList;
@@ -68,6 +78,16 @@ const getPlaylistInitialPosition = (targetIndex: number): XY => {
 };
 
 const Mylist = ({}: MylistProps) => {
+  const {
+    data: playlists,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: "playlists",
+    queryFn: fetchPlaylists,
+  });
+
   const [isEditMode] = useMylistState();
   const [shuffledList, dispatchMyList] = useReducer(shuffleMyList, []);
   const [mouseDown, setMouseDown] = useState(false);
@@ -84,6 +104,8 @@ const Mylist = ({}: MylistProps) => {
 
   const createListModal = useCreateListModal();
   const loadListModal = useLoadListModal();
+
+  const prevPlaylists = usePrevious(playlists);
 
   useEffect(() => {
     let dropTarget =
@@ -106,6 +128,40 @@ const Mylist = ({}: MylistProps) => {
     setDragAndDropTarget,
     shuffledList.length,
   ]);
+
+  useEffect(() => {
+    if (playlists) {
+      dispatchMyList({
+        type: ShuffleActionType.set,
+        playlists,
+      });
+    }
+  }, [playlists]);
+
+  useEffect(() => {
+    if (
+      !isSameArray(prevPlaylists ?? [], playlists ?? []) ||
+      isSameArray(playlists ?? [], shuffledList) ||
+      shuffledList.length === 0 ||
+      isEditMode
+    ) {
+      return;
+    }
+
+    queryClient.setQueryData("playlists", shuffledList);
+
+    (async () => {
+      const success = await editPlaylistOrder(
+        shuffledList.map((item) => item.key)
+      );
+
+      if (success) {
+        refetch();
+      } else {
+        queryClient.setQueryData("playlists", prevPlaylists);
+      }
+    })();
+  }, [isEditMode, playlists, prevPlaylists, refetch, shuffledList]);
 
   const initializeDragTarget = (target: myListItemType, position: XY) => {
     setMouseDown(true);
@@ -134,13 +190,40 @@ const Mylist = ({}: MylistProps) => {
     [mouseDownPosition, setDragPostion, playlistInitialPosition]
   );
 
+  const createList = async () => {
+    const name = await createListModal();
+
+    if (!name) return;
+
+    const success = await createPlaylist(name);
+
+    if (success) {
+      refetch();
+    }
+  };
+
+  const loadList = async () => {
+    const code = await loadListModal();
+
+    if (!code) return;
+
+    const success = await copyPlaylist(code);
+
+    if (success) {
+      refetch();
+    }
+  };
+
+  if (error) return <div>Error...</div>;
+  if (!playlists || isLoading) return <div>Loading...</div>;
+
   return (
     <Container>
       <Menu>
-        <IconButton icon={Create} onClick={createListModal}>
+        <IconButton icon={Create} onClick={createList}>
           리스트 만들기
         </IconButton>
-        <IconButton icon={Import} onClick={loadListModal}>
+        <IconButton icon={Import} onClick={loadList}>
           리스트 가져오기
         </IconButton>
       </Menu>
@@ -157,14 +240,13 @@ const Mylist = ({}: MylistProps) => {
               target: dragAndDropTarget.drag.index,
               to: dragAndDropTarget.drop,
             });
-            // API에 내 리스트 수정 요청 보내기
           }}
           onMouseLeave={() => {
             setMouseDown(false);
           }}
         >
           {!isEditMode
-            ? myList.map((item, index) => (
+            ? playlists.map((item, index) => (
                 <MylistItem
                   key={index}
                   item={{

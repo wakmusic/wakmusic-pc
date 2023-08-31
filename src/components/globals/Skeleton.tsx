@@ -1,5 +1,7 @@
 import styled, { css, keyframes } from "styled-components/macro";
 
+import colors from "@constants/colors";
+
 import { isNumber } from "@utils/isTypes";
 
 interface SkeletonProps {
@@ -12,6 +14,10 @@ interface SkeletonProps {
   marginTop?: string | number;
   marginBottom?: string | number;
 }
+
+const convert = (value: string | number | undefined) => {
+  return isNumber(value) ? `${value}px` : value;
+};
 
 const Skeleton = ({
   width = "100%",
@@ -41,31 +47,16 @@ const MarginContainer = styled.div<{
   $marginBottom?: string | number;
 }>`
   ${({ $marginLeft, $marginRight, $marginTop, $marginBottom }) => css`
-    margin-left: ${isNumber($marginLeft) ? `${$marginLeft}px` : $marginLeft};
-
-    margin-right: ${isNumber($marginRight)
-      ? `${$marginRight}px`
-      : $marginRight};
-
-    margin-top: ${isNumber($marginTop) ? `${$marginTop}px` : $marginTop};
-
-    margin-bottom: ${isNumber($marginBottom)
-      ? `${$marginBottom}px`
-      : $marginBottom};
+    margin-left: ${convert($marginLeft)};
+    margin-right: ${convert($marginRight)};
+    margin-top: ${convert($marginTop)};
+    margin-bottom: ${convert($marginBottom)};
   `}
 `;
 
-const ChangeColor = keyframes`
-  0% {
-    background-color: #d3d3d3;
-  }
-
-  50% {
-    background-color: #acacac;
-  }
-
+const Shimmer = keyframes`
   100% {
-    background-color: #d3d3d3;
+    transform: translateX(100%);
   }
 `;
 
@@ -75,15 +66,37 @@ const Container = styled.div<{
   $borderRadius?: string | number;
 }>`
   ${({ $width, $height, $borderRadius }) => css`
-    width: ${isNumber($width) ? `${$width}px` : $width};
-    height: ${isNumber($height) ? `${$height}px` : $height};
+    width: ${convert($width)};
+    height: ${convert($height)};
 
-    border-radius: ${isNumber($borderRadius)
-      ? `${$borderRadius}px`
-      : $borderRadius};
+    border-radius: ${convert($borderRadius)};
   `}
 
-  animation: ${ChangeColor} 2s infinite;
+  background-color: ${colors.blueGray200};
+
+  position: relative;
+
+  overflow: hidden;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0.5) 60%,
+      rgba(255, 255, 255, 0)
+    );
+
+    animation: ${Shimmer} 1s infinite linear;
+    content: "";
+  }
 `;
 
 export default Skeleton;

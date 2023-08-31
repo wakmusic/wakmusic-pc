@@ -55,8 +55,6 @@ const MusicController = ({
   const [, setPlayingInfo] = usePlayingInfoState();
   const [, setControlState] = useControlState();
 
-  const openAddListModal = useAddListModal();
-
   const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
 
   const openAddListModal = useAddListModal();
@@ -99,11 +97,11 @@ const MusicController = ({
               onClick={async () => {
                 const success = await openAddListModal(selectedSongs);
 
-                if (success === true) {
+                if (success) {
                   // TODO: 플레이리스트 추가 성공
-                  
+
                   dispatchSelectedSongs([]);
-                } else if (success === false) {
+                } else {
                   // TODO: 플레이리스트 추가 실패
                 }
               }}

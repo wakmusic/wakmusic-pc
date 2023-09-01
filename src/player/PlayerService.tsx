@@ -131,7 +131,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
     (length: number) => {
       if (!currentSong.current) return;
 
-      setLength(length);
+      setLength(length - currentSong.current.start);
       setCurrentProgress(currentSong.current.start);
       setControl((prev) => ({
         ...prev,

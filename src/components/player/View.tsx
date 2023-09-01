@@ -26,7 +26,7 @@ const View = ({ isBright }: ViewProps) => {
           {formatNumber(song?.views)}
         </ViewsText>
       </ViewsPopover>
-      <SimpleIconButton icon={isBright ?? false ? ViewsBrightSvg : ViewsSvg} />
+      <SimpleIconButton icon={isBright ? ViewsBrightSvg : ViewsSvg} />
     </Container>
   );
 };

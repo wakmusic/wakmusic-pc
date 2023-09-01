@@ -2,7 +2,7 @@ import "overlayscrollbars/overlayscrollbars.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
 import GNB from "@components/gnb/GNB";
@@ -60,7 +60,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
         <Splash />
-        <HashRouter>
+        <BrowserRouter>
           <Header />
           <RootOverlay>
             <GNB />
@@ -87,7 +87,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Visual />
           </RootOverlay>
           <CheckPlayerMode />
-        </HashRouter>
+        </BrowserRouter>
 
         <PlayerService />
 

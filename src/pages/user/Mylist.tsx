@@ -23,7 +23,7 @@ import { usePrevious } from "@hooks/previous";
 
 import { PlaylistType, myListItemType } from "@templates/playlist";
 
-import { isUndefined } from "@utils/isTypes";
+import { isNull, isUndefined } from "@utils/isTypes";
 import { isSameArray } from "@utils/utils";
 
 interface XY {
@@ -80,7 +80,6 @@ const getPlaylistInitialPosition = (targetIndex: number): XY => {
 const Mylist = ({}: MylistProps) => {
   const {
     data: playlists,
-    isLoading,
     error,
     refetch,
   } = useQuery({
@@ -215,7 +214,6 @@ const Mylist = ({}: MylistProps) => {
   };
 
   if (error) return <div>Error...</div>;
-  if (!playlists || isLoading) return <div>Loading...</div>;
 
   return (
     <Container>
@@ -246,13 +244,17 @@ const Mylist = ({}: MylistProps) => {
           }}
         >
           {!isEditMode
-            ? playlists.map((item, index) => (
+            ? (playlists ?? Array(8).fill(null)).map((item, index) => (
                 <MylistItem
                   key={index}
-                  item={{
-                    ...item,
-                    index: index,
-                  }}
+                  item={
+                    isNull(item)
+                      ? undefined
+                      : {
+                          ...item,
+                          index: index,
+                        }
+                  }
                 />
               ))
             : shuffledList.map((item, index) => (

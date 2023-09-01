@@ -2,7 +2,6 @@ import "overlayscrollbars/overlayscrollbars.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
@@ -62,9 +61,7 @@ createRoot(document.getElementById("root") as HTMLElement).render(
       <QueryClientProvider client={queryClient}>
         <Splash />
         <HashRouter>
-          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
           <Header />
-
           <RootOverlay>
             <GNB />
 
@@ -89,7 +86,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
             <Player />
             <Visual />
           </RootOverlay>
-
           <CheckPlayerMode />
         </HashRouter>
 

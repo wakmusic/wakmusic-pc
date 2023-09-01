@@ -4,6 +4,7 @@ import { Song } from "@templates/song";
 
 let last: Song | undefined;
 let startTimestamp: number | undefined;
+let is_first_song = true;
 
 export const client = new Client({
   clientId: "1130044110837923890",
@@ -60,6 +61,11 @@ export const changePresence = (
 ) => {
   if (!current) return;
   if (!force && current.songId === last?.songId) return;
+  if (is_first_song) {
+    is_first_song = false;
+    last = current;
+    return;
+  }
 
   startTimestamp = timestamp ?? Date.now();
   last = current;

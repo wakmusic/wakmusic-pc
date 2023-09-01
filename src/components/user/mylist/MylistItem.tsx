@@ -6,6 +6,7 @@ import { ReactComponent as DragPlaylist } from "@assets/icons/ic_24_move.svg";
 import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";
 
 import { T6Medium, T7Light } from "@components/Typography";
+import Skeleton from "@components/globals/Skeleton";
 
 import colors from "@constants/colors";
 
@@ -16,10 +17,11 @@ import { XY } from "@pages/user/Mylist";
 
 import { myListItemType } from "@templates/playlist";
 
+import { isNil } from "@utils/isTypes";
 import { getPlaylistIcon } from "@utils/staticUtill";
 
 interface MylistItemProps {
-  item: myListItemType;
+  item?: myListItemType;
   hide?: boolean;
   mouseDown?: boolean;
   onSelect?: (target: myListItemType, position: XY) => void;
@@ -47,7 +49,7 @@ const MylistItem = ({
     const dropTargetRow = dropIndex % 3;
 
     if (
-      item.index === dropIndex &&
+      item?.index === dropIndex &&
       dropTargetRow === 0 &&
       dragIndex > dropIndex
     ) {
@@ -55,7 +57,7 @@ const MylistItem = ({
       return 238;
     }
 
-    if (dropIndex !== item.index - 1) return 0;
+    if (dropIndex !== (item?.index ?? 0) - 1) return 0;
     // 드롭할 리스트가 현재 리스트의 바로 뒤에 있는 경우에만 아래 연산을 수행
 
     if (dragIndex > dropIndex) {
@@ -80,7 +82,7 @@ const MylistItem = ({
     mouseDown,
     dragAndDropTarget.drop,
     dragAndDropTarget.drag.index,
-    item.index,
+    item?.index,
   ]);
 
   const marginRight = useMemo(() => {
@@ -91,14 +93,14 @@ const MylistItem = ({
     const dropTargetRow = dropIndex % 3;
 
     if (
-      dropIndex === item.index &&
+      dropIndex === item?.index &&
       dragIndex < dropIndex &&
       dropTargetRow === 2
     ) {
       return 238; // 드롭 위치가 행의 끝에 있고, 리스트를 앞에서 뒤로 드래그하는 경우
     }
 
-    if (dropIndex !== item.index + 1) return 0;
+    if (dropIndex !== (item?.index ?? 0) + 1) return 0;
     // 드롭할 리스트가 리스트가 현재 리스트의 바로 앞에 있는 경우에만 아래 연산을 수행
 
     if (dragIndex >= dropIndex) {
@@ -113,8 +115,23 @@ const MylistItem = ({
     mouseDown,
     dragAndDropTarget.drop,
     dragAndDropTarget.drag.index,
-    item.index,
+    item?.index,
   ]);
+
+  if (isNil(item)) {
+    return (
+      <Container>
+        <ShiftContainer>
+          <Skeleton width={74} height={74} borderRadius={9} />
+          <InfoContainer>
+            <Skeleton width={100} height={16} />
+            <Skeleton width={100} height={16} />
+            <Skeleton width={24} height={24} />
+          </InfoContainer>
+        </ShiftContainer>
+      </Container>
+    );
+  }
 
   return (
     <Container

@@ -3,6 +3,7 @@ import styled, { css } from "styled-components/macro";
 
 import { T7Light } from "@components/Typography";
 import PlayerScroll from "@components/globals/Scroll/PlayerScroll";
+import MusicController from "@components/globals/musicControllers/MusicController";
 
 import VirtualItem from "@layouts/VirtualItem";
 
@@ -10,20 +11,24 @@ import colors from "@constants/colors";
 
 import { useInterval } from "@hooks/interval";
 import { usePlayingInfoState } from "@hooks/player";
+import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
+import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
 
 interface PlaylistProps {}
 
 const Playlist = ({}: PlaylistProps) => {
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
-  const [playlistData, setPlaylisData] = useState<
+  const [playlistData, setPlaylistData] = useState<
     (Song & {
       isPlaying: boolean;
-      isSelected: boolean;
     })[]
   >([]);
+
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs();
 
   const [mouseState, setMouseState] = useState({
     isMouseDown: false,
@@ -52,7 +57,6 @@ const Playlist = ({}: PlaylistProps) => {
       ...playingInfo.playlist.map((song, i) => ({
         ...song,
         isPlaying: i === playingInfo.current,
-        isSelected: false,
       })),
     ];
   }, [playingInfo]);
@@ -66,17 +70,11 @@ const Playlist = ({}: PlaylistProps) => {
   function onSongSelected(index: number, multiSelect: boolean) {
     if (multiSelect && lastSelected !== null && lastSelected !== index) {
       const start = Math.min(index, lastSelected);
-      const end = Math.max(index, lastSelected);
+      const end = Math.max(index, lastSelected) + 1;
 
-      setPlaylisData(
-        playlistData.map((song, i) =>
-          start <= i && i <= end ? { ...song, isSelected: true } : song
-        )
-      );
+      selectCallback([...playingInfo.playlist].slice(start, end));
     } else {
-      playlistData[index].isSelected = !playlistData[index].isSelected;
-
-      setPlaylisData([...playlistData]);
+      selectCallback(playingInfo.playlist[index], index);
       setLastSelected(index);
     }
   }
@@ -115,7 +113,23 @@ const Playlist = ({}: PlaylistProps) => {
       history: prev.history,
     }));
     setLastSelected(null);
-  }, [playlistData, targetIndex, getCursorIndex, setPlayingInfo]);
+    setSelected([]);
+  }, [playlistData, targetIndex, getCursorIndex, setPlayingInfo, setSelected]);
+
+  const deleteSongs = useCallback(
+    (newSongs: Song[]) => {
+      const newCurrent = newSongs.findIndex(
+        (s) => s.songId === playingInfo.playlist[playingInfo.current].songId
+      );
+
+      setPlayingInfo((prev) => ({
+        playlist: newSongs,
+        current: Math.max(0, newCurrent),
+        history: prev.history,
+      }));
+    },
+    [playingInfo, setPlayingInfo]
+  );
 
   const handleMouseDown = useCallback(
     (index: number) => {
@@ -153,7 +167,7 @@ const Playlist = ({}: PlaylistProps) => {
   );
 
   useEffect(() => {
-    setPlaylisData(createPlaylistData());
+    setPlaylistData(createPlaylistData());
   }, [playingInfo, createPlaylistData]);
 
   useEffect(() => {
@@ -214,7 +228,11 @@ const Playlist = ({}: PlaylistProps) => {
         scroll={onScroll}
         ref={viewportRef}
       >
-        <Wrapper>
+        <Wrapper
+          $appBarEnable={playingInfo.playlist.some((song, i) =>
+            selectedIncludes(song, i)
+          )}
+        >
           <PlaylistContainer height={getTotalSize()}>
             {virtualMap((virtualItem, item) => (
               <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
@@ -226,7 +244,11 @@ const Playlist = ({}: PlaylistProps) => {
                     )}
                   <SongContainer
                     $playing={item.isPlaying}
-                    $selected={item.isSelected}
+                    $selected={selected.some(
+                      (s) =>
+                        s.songId ===
+                        playingInfo.playlist[virtualItem.index].songId
+                    )}
                     $ismoving={mouseState.isMoving}
                     $istarget={
                       mouseState.isMoving && targetIndex === virtualItem.index
@@ -249,6 +271,15 @@ const Playlist = ({}: PlaylistProps) => {
           </PlaylistContainer>
         </Wrapper>
       </PlayerScroll>
+
+      <MusicController
+        songs={playingInfo.playlist}
+        selectedSongs={selected}
+        dispatchSelectedSongs={selectCallback}
+        player={true}
+        onDelete={deleteSongs}
+        features={[ControllerFeature.selectAll, ControllerFeature.addMusic]}
+      />
     </Container>
   );
 };
@@ -257,8 +288,10 @@ const Container = styled.div`
   padding: 16px 0;
 `;
 
-const Wrapper = styled.div`
-  height: calc(100vh - 410px);
+const Wrapper = styled.div<{ $appBarEnable: boolean }>`
+  height: calc(
+    100vh - 410px + ${({ $appBarEnable }) => ($appBarEnable ? -60 : 0)}px
+  );
 `;
 
 const PlaylistContainer = styled.div<{ height: number }>`

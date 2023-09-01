@@ -91,20 +91,19 @@ const MusicController = ({
             />
           );
         case ControllerFeature.addMusic:
-          // 플레이리스트에 노래 추가
           return (
             <AddMusic
               key={key}
               onClick={async () => {
                 const success = await openAddListModal(selectedSongs);
 
-                if (success === true) {
+                if (success) {
                   // TODO: 플레이리스트 추가 성공
-                } else if (success === false) {
+
+                  dispatchSelectedSongs([]);
+                } else {
                   // TODO: 플레이리스트 추가 실패
                 }
-
-                dispatchSelectedSongs([]);
               }}
             />
           );
@@ -132,7 +131,7 @@ const MusicController = ({
           return (
             <DeleteMusic
               onClick={() => {
-                const newSongs = songs.slice();
+                const newSongs = [...songs];
 
                 selectedSongs.forEach((item) => {
                   newSongs.splice(
@@ -145,6 +144,7 @@ const MusicController = ({
 
                 onDelete && onDelete(newSongs);
               }}
+              key={key}
             />
           );
       }

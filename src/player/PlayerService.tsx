@@ -55,14 +55,6 @@ const PlayerService = ({}: PlayerServiceProps) => {
   }, 1000);
 
   useEffect(() => {
-    if (!currentSongState) return;
-
-    getLyrics(currentSongState).then((lyrics) => {
-      setLyrics(lyrics);
-    });
-  }, [currentSongState, setLyrics]);
-
-  useEffect(() => {
     if (!currentSongState || currentSongState?.songId === previousSong?.songId)
       return;
 
@@ -81,12 +73,17 @@ const PlayerService = ({}: PlayerServiceProps) => {
         ),
       }));
     });
+
+    getLyrics(currentSongState).then((lyrics) => {
+      setLyrics(lyrics);
+    });
   }, [
     currentSongState,
     previousSong,
     previousProgress,
     previousLength,
     setInfo,
+    setLyrics,
   ]);
 
   useEffect(() => {

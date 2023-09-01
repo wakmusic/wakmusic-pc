@@ -5,7 +5,15 @@ import instance from "../axios";
 
 export const getLyrics = async (song: Song): Promise<LyricType[] | null> => {
   try {
-    const { data } = await instance.get(`/v2/songs/lyrics/${song.songId}`);
+    const { data } = await instance.get(`/v2/songs/lyrics/${song.songId}`, {
+      validateStatus(status) {
+        return status <= 500;
+      },
+    });
+
+    if (data?.statusCode === 404) {
+      return null;
+    }
 
     return data.map((lyric: LyricType) => ({
       ...lyric,

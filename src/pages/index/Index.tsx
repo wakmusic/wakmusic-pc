@@ -4,6 +4,8 @@ import styled from "styled-components/macro";
 
 import { fetchRecommendedPlaylist } from "@apis/playlist";
 
+import 히죽두 from "@assets/imgs/테헹.webp";
+
 import { T4Medium } from "@components/Typography";
 import Arrow from "@components/icons/Arrow";
 import Background from "@components/index/Background";
@@ -79,6 +81,8 @@ const Index = ({}: IndexProps) => {
           )}
         </RecommentItemContainer>
       </RecommandContainer>
+
+      <테헹 src={히죽두} />
     </Container>
   );
 };
@@ -141,6 +145,17 @@ const RecommendItems = styled.div<{
 
   transform: translateX(${({ $page }) => $page * -760}px);
   transition: transform ease 300ms;
+`;
+
+const 테헹 = styled.img`
+  position: fixed;
+
+  left: 4000px;
+  top: 2000px;
+
+  opacity: 0.2;
+
+  transform: rotate(-20deg);
 `;
 
 export default Index;

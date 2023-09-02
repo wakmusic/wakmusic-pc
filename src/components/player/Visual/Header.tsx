@@ -26,6 +26,9 @@ const Header = ({}: HeaderProps) => {
 const Container = styled.div`
   height: 38px;
 
+  position: relative;
+  z-index: 1001;
+
   display: flex;
   align-items: center;
 

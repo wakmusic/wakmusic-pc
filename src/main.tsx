@@ -40,6 +40,7 @@ import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
 import CheckPlayerMode from "@utils/checkPlayerMode";
+import "@utils/consoleApi";
 import SchemeHandler from "@utils/schemeHandler";
 
 import "./index.css";

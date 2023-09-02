@@ -1,4 +1,3 @@
-import throttle from "lodash.throttle";
 import { atom } from "recoil";
 
 import { IPCRenderer } from "@constants/ipc";
@@ -34,10 +33,9 @@ export const controlState = atom<ControlStateType>({
         if (newValue.isPlaying !== (oldValue as ControlStateType).isPlaying) {
           ipcRenderer?.send(IPCRenderer.RPC_PLAYING, newValue.isPlaying);
         }
+
         if (newValue.volume !== (oldValue as ControlStateType).volume) {
-          throttle(() => {
-            localStorage.setItem("volume", newValue.volume.toString());
-          });
+          localStorage.setItem("volume", newValue.volume.toString());
         }
 
         if (newValue.isMute !== (oldValue as ControlStateType).isMute) {

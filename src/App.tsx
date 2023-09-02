@@ -7,6 +7,7 @@ import AddListModal from "@components/modals/AddListModal";
 import AlertModal from "@components/modals/AlertModal";
 import ConfirmModal from "@components/modals/ConfirmModal";
 import CreateListModal from "@components/modals/CreateListModal";
+import ExitModal from "@components/modals/ExitModal";
 import LoadListModal from "@components/modals/LoadListModal";
 import LoginModal from "@components/modals/LoginModal";
 import NoticeDetailModal from "@components/modals/NoticeDetailModal";
@@ -111,6 +112,7 @@ export class App extends Component<AppProps> {
               <SetUsernameModal />
               <NoticeDetailModal />
               <NoticeModal />
+              <ExitModal />
             </ModalPortal>
           </QueryClientProvider>
         </RecoilRoot>

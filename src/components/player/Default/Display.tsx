@@ -1,5 +1,5 @@
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   buttonVariants,
@@ -18,6 +18,7 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 import {
   useControlState,
   useCurrentSongState,
+  useIsSpaceDisabled,
   useVisualModeState,
 } from "@hooks/player";
 
@@ -29,7 +30,7 @@ import Lyrics from "../Lyrics";
 interface DisplayProps {}
 
 const Display = ({}: DisplayProps) => {
-  const [controlState] = useControlState();
+  const [controlState, setControl] = useControlState();
   const [visualModeState, setVisualModeState] = useVisualModeState();
 
   const song = useCurrentSongState();
@@ -43,6 +44,10 @@ const Display = ({}: DisplayProps) => {
 
   const controls = useAnimation();
 
+  const [isSpaceDisabled] = useIsSpaceDisabled();
+
+  const [lastFCall, setLastFCall] = useState(0);
+
   useEffect(() => {
     if (visualModeState) return;
 
@@ -51,6 +56,63 @@ const Display = ({}: DisplayProps) => {
       controls.set("initial");
     })();
   }, [controls, visualModeState]);
+
+  const openVisualMode = useCallback(async () => {
+    const animate = async () => {
+      controls.set("close");
+      await controls.start("open");
+
+      setVisualModeState(true);
+    };
+
+    if (ipcRenderer && location.pathname == "/player") {
+      navigate(-1);
+      ipcRenderer.send("mode:default");
+
+      setTimeout(() => {
+        animate();
+      }, 200);
+
+      return;
+    }
+
+    animate();
+  }, [controls, location.pathname, navigate, setVisualModeState]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (
+        e.code === "KeyF" &&
+        !isSpaceDisabled &&
+        lastFCall + 500 < Date.now() // 무지성 연타로 인해 UI 깨지는거 방지
+      ) {
+        if (visualModeState) {
+          setVisualModeState(false);
+        } else {
+          openVisualMode();
+        }
+
+        setLastFCall(Date.now());
+      }
+
+      if (e.code === "KeyL" && !isSpaceDisabled) {
+        setControl((prev) => ({ ...prev, isLyricsOn: !prev.isLyricsOn }));
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [
+    isSpaceDisabled,
+    lastFCall,
+    openVisualMode,
+    setControl,
+    setVisualModeState,
+    visualModeState,
+  ]);
 
   return (
     <Container>
@@ -66,30 +128,7 @@ const Display = ({}: DisplayProps) => {
             variants={buttonVariants}
             initial="close"
           >
-            <SimpleIconButton
-              icon={ExpansionSVG}
-              onClick={() => {
-                const animate = async () => {
-                  controls.set("close");
-                  await controls.start("open");
-
-                  setVisualModeState(true);
-                };
-
-                if (ipcRenderer && location.pathname == "/player") {
-                  navigate(-1);
-                  ipcRenderer.send("mode:default");
-
-                  setTimeout(() => {
-                    animate();
-                  }, 200);
-
-                  return;
-                }
-
-                animate();
-              }}
-            />
+            <SimpleIconButton icon={ExpansionSVG} onClick={openVisualMode} />
           </ExpansionButtonContainer>
 
           <PlaylistButtonContainer
@@ -124,6 +163,7 @@ const Display = ({}: DisplayProps) => {
               animate={controls}
               variants={thumbnailVariants}
               initial="initial"
+              onClick={openVisualMode}
             />
           </CenterWrapper>
         </Grid>
@@ -205,6 +245,8 @@ const Thumbnail = styled(motion.img)<{ $off: boolean }>`
 
   object-fit: cover;
   border-radius: 10px;
+
+  cursor: pointer;
 
   ${({ $off }) =>
     $off &&

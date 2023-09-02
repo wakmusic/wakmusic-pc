@@ -8,7 +8,11 @@ import dummyThumbnail from "@assets/svgs/BigDummy.svg";
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import { useLikes } from "@hooks/likes";
-import { useControlState, useCurrentSongState } from "@hooks/player";
+import {
+  useControlState,
+  useCurrentSongState,
+  useToggleVisualModeState,
+} from "@hooks/player";
 
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
 
@@ -20,6 +24,7 @@ import View from "../View";
 interface DefaultModeProps {}
 
 const DefaultMode = ({}: DefaultModeProps) => {
+  const toggleVisualModeState = useToggleVisualModeState();
   const [controlState] = useControlState();
 
   const song = useCurrentSongState();
@@ -41,7 +46,7 @@ const DefaultMode = ({}: DefaultModeProps) => {
       </SongContainer>
 
       <MainContainer>
-        <Thumbnail src={img} />
+        <Thumbnail src={img} onClick={toggleVisualModeState} />
 
         <LyricsContainer>
           <Lyrics size="large" />
@@ -93,6 +98,8 @@ const Thumbnail = styled.img`
 
   object-fit: cover;
   border-radius: 10px;
+
+  cursor: pointer;
 `;
 
 const LyricsContainer = styled.div`

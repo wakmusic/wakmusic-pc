@@ -265,10 +265,10 @@ const Playlist = ({}: PlaylistProps) => {
                 </Fragment>
               </VirtualItem>
             ))}
-            {mouseState.isMoving &&
-              !scrollState.isScrollEnabled &&
-              getCursorIndex() === playlistData.length && <MovementCursor />}
           </PlaylistContainer>
+          {mouseState.isMoving &&
+            !scrollState.isScrollEnabled &&
+            getCursorIndex() === playlistData.length && <MovementCursor />}
         </Wrapper>
       </PlayerScroll>
 

@@ -1,18 +1,14 @@
 import styled from "styled-components/macro";
 
-import { ReactComponent as HeartOffSvg } from "@assets/icons/ic_20_heart_off.svg";
-import { ReactComponent as HeartOnSvg } from "@assets/icons/ic_20_heart_on.svg";
-
 import { T4Medium, T5Light } from "@components/Typography";
 import Marquee from "@components/globals/Marquee";
-import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import colors from "@constants/colors";
 
-import { useLikes } from "@hooks/likes";
 import { useCurrentSongState } from "@hooks/player";
 
 import Controller from "../Controller";
+import Like from "../Like";
 import View from "../View";
 
 interface SongProps {}
@@ -20,15 +16,10 @@ interface SongProps {}
 const Song = ({}: SongProps) => {
   const song = useCurrentSongState();
 
-  const { liked, toggleLikes } = useLikes(song);
-
   return (
     <Container>
       <UpperContainer>
-        <SimpleIconButton
-          icon={liked ? HeartOnSvg : HeartOffSvg}
-          onClick={toggleLikes}
-        />
+        <Like />
 
         <TitleContainer>
           <Marquee width={200}>

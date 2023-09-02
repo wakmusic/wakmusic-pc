@@ -123,7 +123,7 @@ const Wrapper = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
 
 const InnerContainer = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
   style: {
-    zoom: $zoom,
+    transform: `scale(${$zoom})`,
   },
 }))`
   width: 100%;

@@ -9,7 +9,12 @@ import { IPCMain, IPCRenderer } from "@constants/ipc";
 import { useAlertModal } from "@hooks/alertModal";
 import { useLikesState } from "@hooks/likes";
 import { useLoginModalOpener } from "@hooks/loginModal";
-import { useControlState, usePlayingInfoState } from "@hooks/player";
+import {
+  useControlState,
+  useNextSong,
+  usePlayingInfoState,
+  usePrevSong,
+} from "@hooks/player";
 import { useUserState } from "@hooks/user";
 
 import { isNull } from "./isTypes";
@@ -23,6 +28,9 @@ const SchemeHandler = (): null => {
 
   const alertModal = useAlertModal();
   const openLoginModal = useLoginModalOpener();
+
+  const prevSong = usePrevSong();
+  const nextSong = useNextSong();
 
   useEffect(() => {
     (async () => {
@@ -102,6 +110,15 @@ const SchemeHandler = (): null => {
           break;
         }
 
+        case "resume": {
+          setControl((prev) => ({
+            ...prev,
+            isPlaying: true,
+          }));
+
+          break;
+        }
+
         case "pause": {
           setControl((prev) => ({
             ...prev,
@@ -110,9 +127,29 @@ const SchemeHandler = (): null => {
 
           break;
         }
+
+        case "prevSong": {
+          prevSong();
+
+          break;
+        }
+
+        case "nextSong": {
+          nextSong();
+
+          break;
+        }
       }
     },
-    [alertModal, openLoginModal, setControl, setPlayingInfo, setUser]
+    [
+      alertModal,
+      nextSong,
+      openLoginModal,
+      prevSong,
+      setControl,
+      setPlayingInfo,
+      setUser,
+    ]
   );
 
   useEffect(() => {

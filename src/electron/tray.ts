@@ -10,6 +10,16 @@ import { join } from "path";
 
 import { IPCMain } from "@constants/ipc";
 
+const getWindow = (): BrowserWindow | false => {
+  const win = BrowserWindow.getAllWindows()[0];
+
+  if (!win) return false;
+
+  win.focus();
+
+  return win;
+};
+
 const openWindow = () => {
   const win = BrowserWindow.getAllWindows()[0];
 
@@ -20,11 +30,9 @@ const openWindow = () => {
 };
 
 const processLogin = (menu: MenuItem) => {
-  const win = BrowserWindow.getAllWindows()[0];
+  const win = getWindow();
 
   if (!win) return;
-
-  win.focus();
 
   switch (menu.label) {
     case "로그인":
@@ -37,14 +45,36 @@ const processLogin = (menu: MenuItem) => {
   }
 };
 
-const pauseSong = () => {
-  const win = BrowserWindow.getAllWindows()[0];
+const controlSong = (menu: MenuItem) => {
+  const win = getWindow();
 
   if (!win) return;
 
-  win.focus();
+  switch (menu.label) {
+    case "재생":
+      win.webContents.send(IPCMain.SCHEME, "wakmusic://resume/");
+      break;
 
-  win.webContents.send(IPCMain.SCHEME, "wakmusic://pause/");
+    case "일시정지":
+      win.webContents.send(IPCMain.SCHEME, "wakmusic://pause/");
+      break;
+  }
+};
+
+const prevSong = () => {
+  const win = getWindow();
+
+  if (win) {
+    win.webContents.send(IPCMain.SCHEME, "wakmusic://prevSong/");
+  }
+};
+
+const nextSong = () => {
+  const win = getWindow();
+
+  if (win) {
+    win.webContents.send(IPCMain.SCHEME, "wakmusic://nextSong/");
+  }
 };
 
 const template: MenuItemConstructorOptions[] = [
@@ -60,8 +90,16 @@ const template: MenuItemConstructorOptions[] = [
     type: "separator",
   },
   {
-    label: "일시정지",
-    click: pauseSong,
+    label: "재생",
+    click: controlSong,
+  },
+  {
+    label: "이전 곡",
+    click: prevSong,
+  },
+  {
+    label: "다음 곡",
+    click: nextSong,
   },
   {
     type: "separator",
@@ -83,10 +121,22 @@ export const initTray = () => {
   tray.setContextMenu(contextMenu);
   tray.setToolTip("왁타버스 뮤직");
 
-  return (label: string) => {
-    const templateIndex = template.findIndex(
-      (item) => item.label === "로그인" || item.label === "로그아웃"
-    );
+  return (type: "login" | "play", label: string) => {
+    let templateIndex;
+
+    if (type === "login") {
+      templateIndex = template.findIndex(
+        (item) => item.label === "로그인" || item.label === "로그아웃"
+      );
+    }
+
+    if (type === "play") {
+      templateIndex = template.findIndex(
+        (item) => item.label === "재생" || item.label === "일시정지"
+      );
+    }
+
+    if (!templateIndex) return;
 
     template[templateIndex].label = label;
     const contextMenu = Menu.buildFromTemplate(template);

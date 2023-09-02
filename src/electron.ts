@@ -11,7 +11,7 @@ import { initTray } from "./electron/tray";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 
-let tray: ((label: string) => void) | null = null;
+let tray: ((type: "login" | "play", label: string) => void) | null = null;
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -167,6 +167,10 @@ ipcMain.on(IPCRenderer.RPC_PROGRESS, (_event, progress: number) => {
 });
 
 ipcMain.on(IPCRenderer.RPC_PLAYING, (_event, isPlaying: boolean) => {
+  if (tray) {
+    tray("play", isPlaying ? "일시정지" : "재생");
+  }
+
   showPlaying(isPlaying);
 });
 
@@ -176,13 +180,13 @@ ipcMain.on(IPCRenderer.RPC_TRACK, (_event, current: Song | null) => {
 
 ipcMain.on(IPCRenderer.USER_LOGIN, () => {
   if (tray) {
-    tray("로그아웃");
+    tray("login", "로그아웃");
   }
 });
 
 ipcMain.on(IPCRenderer.USER_LOGOUT, () => {
   if (tray) {
-    tray("로그인");
+    tray("login", "로그인");
   }
 
   session.defaultSession.cookies.remove(import.meta.env.VITE_API_URL, "token");

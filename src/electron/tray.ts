@@ -37,6 +37,16 @@ const processLogin = (menu: MenuItem) => {
   }
 };
 
+const pauseSong = () => {
+  const win = BrowserWindow.getAllWindows()[0];
+
+  if (!win) return;
+
+  win.focus();
+
+  win.webContents.send(IPCMain.SCHEME, "wakmusic://pause/");
+};
+
 const template: MenuItemConstructorOptions[] = [
   {
     label: "열기",
@@ -45,6 +55,13 @@ const template: MenuItemConstructorOptions[] = [
   {
     label: "로그인",
     click: processLogin,
+  },
+  {
+    type: "separator",
+  },
+  {
+    label: "일시정지",
+    click: pauseSong,
   },
   {
     type: "separator",

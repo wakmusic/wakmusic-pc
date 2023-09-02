@@ -5,6 +5,11 @@ export const containerVariants: Variants = {
   round: { height: 93 },
 };
 
+export const artistImageVariants: Variants = {
+  square: { width: 140 },
+  round: { width: 68 },
+};
+
 export const backgroundVariants: Variants = {
   square: { width: 140, height: 180, borderRadius: 8, y: 0 },
   round: { width: 68, height: 68, borderRadius: 100, y: 4 },

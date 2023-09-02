@@ -1,5 +1,9 @@
 import { AnimationControls, motion } from "framer-motion";
-import { backgroundVariants, characterVariants } from "src/animations/artist";
+import {
+  artistImageVariants,
+  backgroundVariants,
+  characterVariants,
+} from "src/animations/artist";
 import styled, { css } from "styled-components/macro";
 
 import { Artist } from "@templates/artists";
@@ -14,7 +18,11 @@ interface ArtistImageProps {
 
 const ArtistImage = ({ artist, controls }: ArtistImageProps) => {
   return (
-    <Container>
+    <Container
+      animate={controls}
+      initial="square"
+      variants={artistImageVariants}
+    >
       <Background
         $color={artist.color.card}
         animate={controls}
@@ -33,8 +41,7 @@ const ArtistImage = ({ artist, controls }: ArtistImageProps) => {
   );
 };
 
-const Container = styled.div`
-  width: 140px;
+const Container = styled(motion.div)`
   height: 180px;
 `;
 

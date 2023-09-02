@@ -50,14 +50,11 @@ const Visual = ({}: VisualProps) => {
   }, [ref]);
 
   useEffect(() => {
-    if (!visualMode) {
+    if (visualMode) {
+      controls.start("active");
+    } else {
       controls.set("initial");
-      return;
     }
-
-    (async () => {
-      await controls.start("active");
-    })();
   }, [controls, visualMode]);
 
   return (

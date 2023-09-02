@@ -63,7 +63,7 @@ export class App extends Component<AppProps> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.setState({ hasError: true });
-    console.error(JSON.stringify(error), JSON.stringify(errorInfo));
+    console.error(error, errorInfo);
   }
 
   render(): ReactNode {

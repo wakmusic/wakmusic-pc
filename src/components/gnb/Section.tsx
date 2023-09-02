@@ -8,6 +8,11 @@ import Lottie from "@components/globals/Lottie";
 import colors from "@constants/colors";
 import { SectionData } from "@constants/gnb";
 
+import { useLoginModalOpener } from "@hooks/loginModal";
+import { useUserState } from "@hooks/user";
+
+import { isNull } from "@utils/isTypes";
+
 interface Section {
   path: string;
   icon: React.FunctionComponent<
@@ -22,6 +27,10 @@ interface Section {
 const Section = ({ path, icon: Icon, lottie, children }: Section) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [user] = useUserState();
+  const loginModalOpener = useLoginModalOpener();
+
   const [isCurrent, setIsCurrent] = useState(false);
 
   const comparePath = useCallback(
@@ -48,6 +57,13 @@ const Section = ({ path, icon: Icon, lottie, children }: Section) => {
   return (
     <Container
       onClick={() => {
+        if (path.startsWith("/user")) {
+          if (isNull(user)) {
+            loginModalOpener();
+            return;
+          }
+        }
+
         navigate(path);
       }}
     >

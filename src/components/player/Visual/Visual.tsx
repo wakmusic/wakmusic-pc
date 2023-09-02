@@ -50,14 +50,11 @@ const Visual = ({}: VisualProps) => {
   }, [ref]);
 
   useEffect(() => {
-    if (!visualMode) {
+    if (visualMode) {
+      controls.start("active");
+    } else {
       controls.set("initial");
-      return;
     }
-
-    (async () => {
-      await controls.start("active");
-    })();
   }, [controls, visualMode]);
 
   return (
@@ -123,7 +120,7 @@ const Wrapper = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
 
 const InnerContainer = styled.div.attrs<{ $zoom: number }>(({ $zoom }) => ({
   style: {
-    zoom: $zoom,
+    transform: `scale(${$zoom})`,
   },
 }))`
   width: 100%;

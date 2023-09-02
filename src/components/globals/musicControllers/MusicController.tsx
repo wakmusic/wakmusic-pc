@@ -178,6 +178,20 @@ const MusicController = ({
     setSelectedLength(selectedSongs.length);
   }, [displayDefault, selectedSongs.length]);
 
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.code === "Escape") {
+        dispatchSelectedSongs([]);
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [dispatchSelectedSongs]);
+
   return (
     <Container $display={showControllerState}>
       <Controller count={selectedLength} popdown={popdown}>

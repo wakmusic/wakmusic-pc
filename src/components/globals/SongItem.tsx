@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as MoveSVG } from "@assets/icons/ic_24_move.svg";
 
@@ -131,10 +131,18 @@ const Container = styled.div<{ $selected?: boolean }>`
 
   padding: 0px 20px;
 
-  background-color: ${({ $selected }) =>
-    $selected ? colors.blueGray200 : "transparent"};
-
   cursor: pointer;
+
+  ${({ $selected }) =>
+    $selected
+      ? css`
+          background-color: ${colors.blueGray200};
+        `
+      : css`
+          &:hover {
+            background-color: ${colors.blueGray100};
+          }
+        `}
 `;
 
 const Info = styled.div`

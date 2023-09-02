@@ -42,10 +42,17 @@ const AddListModal = ({}: AddListModalProps) => {
   });
 
   const resolve = async (list: PlaylistType | undefined) => {
-    if (isUndefined(list)) {
+    const _resolve = (result: boolean | undefined) => {
       if (modalState.resolve) {
-        modalState.resolve(undefined);
+        modalState.resolve(result);
       }
+
+      setModalState({ ...modalState, isOpen: false });
+      setIsSpaceDisabled(false);
+    };
+
+    if (isUndefined(list)) {
+      _resolve(undefined);
 
       return;
     }
@@ -59,12 +66,7 @@ const AddListModal = ({}: AddListModalProps) => {
       refetch();
     }
 
-    if (modalState.resolve) {
-      modalState.resolve(success);
-    }
-
-    setModalState({ ...modalState, isOpen: false });
-    setIsSpaceDisabled(false);
+    _resolve(success);
   };
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(

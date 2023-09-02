@@ -23,9 +23,18 @@ if (!window.WAKMU) {
         songId: youtubeId,
         title,
         artist,
+        remix: "",
+        reaction: "",
+        date: 999999,
+        like: 0,
+        views: 0,
         start: 0,
         end: 0,
-        views: 0,
+        chart: {
+          type: "total",
+          increase: 0,
+          last: 0,
+        },
       });
     },
   };

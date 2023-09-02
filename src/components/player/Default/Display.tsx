@@ -1,5 +1,5 @@
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   buttonVariants,
@@ -25,6 +25,7 @@ import { ipcRenderer } from "@utils/modules";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
 
 import Lyrics from "../Lyrics";
+import Shortcuts from "./Shortcuts";
 
 interface DisplayProps {}
 
@@ -52,8 +53,32 @@ const Display = ({}: DisplayProps) => {
     })();
   }, [controls, visualModeState]);
 
+  const openVisualMode = useCallback(async () => {
+    const animate = async () => {
+      controls.set("close");
+      await controls.start("open");
+
+      setVisualModeState(true);
+    };
+
+    if (ipcRenderer && location.pathname == "/player") {
+      navigate(-1);
+      ipcRenderer.send("mode:default");
+
+      setTimeout(() => {
+        animate();
+      }, 200);
+
+      return;
+    }
+
+    animate();
+  }, [controls, location.pathname, navigate, setVisualModeState]);
+
   return (
     <Container>
+      <Shortcuts openVisualMode={openVisualMode} />
+
       <InnerContainer
         $image={song?.songId ? img : undefined}
         animate={controls}
@@ -66,30 +91,7 @@ const Display = ({}: DisplayProps) => {
             variants={buttonVariants}
             initial="close"
           >
-            <SimpleIconButton
-              icon={ExpansionSVG}
-              onClick={() => {
-                const animate = async () => {
-                  controls.set("close");
-                  await controls.start("open");
-
-                  setVisualModeState(true);
-                };
-
-                if (ipcRenderer && location.pathname == "/player") {
-                  navigate(-1);
-                  ipcRenderer.send("mode:default");
-
-                  setTimeout(() => {
-                    animate();
-                  }, 200);
-
-                  return;
-                }
-
-                animate();
-              }}
-            />
+            <SimpleIconButton icon={ExpansionSVG} onClick={openVisualMode} />
           </ExpansionButtonContainer>
 
           <PlaylistButtonContainer
@@ -124,6 +126,7 @@ const Display = ({}: DisplayProps) => {
               animate={controls}
               variants={thumbnailVariants}
               initial="initial"
+              onClick={openVisualMode}
             />
           </CenterWrapper>
         </Grid>
@@ -205,6 +208,8 @@ const Thumbnail = styled(motion.img)<{ $off: boolean }>`
 
   object-fit: cover;
   border-radius: 10px;
+
+  cursor: pointer;
 
   ${({ $off }) =>
     $off &&

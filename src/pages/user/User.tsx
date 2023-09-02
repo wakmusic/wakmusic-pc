@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import Header from "@components/user/Header";
@@ -6,12 +7,35 @@ import Header from "@components/user/Header";
 import PageContainer from "@layouts/PageContainer";
 import PageLayout from "@layouts/PageLayout";
 
+import { useLoginModalOpener } from "@hooks/loginModal";
+import { useUserState } from "@hooks/user";
+
+import { isNull } from "@utils/isTypes";
+
 import Likes from "./Likes";
 import Mylist from "./Mylist";
 
 interface UserProps {}
 
 const User = ({}: UserProps) => {
+  const [user] = useUserState();
+  const loginModalOpener = useLoginModalOpener();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isNull(user)) {
+      loginModalOpener();
+    }
+  }, [user, loginModalOpener, navigate]);
+
+  if (isNull(user)) {
+    return (
+      <PageLayout>
+        <Container />
+      </PageLayout>
+    );
+  }
+
   return (
     <PageLayout>
       <Container>

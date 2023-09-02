@@ -20,6 +20,8 @@ import { usePrevious } from "@hooks/previous";
 
 import { Song } from "@templates/song";
 
+import { applyHook } from "@utils/consoleApi";
+
 import YouTube from "./providers/YouTube";
 
 interface PlayerServiceProps {}
@@ -47,6 +49,8 @@ const PlayerService = ({}: PlayerServiceProps) => {
 
   const currentSong = useRef<Song | null>(null);
   currentSong.current = info.playlist[info.current];
+
+  applyHook(setInfo);
 
   useInterval(() => {
     if (!currentSongState || !control.isPlaying || isControlling) return;

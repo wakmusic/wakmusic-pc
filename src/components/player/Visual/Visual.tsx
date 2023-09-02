@@ -16,7 +16,7 @@ import LyricsMode from "./LyricsMode";
 interface VisualProps {}
 
 const Visual = ({}: VisualProps) => {
-  const [visualMode, setVisualMode] = useVisualModeState();
+  const [visualMode] = useVisualModeState();
   const song = useCurrentSongState();
 
   const img = useMemo(
@@ -56,20 +56,6 @@ const Visual = ({}: VisualProps) => {
       controls.set("initial");
     }
   }, [controls, visualMode]);
-
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setVisualMode(false);
-      }
-    };
-
-    window.addEventListener("keydown", handler);
-
-    return () => {
-      window.removeEventListener("keydown", handler);
-    };
-  }, [setVisualMode]);
 
   return (
     <Container

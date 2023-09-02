@@ -1,5 +1,5 @@
 import { motion, useAnimation } from "framer-motion";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   buttonVariants,
@@ -18,7 +18,6 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 import {
   useControlState,
   useCurrentSongState,
-  useIsSpaceDisabled,
   useVisualModeState,
 } from "@hooks/player";
 
@@ -26,11 +25,12 @@ import { ipcRenderer } from "@utils/modules";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
 
 import Lyrics from "../Lyrics";
+import Shortcuts from "./Shortcuts";
 
 interface DisplayProps {}
 
 const Display = ({}: DisplayProps) => {
-  const [controlState, setControl] = useControlState();
+  const [controlState] = useControlState();
   const [visualModeState, setVisualModeState] = useVisualModeState();
 
   const song = useCurrentSongState();
@@ -43,10 +43,6 @@ const Display = ({}: DisplayProps) => {
   const location = useLocation();
 
   const controls = useAnimation();
-
-  const [isSpaceDisabled] = useIsSpaceDisabled();
-
-  const [lastFCall, setLastFCall] = useState(0);
 
   useEffect(() => {
     if (visualModeState) return;
@@ -79,43 +75,10 @@ const Display = ({}: DisplayProps) => {
     animate();
   }, [controls, location.pathname, navigate, setVisualModeState]);
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (
-        e.code === "KeyF" &&
-        !isSpaceDisabled &&
-        lastFCall + 500 < Date.now() // 무지성 연타로 인해 UI 깨지는거 방지
-      ) {
-        if (visualModeState) {
-          setVisualModeState(false);
-        } else {
-          openVisualMode();
-        }
-
-        setLastFCall(Date.now());
-      }
-
-      if (e.code === "KeyL" && !isSpaceDisabled) {
-        setControl((prev) => ({ ...prev, isLyricsOn: !prev.isLyricsOn }));
-      }
-    };
-
-    window.addEventListener("keydown", handler);
-
-    return () => {
-      window.removeEventListener("keydown", handler);
-    };
-  }, [
-    isSpaceDisabled,
-    lastFCall,
-    openVisualMode,
-    setControl,
-    setVisualModeState,
-    visualModeState,
-  ]);
-
   return (
     <Container>
+      <Shortcuts openVisualMode={openVisualMode} />
+
       <InnerContainer
         $image={song?.songId ? img : undefined}
         animate={controls}

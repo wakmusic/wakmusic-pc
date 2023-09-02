@@ -64,6 +64,8 @@ app.whenReady().then(() => {
   }
 
   win.once("ready-to-show", () => {
+    win.webContents.setZoomFactor(1);
+
     win.show();
   });
 

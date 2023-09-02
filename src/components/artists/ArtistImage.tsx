@@ -33,7 +33,10 @@ const ArtistImage = ({ artist, controls }: ArtistImageProps) => {
   );
 };
 
-const Container = styled.div``;
+const Container = styled.div`
+  width: 140px;
+  height: 180px;
+`;
 
 const Background = styled(motion.div)<{ $color: string[][] }>`
   position: absolute;

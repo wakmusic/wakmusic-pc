@@ -38,7 +38,7 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
 
   const shortcutHandler = useCallback(
     (e: KeyboardEvent) => {
-      if (isSpaceDisabled && e.repeat) return;
+      if (isSpaceDisabled || e.repeat) return;
 
       // 비주얼모드 토글
       if (

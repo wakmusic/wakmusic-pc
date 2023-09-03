@@ -17,6 +17,8 @@ import useVirtualizer from "@hooks/virtualizer";
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
 
+import { addAlpha } from "@utils/utils";
+
 interface PlaylistProps {}
 
 const Playlist = ({}: PlaylistProps) => {
@@ -319,16 +321,16 @@ const SongContainer = styled.div<{
   ${({ $selected, $istarget }) =>
     ($selected || $istarget) &&
     css`
-      background-color: ${colors.gray700};
+      background-color: ${colors.gray700} !important;
     `}
 
-  &:hover {
-    ${({ $ismoving }) =>
-      !$ismoving &&
-      css`
-        background-color: ${colors.gray700};
+  ${({ $ismoving }) =>
+    !$ismoving &&
+    css`
+      &:hover {
+        background-color: ${addAlpha(colors.gray700, 0.5)}};
+      }
       `}
-  }
 `;
 
 const TitleText = styled(T7Light)`

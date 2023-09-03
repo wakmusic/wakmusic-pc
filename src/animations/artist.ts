@@ -22,6 +22,7 @@ export const characterVariants: Variants = {
     y: 0,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
+    cursor: "auto",
   },
   round: {
     width: 68,
@@ -29,6 +30,7 @@ export const characterVariants: Variants = {
     y: -12,
     borderBottomLeftRadius: 100,
     borderBottomRightRadius: 100,
+    cursor: "pointer",
   },
 };
 

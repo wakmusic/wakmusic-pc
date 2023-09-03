@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+import { queryClient } from "src/main";
 import styled from "styled-components/macro";
+
+import { fetchArtistList } from "@apis/artist";
 
 import { T4Medium, T5Light } from "@components/Typography";
 import Marquee from "@components/globals/Marquee";
@@ -15,6 +19,20 @@ interface SongProps {}
 
 const Song = ({}: SongProps) => {
   const song = useCurrentSongState();
+  const navigate = useNavigate();
+
+  const artistClick = async () => {
+    const artists = await queryClient.fetchQuery({
+      queryKey: "artists",
+      queryFn: fetchArtistList,
+    });
+
+    const artist = artists.find((artist) => artist.name === song?.artist);
+
+    if (artist) {
+      navigate(`/artists/${artist.artistId}`);
+    }
+  };
 
   return (
     <Container>
@@ -27,7 +45,7 @@ const Song = ({}: SongProps) => {
           </Marquee>
 
           <Marquee width={200}>
-            <ArtistText>
+            <ArtistText onClick={artistClick}>
               {song?.artist || "재생 버튼을 클릭해보세요."}
             </ArtistText>
           </Marquee>

@@ -69,6 +69,16 @@ app.whenReady().then(() => {
     win.show();
   });
 
+  win.webContents.setWindowOpenHandler(() => {
+    return {
+      action: "allow",
+      overrideBrowserWindowOptions: {
+        frame: false,
+        icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
+      },
+    };
+  });
+
   win.on("maximize", () => {
     win.webContents.send(IPCMain.WINDOW_MAXIMIZED);
   });

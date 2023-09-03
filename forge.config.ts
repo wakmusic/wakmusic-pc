@@ -55,9 +55,10 @@ const config: ForgeConfig = {
     // ],
 
     osxSign: {
+      preAutoEntitlements: false,
       optionsForFile: (_) => {
         return {
-          entitlements: "./build/macos/entitlements.plist --deep",
+          entitlements: "./build/macos/entitlements.plist",
         };
       },
     },

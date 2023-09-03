@@ -21,9 +21,9 @@ const getWindow = (): BrowserWindow | false => {
 };
 
 const openWindow = () => {
-  const win = BrowserWindow.getAllWindows()[0];
+  const wins = BrowserWindow.getAllWindows();
 
-  if (win) {
+  for (const win of wins) {
     win.show();
     win.focus();
   }

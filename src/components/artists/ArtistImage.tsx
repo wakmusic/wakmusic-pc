@@ -14,9 +14,10 @@ import { addAlpha } from "@utils/utils";
 interface ArtistImageProps {
   artist: Artist;
   controls: AnimationControls;
+  scrollToTop?: () => void;
 }
 
-const ArtistImage = ({ artist, controls }: ArtistImageProps) => {
+const ArtistImage = ({ artist, controls, scrollToTop }: ArtistImageProps) => {
   return (
     <Container
       animate={controls}
@@ -36,6 +37,7 @@ const ArtistImage = ({ artist, controls }: ArtistImageProps) => {
         animate={controls}
         initial="square"
         variants={characterVariants}
+        onClick={scrollToTop}
       />
     </Container>
   );

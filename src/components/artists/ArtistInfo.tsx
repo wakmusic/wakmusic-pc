@@ -29,6 +29,8 @@ interface ArtistInfoProps {
   small: boolean;
 
   isLoading?: boolean;
+
+  scrollToTop?: () => void;
 }
 
 const ArtistInfo = ({
@@ -36,6 +38,7 @@ const ArtistInfo = ({
   controls,
   small,
   isLoading,
+  scrollToTop,
 }: ArtistInfoProps) => {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
 
@@ -70,7 +73,11 @@ const ArtistInfo = ({
       <Background $color={artist.color.background} />
 
       <InnerContainer>
-        <ArtistImage artist={artist} controls={controls} />
+        <ArtistImage
+          artist={artist}
+          controls={controls}
+          scrollToTop={scrollToTop}
+        />
 
         <Content animate={controls} initial="square" variants={contentVariants}>
           <T3Medium color={colors.gray900}>

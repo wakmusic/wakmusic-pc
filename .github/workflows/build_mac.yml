@@ -59,7 +59,7 @@ jobs:
         run: yarn package
 
       - name: Sign App
-        run: yarn electron-osx-sign "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
+        run: yarn electron-osx-sign --deep "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2

@@ -127,11 +127,11 @@ const MusicController = ({
 
                 if (success) {
                   // TODO: 플레이리스트 추가 성공
-
-                  dispatchSelectedSongs([]);
                 } else {
                   // TODO: 플레이리스트 추가 실패
                 }
+
+                dispatchSelectedSongs([]);
               }}
             />
           );

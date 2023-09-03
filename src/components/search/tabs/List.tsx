@@ -83,9 +83,9 @@ const List = ({ tab, query }: ListProps) => {
       <GuideBar
         features={[
           GuideBarFeature.info,
-          GuideBarFeature.last,
           GuideBarFeature.date,
           GuideBarFeature.views,
+          GuideBarFeature.like,
         ]}
       />
 

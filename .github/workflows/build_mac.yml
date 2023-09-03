@@ -56,13 +56,13 @@ jobs:
           DOTENV: ${{ secrets.DOTENV }}
 
       - name: Make App
-        run: yarn package
+        run: yarn make
 
-      - name: Sign App
-        run: yarn electron-osx-sign --deep "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
+      # - name: Sign App
+      #   run: yarn electron-osx-sign --deep "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: 왁타버스 뮤직
-          path: "./out/왁타버스 뮤직-darwin-arm64/왁타버스 뮤직.app"
+          path: "./out"

@@ -1,4 +1,5 @@
 import { MakerAppX } from "@electron-forge/maker-appx";
+import { MakerDMG } from "@electron-forge/maker-dmg";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import type { ForgeConfig } from "@electron-forge/shared-types";
 
@@ -64,6 +65,7 @@ const config: ForgeConfig = {
 
       assets: "./build/appx",
     }),
+    new MakerDMG({}),
   ],
   plugins: [
     new VitePlugin({

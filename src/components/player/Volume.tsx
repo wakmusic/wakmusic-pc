@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as SoundOffActivateSvg } from "@assets/icons/ic_20_sound_off_activate.svg";
@@ -9,6 +9,7 @@ import { ReactComponent as SoundOn100ActivateSvg } from "@assets/icons/ic_20_sou
 import { ReactComponent as SoundOn100DefaultSvg } from "@assets/icons/ic_20_sound_on_100_default.svg";
 import { ReactComponent as VolumeSvg } from "@assets/svgs/volume.svg";
 
+import { T8Medium } from "@components/Typography";
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import colors from "@constants/colors";
@@ -25,6 +26,9 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
 
   const [isHover, setIsHover] = useState(false);
   const [isActivate, setIsActivate] = useState(false);
+
+  const [indicatorPosition, setIndicatorPosition] = useState(0);
+  const sliderRef = useRef<HTMLInputElement>(null);
 
   function onClick() {
     if (isActivate) {
@@ -59,6 +63,17 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
     } else {
       onChange(value, false);
     }
+
+    updateIndicatorPosition(value);
+  }
+
+  function updateIndicatorPosition(value: number) {
+    if (!sliderRef?.current) {
+      return;
+    }
+
+    // 양쪽으로 slider thumb의 width 절반만큼씩 빼기
+    setIndicatorPosition((sliderRef.current.clientWidth - 12) * (value / 100));
   }
 
   function getVolumeIcon() {
@@ -101,7 +116,11 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
           onChange={onValueChange}
           onInput={onValueChange}
           onMouseUp={onHandleMouseUp}
+          ref={sliderRef}
         />
+        <VolumeIndicator $visible={isChanging} $left={indicatorPosition}>
+          <T8Medium>{isMute ? 0 : volume}</T8Medium>
+        </VolumeIndicator>
       </Popover>
     </Container>
   );
@@ -168,6 +187,27 @@ const Input = styled.input<{ value: number }>`
 
     cursor: pointer;
   }
+`;
+
+const VolumeIndicator = styled.div<{ $visible: boolean; $left: number }>`
+  height: 18px;
+  width: 24px;
+
+  position: absolute;
+  top: -16px;
+
+  // left + (padding - (width / 2) + (sliderWidth / 2))
+  left: ${({ $left }) => $left + 2}px;
+
+  align-items: center;
+  justify-content: center;
+
+  display: ${({ $visible }) => ($visible ? "inherit" : "none")};
+
+  border-radius: 4px;
+
+  background-color: ${colors.gray400};
+  color: ${colors.gray900};
 `;
 
 export default Volume;

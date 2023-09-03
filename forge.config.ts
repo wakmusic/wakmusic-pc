@@ -1,8 +1,6 @@
 import { MakerAppX } from "@electron-forge/maker-appx";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import type { ForgeConfig } from "@electron-forge/shared-types";
-import { readdir, unlink } from "fs/promises";
-import { join } from "path";
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -39,21 +37,21 @@ const config: ForgeConfig = {
       },
     ],
 
-    afterCopy: [
-      async (buildPath, _electronVersion, _platform, _arch, callback) => {
-        const localeDir = join(buildPath, "../../locales");
+    // afterCopy: [
+    //   async (buildPath, _electronVersion, _platform, _arch, callback) => {
+    //     const localeDir = join(buildPath, "../../locales");
 
-        const files = await readdir(localeDir);
+    //     const files = await readdir(localeDir);
 
-        for (const file of files) {
-          if (file !== "en-US.pak") {
-            await unlink(join(localeDir, file));
-          }
-        }
+    //     for (const file of files) {
+    //       if (file !== "en-US.pak") {
+    //         await unlink(join(localeDir, file));
+    //       }
+    //     }
 
-        callback();
-      },
-    ],
+    //     callback();
+    //   },
+    // ],
   },
   makers: [
     new MakerAppX({

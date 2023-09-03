@@ -120,6 +120,11 @@ ipcMain.on(IPCRenderer.WINDOW_MAX, () => {
 
 ipcMain.on(IPCRenderer.WINDOW_CLOSE, () => {
   const win = BrowserWindow.getFocusedWindow();
+  if (win) win.close();
+});
+
+ipcMain.on(IPCRenderer.WINDOW_HIDE, () => {
+  const win = BrowserWindow.getFocusedWindow();
   if (win) win.hide();
 });
 

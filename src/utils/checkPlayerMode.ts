@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
 import { useInterval } from "@hooks/interval";
+import { useVisualModeState } from "@hooks/player";
 
 import { ipcRenderer } from "./modules";
 
@@ -14,6 +15,7 @@ import { ipcRenderer } from "./modules";
 const CheckPlayerMode = (): null => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [visualMode, setVisualMode] = useVisualModeState();
 
   const callback = useCallback(
     (isSeparated: boolean) => {
@@ -24,8 +26,12 @@ const CheckPlayerMode = (): null => {
       } else if (!isSeparated && location.pathname === "/player") {
         navigate("/");
       }
+
+      if (isSeparated && location.pathname === "/player" && visualMode) {
+        setVisualMode(false);
+      }
     },
-    [location, navigate]
+    [location.pathname, navigate, setVisualMode, visualMode]
   );
 
   useEffect(() => {

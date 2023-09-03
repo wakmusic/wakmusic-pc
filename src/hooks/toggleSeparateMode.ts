@@ -9,13 +9,18 @@ import { useVisualModeState } from "./player";
 export const useToggleSeparateMode = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [visualMode] = useVisualModeState();
+  const [visualMode, setVisualMode] = useVisualModeState();
 
   const toggleSeparateMode = () => {
     if (!ipcRenderer) return;
 
     if (visualMode) {
-      ipcRenderer.send(IPCRenderer.WINDOW_MAX);
+      setVisualMode(false);
+
+      setTimeout(() => {
+        navigate("/player");
+        ipcRenderer?.send(IPCRenderer.MODE_SEPARATE);
+      }, 500);
     } else {
       if (location.pathname !== "/player") {
         navigate("/player");

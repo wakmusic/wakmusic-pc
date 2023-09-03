@@ -9,8 +9,10 @@ import { ReactComponent as RestoreSVG } from "@assets/icons/ic_20_restore.svg";
 
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
+import { useExitModal } from "@hooks/exitModal";
 import { useToggleSeparateMode } from "@hooks/toggleSeparateMode";
 
+import { isNull } from "@utils/isTypes";
 import { ipcRenderer } from "@utils/modules";
 
 import SimpleIconButton from "./SimpleIconButton";
@@ -23,6 +25,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
   const [isMax, setIsMax] = useState(false);
 
   const toggleSeparateMode = useToggleSeparateMode();
+  const openExitModal = useExitModal();
 
   useEffect(() => {
     ipcRenderer?.on(IPCMain.WINDOW_MAXIMIZED, () => {
@@ -38,6 +41,31 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
       ipcRenderer?.removeAllListeners(IPCMain.WINDOW_UNMAXIMIZED);
     };
   }, []);
+
+  const close = async () => {
+    let mode = localStorage.getItem("exitMode") as
+      | "close"
+      | "background"
+      | null;
+
+    if (isNull(mode)) {
+      mode = await openExitModal(true);
+    }
+
+    if (isNull(mode)) {
+      return;
+    } else {
+      localStorage.setItem("exitMode", mode);
+    }
+
+    if (mode === "close") {
+      ipcRenderer?.send(IPCRenderer.WINDOW_CLOSE);
+    }
+
+    if (mode === "background") {
+      ipcRenderer?.send(IPCRenderer.WINDOW_HIDE);
+    }
+  };
 
   if (!ipcRenderer) {
     return null;
@@ -61,12 +89,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
         }
         onClick={toggleSeparateMode}
       />
-      <SimpleIconButton
-        icon={CloseSVG}
-        onClick={() => {
-          ipcRenderer?.send(IPCRenderer.WINDOW_CLOSE);
-        }}
-      />
+      <SimpleIconButton icon={CloseSVG} onClick={close} />
     </Container>
   );
 };

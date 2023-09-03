@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { useAddListModal } from "@hooks/addListModal";
@@ -59,6 +60,8 @@ const MusicController = ({
 
   const openAddListModal = useAddListModal();
 
+  const location = useLocation();
+
   const addSongs = useCallback(
     (list: Song[], play?: boolean) => {
       // 재생목록에 노래 추가
@@ -95,15 +98,40 @@ const MusicController = ({
             <AddMusic
               key={key}
               onClick={async () => {
+                if (location.pathname === "/player") {
+                  const win = open(
+                    "/addList",
+                    "_blank",
+                    "width=440,height=500,frame=false"
+                  );
+
+                  if (win) {
+                    win.addEventListener("message", (e) => {
+                      if (e.data === "ready") {
+                        win.postMessage({
+                          type: "setSongs",
+                          data: selectedSongs,
+                        });
+                      }
+
+                      if (e.data === "resolve") {
+                        dispatchSelectedSongs([]);
+                      }
+                    });
+                  }
+
+                  return;
+                }
+
                 const success = await openAddListModal(selectedSongs);
 
                 if (success) {
                   // TODO: 플레이리스트 추가 성공
-
-                  dispatchSelectedSongs([]);
                 } else {
                   // TODO: 플레이리스트 추가 실패
                 }
+
+                dispatchSelectedSongs([]);
               }}
             />
           );
@@ -150,12 +178,13 @@ const MusicController = ({
       }
     },
     [
+      addSongs,
       dispatchSelectedSongs,
-      songs,
+      location.pathname,
+      onDelete,
       openAddListModal,
       selectedSongs,
-      addSongs,
-      onDelete,
+      songs,
     ]
   );
 

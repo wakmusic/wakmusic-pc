@@ -69,6 +69,16 @@ app.whenReady().then(() => {
     win.show();
   });
 
+  win.webContents.setWindowOpenHandler(() => {
+    return {
+      action: "allow",
+      overrideBrowserWindowOptions: {
+        frame: false,
+        icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
+      },
+    };
+  });
+
   win.on("maximize", () => {
     win.webContents.send(IPCMain.WINDOW_MAXIMIZED);
   });
@@ -109,6 +119,11 @@ ipcMain.on(IPCRenderer.WINDOW_MAX, () => {
 });
 
 ipcMain.on(IPCRenderer.WINDOW_CLOSE, () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (win) win.close();
+});
+
+ipcMain.on(IPCRenderer.WINDOW_HIDE, () => {
   const win = BrowserWindow.getFocusedWindow();
   if (win) win.hide();
 });

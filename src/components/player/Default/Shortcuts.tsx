@@ -1,4 +1,3 @@
-import { visualModeState } from "@state/player/atoms";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -23,7 +22,7 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
   const [lastFCall, setLastFCall] = useState(0);
 
   const [control] = useControlState();
-  const [, setVisualMode] = useVisualModeState();
+  const [visualModeState, setVisualMode] = useVisualModeState();
   const [isSpaceDisabled] = useIsSpaceDisabled();
 
   const setVolumeState = useSetVolumeState();
@@ -125,6 +124,7 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
       toggleIsRandomState,
       toggleRepeatTypeState,
       toggleSeparateMode,
+      visualModeState,
     ]
   );
 

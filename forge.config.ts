@@ -53,6 +53,20 @@ const config: ForgeConfig = {
     //     callback();
     //   },
     // ],
+
+    osxSign: {
+      optionsForFile: (_) => {
+        return {
+          entitlements: "./build/macos/entitlements.plist",
+        };
+      },
+    },
+    osxNotarize: {
+      tool: "notarytool",
+      appleId: process.env.VITE_APPLE_ID ?? "",
+      appleIdPassword: process.env.VITE_APPLE_PASSWORD ?? "",
+      teamId: process.env.VITE_APPLE_TEAM_ID ?? "",
+    },
   },
   makers: [
     new MakerAppX({

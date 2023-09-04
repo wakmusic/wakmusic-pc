@@ -38,7 +38,7 @@ jobs:
       - name: Sign binary
         uses: lando/code-sign-action@v2
         with:
-          file: out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app
+          file: out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app
           certificate-data: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           certificate-password: ${{ secrets.P12_PASSWORD }}
           apple-notary-user: ${{ secrets.APPLE_NOTARY_USER }}

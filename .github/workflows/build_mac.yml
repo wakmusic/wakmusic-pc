@@ -58,8 +58,11 @@ jobs:
       - name: Make App
         run: yarn package
 
+      # - name: Sign App
+      #   run: yarn electron-osx-sign --deep "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
+
       - name: Sign App
-        run: yarn electron-osx-sign --deep "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
+        run: codesign --sign 4C9ACD1C8A0C955DA214277A9308ACD6DA59A471 --deep --force --timestamp --options runtime --entitlements ./build/macos/entitlements.plist "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2

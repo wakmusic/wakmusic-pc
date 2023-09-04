@@ -24,8 +24,6 @@
     "@electron-forge/cli": "^6.3.0",
     "@electron-forge/maker-appx": "^6.4.1",
     "@electron-forge/maker-dmg": "^6.4.1",
-    "@electron-forge/maker-squirrel": "^6.3.0",
-    "@electron-forge/maker-zip": "^6.4.1",
     "@electron-forge/plugin-vite": "^6.3.0",
     "@electron/osx-sign": "^1.0.5",
     "@tanstack/react-virtual": "^3.0.0-alpha.0",

@@ -62,7 +62,7 @@ jobs:
       #   run: yarn electron-osx-sign --deep "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
 
       - name: Sign App
-        run: codesign --deep --force --verify --verbose --entitlements ./build/macos/entitlements.plist -s 4C9ACD1C8A0C955DA214277A9308ACD6DA59A471 "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
+        run: codesign -s 4C9ACD1C8A0C955DA214277A9308ACD6DA59A471 --timestamp=none "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2

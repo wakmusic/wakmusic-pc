@@ -21,7 +21,7 @@ jobs:
         run: |
           # create variables
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
           # import certificate and provisioning profile from secrets
@@ -56,10 +56,10 @@ jobs:
           DOTENV: ${{ secrets.DOTENV }}
 
       - name: Make App
-        run: yarn make
+        run: yarn package
 
-      # - name: Sign App
-      #   run: yarn electron-osx-sign --deep "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
+      - name: Sign App
+        run: yarn electron-osx-sign --deep "./out/왁타버스 뮤직-darwin-x64/왁타버스 뮤직.app"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2

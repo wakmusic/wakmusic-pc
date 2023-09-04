@@ -5,7 +5,7 @@ import type { ForgeConfig } from "@electron-forge/shared-types";
 
 const config: ForgeConfig = {
   packagerConfig: {
-    name: "왁타버스 뮤직",
+    name: "wakmu",
     icon: "public/favicon.ico",
     asar: true,
 

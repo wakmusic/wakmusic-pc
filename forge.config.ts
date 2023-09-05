@@ -1,7 +1,9 @@
 import { MakerAppX } from "@electron-forge/maker-appx";
-import { MakerDMG } from "@electron-forge/maker-dmg";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import type { ForgeConfig } from "@electron-forge/shared-types";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -88,14 +90,42 @@ const config: ForgeConfig = {
 
       assets: "./build/appx",
     }),
-    new MakerDMG({
-      additionalDMGOptions: {
-        "code-sign": {
-          "signing-identity": process.env.APPLE_IDENTITY ?? "",
+    {
+      name: "@electron-forge/maker-dmg",
+      config: {
+        additionalDMGOptions: {
+          window: {
+            size: {
+              height: 634,
+              width: 960,
+            },
+          },
+          "code-sign": {
+            "signing-identity": process.env.APPLE_IDENTITY ?? "",
+          },
+        },
+        background: "./build/background.png",
+        icon: "./build/appicon.icns",
+        iconSize: 184,
+        contents: () => {
+          return [
+            {
+              type: "file",
+              path: `${process.cwd()}/out/wakmusic-pc-darwin-arm64/wakmusic-pc.app`,
+              x: 292,
+              y: 290,
+            },
+            {
+              name: "Applications",
+              type: "link",
+              path: "/Applications",
+              x: 668,
+              y: 290,
+            },
+          ];
         },
       },
-      icon: "./build/appicon.icns",
-    }),
+    },
   ],
   plugins: [
     new VitePlugin({

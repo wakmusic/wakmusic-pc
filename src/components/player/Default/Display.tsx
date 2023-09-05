@@ -1,6 +1,6 @@
 import { motion, useAnimation } from "framer-motion";
 import { useCallback, useEffect, useMemo } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   buttonVariants,
   thumbnailVariants,
@@ -105,9 +105,13 @@ const Display = ({}: DisplayProps) => {
                 onClick={() => navigate(-1)}
               />
             ) : (
-              <Link to="/player/playlist">
-                <SimpleIconButton icon={PlayListSVG} />
-              </Link>
+              <SimpleIconButton
+                icon={PlayListSVG}
+                onClick={() => {
+                  navigate("/player/playlist");
+                  ipcRenderer?.send("mode:default");
+                }}
+              />
             )}
           </PlaylistButtonContainer>
 

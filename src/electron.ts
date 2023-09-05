@@ -97,6 +97,13 @@ app.on("open-url", function (_, url) {
 });
 
 app.on("second-instance", (_, argv, __) => {
+  const wins = BrowserWindow.getAllWindows();
+
+  for (const win of wins) {
+    win.show();
+    win.focus();
+  }
+
   if (process.platform === "win32") {
     schemeHandler(argv[argv.length - 1]);
   }

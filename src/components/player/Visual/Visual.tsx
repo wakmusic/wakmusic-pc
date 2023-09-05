@@ -57,6 +57,10 @@ const Visual = ({}: VisualProps) => {
     }
   }, [controls, visualMode]);
 
+  if (!visualMode) {
+    return null;
+  }
+
   return (
     <Container
       ref={ref}

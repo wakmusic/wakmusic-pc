@@ -113,7 +113,6 @@ const template: MenuItemConstructorOptions[] = [
 export const initTray = () => {
   const image = nativeImage.createFromPath(join(__dirname, "appicon.png"));
   const trayIcon = image.resize({ width: 16 });
-  trayIcon.setTemplateImage(true);
   const tray = new Tray(trayIcon);
 
   const contextMenu = Menu.buildFromTemplate(template);

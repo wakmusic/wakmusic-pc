@@ -111,9 +111,10 @@ const template: MenuItemConstructorOptions[] = [
 ];
 
 export const initTray = () => {
-  const tray = new Tray(
-    nativeImage.createFromPath(join(__dirname, "/favicon.ico"))
-  );
+  const image = nativeImage.createFromPath(join(__dirname, "appicon.png"));
+  const trayIcon = image.resize({ width: 16 });
+  trayIcon.setTemplateImage(true);
+  const tray = new Tray(trayIcon);
 
   const contextMenu = Menu.buildFromTemplate(template);
 

@@ -20,7 +20,9 @@ const getWindow = (): BrowserWindow | false => {
   return win;
 };
 
-const openWindow = () => {
+const openWindow = (type: "click" | "menu") => () => {
+  if (type === "click" && process.platform === "darwin") return;
+
   const wins = BrowserWindow.getAllWindows();
 
   for (const win of wins) {
@@ -80,7 +82,7 @@ const nextSong = () => {
 const template: MenuItemConstructorOptions[] = [
   {
     label: "열기",
-    click: openWindow,
+    click: openWindow("menu"),
   },
   {
     label: "로그인",
@@ -111,13 +113,13 @@ const template: MenuItemConstructorOptions[] = [
 ];
 
 export const initTray = () => {
-  const tray = new Tray(
-    nativeImage.createFromPath(join(__dirname, "/favicon.ico"))
-  );
+  const image = nativeImage.createFromPath(join(__dirname, "appicon.png"));
+  const trayIcon = image.resize({ width: 16 });
+  const tray = new Tray(trayIcon);
 
   const contextMenu = Menu.buildFromTemplate(template);
 
-  tray.on("click", openWindow);
+  tray.on("click", openWindow("click"));
   tray.setContextMenu(contextMenu);
   tray.setToolTip("왁타버스 뮤직");
 

@@ -92,6 +92,15 @@ app.whenReady().then(() => {
   });
 });
 
+app.on("activate", () => {
+  const wins = BrowserWindow.getAllWindows();
+
+  for (const win of wins) {
+    win.show();
+    win.focus();
+  }
+});
+
 app.on("open-url", function (_, url) {
   schemeHandler(url);
 });

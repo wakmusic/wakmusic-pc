@@ -36,22 +36,25 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
         ...prev,
         playlist: changePlaylist,
         current: changePlaylist.findIndex(
-          (song) => song.songId === currentSong.songId
+          (song) => song.songId === currentSong?.songId
         ),
       }));
     }
-  }, [isEdit, changePlaylist, setPlayingInfo, currentSong.songId]);
+  }, [isEdit, changePlaylist, setPlayingInfo, currentSong?.songId]);
 
   const dispatchPlayerListInfo = async (songs: Song[]) => {
-    const removedSongs = playingInfo.playlist.filter((playerSong) =>
-      Boolean(songs.find((song) => song.songId === playerSong.songId))
+    const deletedSongs = playingInfo.playlist.filter(
+      (song) => !songs.includes(song)
     );
 
-    if (removedSongs.length !== playingInfo.playlist.length) {
-      setChangePlaylist(removedSongs);
-    } else {
-      setChangePlaylist(songs);
+    if (deletedSongs.length > 0) {
+      setPlayingInfo((prev) => ({
+        ...prev,
+        playlist: prev.playlist.filter((song) => !deletedSongs.includes(song)),
+      }));
     }
+
+    setChangePlaylist(songs);
   };
 
   return (

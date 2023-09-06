@@ -93,23 +93,22 @@ const ArtistInfo = ({
               </DefaultScroll>
             </DescriptionContainer>
           ) : (
-            <>
-              <EnglishName>{capitalize(artist.artistId)}</EnglishName>
-
-              <motion.div
-                animate={controls}
-                initial="square"
-                variants={hiddenVariants}
-              >
-                <GroupText>
-                  {artist.group.kr !== "우왁굳" && artist.group.kr}
-                  {artist.graduated && " · 졸업"}
-                </GroupText>
-
-                <Description>{artist.title.web}</Description>
-              </motion.div>
-            </>
+            <EnglishName>{capitalize(artist.artistId)}</EnglishName>
           )}
+
+          <motion.div
+            animate={controls}
+            initial="square"
+            variants={hiddenVariants}
+            style={{ visibility: descriptionOpen ? "hidden" : "visible" }}
+          >
+            <GroupText>
+              {artist.group.kr !== "우왁굳" && artist.group.kr}
+              {artist.graduated && " · 졸업"}
+            </GroupText>
+
+            <Description>{artist.title.web}</Description>
+          </motion.div>
         </Content>
 
         <DocumentButton

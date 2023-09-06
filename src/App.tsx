@@ -27,7 +27,7 @@ import Artists from "@pages/artists/Artists";
 import Chart from "@pages/chart/Chart";
 import Faq from "@pages/faq/Faq";
 import Index from "@pages/index/Index";
-import MyPage from "@pages/mypage/MyPage";
+import MyWakmu from "@pages/mywakmu/MyWakmu";
 import New from "@pages/new/New";
 import Notice from "@pages/notice/Notice";
 import PlayerPlaylist from "@pages/playerPlaylist/PlayerPlaylist";
@@ -82,17 +82,18 @@ export class App extends Component<AppProps> {
                   <Route path="/faq" element={<Faq />} />
                   <Route path="/notice" element={<Notice />} />
 
-                  <Route path="/mypage" element={<MyPage />} />
-                  <Route path="/support" element={<MyPage />} />
-                  <Route path="/about" element={<MyPage />} />
+                  <Route path="/mywakmu" element={<MyWakmu />} />
+                  <Route path="/support" element={<MyWakmu />} />
+                  <Route path="/about" element={<MyWakmu />} />
 
                   <Route path="/player" element={null} />
 
                   <Route path="/player/playlist" element={<PlayerPlaylist />} />
+
+                  <Route path="*" element={<NotFound />} />
                 </Route>
 
                 <Route path="/addList" element={<AddListModal popup />} />
-                <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
 

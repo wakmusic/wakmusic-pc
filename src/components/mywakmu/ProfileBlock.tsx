@@ -1,29 +1,16 @@
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { removeUser, setProfileImage, setUsername } from "@apis/user";
 
-import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
 import { ReactComponent as EditSVG } from "@assets/icons/ic_24_edit.svg";
 import { ReactComponent as SetSVG } from "@assets/icons/ic_30_set.svg";
+import { ReactComponent as ErrorIcon } from "@assets/icons/ic_56_contents_info.svg";
 
-import {
-  T4Bold,
-  T4Medium,
-  T5Medium,
-  T6Medium,
-  T7Medium,
-} from "@components/Typography";
-import ContactModal from "@components/modals/ContactModal";
-import ServiceInfoModal from "@components/modals/ServiceInfoModal";
-import Block from "@components/mypage/Block";
-
-import PageLayout from "@layouts/PageLayout";
+import { T4Bold, T4Medium, T5Medium, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 import { IPCRenderer } from "@constants/ipc";
-import { blocks } from "@constants/myPage";
 import platforms from "@constants/platforms";
 
 import { useConfirmModal } from "@hooks/confirmModal";
@@ -32,14 +19,13 @@ import { useSelectProfileModal } from "@hooks/profileModal";
 import { useSetUsernameModal } from "@hooks/setUsernameModal";
 import { useUserState } from "@hooks/user";
 
-import { isNull } from "@utils/isTypes";
+import { isNil } from "@utils/isTypes";
 import { ipcRenderer } from "@utils/modules";
 import { getProfileImg } from "@utils/staticUtill";
 
-interface MyPageProps {}
+interface ProfileBlockProps {}
 
-const MyPage = ({}: MyPageProps) => {
-  const location = useLocation();
+const ProfileBlock = ({}: ProfileBlockProps) => {
   const navigate = useNavigate();
 
   const [user, setUser] = useUserState();
@@ -47,10 +33,6 @@ const MyPage = ({}: MyPageProps) => {
   const selectProfileModal = useSelectProfileModal();
   const setUsernameModal = useSetUsernameModal();
   const confirmModal = useConfirmModal();
-
-  useEffect(() => {
-    if (isNull(user)) loginModalOpener();
-  }, [user, loginModalOpener]);
 
   const setProfileHandler = async () => {
     if (!user) return;
@@ -80,76 +62,55 @@ const MyPage = ({}: MyPageProps) => {
     if (res) {
       await removeUser();
 
-      if (ipcRenderer) ipcRenderer.send(IPCRenderer.USER_LOGOUT);
+      if (ipcRenderer) {
+        ipcRenderer.send(IPCRenderer.USER_LOGOUT);
+      }
 
       navigate("/");
       setUser(undefined);
     }
   };
 
-  if (!user) return <PageLayout />;
+  if (isNil(user)) {
+    return (
+      <Container>
+        <NoLoginContainer>
+          <ErrorIcon />
+          <T6Medium color={colors.gray900}>로그인을 해주세요.</T6Medium>
+          <LoginButton onClick={() => loginModalOpener()}>
+            <T6Medium color={colors.blueGray400}>로그인</T6Medium>
+          </LoginButton>
+        </NoLoginContainer>
+      </Container>
+    );
+  }
 
   return (
-    <PageLayout>
-      {location.pathname === "/about" && <ServiceInfoModal />}
-      {location.pathname === "/support" && <ContactModal />}
-
-      <Container>
-        <ProfileBlock>
-          <FlexDiv>
-            <ImageContainer>
-              <ProfileImage src={getProfileImg(user.profile)} />
-              <Setting onClick={setProfileHandler} />
-            </ImageContainer>
-            <InfoContainer>
-              <UserContainer>
-                <Username>{user.name}</Username>
-                <Designation>님</Designation>
-                <IconCotainer onClick={setUsernameHandler}>
-                  <EditSVG />
-                </IconCotainer>
-              </UserContainer>
-              <Via>{platforms[user.platform]}로 로그인 중</Via>
-            </InfoContainer>
-          </FlexDiv>
-          <QuitButton onClick={quitHandler}>
-            <T6Medium>회원탈퇴</T6Medium>
-          </QuitButton>
-        </ProfileBlock>
-        {blocks.map((block, index) => (
-          <Block
-            key={index}
-            title={block.title}
-            description={block.description}
-            endPoint={block.endPoint}
-            svg={<block.svg />}
-          />
-        ))}
-      </Container>
-      <Buanebi>
-        <DotSVG />
-        <T7Medium>
-          왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라
-          내가 비빈 거다)라는 모토를 가슴에 새기고 일하고 있습니다.
-        </T7Medium>
-      </Buanebi>
-    </PageLayout>
+    <Container>
+      <FlexDiv>
+        <ImageContainer>
+          <ProfileImage src={getProfileImg(user.profile)} />
+          <Setting onClick={setProfileHandler} />
+        </ImageContainer>
+        <InfoContainer>
+          <UserContainer>
+            <Username>{user.name}</Username>
+            <Designation>님</Designation>
+            <IconCotainer onClick={setUsernameHandler}>
+              <EditSVG />
+            </IconCotainer>
+          </UserContainer>
+          <Via>{platforms[user.platform]}로 로그인 중</Via>
+        </InfoContainer>
+      </FlexDiv>
+      <QuitButton onClick={quitHandler}>
+        <T6Medium>회원탈퇴</T6Medium>
+      </QuitButton>
+    </Container>
   );
 };
 
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: 220px 220px 282px;
-  grid-template-rows: 180px 180px;
-  gap: 16px;
-
-  width: 754px;
-  height: 376px;
-
-  margin-top: 20px;
-`;
-
-const ProfileBlock = styled.div`
   border-radius: 15px;
   border: 1px solid ${colors.blueGray25};
   background: ${colors.whiteAlpha40};
@@ -158,6 +119,30 @@ const ProfileBlock = styled.div`
   grid-column: 1/3;
 
   padding: 20px 24px;
+`;
+
+const NoLoginContainer = styled.div`
+  display: flex;
+
+  align-items: center;
+
+  flex-direction: column;
+`;
+
+const LoginButton = styled.div`
+  margin-top: 16px;
+
+  width: 75px;
+  height: 28px;
+
+  border-radius: 6px;
+  border: 1px solid ${colors.blueGray200};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
 `;
 
 const FlexDiv = styled.div`
@@ -253,17 +238,4 @@ const QuitButton = styled.div`
   }
 `;
 
-const Buanebi = styled.div`
-  color: ${colors.blueGray400};
-
-  display: flex;
-  align-items: center;
-
-  margin-top: 16px;
-
-  & svg {
-    float: left;
-  }
-`;
-
-export default MyPage;
+export default ProfileBlock;

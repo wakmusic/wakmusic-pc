@@ -21,7 +21,7 @@ const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
   const commitHash = import.meta.env.VITE_COMMIT_HASH ?? "dev";
 
   return (
-    <ModalOverlay onClick={() => navigate("/mypage")}>
+    <ModalOverlay onClick={() => navigate("/mywakmu")}>
       <Container onClick={(event) => event.stopPropagation()}>
         <AppIcon />
         <Title>왁타버스 뮤직</Title>

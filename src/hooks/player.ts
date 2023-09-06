@@ -324,11 +324,24 @@ export const usePlaySong = () => {
       return;
     }
 
-    setPlayingInfo((prev) => ({
-      ...prev,
-      current: prev.playlist.length,
-      playlist: [...prev.playlist, song],
-    }));
+    setPlayingInfo((prev) => {
+      const index = prev.playlist.findIndex(
+        (item) => item.songId === song.songId
+      );
+
+      if (index !== -1) {
+        return {
+          ...prev,
+          current: index,
+        };
+      }
+
+      return {
+        ...prev,
+        current: prev.playlist.length,
+        playlist: [...prev.playlist, song],
+      };
+    });
   };
 };
 

@@ -67,7 +67,7 @@ const MusicController = ({
       // 재생목록에 노래 추가
       setPlayingInfo((prev) => ({
         playlist: [...prev.playlist, ...list],
-        history: [],
+        original: [],
         current: play ? prev.playlist.length : prev.current,
       }));
 

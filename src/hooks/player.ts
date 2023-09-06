@@ -327,7 +327,7 @@ export const usePlaySongs = () => {
 
     setPlayingInfo({
       playlist: _songs,
-      original: _songs,
+      original: [],
       current: 0,
     });
   };

@@ -133,13 +133,6 @@ export const playingInfoState = atom<PlayingInfoStateType>({
         }
       });
     },
-
-    // Logging
-    ({ onSet }) => {
-      onSet((value) => {
-        console.log("playingInfoState", value);
-      });
-    },
   ],
 });
 

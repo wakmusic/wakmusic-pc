@@ -9,6 +9,8 @@ import { T4Bold, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { isUndefined } from "@utils/isTypes";
+
 import Skeleton from "./Skeleton";
 
 interface RankProps {
@@ -19,7 +21,9 @@ interface RankProps {
 }
 
 const RankInfo = ({ now, last }: RankProps) => {
-  if (!last) return <ZeroSVG />;
+  if (isUndefined(last)) {
+    return <ZeroSVG />;
+  }
 
   // 새로 올라온 곡
   if (last === 0) {

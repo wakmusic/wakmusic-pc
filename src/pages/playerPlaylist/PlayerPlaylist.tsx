@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { T4Medium } from "@components/Typography/Medium";
@@ -10,12 +10,14 @@ import MusicController from "@components/globals/musicControllers/MusicControlle
 import PageContainer from "@layouts/PageContainer";
 import PageLayout from "@layouts/PageLayout";
 
-import { usePlayingInfoState } from "@hooks/player";
+import { useCurrentSongState, usePlayingInfoState } from "@hooks/player";
 import { useSelectSongs } from "@hooks/selectSongs";
 
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
+
+import { isNull } from "@utils/isTypes";
 
 interface PlayerPlaylistProps {}
 
@@ -24,15 +26,31 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
   const { selected, selectCallback, selectedIncludes } = useSelectSongs();
 
+  const [changePlaylist, setChangePlaylist] = useState<Song[] | null>(null);
+
+  const currentSong = useCurrentSongState();
+
+  useEffect(() => {
+    if (!isEdit && !isNull(changePlaylist)) {
+      setPlayingInfo((prev) => ({
+        ...prev,
+        playlist: changePlaylist,
+        current: changePlaylist.findIndex(
+          (song) => song.songId === currentSong.songId
+        ),
+      }));
+    }
+  }, [isEdit, changePlaylist, setPlayingInfo, currentSong.songId]);
+
   const dispatchPlayerListInfo = async (songs: Song[]) => {
     const removedSongs = playingInfo.playlist.filter((playerSong) =>
       Boolean(songs.find((song) => song.songId === playerSong.songId))
     );
 
     if (removedSongs.length !== playingInfo.playlist.length) {
-      setPlayingInfo({ ...playingInfo, playlist: removedSongs });
+      setChangePlaylist(removedSongs);
     } else {
-      setPlayingInfo({ ...playingInfo, playlist: songs });
+      setChangePlaylist(songs);
     }
   };
 

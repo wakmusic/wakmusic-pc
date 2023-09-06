@@ -36,7 +36,6 @@ const config: ForgeConfig = {
 
     // afterCopy: [
     //   async (buildPath, _electronVersion, platform, _arch, callback) => {
-    //     if (platform == "win32")
     //     const localeDir = join(buildPath, "../../locales");
 
     //     const files = await readdir(localeDir);

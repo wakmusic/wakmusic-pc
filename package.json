@@ -18,8 +18,7 @@
     "check:eslint": "yarn lint"
   },
   "dependencies": {
-    "@xhayper/discord-rpc": "^1.0.21",
-    "dotenv": "^16.3.1"
+    "@xhayper/discord-rpc": "^1.0.21"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.3.0",
@@ -40,6 +39,7 @@
     "axios": "^1.4.0",
     "babel-plugin-styled-components": "^2.1.4",
     "concurrently": "^8.2.0",
+    "dotenv": "^16.3.1",
     "electron": "^25.1.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",

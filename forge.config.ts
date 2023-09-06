@@ -7,7 +7,7 @@ dotenv.config();
 
 const config: ForgeConfig = {
   packagerConfig: {
-    name: "왁타버스 뮤직",
+    name: "Wakmusic",
     icon: "./build/appicon",
     asar: true,
     appBundleId: "com.wakmusic-pc",
@@ -35,7 +35,8 @@ const config: ForgeConfig = {
     ],
 
     // afterCopy: [
-    //   async (buildPath, _electronVersion, _platform, _arch, callback) => {
+    //   async (buildPath, _electronVersion, platform, _arch, callback) => {
+    //     if (platform == "win32")
     //     const localeDir = join(buildPath, "../../locales");
 
     //     const files = await readdir(localeDir);
@@ -57,27 +58,29 @@ const config: ForgeConfig = {
       },
     ],
 
-    osxSign: {
-      type: "distribution",
-      identityValidation: true,
-      identity: process.env.APPLE_IDENTITY,
-      provisioningProfile: process.env.PP_PATH,
-      optionsForFile: (_) => {
-        return {
-          hardenedRuntime: true,
-          entitlements: "./build/macos/entitlements.plist",
-        };
-      },
-      strictVerify: true,
-      preAutoEntitlements: false,
-      preEmbedProvisioningProfile: false,
-    },
-    osxNotarize: {
-      tool: "notarytool",
-      appleId: process.env.APPLE_ID ?? "",
-      appleIdPassword: process.env.APPLE_PASSWORD ?? "",
-      teamId: process.env.APPLE_TEAM_ID ?? "",
-    },
+    // osxSign: {
+    //   type: "distribution",
+    //   identityValidation: true,
+    //   identity: process.env.APPLE_IDENTITY,
+    //   provisioningProfile: process.env.PP_PATH,
+    //   optionsForFile: (_) => {
+    //     return {
+    //       hardenedRuntime: true,
+    //       entitlements: "./build/macos/entitlements.plist",
+    //     };
+    //   },
+    //   strictVerify: true,
+    //   preAutoEntitlements: false,
+    //   preEmbedProvisioningProfile: false,
+    // },
+    // osxNotarize: {
+    //   tool: "notarytool",
+    //   appleId: process.env.APPLE_ID ?? "",
+    //   appleIdPassword: process.env.APPLE_PASSWORD ?? "",
+    //   teamId: process.env.APPLE_TEAM_ID ?? "",
+    // },
+
+    extraResource: "./build/macos/ko.lproj/",
   },
   rebuildConfig: {},
   makers: [

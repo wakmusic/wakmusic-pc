@@ -88,10 +88,38 @@ export const useToggleIsRandomState = () => {
   const setPlayingInfo = useSetRecoilState(playingInfoState);
 
   return () => {
-    setPlayingInfo((prev) => ({
-      ...prev,
-      history: [],
-    }));
+    setPlayingInfo((prev) => {
+      let newPlaylist;
+      let current;
+
+      if (!state.isRandom) {
+        const shuffledPlaylist = [...prev.original].sort(
+          () => Math.random() - 0.5
+        );
+
+        const movedCurrent = shuffledPlaylist.findIndex(
+          (item) => item.songId === prev.playlist[prev.current].songId
+        );
+
+        current = 0;
+        newPlaylist = [
+          shuffledPlaylist[movedCurrent],
+          ...shuffledPlaylist.slice(0, movedCurrent),
+          ...shuffledPlaylist.slice(movedCurrent + 1),
+        ];
+      } else {
+        newPlaylist = [...prev.original];
+        current = newPlaylist.findIndex(
+          (item) => item.songId === prev.playlist[prev.current].songId
+        );
+      }
+
+      return {
+        ...prev,
+        playlist: newPlaylist,
+        current,
+      };
+    });
 
     setState({ ...state, isRandom: !state.isRandom });
   };
@@ -161,44 +189,7 @@ export const usePrevSong = () => {
       return;
     }
 
-    let prevIndex = 0;
-
-    if (controlState.isRandom) {
-      const getSongIndex = (): number => {
-        if (playingInfo.history.length === 0) {
-          return 0;
-        }
-
-        let minus = 1;
-        let songId = playingInfo.history[playingInfo.history.length - minus];
-
-        if (songId === playingInfo.playlist[playingInfo.current].songId) {
-          songId = playingInfo.history[playingInfo.history.length - 2];
-          minus = 2;
-        }
-
-        const songIndex = playingInfo.playlist.findIndex(
-          (song) => song.songId === songId
-        );
-
-        if (songId) {
-          setPlayingInfo((prev) => ({
-            ...prev,
-            history: prev.history.slice(0, prev.history.length - minus),
-          }));
-        }
-
-        if (!songIndex) {
-          return getSongIndex();
-        }
-
-        return songIndex;
-      };
-
-      prevIndex = getSongIndex();
-    } else {
-      prevIndex = playingInfo.current - 1;
-    }
+    let prevIndex = playingInfo.current - 1;
 
     if (prevIndex < 0) {
       prevIndex = 0;
@@ -240,23 +231,6 @@ export const useNextSong = () => {
     const { control, playingInfo } = stateRef.current;
 
     setControl((prev) => ({ ...prev, isPlaying: false }));
-
-    if (control.isRandom && control.repeatType !== RepeatType.One) {
-      const randomIndex = Math.floor(
-        Math.random() * playingInfo.playlist.length
-      );
-
-      setPlayingInfo((prev) => ({
-        ...prev,
-        current: randomIndex,
-        history: [
-          ...(prev.history ?? []),
-          prev.playlist[randomIndex].songId,
-        ].slice(-50),
-      }));
-
-      return;
-    }
 
     switch (control.repeatType) {
       case RepeatType.Off: {
@@ -324,11 +298,24 @@ export const usePlaySong = () => {
       return;
     }
 
-    setPlayingInfo((prev) => ({
-      ...prev,
-      current: prev.playlist.length,
-      playlist: [...prev.playlist, song],
-    }));
+    setPlayingInfo((prev) => {
+      const index = prev.playlist.findIndex(
+        (item) => item.songId === song.songId
+      );
+
+      if (index !== -1) {
+        return {
+          ...prev,
+          current: index,
+        };
+      }
+
+      return {
+        ...prev,
+        current: prev.playlist.length,
+        playlist: [...prev.playlist, song],
+      };
+    });
   };
 };
 
@@ -340,7 +327,7 @@ export const usePlaySongs = () => {
 
     setPlayingInfo({
       playlist: _songs,
-      history: [],
+      original: [],
       current: 0,
     });
   };

@@ -7,9 +7,11 @@ dotenv.config();
 
 const config: ForgeConfig = {
   packagerConfig: {
+    name: "왁타버스 뮤직",
     icon: "./build/appicon",
     asar: true,
     appBundleId: "com.wakmusic-pc",
+    // helperBundleId: "com.wakmusic-pc.helper",
 
     ignore: [
       /.github/,
@@ -56,27 +58,27 @@ const config: ForgeConfig = {
       },
     ],
 
-    osxSign: {
-      type: "distribution",
-      identityValidation: true,
-      identity: process.env.APPLE_IDENTITY,
-      provisioningProfile: process.env.PP_PATH,
-      optionsForFile: (_) => {
-        return {
-          hardenedRuntime: true,
-          entitlements: "./build/macos/entitlements.plist",
-        };
-      },
-      strictVerify: true,
-      preAutoEntitlements: false,
-      preEmbedProvisioningProfile: false,
-    },
-    osxNotarize: {
-      tool: "notarytool",
-      appleId: process.env.APPLE_ID ?? "",
-      appleIdPassword: process.env.APPLE_PASSWORD ?? "",
-      teamId: process.env.APPLE_TEAM_ID ?? "",
-    },
+    // osxSign: {
+    //   type: "distribution",
+    //   identityValidation: true,
+    //   identity: process.env.APPLE_IDENTITY,
+    //   provisioningProfile: process.env.PP_PATH,
+    //   optionsForFile: (_) => {
+    //     return {
+    //       hardenedRuntime: true,
+    //       entitlements: "./build/macos/entitlements.plist",
+    //     };
+    //   },
+    //   strictVerify: true,
+    //   preAutoEntitlements: false,
+    //   preEmbedProvisioningProfile: false,
+    // },
+    // osxNotarize: {
+    //   tool: "notarytool",
+    //   appleId: process.env.APPLE_ID ?? "",
+    //   appleIdPassword: process.env.APPLE_PASSWORD ?? "",
+    //   teamId: process.env.APPLE_TEAM_ID ?? "",
+    // },
   },
   rebuildConfig: {},
   makers: [

@@ -17,8 +17,8 @@ export const getLyrics = async (song: Song): Promise<LyricType[] | null> => {
 
     return data.map((lyric: LyricType) => ({
       ...lyric,
-      start: lyric.start - song.start + 0.3,
-      end: lyric.end - song.start + 0.3,
+      start: lyric.start - song.start - 0.3,
+      end: lyric.end - song.start - 0.3,
     }));
   } catch (err) {
     return null;

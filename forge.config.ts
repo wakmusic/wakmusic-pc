@@ -104,7 +104,7 @@ const config: ForgeConfig = {
             "signing-identity": process.env.APPLE_IDENTITY ?? "",
           },
         },
-        background: "./build/background.png",
+        background: "./macos/build/background.png",
         icon: "./build/appicon.icns",
         iconSize: 184,
         contents: () => {

@@ -95,6 +95,8 @@ const User = ({}: UserProps) => {
         <Text>MY 왁뮤</Text>
       </Container>
     );
+
+  return null;
 };
 
 const Container = styled.div`

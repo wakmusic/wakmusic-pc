@@ -43,14 +43,22 @@ const User = ({}: UserProps) => {
   };
 
   const goMypage = () => {
-    navigate("/mypage");
+    navigate("/mywakmu");
   };
 
-  if (user && ["/mypage", "/about", "/support"].includes(location.pathname)) {
+  const clickUserButton = (e: React.MouseEvent<Element, MouseEvent>) => {
+    if (user) {
+      logout(e);
+    } else {
+      loginModalOpener();
+    }
+  };
+
+  if (["/mywakmu", "/about", "/support"].includes(location.pathname)) {
     return (
       <>
-        <Container onClick={logout}>
-          <Text>로그아웃</Text>
+        <Container onClick={clickUserButton}>
+          <Text>{user ? "로그아웃" : "로그인 하기"}</Text>
         </Container>
 
         <Container
@@ -81,11 +89,12 @@ const User = ({}: UserProps) => {
     );
   }
 
-  return (
-    <Container onClick={() => loginModalOpener()}>
-      <Text>로그인 하기</Text>
-    </Container>
-  );
+  if (!user)
+    return (
+      <Container onClick={() => navigate("/mywakmu")}>
+        <Text>MY 왁뮤</Text>
+      </Container>
+    );
 };
 
 const Container = styled.div`

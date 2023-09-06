@@ -110,9 +110,9 @@ const Playlist = ({}: PlaylistProps) => {
     );
 
     setPlayingInfo((prev) => ({
+      ...prev,
       playlist: playlistData,
       current: playlistData.findIndex((song) => song.isPlaying),
-      history: prev.history,
     }));
     setLastSelected(null);
     setSelected([]);
@@ -125,9 +125,9 @@ const Playlist = ({}: PlaylistProps) => {
       );
 
       setPlayingInfo((prev) => ({
+        ...prev,
         playlist: newSongs,
         current: Math.max(0, newCurrent),
-        history: prev.history,
       }));
     },
     [playingInfo, setPlayingInfo]

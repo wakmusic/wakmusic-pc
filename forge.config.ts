@@ -7,6 +7,7 @@ dotenv.config();
 
 const config: ForgeConfig = {
   packagerConfig: {
+    name: "Wakmusic",
     icon: "./build/appicon",
     asar: true,
     appBundleId: "com.wakmusic-pc",
@@ -34,7 +35,7 @@ const config: ForgeConfig = {
     ],
 
     // afterCopy: [
-    //   async (buildPath, _electronVersion, _platform, _arch, callback) => {
+    //   async (buildPath, _electronVersion, platform, _arch, callback) => {
     //     const localeDir = join(buildPath, "../../locales");
 
     //     const files = await readdir(localeDir);
@@ -77,6 +78,8 @@ const config: ForgeConfig = {
       appleIdPassword: process.env.APPLE_PASSWORD ?? "",
       teamId: process.env.APPLE_TEAM_ID ?? "",
     },
+
+    extraResource: "./build/macos/ko.lproj/",
   },
   rebuildConfig: {},
   makers: [

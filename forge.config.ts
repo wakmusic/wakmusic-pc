@@ -126,6 +126,10 @@ const config: ForgeConfig = {
         },
       },
     },
+    {
+      name: "@electron-forge/maker-zip",
+      config: {},
+    },
   ],
   plugins: [
     new VitePlugin({
@@ -142,6 +146,19 @@ const config: ForgeConfig = {
         },
       ],
     }),
+  ],
+  publishers: [
+    {
+      name: "@electron-forge/publisher-github",
+      config: {
+        repository: {
+          owner: "wakmusic",
+          name: "wakmusic-pc",
+        },
+        authToken: process.env.GITHUB_TOKEN,
+        prerelease: true,
+      },
+    },
   ],
 };
 

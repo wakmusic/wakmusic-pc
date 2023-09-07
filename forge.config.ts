@@ -1,6 +1,8 @@
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import type { ForgeConfig } from "@electron-forge/shared-types";
 import * as dotenv from "dotenv";
+import { readdir, rmdir, unlink } from "fs/promises";
+import { join } from "path";
 
 dotenv.config();
 

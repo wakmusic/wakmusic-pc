@@ -322,13 +322,36 @@ export const usePlaySong = () => {
 export const usePlaySongs = () => {
   const setPlayingInfo = useSetRecoilState(playingInfoState);
 
-  return (songs: Song[], shuffle = false) => {
-    const _songs = shuffle ? [...songs].sort(() => Math.random() - 0.5) : songs;
+  return (songs: Song[], shuffle = false, play = true) => {
+    const addSongs = shuffle
+      ? [...songs].sort(() => Math.random() - 0.5)
+      : songs;
 
-    setPlayingInfo({
-      playlist: _songs,
-      original: [],
-      current: 0,
+    setPlayingInfo((prev) => {
+      const oldPlaylist = [...prev.playlist];
+
+      for (const song of addSongs) {
+        const index = oldPlaylist.findIndex(
+          (item) => item.songId === song.songId
+        );
+
+        if (index !== -1) {
+          oldPlaylist.splice(index, 1);
+        }
+      }
+
+      const newPlaylist = [...oldPlaylist, ...addSongs];
+
+      return {
+        ...prev,
+        current: newPlaylist.findIndex(
+          (item) =>
+            item.songId ===
+            (play ? songs[0] : prev.playlist[prev.current]).songId
+        ),
+        playlist: newPlaylist,
+        original: newPlaylist,
+      };
     });
   };
 };

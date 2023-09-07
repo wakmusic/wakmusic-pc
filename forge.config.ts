@@ -33,21 +33,34 @@ const config: ForgeConfig = {
       /node_modules\/.vite/,
     ],
 
-    // afterCopy: [
-    //   async (buildPath, _electronVersion, platform, _arch, callback) => {
-    //     const localeDir = join(buildPath, "../../locales");
+    afterCopy: [
+      async (buildPath, _electronVersion, platform, _arch, callback) => {
+        if (platform == "win32") {
+          const localeDir = join(buildPath, "../../locales");
 
-    //     const files = await readdir(localeDir);
+          const files = await readdir(localeDir);
 
-    //     for (const file of files) {
-    //       if (file !== "en-US.pak") {
-    //         await unlink(join(localeDir, file));
-    //       }
-    //     }
+          for (const file of files) {
+            if (file !== "en-US.pak") {
+              await unlink(join(localeDir, file));
+            }
+          }
+        }
+        if (platform == "darwin") {
+          const resourcesDir = join(buildPath, "../../Resources");
 
-    //     callback();
-    //   },
-    // ],
+          const files = await readdir(resourcesDir);
+
+          for (const file of files) {
+            if (file.endsWith(".lproj") && file !== "ko.lproj") {
+              await rmdir(join(resourcesDir, file));
+            }
+          }
+        }
+
+        callback();
+      },
+    ],
 
     protocols: [
       {

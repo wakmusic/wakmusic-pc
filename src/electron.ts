@@ -56,13 +56,13 @@ autoUpdater.on("update-available", () => {
   console.log("update available");
 });
 
-autoUpdater.on("update-downloaded", (_, releaseNotes, releaseName) => {
+autoUpdater.on("update-downloaded", (_, __, releaseName) => {
   console.log("update downloaded");
   const dialogOpts: Electron.MessageBoxOptions = {
     type: "info",
     buttons: ["재시작", "나중에"],
     title: "Application Update",
-    message: process.platform === "win32" ? releaseNotes : releaseName,
+    message: releaseName,
     detail: "새 버전이 감지되었습니다. 재시작하여 업데이트해주세요.",
   };
 

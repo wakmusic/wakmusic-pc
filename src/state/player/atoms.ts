@@ -53,7 +53,7 @@ export const isControlling = atom<boolean>({
 
 export const playingLength = atom<number>({
   key: "playingLength",
-  default: 0.1,
+  default: 240,
 });
 
 export const playingProgress = atom<number>({

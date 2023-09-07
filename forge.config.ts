@@ -1,4 +1,3 @@
-import { MakerAppX } from "@electron-forge/maker-appx";
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import type { ForgeConfig } from "@electron-forge/shared-types";
 import * as dotenv from "dotenv";
@@ -83,16 +82,16 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerAppX({
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+    {
+      name: "@electron-forge/maker-appx",
+      config: {
+        identityName: "55390B70E4627.1221F2615847",
+        publisher: "CN=CFF2F2B0-3997-40A5-9513-E927980AC814",
+        publisherDisplayName: "왁타버스 뮤직",
 
-      identityName: "55390B70E4627.1221F2615847",
-      publisher: "CN=CFF2F2B0-3997-40A5-9513-E927980AC814",
-      publisherDisplayName: "왁타버스 뮤직",
-
-      assets: "./build/appx",
-    }),
+        assets: "./build/appx",
+      },
+    },
     {
       name: "@electron-forge/maker-dmg",
       config: {
@@ -131,6 +130,10 @@ const config: ForgeConfig = {
         },
       },
     },
+    {
+      name: "@electron-forge/maker-zip",
+      config: {},
+    },
   ],
   plugins: [
     new VitePlugin({
@@ -147,6 +150,19 @@ const config: ForgeConfig = {
         },
       ],
     }),
+  ],
+  publishers: [
+    {
+      name: "@electron-forge/publisher-github",
+      config: {
+        repository: {
+          owner: "wakmusic",
+          name: "wakmusic-pc",
+        },
+        authToken: process.env.GITHUB_TOKEN,
+        prerelease: true,
+      },
+    },
   ],
 };
 

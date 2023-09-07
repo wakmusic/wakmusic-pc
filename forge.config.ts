@@ -111,7 +111,9 @@ const config: ForgeConfig = {
           return [
             {
               type: "file",
-              path: `${process.cwd()}/out/wakmusic-pc-darwin-x64/wakmusic-pc.app`,
+              path: `${process.cwd()}/out/wakmusic-pc-darwin-${
+                process.arch
+              }/wakmusic-pc.app`,
               x: 292,
               y: 290,
             },

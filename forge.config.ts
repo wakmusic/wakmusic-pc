@@ -1,6 +1,8 @@
 import { VitePlugin } from "@electron-forge/plugin-vite";
 import type { ForgeConfig } from "@electron-forge/shared-types";
 import * as dotenv from "dotenv";
+import { readdir, rmdir, unlink } from "fs/promises";
+import { join } from "path";
 
 dotenv.config();
 
@@ -52,7 +54,10 @@ const config: ForgeConfig = {
           const files = await readdir(resourcesDir);
 
           for (const file of files) {
-            if (file.endsWith(".lproj") && file !== "ko.lproj") {
+            if (
+              file.endsWith(".lproj") &&
+              !["ko.lproj", "en.lproj"].includes(file)
+            ) {
               await rmdir(join(resourcesDir, file));
             }
           }
@@ -91,7 +96,10 @@ const config: ForgeConfig = {
       teamId: process.env.APPLE_TEAM_ID ?? "",
     },
 
-    extraResource: "./build/macos/ko.lproj/",
+    extraResource: [
+      "./build/macos/resources/en.lproj",
+      "./build/macos/resources/ko.lproj",
+    ],
   },
   rebuildConfig: {},
   makers: [
@@ -126,9 +134,9 @@ const config: ForgeConfig = {
           return [
             {
               type: "file",
-              path: `${process.cwd()}/out/wakmusic-pc-darwin-${
+              path: `${process.cwd()}/out/Wakmusic-darwin-${
                 process.arch
-              }/wakmusic-pc.app`,
+              }/Wakmusic.app`,
               x: 292,
               y: 290,
             },

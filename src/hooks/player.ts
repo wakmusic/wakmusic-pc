@@ -22,6 +22,8 @@ import {
 } from "@templates/player";
 import { Song } from "@templates/song";
 
+import { isNil } from "@utils/isTypes";
+
 export const usePlayingLengthState = () => {
   return useRecoilState(playingLength);
 };
@@ -89,8 +91,8 @@ export const useToggleIsRandomState = () => {
 
   return () => {
     setPlayingInfo((prev) => {
-      let newPlaylist;
-      let current;
+      let newPlaylist: Song[] = [];
+      let current = 0;
 
       if (!state.isRandom) {
         const shuffledPlaylist = [...prev.original].sort(
@@ -101,12 +103,13 @@ export const useToggleIsRandomState = () => {
           (item) => item.songId === prev.playlist[prev.current].songId
         );
 
-        current = 0;
-        newPlaylist = [
-          shuffledPlaylist[movedCurrent],
-          ...shuffledPlaylist.slice(0, movedCurrent),
-          ...shuffledPlaylist.slice(movedCurrent + 1),
-        ];
+        if (movedCurrent !== -1) {
+          newPlaylist = [
+            shuffledPlaylist[movedCurrent],
+            ...shuffledPlaylist.slice(0, movedCurrent),
+            ...shuffledPlaylist.slice(movedCurrent + 1),
+          ];
+        }
       } else {
         newPlaylist = [...prev.original];
         current = newPlaylist.findIndex(
@@ -329,8 +332,11 @@ export const usePlaySongs = () => {
       const oldPlaylist = [...prev.playlist];
 
       for (const song of addSongs) {
+        if (isNil(song)) continue;
+        console.log(song);
+
         const index = oldPlaylist.findIndex(
-          (item) => item.songId === song.songId
+          (item) => item?.songId === song.songId
         );
 
         if (index !== -1) {
@@ -350,7 +356,7 @@ export const usePlaySongs = () => {
           : 0,
 
         playlist: newPlaylist,
-        original: newPlaylist,
+        original: [],
       };
     });
   };

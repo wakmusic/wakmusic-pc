@@ -10,7 +10,7 @@ import VirtualItem from "@layouts/VirtualItem";
 import colors from "@constants/colors";
 
 import { useInterval } from "@hooks/interval";
-import { usePlayingInfoState } from "@hooks/player";
+import { useControlState, usePlayingInfoState } from "@hooks/player";
 import { useSelectSongs } from "@hooks/selectSongs";
 import useVirtualizer from "@hooks/virtualizer";
 
@@ -22,6 +22,7 @@ import { addAlpha } from "@utils/utils";
 interface PlaylistProps {}
 
 const Playlist = ({}: PlaylistProps) => {
+  const [, setControl] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
   const [playlistData, setPlaylistData] = useState<
     (Song & {
@@ -83,6 +84,10 @@ const Playlist = ({}: PlaylistProps) => {
 
   function onSongDoubleClicked(index: number) {
     setPlayingInfo({ ...playingInfo, current: index });
+    setControl((prev) => ({
+      ...prev,
+      isPlaying: true,
+    }));
   }
 
   const getCursorIndex = useCallback(() => {

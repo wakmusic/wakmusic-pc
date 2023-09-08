@@ -12,6 +12,7 @@ import {
   useLyricsState,
   usePlayingProgressChangeState,
   usePlayingProgressState,
+  useVisualModeState,
 } from "@hooks/player";
 
 import { isNull } from "@utils/isTypes";
@@ -21,19 +22,25 @@ type LyricsSize = "large" | "small";
 
 interface LyricsProps {
   size: LyricsSize;
+  isVisualMode: boolean;
 }
 
-const Lyrics = ({ size }: LyricsProps) => {
+const Lyrics = ({ size, isVisualMode }: LyricsProps) => {
   const [lyrics] = useLyricsState();
 
   const [current] = usePlayingProgressState();
   const [, setCurrent] = usePlayingProgressChangeState();
   const [control, setControl] = useControlState();
 
+  const [visualMode] = useVisualModeState();
+
   const [timeout, setTimeout] = useState<number>(0);
 
   const ref = useRef<HTMLDivElement>(null);
   const currentRef = useRef<HTMLDivElement>(null);
+
+  const [prvLyrics, setPrvLyrics] = useState(lyrics);
+  const [prvVisualMode, setPrvVisualMode] = useState(visualMode);
 
   function onLineClick(index: number) {
     if (isNull(lyrics)) return;
@@ -91,6 +98,28 @@ const Lyrics = ({ size }: LyricsProps) => {
     setPosition(true);
   }, [setPosition, timeout]);
 
+  useEffect(() => {
+    if (lyrics !== prvLyrics) {
+      if (!ref.current) return;
+
+      ref.current.scrollTo({
+        top: 0,
+        behavior: "instant",
+      });
+
+      setPrvLyrics(lyrics);
+    }
+  }, [lyrics, prvLyrics, setPosition]);
+
+  useEffect(() => {
+    if (visualMode !== prvVisualMode) {
+      if (!ref.current) return;
+      setPosition(false);
+
+      setPrvVisualMode(visualMode);
+    }
+  }, [visualMode, prvVisualMode, setPosition, getIndex]);
+
   useInterval(() => {
     setTimeout((prev) => {
       if (prev === 0) return 0;
@@ -128,23 +157,24 @@ const Lyrics = ({ size }: LyricsProps) => {
         padding: `${(ref.current?.offsetHeight ?? 0) / 2}px 0`,
       }}
     >
-      {lyrics.map((line, i) => {
-        const isCurrent = i === getIndex();
-        const Line =
-          current >= lyrics[0].start && isCurrent ? CurrentLine : DefaultLine;
+      {visualMode === isVisualMode &&
+        lyrics.map((line, i) => {
+          const isCurrent = i === getIndex();
+          const Line =
+            current >= lyrics[0].start && isCurrent ? CurrentLine : DefaultLine;
 
-        return (
-          <Line
-            key={i}
-            $size={size}
-            ref={isCurrent ? currentRef : null}
-            color={colors.blueGray25}
-            onClick={() => onLineClick(i)}
-          >
-            {line.text}
-          </Line>
-        );
-      })}
+          return (
+            <Line
+              key={i}
+              $size={size}
+              ref={isCurrent ? currentRef : null}
+              color={colors.blueGray25}
+              onClick={() => onLineClick(i)}
+            >
+              {line.text}
+            </Line>
+          );
+        })}
     </Container>
   );
 };

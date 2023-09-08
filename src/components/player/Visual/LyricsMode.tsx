@@ -31,7 +31,7 @@ const LyricsMode = ({}: LyricsModeProps) => {
       </TitleContainer>
 
       <LyricsContainer>
-        <Lyrics size="large" />
+        <Lyrics size="large" isVisualMode={true} />
       </LyricsContainer>
 
       <TimelineContainer>

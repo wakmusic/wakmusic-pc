@@ -122,7 +122,7 @@ const Display = ({}: DisplayProps) => {
               variants={buttonVariants}
               initial="close"
             >
-              <Lyrics size="small" />
+              <Lyrics size="small" isVisualMode={false} />
             </LyricsWrapper>
             <Thumbnail
               src={img}

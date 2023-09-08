@@ -144,6 +144,10 @@ const Lyrics = ({ size, isVisualMode }: LyricsProps) => {
     };
   }, [setPosition]);
 
+  if (!current) {
+    return <NoLyricsContainer />;
+  }
+
   if (!lyrics) {
     return (
       <NoLyricsContainer>

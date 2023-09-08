@@ -243,7 +243,9 @@ const YouTube = ({
     if (!player.current) return;
 
     if (isPlaying) {
-      if (playerState.current.isFirst) return;
+      if (playerState.current.isFirst) {
+        return;
+      }
 
       player.current.playVideo();
     } else {

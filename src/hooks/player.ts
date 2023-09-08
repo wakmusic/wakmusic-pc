@@ -341,14 +341,16 @@ export const usePlaySongs = () => {
       }
 
       const newPlaylist = [...oldPlaylist, ...addSongs];
+      const currentSong: Song | undefined = prev.playlist[prev.current];
 
       return {
         ...prev,
-        current: newPlaylist.findIndex(
-          (item) =>
-            item.songId ===
-            (play ? songs[0] : prev.playlist[prev.current]).songId
-        ),
+        current: currentSong
+          ? newPlaylist.findIndex(
+              (item) => item.songId === (play ? songs[0] : currentSong).songId
+            )
+          : 0,
+
         playlist: newPlaylist,
         original: newPlaylist,
       };

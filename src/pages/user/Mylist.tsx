@@ -108,14 +108,6 @@ const Mylist = ({}: MylistProps) => {
 
   const prevPlaylists = usePrevious(playlists);
 
-  console.log({
-    mouseDown,
-    mouseDownPosition,
-    dragAndDropTarget,
-    playlistInitialPosition,
-    dragPosition,
-  });
-
   useEffect(() => {
     let dropTarget =
       Math.floor((dragPosition.x + 94) / 238) +

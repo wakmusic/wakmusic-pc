@@ -69,8 +69,6 @@ const All = ({ query, res, isFetching }: AllProps) => {
     );
   }
 
-  console.log(res["song"], res["song"].slice(-3), res["song"].slice(3));
-
   return (
     <PageItemContainer height={142}>
       <Wrapper>

@@ -10,6 +10,7 @@ import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
 import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
 
 import IconButton from "@components/globals/IconButton";
+import MusicController from "@components/globals/musicControllers/MusicController";
 import MylistItem from "@components/user/mylist/MylistItem";
 
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -21,7 +22,9 @@ import { useLoadListModal } from "@hooks/loadListModal";
 import { useDragAndDropState, useMylistState } from "@hooks/mylist";
 import { usePrevious } from "@hooks/previous";
 
+import { ControllerFeature } from "@templates/musicController";
 import { PlaylistType, myListItemType } from "@templates/playlist";
+import { Song } from "@templates/song";
 
 import { isNull, isUndefined } from "@utils/isTypes";
 import { isSameArray } from "@utils/utils";
@@ -89,6 +92,7 @@ const Mylist = ({}: MylistProps) => {
 
   const [isEditMode] = useMylistState();
   const [shuffledList, dispatchMyList] = useReducer(shuffleMyList, []);
+  const [selectedList, setSelectedList] = useState<PlaylistType[]>([]);
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseDownPosition, setmouseDownPosition] = useState<XY>({
     x: 0,
@@ -201,6 +205,18 @@ const Mylist = ({}: MylistProps) => {
     }
   };
 
+  const handleSelectPlaylist = (playlist: PlaylistType) => {
+    setSelectedList((prev) => {
+      const keyList = prev.map((item) => {
+        return item.key;
+      });
+      if (!keyList.includes(playlist.key)) {
+        return [...prev, playlist];
+      }
+      return prev;
+    });
+  };
+
   const loadList = async () => {
     const code = await loadListModal();
 
@@ -225,7 +241,6 @@ const Mylist = ({}: MylistProps) => {
           리스트 가져오기
         </IconButton>
       </Menu>
-
       <PageItemContainer height={206}>
         <PlayLists
           onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
@@ -243,8 +258,20 @@ const Mylist = ({}: MylistProps) => {
             setMouseDown(false);
           }}
         >
-          {!isEditMode
-            ? (playlists ?? Array(8).fill(null)).map((item, index) => (
+          {isEditMode
+            ? shuffledList.map((item, index) => (
+                <MylistItem
+                  key={index}
+                  item={{
+                    ...item,
+                    index: index,
+                  }}
+                  hide={index === dragAndDropTarget.drag.index && mouseDown}
+                  mouseDown={mouseDown}
+                  onSelect={initializeDragTarget}
+                />
+              ))
+            : (playlists ?? Array(8).fill(null)).map((item, index) => (
                 <MylistItem
                   key={index}
                   item={
@@ -255,18 +282,6 @@ const Mylist = ({}: MylistProps) => {
                           index: index,
                         }
                   }
-                />
-              ))
-            : shuffledList.map((item, index) => (
-                <MylistItem
-                  key={index}
-                  item={{
-                    ...item,
-                    index: index,
-                  }}
-                  hide={index === dragAndDropTarget.drag.index && mouseDown}
-                  mouseDown={mouseDown}
-                  onSelect={initializeDragTarget}
                 />
               ))}
           <DragedPlaylist

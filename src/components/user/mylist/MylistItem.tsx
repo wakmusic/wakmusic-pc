@@ -4,6 +4,7 @@ import styled from "styled-components/macro";
 
 import { ReactComponent as DragPlaylist } from "@assets/icons/ic_24_move.svg";
 import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";
+import { ReactComponent as Check } from "@assets/svgs/Check.svg";
 
 import { T6Medium, T7Light } from "@components/Typography";
 import Skeleton from "@components/globals/Skeleton";
@@ -26,6 +27,7 @@ interface MylistItemProps {
   mouseDown?: boolean;
   onSelect?: (target: myListItemType, position: XY) => void;
   onMouseEnter?: () => void;
+  onClickEvenet?: () => void;
 }
 
 const MylistItem = ({
@@ -34,6 +36,7 @@ const MylistItem = ({
   mouseDown = false,
   onSelect,
   onMouseEnter,
+  onClickEvenet,
 }: MylistItemProps) => {
   const navigate = useNavigate();
   const [isEditMode] = useMylistState();
@@ -146,7 +149,14 @@ const MylistItem = ({
       }}
     >
       <ShiftContainer>
-        <Icon src={getPlaylistIcon(item.image)} />
+        <IconBox onClick={isEditMode ? onClickEvenet : undefined}>
+          <IconBackground>
+            <IconCheckCircle>
+              <Check />
+            </IconCheckCircle>
+          </IconBackground>
+          <Icon src={getPlaylistIcon(item.image)} />
+        </IconBox>
         <InfoContainer>
           <Title>{item.title}</Title>
           <Volume>{item.songs.length}곡</Volume>
@@ -181,6 +191,39 @@ const Container = styled.div`
 const ShiftContainer = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const IconBox = styled.div`
+  position: relative;
+  width: 74px;
+  height: 74px;
+  overflow: hidden;
+  border-radius: 9px;
+`;
+
+const IconBackground = styled.div`
+  width: 74px;
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  background-color: rgb(0, 0, 0, 0.4);
+`;
+
+const IconCheckCircle = styled.div`
+  transition: all 0.3s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  background-color: ${colors.gray400};
+
+  &:hover {
+    background-color: #08def7;
+  }
 `;
 
 const Icon = styled.img`

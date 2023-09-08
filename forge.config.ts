@@ -119,7 +119,7 @@ const config: ForgeConfig = {
         additionalDMGOptions: {
           window: {
             size: {
-              height: 634,
+              height: 586,
               width: 960,
             },
           },

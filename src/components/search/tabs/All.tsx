@@ -69,6 +69,8 @@ const All = ({ query, res, isFetching }: AllProps) => {
     );
   }
 
+  console.log(res["song"], res["song"].slice(-3), res["song"].slice(3));
+
   return (
     <PageItemContainer height={142}>
       <Wrapper>
@@ -93,7 +95,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
               )}
             </CategoryHeader>
 
-            {res[key].slice(-3).map((song, index) => (
+            {res[key].slice(0, 3).map((song, index) => (
               <SongItem
                 key={index}
                 song={song}

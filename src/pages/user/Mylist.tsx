@@ -108,6 +108,14 @@ const Mylist = ({}: MylistProps) => {
 
   const prevPlaylists = usePrevious(playlists);
 
+  console.log({
+    mouseDown,
+    mouseDownPosition,
+    dragAndDropTarget,
+    playlistInitialPosition,
+    dragPosition,
+  });
+
   useEffect(() => {
     let dropTarget =
       Math.floor((dragPosition.x + 94) / 238) +
@@ -179,7 +187,9 @@ const Mylist = ({}: MylistProps) => {
   };
 
   const movePlayList = useCallback(
-    (event: React.MouseEvent) => {
+    (event: MouseEvent) => {
+      if (!(mouseDown && isEditMode)) return;
+
       const movementX = event.clientX - mouseDownPosition.x; // 마우스가 움직인 거리 = 현재 마우스의 위치 - 마우스가 클릭된 위치
       const movementY = event.clientY - mouseDownPosition.y;
 
@@ -188,8 +198,42 @@ const Mylist = ({}: MylistProps) => {
         y: playlistInitialPosition.y + movementY,
       });
     },
-    [mouseDownPosition, setDragPostion, playlistInitialPosition]
+    [
+      isEditMode,
+      mouseDown,
+      mouseDownPosition.x,
+      mouseDownPosition.y,
+      playlistInitialPosition.x,
+      playlistInitialPosition.y,
+    ]
   );
+
+  const onMouseUp = useCallback(() => {
+    setMouseDown(false);
+    if (!mouseDown) return;
+
+    dispatchMyList({
+      type: ShuffleActionType.relocate,
+      target: dragAndDropTarget.drag.index,
+      to: dragAndDropTarget.drop,
+    });
+  }, [dragAndDropTarget.drag.index, dragAndDropTarget.drop, mouseDown]);
+
+  const onMouseLeave = useCallback(() => {
+    setMouseDown(false);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("mouseleave", onMouseLeave);
+    window.addEventListener("mousemove", movePlayList);
+
+    return () => {
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("mouseleave", onMouseLeave);
+      window.removeEventListener("mousemove", movePlayList);
+    };
+  }, [movePlayList, onMouseLeave, onMouseUp]);
 
   const createList = async () => {
     const name = await createListModal();
@@ -246,22 +290,7 @@ const Mylist = ({}: MylistProps) => {
         </IconButton>
       </Menu>
       <PageItemContainer height={206}>
-        <PlayLists
-          onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
-          onMouseUp={() => {
-            setMouseDown(false);
-            if (!mouseDown) return;
-
-            dispatchMyList({
-              type: ShuffleActionType.relocate,
-              target: dragAndDropTarget.drag.index,
-              to: dragAndDropTarget.drop,
-            });
-          }}
-          onMouseLeave={() => {
-            setMouseDown(false);
-          }}
-        >
+        <PlayLists>
           {((isEditMode ? shuffledList : playlists) ?? Array(8).fill(null)).map(
             (item, index) => (
               <MylistItem

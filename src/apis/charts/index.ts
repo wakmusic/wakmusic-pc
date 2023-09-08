@@ -4,13 +4,13 @@ import { ChartType, RawSong, Song } from "@templates/song";
 
 import processSong from "@utils/processSong";
 
-const CHARTS_UPDATE_URL = "/charts";
+const CHARTS_BASE = "/charts";
 
 export const fetchCharts = async <T extends ChartType>(
   type: T,
   limit = 10
 ): Promise<Song[]> => {
-  const { data } = await instance.get(`/v2/charts`, {
+  const { data } = await instance.get(`${CHARTS_BASE}`, {
     params: {
       type,
       limit,
@@ -23,9 +23,7 @@ export const fetchCharts = async <T extends ChartType>(
 export const fetchChartsUpdateTypes = async (
   chartType: ChartType
 ): Promise<string> => {
-  const { data } = await instance.get(
-    `${CHARTS_UPDATE_URL}/updated/${chartType}`
-  );
+  const { data } = await instance.get(`${CHARTS_BASE}/updated/${chartType}`);
 
   return data;
 };

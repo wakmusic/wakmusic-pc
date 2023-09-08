@@ -5,17 +5,19 @@ import { RawSong } from "@templates/song";
 
 import processSong from "@utils/processSong";
 
+const PLAYLIST_BASE = "/playlist";
+
 export const fetchRecommendedPlaylist = async (): Promise<
   RecommendListMetaType[]
 > => {
-  const { data } = await instance.get(`/playlist/recommended`);
+  const { data } = await instance.get(`${PLAYLIST_BASE}/recommended`);
   return data;
 };
 
 export const fetchRecommendedPlaylistDetail = async (
   key: string
 ): Promise<RecommendListType> => {
-  const { data } = await instance.get(`/v2/playlist/recommended/${key}`);
+  const { data } = await instance.get(`${PLAYLIST_BASE}/recommended/${key}`);
 
   return {
     ...data,
@@ -25,7 +27,7 @@ export const fetchRecommendedPlaylistDetail = async (
 
 export const createPlaylist = async (title: string): Promise<boolean> => {
   const { data } = await instance.post(
-    `/v2/playlist/create`,
+    `${PLAYLIST_BASE}/create`,
     {
       title,
       image: `${Math.floor(Math.random() * 10) + 1}`,
@@ -38,7 +40,7 @@ export const createPlaylist = async (title: string): Promise<boolean> => {
 
 export const copyPlaylist = async (key: string): Promise<boolean> => {
   const { data } = await instance.post(
-    `/v2/playlist/copy`,
+    `${PLAYLIST_BASE}/copy`,
     {
       key,
     },
@@ -53,7 +55,7 @@ export const addSongToPlaylist = async (
   songIds: string[]
 ): Promise<boolean> => {
   const { data } = await instance.post(
-    `/v2/playlist/${playlistKey}/songs/add`,
+    `${PLAYLIST_BASE}/${playlistKey}/songs/add`,
     {
       songIds,
     },
@@ -68,7 +70,7 @@ export const editPlaylistName = async (
   title: string
 ): Promise<boolean> => {
   const { data } = await instance.patch(
-    `/v2/playlist/${playlistKey}`,
+    `${PLAYLIST_BASE}/${playlistKey}`,
     {
       title,
     },
@@ -83,7 +85,7 @@ export const removeSongsFromPlaylist = async (
   songIds: string[]
 ): Promise<boolean> => {
   const { data } = await instance.post(
-    `/v2/playlist/${playlistKey}/songs/remove`,
+    `${PLAYLIST_BASE}/${playlistKey}/songs/remove`,
     {
       songIds,
     },
@@ -98,7 +100,7 @@ export const editOrderOfPlaylist = async (
   songIds: string[]
 ): Promise<boolean> => {
   const { data } = await instance.patch(
-    `/v2/playlist/${playlistKey}/songs`,
+    `${PLAYLIST_BASE}/${playlistKey}/songs`,
     {
       songIds,
     },

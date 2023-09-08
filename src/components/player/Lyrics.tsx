@@ -84,6 +84,10 @@ const Lyrics = ({ size, isVisualMode }: LyricsProps) => {
         padding +
         currentRef.current.offsetHeight / 2;
 
+      if (Math.abs(ref.current.scrollTop - top) > 300) {
+        setTimeout(1);
+      }
+
       ref.current.scrollTo({
         top,
         behavior: (isSmooth ? "smooth" : "instant") as ScrollBehavior,
@@ -93,7 +97,7 @@ const Lyrics = ({ size, isVisualMode }: LyricsProps) => {
   );
 
   useEffect(() => {
-    if (timeout !== 0) return;
+    if (timeout > 0) return;
 
     setPosition(true);
   }, [setPosition, timeout]);
@@ -109,7 +113,7 @@ const Lyrics = ({ size, isVisualMode }: LyricsProps) => {
 
       setPrvLyrics(lyrics);
     }
-  }, [lyrics, prvLyrics, setPosition]);
+  }, [lyrics, prvLyrics]);
 
   useEffect(() => {
     if (visualMode !== prvVisualMode) {
@@ -122,7 +126,7 @@ const Lyrics = ({ size, isVisualMode }: LyricsProps) => {
 
   useInterval(() => {
     setTimeout((prev) => {
-      if (prev === 0) return 0;
+      if (prev < 0) return 0;
 
       return prev - 1;
     });

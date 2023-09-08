@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as DragPlaylist } from "@assets/icons/ic_24_move.svg";
 import { ReactComponent as PlayAll } from "@assets/icons/ic_24_play_all.svg";
+import { ReactComponent as Check } from "@assets/svgs/Check.svg";
 
 import { T6Medium, T7Light } from "@components/Typography";
 import Skeleton from "@components/globals/Skeleton";
@@ -24,16 +25,20 @@ interface MylistItemProps {
   item?: myListItemType;
   hide?: boolean;
   mouseDown?: boolean;
+  selected?: boolean;
   onSelect?: (target: myListItemType, position: XY) => void;
   onMouseEnter?: () => void;
+  onEditSelect?: (item: myListItemType) => void;
 }
 
 const MylistItem = ({
   item,
   hide = false,
   mouseDown = false,
+  selected = false,
   onSelect,
   onMouseEnter,
+  onEditSelect,
 }: MylistItemProps) => {
   const navigate = useNavigate();
   const [isEditMode] = useMylistState();
@@ -142,11 +147,30 @@ const MylistItem = ({
       }}
       onMouseEnter={onMouseEnter}
       onClick={() => {
-        navigate(`/playlist/${item.key}`);
+        if (!isEditMode) {
+          navigate(`/playlist/${item.key}`);
+        }
       }}
     >
       <ShiftContainer>
-        <Icon src={getPlaylistIcon(item.image)} />
+        <IconBox
+          onClick={() => {
+            if (isEditMode && onEditSelect) {
+              onEditSelect(item);
+            }
+          }}
+        >
+          {isEditMode && (
+            <IconBackground>
+              <IconCheckCircle $selected={selected}>
+                <Check />
+              </IconCheckCircle>
+            </IconBackground>
+          )}
+
+          <Icon src={getPlaylistIcon(item.image)} />
+        </IconBox>
+
         <InfoContainer>
           <Title>{item.title}</Title>
           <Volume>{item.songs.length}곡</Volume>
@@ -181,6 +205,45 @@ const Container = styled.div`
 const ShiftContainer = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const IconBox = styled.div`
+  position: relative;
+  width: 74px;
+  height: 74px;
+  overflow: hidden;
+  border-radius: 9px;
+`;
+
+const IconBackground = styled.div`
+  width: 74px;
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  background-color: rgb(0, 0, 0, 0.4);
+`;
+
+const IconCheckCircle = styled.div<{ $selected?: boolean }>`
+  transition: all 0.1s;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  background-color: ${colors.gray400};
+
+  &:hover {
+    background-color: #a5cfd4;
+  }
+
+  ${({ $selected }) =>
+    $selected &&
+    css`
+      background-color: #08def7 !important;
+    `}
 `;
 
 const Icon = styled.img`

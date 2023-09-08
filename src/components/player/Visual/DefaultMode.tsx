@@ -40,7 +40,7 @@ const DefaultMode = ({}: DefaultModeProps) => {
         <Thumbnail src={img} onClick={toggleVisualModeState} />
 
         <LyricsContainer>
-          <Lyrics size="large" />
+          <Lyrics size="large" isVisualMode={true} />
         </LyricsContainer>
 
         <TimelineContainer>

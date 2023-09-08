@@ -53,8 +53,10 @@ const Track = ({ item, maxWidth, isLoading }: TrackProps) => {
   }
 
   return (
-    <Container onClick={onClickHandler}>
-      <PlayIcon />
+    <Container>
+      <Play onClick={onClickHandler}>
+        <PlaySVG />
+      </Play>
 
       <Thumbnail src={getYoutubeThumbnail(item.songId)} />
 
@@ -75,10 +77,42 @@ const Track = ({ item, maxWidth, isLoading }: TrackProps) => {
   );
 };
 
-const PlayIcon = styled(PlaySVG)`
-  display: none;
+const Container = styled.div`
+  position: relative;
 
+  display: flex;
+  align-items: center;
+`;
+
+const Play = styled.div`
   z-index: 1;
+
+  width: 78px;
+  height: 44px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  top: 0;
+
+  padding-top: 8px;
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  svg {
+    visibility: hidden;
+  }
+
+  &:hover svg {
+    visibility: visible;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 `;
 
 const Thumbnail = styled.img`
@@ -89,27 +123,6 @@ const Thumbnail = styled.img`
 
   object-fit: cover;
   border-radius: 4px;
-`;
-
-const Container = styled.div`
-  position: relative;
-
-  display: flex;
-  align-items: center;
-
-  cursor: pointer;
-
-  &:hover ${Thumbnail} {
-    filter: brightness(0.4);
-  }
-
-  &:hover ${PlayIcon} {
-    display: block;
-
-    position: absolute;
-    left: 18px;
-    top: 7px;
-  }
 `;
 
 const TrackInfo = styled.div<{ $maxWidth?: number }>`

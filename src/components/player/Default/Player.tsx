@@ -32,6 +32,8 @@ const Container = styled.div`
   background-color: ${colors.gray900};
 
   overflow: hidden;
+
+  margin-left: -0.5px;
 `;
 
 const Divider = styled.div`

@@ -90,8 +90,6 @@ const ListController = ({
               .map((playlist) => playlist.songs)
               .flat();
 
-            console.log(songs);
-
             playSongs(songs, false, false);
             dispatchSelectedPlaylists([]);
           }}

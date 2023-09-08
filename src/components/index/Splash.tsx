@@ -15,7 +15,9 @@ interface SplashProps {}
 
 const Splash = ({}: SplashProps) => {
   const controls = useAnimation();
-  const [disable, setDisable] = useState(false);
+  const [disable, setDisable] = useState(
+    import.meta.env.VITE_NO_SPLASH === "true"
+  );
 
   const [, setIsNoticeModalOpen] = useNoticeModalState();
 

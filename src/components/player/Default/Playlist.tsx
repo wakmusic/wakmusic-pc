@@ -24,11 +24,6 @@ interface PlaylistProps {}
 const Playlist = ({}: PlaylistProps) => {
   const [, setControl] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
-  const [playlistData, setPlaylistData] = useState<
-    (Song & {
-      isPlaying: boolean;
-    })[]
-  >([]);
 
   const { selected, setSelected, selectCallback, selectedIncludes } =
     useSelectSongs();
@@ -51,18 +46,9 @@ const Playlist = ({}: PlaylistProps) => {
   const [lastSelected, setLastSelected] = useState<number | null>(null);
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
-    playlistData,
+    playingInfo.playlist,
     { size: 24 }
   );
-
-  const createPlaylistData = useCallback(() => {
-    return [
-      ...playingInfo.playlist.map((song, i) => ({
-        ...song,
-        isPlaying: i === playingInfo.current,
-      })),
-    ];
-  }, [playingInfo]);
 
   function onScroll() {
     if (!scrollState.isScrollEnabled) {
@@ -99,16 +85,21 @@ const Playlist = ({}: PlaylistProps) => {
       (scrollbar.scrollTop ?? 0) -
       rect.top;
 
-    return Math.max(0, Math.min(playlistData.length, Math.round(y / 24)));
-  }, [mouseY, playlistData, scrollbar]);
+    return Math.max(
+      0,
+      Math.min(playingInfo.playlist.length, Math.round(y / 24))
+    );
+  }, [mouseY, playingInfo, scrollbar]);
 
   const updatePlaylist = useCallback(() => {
-    const target = playlistData[targetIndex];
+    const target = playingInfo.playlist[targetIndex];
 
     const cursorIndex = getCursorIndex();
 
-    playlistData.splice(targetIndex, 1);
-    playlistData.splice(
+    const newPlaylist = [...playingInfo.playlist];
+
+    newPlaylist.splice(targetIndex, 1);
+    newPlaylist.splice(
       targetIndex < cursorIndex ? cursorIndex - 1 : cursorIndex,
       0,
       target
@@ -116,12 +107,15 @@ const Playlist = ({}: PlaylistProps) => {
 
     setPlayingInfo((prev) => ({
       ...prev,
-      playlist: playlistData,
-      current: playlistData.findIndex((song) => song.isPlaying),
+      playlist: newPlaylist,
+      current: newPlaylist.findIndex(
+        (song) =>
+          song.songId === playingInfo.playlist[playingInfo.current].songId
+      ),
     }));
     setLastSelected(null);
     setSelected([]);
-  }, [playlistData, targetIndex, getCursorIndex, setPlayingInfo, setSelected]);
+  }, [playingInfo, setPlayingInfo, targetIndex, getCursorIndex, setSelected]);
 
   const deleteSongs = useCallback(
     (newSongs: Song[]) => {
@@ -172,10 +166,6 @@ const Playlist = ({}: PlaylistProps) => {
     },
     [mouseState, scrollState]
   );
-
-  useEffect(() => {
-    setPlaylistData(createPlaylistData());
-  }, [playingInfo, createPlaylistData]);
 
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
@@ -250,7 +240,10 @@ const Playlist = ({}: PlaylistProps) => {
                       <MovementCursor />
                     )}
                   <SongContainer
-                    $playing={item.isPlaying}
+                    $playing={
+                      item.songId ===
+                      playingInfo.playlist[playingInfo.current].songId
+                    }
                     $selected={selected.some(
                       (s) =>
                         s.songId ===
@@ -275,7 +268,9 @@ const Playlist = ({}: PlaylistProps) => {
           </PlaylistContainer>
           {mouseState.isMoving &&
             !scrollState.isScrollEnabled &&
-            getCursorIndex() === playlistData.length && <MovementCursor />}
+            getCursorIndex() === playingInfo.playlist.length && (
+              <MovementCursor />
+            )}
         </Wrapper>
       </PlayerScroll>
 

@@ -4,13 +4,13 @@ import { queryClient } from "src/main";
 import styled from "styled-components/macro";
 
 import { copyPlaylist, createPlaylist } from "@apis/playlist";
-import { editPlaylistOrder, fetchPlaylists } from "@apis/user";
+import { editPlaylistOrder, fetchPlaylists, removePlaylists } from "@apis/user";
 
 import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
 import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
 
 import IconButton from "@components/globals/IconButton";
-import MusicController from "@components/globals/musicControllers/MusicController";
+import ListController from "@components/user/mylist/ListController";
 import MylistItem from "@components/user/mylist/MylistItem";
 
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -22,9 +22,7 @@ import { useLoadListModal } from "@hooks/loadListModal";
 import { useDragAndDropState, useMylistState } from "@hooks/mylist";
 import { usePrevious } from "@hooks/previous";
 
-import { ControllerFeature } from "@templates/musicController";
 import { PlaylistType, myListItemType } from "@templates/playlist";
-import { Song } from "@templates/song";
 
 import { isNull, isUndefined } from "@utils/isTypes";
 import { isSameArray } from "@utils/utils";
@@ -207,13 +205,13 @@ const Mylist = ({}: MylistProps) => {
 
   const handleSelectPlaylist = (playlist: PlaylistType) => {
     setSelectedList((prev) => {
-      const keyList = prev.map((item) => {
-        return item.key;
-      });
-      if (!keyList.includes(playlist.key)) {
+      const newSelectedList = [...prev];
+
+      if (newSelectedList.findIndex((item) => item.key === playlist.key) > -1) {
+        return prev.filter((item) => item.key !== playlist.key);
+      } else {
         return [...prev, playlist];
       }
-      return prev;
     });
   };
 
@@ -227,6 +225,12 @@ const Mylist = ({}: MylistProps) => {
     if (success) {
       refetch();
     }
+  };
+
+  const removePlaylistsHandler = async (playlists: PlaylistType[]) => {
+    await removePlaylists(playlists.map((item) => item.key));
+
+    refetch();
   };
 
   if (error) return <div>Error...</div>;
@@ -258,32 +262,29 @@ const Mylist = ({}: MylistProps) => {
             setMouseDown(false);
           }}
         >
-          {isEditMode
-            ? shuffledList.map((item, index) => (
-                <MylistItem
-                  key={index}
-                  item={{
-                    ...item,
-                    index: index,
-                  }}
-                  hide={index === dragAndDropTarget.drag.index && mouseDown}
-                  mouseDown={mouseDown}
-                  onSelect={initializeDragTarget}
-                />
-              ))
-            : (playlists ?? Array(8).fill(null)).map((item, index) => (
-                <MylistItem
-                  key={index}
-                  item={
-                    isNull(item)
-                      ? undefined
-                      : {
-                          ...item,
-                          index: index,
-                        }
-                  }
-                />
-              ))}
+          {((isEditMode ? shuffledList : playlists) ?? Array(8).fill(null)).map(
+            (item, index) => (
+              <MylistItem
+                key={index}
+                item={
+                  isNull(item)
+                    ? undefined
+                    : {
+                        ...item,
+                        index: index,
+                      }
+                }
+                hide={index === dragAndDropTarget.drag.index && mouseDown}
+                mouseDown={mouseDown}
+                selected={
+                  selectedList.findIndex((i) => i.key === item?.key) > -1
+                }
+                onSelect={initializeDragTarget}
+                onEditSelect={handleSelectPlaylist}
+              />
+            )
+          )}
+
           <DragedPlaylist
             style={{
               top: `${dragPosition.y}px`,
@@ -294,6 +295,13 @@ const Mylist = ({}: MylistProps) => {
             <MylistItem item={dragAndDropTarget.drag} />
           </DragedPlaylist>
         </PlayLists>
+
+        <ListController
+          playlists={shuffledList}
+          selectedPlaylists={selectedList}
+          dispatchSelectedPlaylists={setSelectedList}
+          onDelete={removePlaylistsHandler}
+        />
       </PageItemContainer>
     </Container>
   );

@@ -267,10 +267,8 @@ export const useNextSong = () => {
       case RepeatType.One: {
         setControl((prev) => ({ ...prev, isPlaying: true }));
 
-        const start = playingInfo.playlist[playingInfo.current]?.start || 0;
-
         setProgress({
-          progress: start,
+          progress: 0,
           force: true,
         });
 

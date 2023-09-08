@@ -2,14 +2,14 @@ import instance from "@apis/axios";
 
 import { AllFAQResponse, FAQCategoriesResponse } from "./dto";
 
-const FAQ_URL = "/v2/faq";
+const FAQ_BASE = "/faq";
 
 export const fetchAllFAQ = async (): Promise<AllFAQResponse> => {
-  const { data } = await instance.get(FAQ_URL);
+  const { data } = await instance.get(`${FAQ_BASE}`);
   return data;
 };
 
 export const fetchFAQCategories = async (): Promise<FAQCategoriesResponse> => {
-  const { data } = await instance.get(`${FAQ_URL}/categories`);
+  const { data } = await instance.get(`${FAQ_BASE}/categories`);
   return data;
 };

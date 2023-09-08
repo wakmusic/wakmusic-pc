@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components/macro";
 
-import { getLyrics } from "@apis/lyrics";
 import { requestPlaySong } from "@apis/play";
+import { getLyrics } from "@apis/songs";
 
 import { useInterval } from "@hooks/interval";
 import {

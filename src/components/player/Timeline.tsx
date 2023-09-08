@@ -30,6 +30,8 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
     return isMouseDown ? change.progress : progress;
   }, [change, isMouseDown, progress]);
 
+  const displayingCurrent = (Math.min(current, length) / length) * 100;
+
   const [, setIsControlling] = useIsControllingState();
 
   const changeProgressPosition = useCallback(
@@ -95,20 +97,11 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
       $controlling={isMouseDown}
       $isSeparated={isSeparated ?? false}
     >
-      <Line
-        $progress={(current / length) * 100}
-        $isSeparated={isSeparated ?? false}
-      />
-      <HandleContainer
-        $progress={(current / length) * 100}
-        $isSeparated={isSeparated}
-      >
+      <Line $progress={displayingCurrent} $isSeparated={isSeparated ?? false} />
+      <HandleContainer $progress={displayingCurrent} $isSeparated={isSeparated}>
         <Handle />
       </HandleContainer>
-      <TimelinePopover
-        $progress={(current / length) * 100}
-        $isSeparated={isSeparated}
-      >
+      <TimelinePopover $progress={displayingCurrent} $isSeparated={isSeparated}>
         <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
         <LengthText color={colors.blueGray100}>
           {formatSecond(length)}

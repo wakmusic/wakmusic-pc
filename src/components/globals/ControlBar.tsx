@@ -67,6 +67,10 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     }
   };
 
+  const maximize = () => {
+    ipcRenderer?.send(IPCRenderer.WINDOW_MAX);
+  };
+
   if (!ipcRenderer) {
     return null;
   }
@@ -87,7 +91,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
               : MaxSVG // 비주얼모드에만 최대화, 복구 가능
             : DivideSVG // 그 외에는 분리만 가능
         }
-        onClick={toggleSeparateMode}
+        onClick={isVisualMode ? maximize : toggleSeparateMode}
       />
       <SimpleIconButton icon={CloseSVG} onClick={close} />
     </Container>

@@ -53,6 +53,7 @@ const Faq = ({}: FaqProps) => {
           <PageItemContainer>
             {(faq || Array(20).fill(null))
               .filter((article) => tab === "전체" || article.category === tab)
+              .reverse()
               .map((article, index) => (
                 <Section key={tab + index} article={article} />
               ))}

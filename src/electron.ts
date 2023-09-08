@@ -1,4 +1,12 @@
-import { BrowserWindow, app, ipcMain, nativeImage, session } from "electron";
+import {
+  BrowserWindow,
+  app,
+  autoUpdater,
+  dialog,
+  ipcMain,
+  nativeImage,
+  session,
+} from "electron";
 import { join, resolve } from "path";
 
 import { IPCMain, IPCRenderer } from "@constants/ipc";
@@ -34,6 +42,39 @@ if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
 } else {
   app.setAsDefaultProtocolClient("wakmusic");
 }
+
+const server = "https://update.electronjs.org";
+const feed = `${server}/wakmusic/wakmusic-pc/${process.platform}-${
+  process.arch
+}/${app.getVersion()}`;
+
+autoUpdater.setFeedURL({
+  url: feed,
+});
+
+autoUpdater.on("update-available", () => {
+  console.log("update available");
+});
+
+autoUpdater.on("update-downloaded", (_, __, releaseName) => {
+  console.log("update downloaded");
+  const dialogOpts: Electron.MessageBoxOptions = {
+    type: "info",
+    buttons: ["재시작", "나중에"],
+    title: "Application Update",
+    message: releaseName,
+    detail: "새 버전이 감지되었습니다. 재시작하여 업데이트해주세요.",
+  };
+
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall();
+  });
+});
+
+autoUpdater.on("error", (message) => {
+  console.error("There was a problem updating the application");
+  console.error(message);
+});
 
 app.whenReady().then(() => {
   const win = new BrowserWindow({
@@ -90,6 +131,24 @@ app.whenReady().then(() => {
   win.on("resize", () => {
     win.webContents.send("window:resize");
   });
+
+  if (process.platform === "darwin") {
+    autoUpdater.checkForUpdates();
+
+    // 20초 마다 업데이트 체크
+    setInterval(() => {
+      autoUpdater.checkForUpdates();
+    }, 1000 * 60 * 20);
+  }
+});
+
+app.on("activate", () => {
+  const wins = BrowserWindow.getAllWindows();
+
+  for (const win of wins) {
+    win.show();
+    win.focus();
+  }
 });
 
 app.on("open-url", function (_, url) {
@@ -97,6 +156,13 @@ app.on("open-url", function (_, url) {
 });
 
 app.on("second-instance", (_, argv, __) => {
+  const wins = BrowserWindow.getAllWindows();
+
+  for (const win of wins) {
+    win.show();
+    win.focus();
+  }
+
   if (process.platform === "win32") {
     schemeHandler(argv[argv.length - 1]);
   }

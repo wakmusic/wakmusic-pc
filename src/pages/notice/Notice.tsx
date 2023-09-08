@@ -27,7 +27,7 @@ const Notice = ({}: NoticeProps) => {
   });
 
   const { data: notice, error: noticeError } = useQuery({
-    queryKey: "notice",
+    queryKey: "noticeAll",
     queryFn: fetchAllNotice,
   });
 

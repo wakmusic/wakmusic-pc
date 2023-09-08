@@ -17,7 +17,9 @@ interface ExitModalProps {}
 
 const ExitModal = ({}: ExitModalProps) => {
   const [modalState, setModalState] = useExitModalState();
-  const [mode, setMode] = useState<"close" | "background">("close");
+  const [mode, setMode] = useState<"close" | "background">(
+    localStorage.getItem("exitMode") === "background" ? "background" : "close"
+  );
 
   const resolve = (result: boolean) => () => {
     if (modalState.resolve) {

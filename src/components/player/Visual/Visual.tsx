@@ -66,15 +66,17 @@ const Visual = ({}: VisualProps) => {
       variants={visualVariants}
       initial="initial"
     >
-      <Wrapper $zoom={zoom}>
-        <Header />
-        <InnerContainer $zoom={zoom}>
-          <InnerWrapper $zoom={zoom}>
-            <LyricsMode />
-            <DefaultMode />
-          </InnerWrapper>
-        </InnerContainer>
-      </Wrapper>
+      {visualMode ? (
+        <Wrapper $zoom={zoom}>
+          <Header />
+          <InnerContainer $zoom={zoom}>
+            <InnerWrapper $zoom={zoom}>
+              <LyricsMode />
+              <DefaultMode />
+            </InnerWrapper>
+          </InnerContainer>
+        </Wrapper>
+      ) : null}
     </Container>
   );
 };

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { useAddListModal } from "@hooks/addListModal";
-import { useControlState, usePlayingInfoState } from "@hooks/player";
+import { usePlaySongs } from "@hooks/player";
 
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
@@ -53,32 +53,13 @@ const MusicController = ({
     useState(displayDefault);
   const [popdown, setPopdown] = useState(false);
 
-  const [, setPlayingInfo] = usePlayingInfoState();
-  const [, setControlState] = useControlState();
-
   const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
 
   const openAddListModal = useAddListModal();
 
   const location = useLocation();
 
-  const addSongs = useCallback(
-    (list: Song[], play?: boolean) => {
-      // 재생목록에 노래 추가
-      setPlayingInfo((prev) => ({
-        playlist: [...prev.playlist, ...list],
-        history: [],
-        current: play ? prev.playlist.length : prev.current,
-      }));
-
-      if (!play) return;
-      setControlState((prev) => ({
-        ...prev,
-        isPlaying: true,
-      }));
-    },
-    [setControlState, setPlayingInfo]
-  );
+  const playSongs = usePlaySongs();
 
   const getControllerComponent = useCallback(
     (feature: ControllerFeature, key: number) => {
@@ -139,7 +120,7 @@ const MusicController = ({
           return (
             <AddPlaylist
               onClick={() => {
-                addSongs(selectedSongs);
+                playSongs(selectedSongs, false, false);
                 dispatchSelectedSongs([]);
               }}
               key={key}
@@ -149,7 +130,7 @@ const MusicController = ({
           return (
             <PlayMusic
               onClick={() => {
-                addSongs(selectedSongs, true);
+                playSongs(selectedSongs);
                 dispatchSelectedSongs([]);
               }}
               key={key}
@@ -178,11 +159,11 @@ const MusicController = ({
       }
     },
     [
-      addSongs,
       dispatchSelectedSongs,
       location.pathname,
       onDelete,
       openAddListModal,
+      playSongs,
       selectedSongs,
       songs,
     ]

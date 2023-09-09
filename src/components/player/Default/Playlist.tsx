@@ -45,6 +45,8 @@ const Playlist = ({}: PlaylistProps) => {
 
   const [lastSelected, setLastSelected] = useState<number | null>(null);
 
+  const [clickTimer, setClickTimer] = useState<NodeJS.Timeout | null>(null);
+
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
     playingInfo.playlist,
     { size: 24 }
@@ -57,23 +59,38 @@ const Playlist = ({}: PlaylistProps) => {
   }
 
   function onSongSelected(index: number, multiSelect: boolean) {
-    if (multiSelect && lastSelected !== null && lastSelected !== index) {
-      const start = Math.min(index, lastSelected);
-      const end = Math.max(index, lastSelected) + 1;
-
-      selectCallback([...playingInfo.playlist].slice(start, end));
-    } else {
-      selectCallback(playingInfo.playlist[index], index);
-      setLastSelected(index);
+    if (clickTimer) {
+      clearTimeout(clickTimer);
     }
+
+    setClickTimer(
+      setTimeout(() => {
+        if (multiSelect && lastSelected !== null && lastSelected !== index) {
+          const start = Math.min(index, lastSelected);
+          const end = Math.max(index, lastSelected) + 1;
+          selectCallback([...playingInfo.playlist].slice(start, end));
+        } else {
+          selectCallback(playingInfo.playlist[index], index);
+          setLastSelected(index);
+        }
+      }, 250)
+    );
   }
 
   function onSongDoubleClicked(index: number) {
+    if (clickTimer) {
+      clearTimeout(clickTimer);
+    }
+
     setPlayingInfo({ ...playingInfo, current: index });
     setControl((prev) => ({
       ...prev,
       isPlaying: true,
     }));
+
+    if (lastSelected === index) {
+      selectCallback(playingInfo.playlist[index], index);
+    }
   }
 
   const getCursorIndex = useCallback(() => {
@@ -308,10 +325,6 @@ const Popup = keyframes`
   0% {
     height: calc(100vh - 410px);
   }
-  
-  60% {
-    height: calc(100vh - 410px);
-  }
 
   100% {
     height: calc(100vh - 410px - 65px);
@@ -333,14 +346,8 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div<{ $appBarEnable: boolean }>`
-  ${({ $appBarEnable }) =>
-    $appBarEnable
-      ? css`
-          animation: ${Popup} 0.35s ease-out forwards;
-        `
-      : css`
-          animation: ${Popdown} 0.25s ease-out forwards;
-        `}
+  animation: ${({ $appBarEnable }) => ($appBarEnable ? Popup : Popdown)} 0.15s
+    ease-out forwards;
 `;
 
 const PlaylistContainer = styled.div<{ height: number }>`

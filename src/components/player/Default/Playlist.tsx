@@ -169,19 +169,37 @@ const Playlist = ({}: PlaylistProps) => {
 
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [handleMouseUp]);
-
-  useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
+      window.removeEventListener("mouseup", handleMouseUp);
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [handleMouseMove]);
+  }, [handleMouseUp, handleMouseMove]);
+
+  useEffect(() => {
+    if (!viewportRef.current) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (!viewportRef.current || lastSelected === null) return;
+
+      if (!playingInfo.playlist.some((song, i) => selectedIncludes(song, i))) {
+        return;
+      }
+
+      if (lastSelected >= playingInfo.playlist.length - 3) {
+        viewportRef.current.scrollTo({
+          top:
+            viewportRef.current.scrollHeight - viewportRef.current.clientHeight,
+        });
+      }
+    });
+    resizeObserver.observe(viewportRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [playingInfo, selectedIncludes, getTotalSize, lastSelected, viewportRef]);
 
   useInterval(() => {
     if (!mouseState.isMoving) return;
@@ -288,25 +306,25 @@ const Playlist = ({}: PlaylistProps) => {
 
 const Popup = keyframes`
   0% {
-    margin-bottom: 0;
+    height: calc(100vh - 410px);
   }
   
   60% {
-    margin-bottom: 0;
+    height: calc(100vh - 410px);
   }
 
   100% {
-    margin-bottom: -60px;
+    height: calc(100vh - 410px - 65px);
   }
 `;
 
 const Popdown = keyframes`
   0% {
-    margin-bottom: -60px;
+    height: calc(100vh - 410px - 65px);
   }
 
   100% {
-    margin-bottom: 0;
+    height: calc(100vh - 410px);
   }
 `;
 
@@ -315,8 +333,6 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div<{ $appBarEnable: boolean }>`
-  height: calc(100vh - 410px);
-
   ${({ $appBarEnable }) =>
     $appBarEnable
       ? css`
@@ -359,9 +375,9 @@ const SongContainer = styled.div<{
     !$ismoving &&
     css`
       &:hover {
-        background-color: ${addAlpha(colors.gray700, 0.5)}};
+        background-color: ${addAlpha(colors.gray700, 0.5)};
       }
-      `}
+    `}
 `;
 
 const TitleText = styled(T7Light)`

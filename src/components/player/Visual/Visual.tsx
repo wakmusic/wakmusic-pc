@@ -30,9 +30,7 @@ const Visual = ({}: VisualProps) => {
   const [zoom, setZoom] = useState(1);
 
   useEffect(() => {
-    if (!ref.current) {
-      return;
-    }
+    if (!ref.current) return;
 
     const resizeObserver = new ResizeObserver(() => {
       setZoom(

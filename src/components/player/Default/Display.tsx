@@ -109,7 +109,10 @@ const Display = ({}: DisplayProps) => {
                 icon={PlayListSVG}
                 onClick={() => {
                   navigate("/player/playlist");
-                  ipcRenderer?.send("mode:default");
+
+                  if (location.pathname === "/player") {
+                    ipcRenderer?.send("mode:default");
+                  }
                 }}
               />
             )}

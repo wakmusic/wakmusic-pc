@@ -1,11 +1,46 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { OrderedSongType, Song } from "@templates/song";
 
 import { isUndefined } from "@utils/isTypes";
 
-export const useSelectSongs = () => {
+export const useSelectSongs = (songs?: Song[]) => {
   const [selected, setSelected] = useState<OrderedSongType[]>([]);
+  const [prevSongs, setPrevSongs] = useState<OrderedSongType[]>([]);
+
+  useEffect(() => {
+    if (isUndefined(songs)) return;
+
+    const newSelected = [...selected];
+    selected.forEach((selectedItem, index) => {
+      let itemIndex = -1;
+
+      songs.forEach((songItem, compareIndex) => {
+        const selectedSong: Song = selectedItem;
+        console.log(songItem, selectedSong);
+        if (songItem.songId === selectedSong.songId) {
+          itemIndex = compareIndex;
+        }
+      });
+
+      newSelected[index].index = itemIndex;
+      console.log(itemIndex);
+    });
+
+    if (
+      !newSelected.every(
+        (value, index) =>
+          JSON.stringify(value) === JSON.stringify(selected[index])
+      )
+    ) {
+      newSelected.sort((a, b) => {
+        if (isUndefined(a.index) || isUndefined(b.index)) return 0;
+        return a.index - b.index;
+      });
+
+      setSelected(newSelected);
+    }
+  }, [songs, selected]);
 
   const selectCallback = (song: Song | Song[], index?: number) => {
     if (Array.isArray(song)) {
@@ -51,14 +86,13 @@ export const useSelectSongs = () => {
     } else {
       const newSelected = selected.slice();
       newSelected.push(item);
-      newSelected.sort((a, b) => a.index - b.index);
 
       setSelected(newSelected);
     }
   };
 
   const selectedIncludes = useCallback(
-    (song: Song, index: number) =>
+    (song: Song, index?: number) =>
       !selected.every(
         (value) =>
           JSON.stringify(value) !==

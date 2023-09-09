@@ -1,5 +1,5 @@
 import { VirtualItem as VirtualItemType } from "@tanstack/react-virtual";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -10,8 +10,6 @@ import useVirtualizer from "@hooks/virtualizer";
 
 import { OrderedSongType, Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
-
-import { isNull } from "@utils/isTypes";
 
 import SongItem from "./SongItem";
 
@@ -31,13 +29,7 @@ interface CustomSongsProps {
 interface DragTarget {
   song?: Song;
   index: number;
-  position: number;
   offset: number;
-}
-
-interface DragStart {
-  absolute: number; // 화면상에서 처음 클릭이 일어난 위치, 스크롤 영향 안받음
-  relative: number; // PageItemContainer을 기준으로 한 위치
 }
 
 const CustomSongs = ({
@@ -54,12 +46,7 @@ const CustomSongs = ({
 
   const [dragTarget, setDragTarget] = useState<DragTarget>({
     index: -1,
-    position: 0,
     offset: 0,
-  });
-  const [dragStart, setDragStart] = useState<DragStart>({
-    absolute: 0,
-    relative: 0,
   });
   const [dropTarget, setDropTarget] = useState(-1);
 
@@ -70,18 +57,22 @@ const CustomSongs = ({
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(songs);
 
-  const getSongItemY = useCallback(
-    (index: number) => {
-      if (isNull(viewportRef.current)) {
-        return -100;
-      }
+  const dragedPosition = useMemo(() => {
+    if (!isMouseDown || !viewportRef.current) return -64;
 
-      const scrolled = viewportRef.current.scrollTop;
+    const viewportRect = viewportRef.current.getBoundingClientRect();
+    const dragPos = mouseY - viewportRect.top - (dragTarget.offset + 20);
 
-      return (index - Math.floor(scrolled / 64)) * 64 - (scrolled % 64);
-    },
-    [viewportRef]
-  );
+    if (dragPos < 0) {
+      return 0;
+    }
+
+    if (dragPos > viewportRect.height - 64) {
+      return viewportRect.height - 64;
+    }
+
+    return dragPos;
+  }, [mouseY, isMouseDown, dragTarget.offset, viewportRef]);
 
   const mapSongComponent = useCallback(
     (virtualItem: VirtualItemType, item: Song) => {
@@ -113,16 +104,10 @@ const CustomSongs = ({
               onEdit={(e) => {
                 setIsMouseDown(true);
 
-                const position = getSongItemY(index);
                 setDragTarget({
                   index: index,
                   song: item,
-                  position: position,
                   offset: e.nativeEvent.offsetY,
-                });
-                setDragStart({
-                  relative: position,
-                  absolute: e.clientY,
                 });
                 setDropTarget(index);
                 setMouseY(e.clientY);
@@ -141,38 +126,11 @@ const CustomSongs = ({
       animateDrag,
       dropTarget,
       editMode,
-      getSongItemY,
       isMouseDown,
       songFeatures,
       onSongClick,
       selectedIncludes,
     ]
-  );
-
-  const moveDragedSong = useCallback(
-    (e: React.MouseEvent) => {
-      const viewportDOM = viewportRef.current;
-
-      if (!viewportDOM) return;
-      document.body.style.cursor = "pointer";
-
-      let newPosition = dragStart.relative + (e.clientY - dragStart.absolute);
-      const viewportRect = viewportDOM.getBoundingClientRect();
-
-      if (newPosition < 0) {
-        newPosition = 0;
-      } else if (newPosition + 64 > viewportRect.height) {
-        newPosition = viewportRect.height - 64;
-      }
-
-      if (newPosition !== dragTarget.position) {
-        setDragTarget({
-          ...dragTarget,
-          position: newPosition,
-        });
-      }
-    },
-    [viewportRef, dragStart, dragTarget]
   );
 
   useEffect(() => {
@@ -190,14 +148,26 @@ const CustomSongs = ({
   }, [children, songs, isMouseDown, defaultSongs]);
 
   useEffect(() => {
-    // mouse 이벤트 핸들러 등록
-    if (!editMode) return;
+    // mousemove 이벤트 핸들러 등록
+    if (!isMouseDown) return;
+    console.log("HANDLE");
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (editMode) {
+      if (isMouseDown) {
         setMouseY(e.clientY);
       }
     };
+
+    document.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [isMouseDown]);
+
+  useEffect(() => {
+    // mouseup 이벤트 핸들러 등록
+    if (!isMouseDown) return;
 
     const handleMouseUp = () => {
       if (isMouseDown) {
@@ -214,7 +184,7 @@ const CustomSongs = ({
         }
 
         setSongs(newSongs);
-        if (newSongs !== children) {
+        if (!newSongs.every((value, index) => value === children[index])) {
           onEdit(newSongs);
         }
 
@@ -224,11 +194,9 @@ const CustomSongs = ({
       }
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [
@@ -329,12 +297,7 @@ const CustomSongs = ({
   }, 25);
 
   return (
-    <Container
-      onMouseMove={(e) => {
-        if (!isMouseDown) return;
-        moveDragedSong(e);
-      }}
-    >
+    <Container>
       <PageItemContainer
         height={height}
         ref={viewportRef}
@@ -348,7 +311,7 @@ const CustomSongs = ({
       <PseuduSongItem
         style={{
           display: isMouseDown && editMode ? "block" : "none",
-          top: dragTarget.position,
+          top: dragedPosition,
         }}
       >
         {dragTarget.song && (

@@ -25,7 +25,7 @@ const Likes = ({}: LikesProps) => {
   const prevLikes = usePrevious(likes);
   const [changeLikes, setChangeLikes] = useState<Song[]>([]);
 
-  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
+  const { selected, selectCallback, selectedIncludes } = useSelectSongs(likes);
 
   useEffect(() => {
     if (

@@ -36,6 +36,7 @@ import { BasePlaylist, PlaylistType } from "@templates/playlist";
 import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
+import { isUndefined } from "@utils/isTypes";
 import { getPlaylistIcon, getRecommendSquareImage } from "@utils/staticUtill";
 import { isSameArray } from "@utils/utils";
 
@@ -84,7 +85,9 @@ const Playlist = ({}: PlaylistProps) => {
     return (playlists ?? []).find((item) => item.key === playlistId);
   }, [playlistId, playlists, recommendList]);
 
-  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
+  const { selected, selectCallback, selectedIncludes } = useSelectSongs(
+    isUndefined(playlist) ? [] : playlist.songs
+  );
 
   const prevPlaylist = usePrevious(playlist);
   const [changePlaylist, setChangePlaylist] = useState<Song[]>([]);

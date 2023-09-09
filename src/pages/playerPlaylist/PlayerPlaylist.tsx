@@ -22,7 +22,9 @@ interface PlayerPlaylistProps {}
 const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
-  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
+  const { selected, selectCallback, selectedIncludes } = useSelectSongs(
+    playingInfo.playlist
+  );
 
   const dispatchPlayerListInfo = async (songs: Song[]) => {
     const removedSongs = playingInfo.playlist.filter((playerSong) =>

@@ -29,7 +29,7 @@ const LoginModal = ({}: LoginModalProps) => {
     // TODO: 추후 웹 환경에서도 로그인 가능하도록 패치 필요
     const openFn = openExternal || ((url: string) => open(url, "_blank"));
 
-    openFn(`${import.meta.env.VITE_API_URL}/v2/auth/pc/login/${platform}`);
+    openFn(`${import.meta.env.VITE_API_URL}/auth/pc/login/${platform}`);
 
     setLoginModalState(false);
   };

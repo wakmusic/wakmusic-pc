@@ -333,7 +333,6 @@ export const usePlaySongs = () => {
 
       for (const song of addSongs) {
         if (isNil(song)) continue;
-        console.log(song);
 
         const index = oldPlaylist.findIndex(
           (item) => item?.songId === song.songId

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import styled, { keyframes } from "styled-components/macro";
+import styled, { css, keyframes } from "styled-components/macro";
 
 import { T4Bold } from "@components/Typography/Bold";
 
@@ -32,6 +32,10 @@ const Popup = keyframes`
   0% {
     bottom: -75px;
   }
+  
+  60% {
+    bottom: -75px;
+  }
 
   100% {
     bottom: 0;
@@ -51,8 +55,14 @@ const Popdown = keyframes`
 const Wrapper = styled.div<{ $popdown: boolean }>`
   position: fixed;
 
-  animation: ${({ $popdown }) => ($popdown ? Popdown : Popup)} 0.25s ease-out
-    forwards;
+  ${({ $popdown }) =>
+    $popdown
+      ? css`
+          animation: ${Popdown} 0.25s ease-out forwards;
+        `
+      : css`
+          animation: ${Popup} 0.35s ease-out forwards;
+        `}
 `;
 
 const ButtonContainer = styled.div`

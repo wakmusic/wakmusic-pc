@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
-import styled, { css } from "styled-components/macro";
+import styled, { css, keyframes } from "styled-components/macro";
 
 import { T7Light } from "@components/Typography";
 import PlayerScroll from "@components/globals/Scroll/PlayerScroll";
@@ -286,14 +286,45 @@ const Playlist = ({}: PlaylistProps) => {
   );
 };
 
+const Popup = keyframes`
+  0% {
+    margin-bottom: 0;
+  }
+  
+  60% {
+    margin-bottom: 0;
+  }
+
+  100% {
+    margin-bottom: -60px;
+  }
+`;
+
+const Popdown = keyframes`
+  0% {
+    margin-bottom: -60px;
+  }
+
+  100% {
+    margin-bottom: 0;
+  }
+`;
+
 const Container = styled.div`
   padding: 16px 0;
 `;
 
 const Wrapper = styled.div<{ $appBarEnable: boolean }>`
-  height: calc(
-    100vh - 410px + ${({ $appBarEnable }) => ($appBarEnable ? -60 : 0)}px
-  );
+  height: calc(100vh - 410px);
+
+  ${({ $appBarEnable }) =>
+    $appBarEnable
+      ? css`
+          animation: ${Popup} 0.35s ease-out forwards;
+        `
+      : css`
+          animation: ${Popdown} 0.25s ease-out forwards;
+        `}
 `;
 
 const PlaylistContainer = styled.div<{ height: number }>`

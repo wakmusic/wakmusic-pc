@@ -25,6 +25,7 @@ const Player = ({}: PlayerProps) => {
 
 const Container = styled.div`
   margin-left: auto;
+  margin-right: 0.5px;
 
   width: 290px;
   height: calc(100vh - 38px);
@@ -32,8 +33,6 @@ const Container = styled.div`
   background-color: ${colors.gray900};
 
   overflow: hidden;
-
-  margin-left: -0.5px;
 `;
 
 const Divider = styled.div`

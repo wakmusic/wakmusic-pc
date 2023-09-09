@@ -9,7 +9,12 @@ import { IPCMain, IPCRenderer } from "@constants/ipc";
 import { useAlertModal } from "@hooks/alertModal";
 import { useLikesState } from "@hooks/likes";
 import { useLoginModalOpener } from "@hooks/loginModal";
-import { usePlayingInfoState } from "@hooks/player";
+import {
+  useControlState,
+  useNextSong,
+  usePlayingInfoState,
+  usePrevSong,
+} from "@hooks/player";
 import { useUserState } from "@hooks/user";
 
 import { isNull } from "./isTypes";
@@ -18,10 +23,14 @@ import { ipcRenderer } from "./modules";
 const SchemeHandler = (): null => {
   const [, setUser] = useUserState();
   const [, setLikes] = useLikesState();
+  const [, setControl] = useControlState();
   const [, setPlayingInfo] = usePlayingInfoState();
 
   const alertModal = useAlertModal();
   const openLoginModal = useLoginModalOpener();
+
+  const prevSong = usePrevSong();
+  const nextSong = useNextSong();
 
   useEffect(() => {
     (async () => {
@@ -97,10 +106,50 @@ const SchemeHandler = (): null => {
           if (ipcRenderer) ipcRenderer.send("user:logout");
 
           setUser(null);
+
+          break;
+        }
+
+        case "resume": {
+          setControl((prev) => ({
+            ...prev,
+            isPlaying: true,
+          }));
+
+          break;
+        }
+
+        case "pause": {
+          setControl((prev) => ({
+            ...prev,
+            isPlaying: false,
+          }));
+
+          break;
+        }
+
+        case "prevSong": {
+          prevSong();
+
+          break;
+        }
+
+        case "nextSong": {
+          nextSong();
+
+          break;
         }
       }
     },
-    [alertModal, openLoginModal, setPlayingInfo, setUser]
+    [
+      alertModal,
+      nextSong,
+      openLoginModal,
+      prevSong,
+      setControl,
+      setPlayingInfo,
+      setUser,
+    ]
   );
 
   useEffect(() => {

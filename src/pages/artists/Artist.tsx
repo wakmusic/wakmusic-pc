@@ -126,6 +126,10 @@ const Artist = ({}: ArtistProps) => {
     }
   }, [animationState, controls, scroll]);
 
+  const scrollToTop = () => {
+    viewportRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   // TODO: 스켈레톤, 오류
   if (artistsError || albumsError) return <div>에러 발생!</div>;
 
@@ -137,6 +141,7 @@ const Artist = ({}: ArtistProps) => {
           controls={controls}
           small={scroll > 0}
           isLoading={artistsIsLoading}
+          scrollToTop={scrollToTop}
         />
 
         <TabBarWrapper>

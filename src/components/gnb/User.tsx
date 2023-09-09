@@ -9,9 +9,11 @@ import colors from "@constants/colors";
 import { IPCRenderer } from "@constants/ipc";
 
 import { useConfirmModal } from "@hooks/confirmModal";
+import { useExitModal } from "@hooks/exitModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
 import { useUserState } from "@hooks/user";
 
+import { isNull } from "@utils/isTypes";
 import { ipcRenderer } from "@utils/modules";
 import { getProfileImg } from "@utils/staticUtill";
 
@@ -25,6 +27,7 @@ const User = ({}: UserProps) => {
   const [user, setUser] = useUserState();
 
   const confirmModal = useConfirmModal();
+  const exitModal = useExitModal();
 
   const logout = async (e: React.MouseEvent<Element, MouseEvent>) => {
     e.stopPropagation();
@@ -40,14 +43,36 @@ const User = ({}: UserProps) => {
   };
 
   const goMypage = () => {
-    navigate("/mypage");
+    navigate("/mywakmu");
   };
 
-  if (user && ["/mypage", "/about", "/support"].includes(location.pathname)) {
+  const clickUserButton = (e: React.MouseEvent<Element, MouseEvent>) => {
+    if (user) {
+      logout(e);
+    } else {
+      loginModalOpener();
+    }
+  };
+
+  if (["/mywakmu", "/about", "/support"].includes(location.pathname)) {
     return (
-      <Container onClick={logout}>
-        <Text>로그아웃</Text>
-      </Container>
+      <>
+        <Container onClick={clickUserButton}>
+          <Text>{user ? "로그아웃" : "로그인 하기"}</Text>
+        </Container>
+
+        <Container
+          onClick={async () => {
+            const result = await exitModal(false);
+
+            if (!isNull(result)) {
+              localStorage.setItem("exitMode", result);
+            }
+          }}
+        >
+          <Text>앱 설정</Text>
+        </Container>
+      </>
     );
   }
 
@@ -64,11 +89,14 @@ const User = ({}: UserProps) => {
     );
   }
 
-  return (
-    <Container onClick={() => loginModalOpener()}>
-      <Text>로그인 하기</Text>
-    </Container>
-  );
+  if (!user)
+    return (
+      <Container onClick={() => navigate("/mywakmu")}>
+        <Text>MY 왁뮤</Text>
+      </Container>
+    );
+
+  return null;
 };
 
 const Container = styled.div`

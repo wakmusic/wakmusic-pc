@@ -17,7 +17,7 @@ export type ControlStateType = {
 
 export type PlayingInfoStateType = {
   playlist: Song[];
-  history: string[];
+  original: Song[];
   current: number;
 };
 

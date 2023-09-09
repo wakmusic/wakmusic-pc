@@ -25,6 +25,7 @@ const Player = ({}: PlayerProps) => {
 
 const Container = styled.div`
   margin-left: auto;
+  margin-right: 0.5px;
 
   width: 290px;
   height: calc(100vh - 38px);

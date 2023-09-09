@@ -93,7 +93,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
               )}
             </CategoryHeader>
 
-            {res[key].slice(-3).map((song, index) => (
+            {res[key].slice(0, 3).map((song, index) => (
               <SongItem
                 key={index}
                 song={song}

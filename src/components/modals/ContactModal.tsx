@@ -44,7 +44,7 @@ const ContactModal = ({}: ContactModalProps) => {
         </InputContainer>
 
         <ButtonsWrapper>
-          <OkButton onClick={() => navigate("/mypage")} />
+          <OkButton onClick={() => navigate("/mywakmu")} />
         </ButtonsWrapper>
       </Container>
     </ModalOverlay>

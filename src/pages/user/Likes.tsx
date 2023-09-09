@@ -96,7 +96,6 @@ const Likes = ({}: LikesProps) => {
       >
         {likes}
       </CustomSongs>
-
       <MusicController
         songs={likes}
         selectedSongs={selected}

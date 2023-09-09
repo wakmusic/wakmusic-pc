@@ -89,10 +89,14 @@ const YouTube = ({
     const current = playerState.current.current;
     if (current && gainNode.current) {
       if (current.songId in soundBoosts) {
-        gainNode.current.gain.value = soundBoosts[current.songId];
+        gainNode.current.gain.value = 1 + soundBoosts[current.songId];
       } else {
-        gainNode.current.gain.value = 1;
+        gainNode.current.gain.value = 2;
       }
+
+      console.debug(
+        `[SoundBoost] ${current.songId} - ${gainNode.current.gain.value}x`
+      );
     }
   };
 
@@ -239,7 +243,9 @@ const YouTube = ({
     if (!player.current) return;
 
     if (isPlaying) {
-      if (playerState.current.isFirst) return;
+      if (playerState.current.isFirst) {
+        return;
+      }
 
       player.current.playVideo();
     } else {

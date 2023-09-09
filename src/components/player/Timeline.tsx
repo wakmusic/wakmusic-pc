@@ -30,6 +30,8 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
     return isMouseDown ? change.progress : progress;
   }, [change, isMouseDown, progress]);
 
+  const displayingCurrent = (Math.min(current, length) / length) * 100;
+
   const [, setIsControlling] = useIsControllingState();
 
   const changeProgressPosition = useCallback(
@@ -95,20 +97,11 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
       $controlling={isMouseDown}
       $isSeparated={isSeparated ?? false}
     >
-      <Line
-        $progress={(current / length) * 100}
-        $isSeparated={isSeparated ?? false}
-      />
-      <HandleContainer
-        $progress={(current / length) * 100}
-        $isSeparated={isSeparated}
-      >
+      <Line $progress={displayingCurrent} $isSeparated={isSeparated ?? false} />
+      <HandleContainer $progress={displayingCurrent} $isSeparated={isSeparated}>
         <Handle />
       </HandleContainer>
-      <TimelinePopover
-        $progress={(current / length) * 100}
-        $isSeparated={isSeparated}
-      >
+      <TimelinePopover $progress={displayingCurrent} $isSeparated={isSeparated}>
         <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
         <LengthText color={colors.blueGray100}>
           {formatSecond(length)}
@@ -161,8 +154,8 @@ const TimelinePopover = styled.div.attrs<{
 
 const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
   width: 100%;
-  height: 2px;
 
+  height: 2px;
   margin-bottom: 2px;
 
   cursor: pointer;
@@ -176,8 +169,17 @@ const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
 
   &:hover {
     height: 4px;
+    margin-bottom: -2px;
 
-    margin-bottom: 0;
+    ${({ $isSeparated }) =>
+      $isSeparated
+        ? css`
+            margin-top: -1px;
+            margin-bottom: -1px;
+          `
+        : css`
+            margin-bottom: 0;
+          `}
 
     ${HandleContainer} {
       display: inherit;
@@ -188,12 +190,20 @@ const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
     }
   }
 
-  ${({ $controlling }) =>
+  ${({ $controlling, $isSeparated }) =>
     $controlling &&
     css`
       height: 4px;
-
       margin-bottom: 0;
+
+      ${$isSeparated
+        ? css`
+            margin-top: -1px;
+            margin-bottom: -1px;
+          `
+        : css`
+            margin-bottom: 0;
+          `}
 
       ${HandleContainer} {
         display: inherit;

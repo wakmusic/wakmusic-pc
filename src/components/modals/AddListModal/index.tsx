@@ -6,6 +6,7 @@ import { addSongToPlaylist, createPlaylist } from "@apis/playlist";
 import { fetchPlaylists } from "@apis/user";
 
 import { ReactComponent as AddListSVG } from "@assets/icons/ic_24_playadd_600.svg";
+import { ReactComponent as CloseSVG } from "@assets/icons/ic_30_close.svg";
 
 import { T4Bold, T5Medium, T6Medium } from "@components/Typography";
 import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
@@ -26,9 +27,11 @@ import { getPlaylistIcon } from "@utils/staticUtill";
 import Input from "../globals/Input";
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";
 
-interface AddListModalProps {}
+interface AddListModalProps {
+  popup?: boolean;
+}
 
-const AddListModal = ({}: AddListModalProps) => {
+const AddListModal = ({ popup }: AddListModalProps) => {
   const [modalState, setModalState] = useAddListModalState();
 
   const [open, setOpen] = useState<boolean>(false);
@@ -42,10 +45,22 @@ const AddListModal = ({}: AddListModalProps) => {
   });
 
   const resolve = async (list: PlaylistType | undefined) => {
-    if (isUndefined(list)) {
+    const _resolve = (result: boolean | undefined) => {
       if (modalState.resolve) {
-        modalState.resolve(undefined);
+        modalState.resolve(result);
       }
+
+      if (location.pathname === "/addList") {
+        window.postMessage("resolve");
+        window.close();
+      }
+
+      setModalState({ ...modalState, isOpen: false });
+      setIsSpaceDisabled(false);
+    };
+
+    if (isUndefined(list)) {
+      _resolve(undefined);
 
       return;
     }
@@ -59,12 +74,7 @@ const AddListModal = ({}: AddListModalProps) => {
       refetch();
     }
 
-    if (modalState.resolve) {
-      modalState.resolve(success);
-    }
-
-    setModalState({ ...modalState, isOpen: false });
-    setIsSpaceDisabled(false);
+    _resolve(success);
   };
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
@@ -93,12 +103,32 @@ const AddListModal = ({}: AddListModalProps) => {
     }
   }, [playlists, viewportRef]);
 
-  if (!modalState.isOpen) return null;
+  useEffect(() => {
+    if (location.pathname === "/addList") {
+      window.postMessage("ready");
+    }
+
+    const listener = (e: MessageEvent) => {
+      if (e.data.type === "setSongs") {
+        setModalState((prev) => ({ ...prev, selected: e.data.data }));
+      }
+    };
+
+    window.addEventListener("message", listener);
+
+    return () => {
+      window.removeEventListener("message", listener);
+    };
+  }, [setModalState]);
+
+  if (!modalState.isOpen && !popup) return null;
 
   return (
     <ModalOverlay onClick={() => resolve(undefined)}>
       <Container onClick={(e) => e.stopPropagation()}>
+        <Header />
         <Title>보관함에 담기</Title>
+        <CloseButton onClick={() => resolve(undefined)} />
 
         <SelectedSongs>
           <T5Medium color={colors.point}>{modalState.selected.length}</T5Medium>
@@ -158,12 +188,15 @@ const Container = styled(ModalContainer)`
   height: 500px;
 `;
 
-const SelectedSongs = styled.div`
-  margin-right: auto;
-  margin-left: 30px;
-  margin-bottom: 12px;
+const Header = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
 
-  display: flex;
+  width: 440px;
+  height: 60px;
+
+  -webkit-app-region: drag;
 `;
 
 const Title = styled(T4Bold)`
@@ -171,6 +204,25 @@ const Title = styled(T4Bold)`
 
   margin-top: 20px;
   margin-bottom: 32px;
+`;
+
+const CloseButton = styled(CloseSVG)`
+  position: absolute;
+
+  top: 20px;
+  right: 20px;
+
+  cursor: pointer;
+
+  -webkit-app-region: no-drag;
+`;
+
+const SelectedSongs = styled.div`
+  margin-right: auto;
+  margin-left: 30px;
+  margin-bottom: 12px;
+
+  display: flex;
 `;
 
 const InputContainer = styled.div`

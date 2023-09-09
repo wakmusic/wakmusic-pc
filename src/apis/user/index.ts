@@ -12,15 +12,17 @@ import {
   UserProfileResponse,
 } from "./dto";
 
+const USER_BASE = "/user";
+
 export const fetchProfileImages = async (): Promise<ProfileListResponse> => {
-  const { data } = await instance.get(`/v2/user/profile/list`);
+  const { data } = await instance.get(`${USER_BASE}/profile/list`);
 
   return data;
 };
 
 export const fetchUser = async (): Promise<UserProfileResponse> => {
   const { data, status } = await instance.get(
-    `/v2/user/profile`,
+    `${USER_BASE}/profile`,
     validateStatus
   );
 
@@ -33,7 +35,7 @@ export const setProfileImage = async (
   profile: UserProfile
 ): Promise<boolean> => {
   const { status } = await instance.patch(
-    `/v2/user/profile`,
+    `${USER_BASE}/profile`,
     {
       type: profile.type,
     },
@@ -45,7 +47,7 @@ export const setProfileImage = async (
 
 export const setUsername = async (name: string): Promise<boolean> => {
   const { status } = await instance.patch(
-    `/v2/user/name`,
+    `${USER_BASE}/name`,
     {
       name,
     },
@@ -56,7 +58,7 @@ export const setUsername = async (name: string): Promise<boolean> => {
 };
 
 export const fetchPlaylists = async (): Promise<PlaylistsResponse> => {
-  const { data } = await instance.get(`/v2/user/playlists`);
+  const { data } = await instance.get(`${USER_BASE}/playlists`);
 
   return data.map((item: RawPlaylist) => ({
     ...item,
@@ -68,7 +70,7 @@ export const editPlaylists = async (
   playlistKeys: string[]
 ): Promise<boolean> => {
   const { status } = await instance.put(
-    `/v2/user/playlists`,
+    `${USER_BASE}/playlists`,
     {
       playlistKeys,
     },
@@ -82,7 +84,7 @@ export const removePlaylists = async (
   playlistKeys: string[]
 ): Promise<boolean> => {
   const { status } = await instance.post(
-    `/v2/user/playlists/delete`,
+    `${USER_BASE}/playlists/delete`,
     {
       playlistKeys,
     },
@@ -93,14 +95,14 @@ export const removePlaylists = async (
 };
 
 export const fetchLikes = async (): Promise<Song[]> => {
-  const { data } = await instance.get(`/v2/user/likes`);
+  const { data } = await instance.get(`${USER_BASE}/likes`);
 
   return data.map((item: RawSong) => processSong("total", item));
 };
 
 export const editLikes = async (songIds: string[]): Promise<boolean> => {
   const { status } = await instance.put(
-    `/v2/user/likes`,
+    `${USER_BASE}/likes`,
     {
       songIds,
     },
@@ -112,7 +114,7 @@ export const editLikes = async (songIds: string[]): Promise<boolean> => {
 
 export const removeLikes = async (songIds: string[]): Promise<boolean> => {
   const { status } = await instance.post(
-    `/v2/user/likes/delete`,
+    `${USER_BASE}/likes/delete`,
     {
       songIds,
     },
@@ -123,7 +125,10 @@ export const removeLikes = async (songIds: string[]): Promise<boolean> => {
 };
 
 export const removeUser = async (): Promise<boolean> => {
-  const { status } = await instance.delete(`/v2/user/remove`, validateStatus);
+  const { status } = await instance.delete(
+    `${USER_BASE}/remove`,
+    validateStatus
+  );
 
   return status === 200;
 };
@@ -132,7 +137,7 @@ export const editPlaylistOrder = async (
   playlistKeys: string[]
 ): Promise<boolean> => {
   const { data } = await instance.put(
-    `/v2/user/playlists`,
+    `${USER_BASE}/playlists`,
     {
       playlistKeys,
     },

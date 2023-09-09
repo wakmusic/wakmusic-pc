@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { useAddListModal } from "@hooks/addListModal";
-import { useControlState, usePlayingInfoState } from "@hooks/player";
+import { usePlaySongs } from "@hooks/player";
 
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
@@ -52,30 +53,13 @@ const MusicController = ({
     useState(displayDefault);
   const [popdown, setPopdown] = useState(false);
 
-  const [, setPlayingInfo] = usePlayingInfoState();
-  const [, setControlState] = useControlState();
-
   const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
 
   const openAddListModal = useAddListModal();
 
-  const addSongs = useCallback(
-    (list: Song[], play?: boolean) => {
-      // 재생목록에 노래 추가
-      setPlayingInfo((prev) => ({
-        playlist: [...prev.playlist, ...list],
-        history: [],
-        current: play ? prev.playlist.length : prev.current,
-      }));
+  const location = useLocation();
 
-      if (!play) return;
-      setControlState((prev) => ({
-        ...prev,
-        isPlaying: true,
-      }));
-    },
-    [setControlState, setPlayingInfo]
-  );
+  const playSongs = usePlaySongs();
 
   const getControllerComponent = useCallback(
     (feature: ControllerFeature, key: number) => {
@@ -95,15 +79,40 @@ const MusicController = ({
             <AddMusic
               key={key}
               onClick={async () => {
+                if (location.pathname === "/player") {
+                  const win = open(
+                    "/addList",
+                    "_blank",
+                    "width=440,height=500,frame=false"
+                  );
+
+                  if (win) {
+                    win.addEventListener("message", (e) => {
+                      if (e.data === "ready") {
+                        win.postMessage({
+                          type: "setSongs",
+                          data: selectedSongs,
+                        });
+                      }
+
+                      if (e.data === "resolve") {
+                        dispatchSelectedSongs([]);
+                      }
+                    });
+                  }
+
+                  return;
+                }
+
                 const success = await openAddListModal(selectedSongs);
 
                 if (success) {
                   // TODO: 플레이리스트 추가 성공
-
-                  dispatchSelectedSongs([]);
                 } else {
                   // TODO: 플레이리스트 추가 실패
                 }
+
+                dispatchSelectedSongs([]);
               }}
             />
           );
@@ -111,7 +120,7 @@ const MusicController = ({
           return (
             <AddPlaylist
               onClick={() => {
-                addSongs(selectedSongs);
+                playSongs(selectedSongs, false, false);
                 dispatchSelectedSongs([]);
               }}
               key={key}
@@ -121,7 +130,7 @@ const MusicController = ({
           return (
             <PlayMusic
               onClick={() => {
-                addSongs(selectedSongs, true);
+                playSongs(selectedSongs);
                 dispatchSelectedSongs([]);
               }}
               key={key}
@@ -151,11 +160,12 @@ const MusicController = ({
     },
     [
       dispatchSelectedSongs,
-      songs,
-      openAddListModal,
-      selectedSongs,
-      addSongs,
+      location.pathname,
       onDelete,
+      openAddListModal,
+      playSongs,
+      selectedSongs,
+      songs,
     ]
   );
 
@@ -177,6 +187,20 @@ const MusicController = ({
 
     setSelectedLength(selectedSongs.length);
   }, [displayDefault, selectedSongs.length]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.code === "Escape") {
+        dispatchSelectedSongs([]);
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [dispatchSelectedSongs]);
 
   return (
     <Container $display={showControllerState}>

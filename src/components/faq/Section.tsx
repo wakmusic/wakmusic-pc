@@ -45,11 +45,10 @@ const Section = ({ article }: SectionProps) => {
         )}
         {isOpened ? <UpSVG /> : <DownSVG />}
       </Grid>
-      <DescriptionContainer
-        $open={isOpened}
-        $lines={article.description.split("\n").length}
-      >
-        <Description>{article.description}</Description>
+      <DescriptionContainer $open={isOpened}>
+        <DescriptionWrapper>
+          <Description>{article.description}</Description>
+        </DescriptionWrapper>
       </DescriptionContainer>
     </Container>
   );
@@ -123,26 +122,35 @@ const DownSVG = styled(ArrowDownSVG)`
 
 const DescriptionContainer = styled.div<{
   $open: boolean;
-  $lines: number;
 }>`
   width: 100%;
   padding: 0 20px;
 
-  height: ${({ $open, $lines }) => ($open ? $lines * 20 + 32 : 0)}px;
-
-  overflow: hidden;
   background-color: ${colors.blueGray200};
 
-  transition: height ease 300ms;
+  display: grid;
+  grid-template-rows: 0fr;
+
+  transition: grid-template-rows 0.3s ease-in-out;
+
+  ${({ $open }) =>
+    $open &&
+    css`
+      grid-template-rows: 1fr;
+    `}
+`;
+
+const DescriptionWrapper = styled.div`
+  overflow: hidden;
 `;
 
 const Description = styled(T6Medium)`
-  margin-top: 16px;
-
   width: 634px;
   color: ${colors.blueGray600};
 
   white-space: pre-wrap;
+
+  padding: 16px 0;
 `;
 
 export default Section;

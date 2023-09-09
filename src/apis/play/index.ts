@@ -14,7 +14,7 @@ export const requestPlaySong = async (
   currentSongId: string,
   prev: PrevData | undefined
 ): Promise<Song> => {
-  const { data } = await instance.post(`/v2/play`, {
+  const { data } = await instance.post(`/play`, {
     prev,
     curr: {
       songId: currentSongId,

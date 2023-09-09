@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
@@ -10,6 +9,10 @@ import { ReactComponent as RestoreSVG } from "@assets/icons/ic_20_restore.svg";
 
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
+import { useExitModal } from "@hooks/exitModal";
+import { useToggleSeparateMode } from "@hooks/toggleSeparateMode";
+
+import { isNull } from "@utils/isTypes";
 import { ipcRenderer } from "@utils/modules";
 
 import SimpleIconButton from "./SimpleIconButton";
@@ -19,10 +22,10 @@ interface ControlBarProps {
 }
 
 const ControlBar = ({ isVisualMode }: ControlBarProps) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const [isMax, setIsMax] = useState(false);
+
+  const toggleSeparateMode = useToggleSeparateMode();
+  const openExitModal = useExitModal();
 
   useEffect(() => {
     ipcRenderer?.on(IPCMain.WINDOW_MAXIMIZED, () => {
@@ -38,6 +41,35 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
       ipcRenderer?.removeAllListeners(IPCMain.WINDOW_UNMAXIMIZED);
     };
   }, []);
+
+  const close = async () => {
+    let mode = localStorage.getItem("exitMode") as
+      | "close"
+      | "background"
+      | null;
+
+    if (isNull(mode)) {
+      mode = await openExitModal(true);
+    }
+
+    if (isNull(mode)) {
+      return;
+    } else {
+      localStorage.setItem("exitMode", mode);
+    }
+
+    if (mode === "close") {
+      ipcRenderer?.send(IPCRenderer.WINDOW_CLOSE);
+    }
+
+    if (mode === "background") {
+      ipcRenderer?.send(IPCRenderer.WINDOW_HIDE);
+    }
+  };
+
+  const maximize = () => {
+    ipcRenderer?.send(IPCRenderer.WINDOW_MAX);
+  };
 
   if (!ipcRenderer) {
     return null;
@@ -59,28 +91,9 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
               : MaxSVG // 비주얼모드에만 최대화, 복구 가능
             : DivideSVG // 그 외에는 분리만 가능
         }
-        onClick={() => {
-          if (!ipcRenderer) return;
-
-          if (isVisualMode) {
-            ipcRenderer.send(IPCRenderer.WINDOW_MAX);
-          } else {
-            if (location.pathname !== "/player") {
-              navigate("/player");
-              ipcRenderer.send(IPCRenderer.MODE_SEPARATE);
-            } else {
-              navigate(-1);
-              ipcRenderer.send(IPCRenderer.MODE_DEFAULT);
-            }
-          }
-        }}
+        onClick={isVisualMode ? maximize : toggleSeparateMode}
       />
-      <SimpleIconButton
-        icon={CloseSVG}
-        onClick={() => {
-          ipcRenderer?.send(IPCRenderer.WINDOW_CLOSE);
-        }}
-      />
+      <SimpleIconButton icon={CloseSVG} onClick={close} />
     </Container>
   );
 };

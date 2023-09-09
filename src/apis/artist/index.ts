@@ -7,8 +7,10 @@ import processSong from "@utils/processSong";
 
 type ArtistListResponse = Artist[];
 
+const ARTIST_BASE = "/artist";
+
 export const fetchArtistList = async (): Promise<ArtistListResponse> => {
-  const { data } = await instance.get(`/v2/artist`);
+  const { data } = await instance.get(`${ARTIST_BASE}`);
   return data;
 };
 
@@ -17,7 +19,7 @@ export const fetchArtistAlbums = async (
   sort: SongSortType,
   start: number
 ): Promise<Song[]> => {
-  const { data } = await instance.get(`v2/artist/albums`, {
+  const { data } = await instance.get(`${ARTIST_BASE}/albums`, {
     params: {
       id: artistId,
       sort,

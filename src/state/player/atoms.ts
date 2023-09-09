@@ -1,4 +1,3 @@
-import throttle from "lodash.throttle";
 import { atom } from "recoil";
 
 import { IPCRenderer } from "@constants/ipc";
@@ -34,10 +33,9 @@ export const controlState = atom<ControlStateType>({
         if (newValue.isPlaying !== (oldValue as ControlStateType).isPlaying) {
           ipcRenderer?.send(IPCRenderer.RPC_PLAYING, newValue.isPlaying);
         }
+
         if (newValue.volume !== (oldValue as ControlStateType).volume) {
-          throttle(() => {
-            localStorage.setItem("volume", newValue.volume.toString());
-          });
+          localStorage.setItem("volume", newValue.volume.toString());
         }
 
         if (newValue.isMute !== (oldValue as ControlStateType).isMute) {
@@ -55,7 +53,7 @@ export const isControlling = atom<boolean>({
 
 export const playingLength = atom<number>({
   key: "playingLength",
-  default: 1,
+  default: 240,
 });
 
 export const playingProgress = atom<number>({
@@ -84,10 +82,13 @@ export const playingInfoState = atom<PlayingInfoStateType>({
     playlist: localStorage.getItem("playlist")
       ? JSON.parse(localStorage.getItem("playlist") as string)
       : [],
-    history: [],
+    original: localStorage.getItem("playlist")
+      ? JSON.parse(localStorage.getItem("playlist") as string)
+      : [],
     current: 0,
   },
   effects: [
+    // Discord RPC
     ({ onSet }) => {
       onSet((value, oldValue) => {
         const current = value.playlist[value.current];
@@ -95,6 +96,40 @@ export const playingInfoState = atom<PlayingInfoStateType>({
 
         if (value.playlist !== (oldValue as PlayingInfoStateType).playlist) {
           localStorage.setItem("playlist", JSON.stringify(value.playlist));
+        }
+      });
+    },
+
+    // Shuffle Original Playlist
+    ({ onSet, setSelf }) => {
+      onSet((value, oldValue) => {
+        const nowPlaylist = value.playlist;
+        const oldPlaylist = (oldValue as PlayingInfoStateType).playlist;
+
+        if (nowPlaylist.length !== oldPlaylist.length) {
+          const deleted = oldPlaylist.filter(
+            (item) => !nowPlaylist.includes(item)
+          );
+
+          const added = nowPlaylist.filter(
+            (item) => !oldPlaylist.includes(item)
+          );
+
+          const newOriginal = [...value.original];
+
+          for (const item of deleted) {
+            const index = newOriginal.indexOf(item);
+            newOriginal.splice(index, 1);
+          }
+
+          for (const item of added) {
+            newOriginal.push(item);
+          }
+
+          setSelf({
+            ...value,
+            original: newOriginal,
+          });
         }
       });
     },

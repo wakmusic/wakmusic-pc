@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components/macro";
 
-import { getLyrics } from "@apis/lyrics";
 import { requestPlaySong } from "@apis/play";
+import { getLyrics } from "@apis/songs";
 
 import { useInterval } from "@hooks/interval";
 import {
@@ -19,6 +19,8 @@ import {
 import { usePrevious } from "@hooks/previous";
 
 import { Song } from "@templates/song";
+
+import { applyHook } from "@utils/consoleApi";
 
 import YouTube from "./providers/YouTube";
 
@@ -48,19 +50,13 @@ const PlayerService = ({}: PlayerServiceProps) => {
   const currentSong = useRef<Song | null>(null);
   currentSong.current = info.playlist[info.current];
 
+  applyHook(setInfo);
+
   useInterval(() => {
     if (!currentSongState || !control.isPlaying || isControlling) return;
 
-    setCurrentProgress((prev) => prev + 1);
-  }, 1000);
-
-  useEffect(() => {
-    if (!currentSongState) return;
-
-    getLyrics(currentSongState).then((lyrics) => {
-      setLyrics(lyrics);
-    });
-  }, [currentSongState, setLyrics]);
+    setCurrentProgress((prev) => prev + 0.25);
+  }, 250);
 
   useEffect(() => {
     if (!currentSongState || currentSongState?.songId === previousSong?.songId)
@@ -81,12 +77,17 @@ const PlayerService = ({}: PlayerServiceProps) => {
         ),
       }));
     });
+
+    getLyrics(currentSongState).then((lyrics) => {
+      setLyrics(lyrics);
+    });
   }, [
     currentSongState,
     previousSong,
     previousProgress,
     previousLength,
     setInfo,
+    setLyrics,
   ]);
 
   useEffect(() => {
@@ -116,7 +117,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
   useEffect(() => {
     if (currentSongState) return;
 
-    setLength(1);
+    setLength(0.1);
     setCurrentProgress(0);
     setControl((prev) => ({
       ...prev,
@@ -134,7 +135,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
     (length: number) => {
       if (!currentSong.current) return;
 
-      setLength(length);
+      setLength(length - currentSong.current.start);
       setCurrentProgress(currentSong.current.start);
       setControl((prev) => ({
         ...prev,

@@ -4,12 +4,13 @@ import { queryClient } from "src/main";
 import styled from "styled-components/macro";
 
 import { copyPlaylist, createPlaylist } from "@apis/playlist";
-import { editPlaylistOrder, fetchPlaylists } from "@apis/user";
+import { editPlaylistOrder, fetchPlaylists, removePlaylists } from "@apis/user";
 
 import { ReactComponent as Create } from "@assets/icons/ic_24_playadd_600.svg";
 import { ReactComponent as Import } from "@assets/icons/ic_24_share.svg";
 
 import IconButton from "@components/globals/IconButton";
+import ListController from "@components/user/mylist/ListController";
 import MylistItem from "@components/user/mylist/MylistItem";
 
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -23,7 +24,7 @@ import { usePrevious } from "@hooks/previous";
 
 import { PlaylistType, myListItemType } from "@templates/playlist";
 
-import { isUndefined } from "@utils/isTypes";
+import { isNull, isUndefined } from "@utils/isTypes";
 import { isSameArray } from "@utils/utils";
 
 interface XY {
@@ -80,7 +81,6 @@ const getPlaylistInitialPosition = (targetIndex: number): XY => {
 const Mylist = ({}: MylistProps) => {
   const {
     data: playlists,
-    isLoading,
     error,
     refetch,
   } = useQuery({
@@ -90,6 +90,7 @@ const Mylist = ({}: MylistProps) => {
 
   const [isEditMode] = useMylistState();
   const [shuffledList, dispatchMyList] = useReducer(shuffleMyList, []);
+  const [selectedList, setSelectedList] = useState<PlaylistType[]>([]);
   const [mouseDown, setMouseDown] = useState(false);
   const [mouseDownPosition, setmouseDownPosition] = useState<XY>({
     x: 0,
@@ -178,7 +179,9 @@ const Mylist = ({}: MylistProps) => {
   };
 
   const movePlayList = useCallback(
-    (event: React.MouseEvent) => {
+    (event: MouseEvent) => {
+      if (!(mouseDown && isEditMode)) return;
+
       const movementX = event.clientX - mouseDownPosition.x; // 마우스가 움직인 거리 = 현재 마우스의 위치 - 마우스가 클릭된 위치
       const movementY = event.clientY - mouseDownPosition.y;
 
@@ -187,8 +190,42 @@ const Mylist = ({}: MylistProps) => {
         y: playlistInitialPosition.y + movementY,
       });
     },
-    [mouseDownPosition, setDragPostion, playlistInitialPosition]
+    [
+      isEditMode,
+      mouseDown,
+      mouseDownPosition.x,
+      mouseDownPosition.y,
+      playlistInitialPosition.x,
+      playlistInitialPosition.y,
+    ]
   );
+
+  const onMouseUp = useCallback(() => {
+    setMouseDown(false);
+    if (!mouseDown) return;
+
+    dispatchMyList({
+      type: ShuffleActionType.relocate,
+      target: dragAndDropTarget.drag.index,
+      to: dragAndDropTarget.drop,
+    });
+  }, [dragAndDropTarget.drag.index, dragAndDropTarget.drop, mouseDown]);
+
+  const onMouseLeave = useCallback(() => {
+    setMouseDown(false);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("mouseup", onMouseUp);
+    window.addEventListener("mouseleave", onMouseLeave);
+    window.addEventListener("mousemove", movePlayList);
+
+    return () => {
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("mouseleave", onMouseLeave);
+      window.removeEventListener("mousemove", movePlayList);
+    };
+  }, [movePlayList, onMouseLeave, onMouseUp]);
 
   const createList = async () => {
     const name = await createListModal();
@@ -200,6 +237,18 @@ const Mylist = ({}: MylistProps) => {
     if (success) {
       refetch();
     }
+  };
+
+  const handleSelectPlaylist = (playlist: PlaylistType) => {
+    setSelectedList((prev) => {
+      const newSelectedList = [...prev];
+
+      if (newSelectedList.findIndex((item) => item.key === playlist.key) > -1) {
+        return prev.filter((item) => item.key !== playlist.key);
+      } else {
+        return [...prev, playlist];
+      }
+    });
   };
 
   const loadList = async () => {
@@ -214,8 +263,13 @@ const Mylist = ({}: MylistProps) => {
     }
   };
 
+  const removePlaylistsHandler = async (playlists: PlaylistType[]) => {
+    await removePlaylists(playlists.map((item) => item.key));
+
+    refetch();
+  };
+
   if (error) return <div>Error...</div>;
-  if (!playlists || isLoading) return <div>Loading...</div>;
 
   return (
     <Container>
@@ -227,46 +281,31 @@ const Mylist = ({}: MylistProps) => {
           리스트 가져오기
         </IconButton>
       </Menu>
-
       <PageItemContainer height={206}>
-        <PlayLists
-          onMouseMove={mouseDown && isEditMode ? movePlayList : undefined}
-          onMouseUp={() => {
-            setMouseDown(false);
-            if (!mouseDown) return;
+        <PlayLists>
+          {((isEditMode ? shuffledList : playlists) ?? Array(8).fill(null)).map(
+            (item, index) => (
+              <MylistItem
+                key={index}
+                item={
+                  isNull(item)
+                    ? undefined
+                    : {
+                        ...item,
+                        index: index,
+                      }
+                }
+                hide={index === dragAndDropTarget.drag.index && mouseDown}
+                mouseDown={mouseDown}
+                selected={
+                  selectedList.findIndex((i) => i.key === item?.key) > -1
+                }
+                onSelect={initializeDragTarget}
+                onEditSelect={handleSelectPlaylist}
+              />
+            )
+          )}
 
-            dispatchMyList({
-              type: ShuffleActionType.relocate,
-              target: dragAndDropTarget.drag.index,
-              to: dragAndDropTarget.drop,
-            });
-          }}
-          onMouseLeave={() => {
-            setMouseDown(false);
-          }}
-        >
-          {!isEditMode
-            ? playlists.map((item, index) => (
-                <MylistItem
-                  key={index}
-                  item={{
-                    ...item,
-                    index: index,
-                  }}
-                />
-              ))
-            : shuffledList.map((item, index) => (
-                <MylistItem
-                  key={index}
-                  item={{
-                    ...item,
-                    index: index,
-                  }}
-                  hide={index === dragAndDropTarget.drag.index && mouseDown}
-                  mouseDown={mouseDown}
-                  onSelect={initializeDragTarget}
-                />
-              ))}
           <DragedPlaylist
             style={{
               top: `${dragPosition.y}px`,
@@ -277,6 +316,13 @@ const Mylist = ({}: MylistProps) => {
             <MylistItem item={dragAndDropTarget.drag} />
           </DragedPlaylist>
         </PlayLists>
+
+        <ListController
+          playlists={shuffledList}
+          selectedPlaylists={selectedList}
+          dispatchSelectedPlaylists={setSelectedList}
+          onDelete={removePlaylistsHandler}
+        />
       </PageItemContainer>
     </Container>
   );

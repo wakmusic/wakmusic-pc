@@ -6,6 +6,21 @@ import { join } from "path";
 
 dotenv.config();
 
+const availableArch = ["arm64", "x64"];
+const getTargetArch = (): string => {
+  for (const arg of process.argv) {
+    if (availableArch.includes(arg)) {
+      return arg;
+    }
+    const matches = arg.match(RegExp(`--arch=(${availableArch.join("|")})`));
+    if (matches !== null) {
+      return matches[1];
+    }
+  }
+
+  return process.arch;
+};
+
 const config: ForgeConfig = {
   packagerConfig: {
     name: "Wakmusic",
@@ -103,16 +118,16 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    {
-      name: "@electron-forge/maker-appx",
-      config: {
-        identityName: "55390B70E4627.1221F2615847",
-        publisher: "CN=CFF2F2B0-3997-40A5-9513-E927980AC814",
-        publisherDisplayName: "왁타버스 뮤직",
+    // {
+    //   name: "@electron-forge/maker-appx",
+    //   config: {
+    //     identityName: "55390B70E4627.1221F2615847",
+    //     publisher: "CN=CFF2F2B0-3997-40A5-9513-E927980AC814",
+    //     publisherDisplayName: "왁타버스 뮤직",
 
-        assets: "./build/appx",
-      },
-    },
+    //     assets: "./build/appx",
+    //   },
+    // },
     {
       name: "@electron-forge/maker-dmg",
       config: {
@@ -134,9 +149,7 @@ const config: ForgeConfig = {
           return [
             {
               type: "file",
-              path: `${process.cwd()}/out/Wakmusic-darwin-${
-                process.arch
-              }/Wakmusic.app`,
+              path: `${process.cwd()}/out/Wakmusic-darwin-${getTargetArch()}/Wakmusic.app`,
               x: 292,
               y: 290,
             },

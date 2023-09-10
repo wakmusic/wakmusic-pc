@@ -1,20 +1,57 @@
-name: Build and Publish
+name: Build application
 
-on:
-  push:
-    branches:
-      - production
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
-  build-and-publish:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        os:
+          [
+            { name: "Windows", image: "windows-latest" },
+            { name: "macOS", image: "macos-latest" },
+          ]
+
+    runs-on: ${{ matrix.os.image }}
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.GH_TOKEN }}
+
+      - name: Install the Apple certificate and provisioning profile
+        if: matrix.os.image == 'macos-latest'
+        env:
+          BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+          P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
+          BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        run: |
+          # create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.provisionprofile
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+
+          echo "PP_PATH = $PP_PATH" >> $GITHUB_ENV
+
+          # import certificate and provisioning profile from secrets
+          echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+
+          # create temporary keychain
+          security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
+
+          # import certificate to keychain
+          security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          # apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -22,29 +59,43 @@ jobs:
           node-version: 18
           cache: yarn
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: yarn install
 
-      - name: Make Dotenv
+      - name: Make dotenv
         run: echo "$DOTENV" > .env
         env:
           DOTENV: ${{ secrets.DOTENV }}
 
-      - name: Write Commit Hash
-        id: write_commit_hash
-        run: echo "VITE_COMMIT_HASH=$(echo "${{ github.sha }}" | cut -c1-7)" >> .env
+      - name: Set environment variables for macOS build
+        if: matrix.os.image == 'macos-latest'
+        run: |
+          echo "APPLE_IDENTITY=${{ secrets.APPLE_IDENTITY }}" >> $GITHUB_ENV
+          echo "APPLE_ID=${{ secrets.APPLE_ID }}" >> $GITHUB_ENV
+          echo "APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }}" >> $GITHUB_ENV
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
 
-      - name: Build
-        run: yarn build:web
+      - name: Make application (x64)
+        run: yarn make --arch x64
 
-      - name: Push
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.GH_TOKEN }}
+      - name: Make application (arm64)
+        if: matrix.os.image == 'macos-latest'
+        run: yarn make --arch arm64
+
+      - name: Upload artifact (x64)
+        uses: actions/upload-artifact@v3
         with:
-          source-directory: dist
-          destination-repository-name: ${{ secrets.DEST_REPO }}
-          commit-message: ${{ github.sha }}
-          target-branch: main
-          destination-github-username: "wakmusic"
-          user-email: gh@wakmusic.xyz
+          name: 왁타버스 뮤직 ${{ matrix.os.name }} (x64)
+          path: |
+            ./out/make/*-x64.dmg
+            ./out/make/zip/darwin/x64/*.zip
+            ./out/make/zip/win32/x64/*.zip
+
+      - name: Upload artifact (arm64)
+        if: matrix.os.image == 'macos-latest'
+        uses: actions/upload-artifact@v3
+        with:
+          name: 왁타버스 뮤직 ${{ matrix.os.name }} (arm64)
+          path: |
+            ./out/make/*-arm64.dmg
+            ./out/make/zip/darwin/arm64/*.zip

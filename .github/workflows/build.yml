@@ -68,10 +68,10 @@ jobs:
 
       - name: Set macOS environment variables
         run: |
-          echo APPLE_IDENTITY=${{ secrets.APPLE_IDENTITY }} >> $GITHUB_ENV
-          echo APPLE_ID=${{ secrets.APPLE_ID }} >> $GITHUB_ENV
-          echo APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }} >> $GITHUB_ENV
-          echo APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }} >> $GITHUB_ENV
+          echo "APPLE_IDENTITY=${{ secrets.APPLE_IDENTITY }}" >> $GITHUB_ENV
+          echo "APPLE_ID=${{ secrets.APPLE_ID }}" >> $GITHUB_ENV
+          echo "APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }}" >> $GITHUB_ENV
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
 
       - name: Make application (x64)
         run: yarn make

@@ -13,15 +13,27 @@ import HelpText from "./globals/HelpText";
 import TwoButton from "./globals/TwoButton";
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
 
-interface ExitModalProps {}
+interface ExitModalProps {
+  popup?: boolean;
+}
 
-const ExitModal = ({}: ExitModalProps) => {
+const ExitModal = ({ popup }: ExitModalProps) => {
   const [modalState, setModalState] = useExitModalState();
   const [mode, setMode] = useState<"close" | "background">(
     localStorage.getItem("exitMode") === "background" ? "background" : "close"
   );
 
   const resolve = (result: boolean) => () => {
+    if (location.pathname === "/selectExit") {
+      window.postMessage({
+        type: "resolve",
+        payload: result ? mode : null,
+      });
+      window.close();
+
+      return;
+    }
+
     if (modalState.resolve) {
       modalState.resolve(result ? mode : null);
     }
@@ -29,7 +41,7 @@ const ExitModal = ({}: ExitModalProps) => {
     return setModalState({ isOpen: false });
   };
 
-  if (!modalState.isOpen) return null;
+  if (!modalState.isOpen && !popup) return null;
 
   return (
     <ModalOverlay>
@@ -72,8 +84,10 @@ const Container = styled(ModalContainer)`
 const Title = styled(T1Bold)`
   color: ${colors.primary900};
 
-  margin-top: 52px;
+  padding-top: 52px;
   margin-bottom: 24px;
+
+  -webkit-app-region: drag;
 `;
 
 const Select = styled.div<{ $selected: boolean }>`

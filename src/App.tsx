@@ -94,6 +94,7 @@ export class App extends Component<AppProps> {
                 </Route>
 
                 <Route path="/addList" element={<AddListModal popup />} />
+                <Route path="/selectExit" element={<ExitModal popup />} />
               </Routes>
             </BrowserRouter>
 

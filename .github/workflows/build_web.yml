@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.GH_TOKEN }}
@@ -22,15 +22,15 @@ jobs:
           node-version: 18
           cache: yarn
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: yarn install
 
-      - name: Make Dotenv
+      - name: Make dotenv
         run: echo "$DOTENV" > .env
         env:
           DOTENV: ${{ secrets.DOTENV }}
 
-      - name: Write Commit Hash
+      - name: Write commit hash
         id: write_commit_hash
         run: echo "VITE_COMMIT_HASH=$(echo "${{ github.sha }}" | cut -c1-7)" >> .env
 

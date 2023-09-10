@@ -1,5 +1,5 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
-import styled, { css } from "styled-components/macro";
+import styled, { css, keyframes } from "styled-components/macro";
 
 import { T7Light } from "@components/Typography";
 import PlayerScroll from "@components/globals/Scroll/PlayerScroll";
@@ -28,6 +28,8 @@ const Playlist = ({}: PlaylistProps) => {
   const { selected, setSelected, selectCallback, selectedIncludes } =
     useSelectSongs();
 
+  const [mouseUp, setMouseUp] = useState(false);
+
   const [mouseState, setMouseState] = useState({
     isMouseDown: false,
     isMoving: false,
@@ -45,6 +47,8 @@ const Playlist = ({}: PlaylistProps) => {
 
   const [lastSelected, setLastSelected] = useState<number | null>(null);
 
+  const [clickTimer, setClickTimer] = useState<NodeJS.Timeout | null>(null);
+
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
     playingInfo.playlist,
     { size: 24 }
@@ -57,23 +61,59 @@ const Playlist = ({}: PlaylistProps) => {
   }
 
   function onSongSelected(index: number, multiSelect: boolean) {
-    if (multiSelect && lastSelected !== null && lastSelected !== index) {
-      const start = Math.min(index, lastSelected);
-      const end = Math.max(index, lastSelected) + 1;
-
-      selectCallback([...playingInfo.playlist].slice(start, end));
-    } else {
-      selectCallback(playingInfo.playlist[index], index);
-      setLastSelected(index);
+    if (clickTimer) {
+      clearTimeout(clickTimer);
     }
+
+    setClickTimer(
+      setTimeout(() => {
+        if (
+          multiSelect &&
+          lastSelected !== null &&
+          lastSelected !== index &&
+          selectedIncludes(playingInfo.playlist[lastSelected], lastSelected)
+        ) {
+          const start = Math.min(index, lastSelected);
+          const end = Math.max(index, lastSelected) + 1;
+
+          const newSelected = [
+            ...selected,
+            ...[...playingInfo.playlist].slice(start, end),
+          ];
+
+          setSelected(
+            newSelected
+              .filter(
+                (s, i) =>
+                  newSelected.findIndex((ss) => s.songId === ss.songId) === i
+              )
+              .map((item, index) => ({
+                ...item,
+                index: index,
+              }))
+          );
+        } else {
+          selectCallback(playingInfo.playlist[index], index);
+          setLastSelected(index);
+        }
+      }, 250)
+    );
   }
 
   function onSongDoubleClicked(index: number) {
+    if (clickTimer) {
+      clearTimeout(clickTimer);
+    }
+
     setPlayingInfo({ ...playingInfo, current: index });
     setControl((prev) => ({
       ...prev,
       isPlaying: true,
     }));
+
+    if (lastSelected === index) {
+      selectCallback(playingInfo.playlist[index], index);
+    }
   }
 
   const getCursorIndex = useCallback(() => {
@@ -140,7 +180,11 @@ const Playlist = ({}: PlaylistProps) => {
     [mouseState]
   );
 
-  const handleMouseUp = useCallback(() => {
+  function handleMouseUp() {
+    setMouseUp(true);
+  }
+
+  const processMouseUp = useCallback(() => {
     if (!mouseState.isMouseDown) return;
 
     if (mouseState.isMoving && !scrollState.isScrollEnabled) {
@@ -173,7 +217,7 @@ const Playlist = ({}: PlaylistProps) => {
     return () => {
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [handleMouseUp]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener("mousemove", handleMouseMove);
@@ -182,6 +226,40 @@ const Playlist = ({}: PlaylistProps) => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
   }, [handleMouseMove]);
+
+  useEffect(() => {
+    if (mouseUp) {
+      setMouseUp(false);
+
+      setTimeout(() => {
+        processMouseUp();
+      }, 10);
+    }
+  }, [mouseUp, processMouseUp]);
+
+  useEffect(() => {
+    if (!viewportRef.current) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (!viewportRef.current || lastSelected === null) return;
+
+      if (!playingInfo.playlist.some((song, i) => selectedIncludes(song, i))) {
+        return;
+      }
+
+      if (lastSelected >= playingInfo.playlist.length - 3) {
+        viewportRef.current.scrollTo({
+          top:
+            viewportRef.current.scrollHeight - viewportRef.current.clientHeight,
+        });
+      }
+    });
+    resizeObserver.observe(viewportRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [playingInfo, selectedIncludes, getTotalSize, lastSelected, viewportRef]);
 
   useInterval(() => {
     if (!mouseState.isMoving) return;
@@ -206,7 +284,7 @@ const Playlist = ({}: PlaylistProps) => {
     }
 
     if (scroll === 0) {
-      setScrollState({ ...scrollState, isScrolling: false });
+      setScrollState({ isScrollEnabled: false, isScrolling: false });
 
       return;
     }
@@ -286,14 +364,33 @@ const Playlist = ({}: PlaylistProps) => {
   );
 };
 
+const Popup = keyframes`
+  0% {
+    height: calc(100vh - 410px);
+  }
+
+  100% {
+    height: calc(100vh - 410px - 65px);
+  }
+`;
+
+const Popdown = keyframes`
+  0% {
+    height: calc(100vh - 410px - 65px);
+  }
+
+  100% {
+    height: calc(100vh - 410px);
+  }
+`;
+
 const Container = styled.div`
   padding: 16px 0;
 `;
 
 const Wrapper = styled.div<{ $appBarEnable: boolean }>`
-  height: calc(
-    100vh - 410px + ${({ $appBarEnable }) => ($appBarEnable ? -60 : 0)}px
-  );
+  animation: ${({ $appBarEnable }) => ($appBarEnable ? Popup : Popdown)} 0.15s
+    ease-out forwards;
 `;
 
 const PlaylistContainer = styled.div<{ height: number }>`
@@ -328,9 +425,9 @@ const SongContainer = styled.div<{
     !$ismoving &&
     css`
       &:hover {
-        background-color: ${addAlpha(colors.gray700, 0.5)}};
+        background-color: ${addAlpha(colors.gray700, 0.5)};
       }
-      `}
+    `}
 `;
 
 const TitleText = styled(T7Light)`

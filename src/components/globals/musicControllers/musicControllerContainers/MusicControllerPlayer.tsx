@@ -51,7 +51,7 @@ const Popdown = keyframes`
 const Wrapper = styled.div<{ $popdown: boolean }>`
   position: fixed;
 
-  animation: ${({ $popdown }) => ($popdown ? Popdown : Popup)} 0.25s ease-out
+  animation: ${({ $popdown }) => ($popdown ? Popdown : Popup)} 0.15s ease-out
     forwards;
 `;
 

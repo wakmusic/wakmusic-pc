@@ -38,8 +38,6 @@ import { SongItemFeature } from "@templates/songItem";
 interface ArtistProps {}
 
 const Artist = ({}: ArtistProps) => {
-  const { selected, setSelected, selectCallback, selectedIncludes } =
-    useSelectSongs();
   const [searchParams] = useSearchParams();
   const tab = (searchParams.get("tab") as SongSortType) ?? "new";
 
@@ -99,6 +97,9 @@ const Artist = ({}: ArtistProps) => {
 
     return albumsData.pages.flat();
   }, [albumsData, albumsIsLoading, isFetchingNextPage]);
+
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs(albums ?? []);
 
   const { viewportRef, getTotalSize, virtualMap, getVirtualItems } =
     useVirtualizer(albums ?? [], {
@@ -195,7 +196,7 @@ const Artist = ({}: ArtistProps) => {
                   <SongItem
                     song={item}
                     index={virtualItem.index}
-                    selected={selectedIncludes(item, virtualItem.index)}
+                    selected={selectedIncludes(item)}
                     features={[
                       SongItemFeature.date,
                       SongItemFeature.views,

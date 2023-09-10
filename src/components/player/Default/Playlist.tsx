@@ -26,7 +26,7 @@ const Playlist = ({}: PlaylistProps) => {
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
   const { selected, setSelected, selectCallback, selectedIncludes } =
-    useSelectSongs();
+    useSelectSongs(playingInfo.playlist);
 
   const [mouseState, setMouseState] = useState({
     isMouseDown: false,
@@ -226,8 +226,8 @@ const Playlist = ({}: PlaylistProps) => {
         ref={viewportRef}
       >
         <Wrapper
-          $appBarEnable={playingInfo.playlist.some((song, i) =>
-            selectedIncludes(song, i)
+          $appBarEnable={playingInfo.playlist.some((song) =>
+            selectedIncludes(song)
           )}
         >
           <PlaylistContainer height={getTotalSize()}>

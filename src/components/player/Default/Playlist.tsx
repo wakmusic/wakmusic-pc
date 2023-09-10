@@ -67,7 +67,12 @@ const Playlist = ({}: PlaylistProps) => {
 
     setClickTimer(
       setTimeout(() => {
-        if (multiSelect && lastSelected !== null && lastSelected !== index) {
+        if (
+          multiSelect &&
+          lastSelected !== null &&
+          lastSelected !== index &&
+          selectedIncludes(playingInfo.playlist[lastSelected], lastSelected)
+        ) {
           const start = Math.min(index, lastSelected);
           const end = Math.max(index, lastSelected) + 1;
           selectCallback([...playingInfo.playlist].slice(start, end));

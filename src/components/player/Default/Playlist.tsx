@@ -28,6 +28,8 @@ const Playlist = ({}: PlaylistProps) => {
   const { selected, setSelected, selectCallback, selectedIncludes } =
     useSelectSongs();
 
+  const [mouseUp, setMouseUp] = useState(false);
+
   const [mouseState, setMouseState] = useState({
     isMouseDown: false,
     isMoving: false,
@@ -157,7 +159,11 @@ const Playlist = ({}: PlaylistProps) => {
     [mouseState]
   );
 
-  const handleMouseUp = useCallback(() => {
+  function handleMouseUp() {
+    setMouseUp(true);
+  }
+
+  const processMouseUp = useCallback(() => {
     if (!mouseState.isMouseDown) return;
 
     if (mouseState.isMoving && !scrollState.isScrollEnabled) {
@@ -186,13 +192,29 @@ const Playlist = ({}: PlaylistProps) => {
 
   useEffect(() => {
     window.addEventListener("mouseup", handleMouseUp);
-    window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [handleMouseUp, handleMouseMove]);
+  }, [handleMouseMove]);
+
+  useEffect(() => {
+    if (mouseUp) {
+      setMouseUp(false);
+
+      setTimeout(() => {
+        processMouseUp();
+      }, 10);
+    }
+  }, [mouseUp, processMouseUp]);
 
   useEffect(() => {
     if (!viewportRef.current) return;

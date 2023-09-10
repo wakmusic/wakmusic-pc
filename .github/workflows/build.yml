@@ -1,4 +1,5 @@
 name: Build application
+
 on: workflow_dispatch
 
 jobs:
@@ -15,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.GH_TOKEN }}
@@ -66,7 +67,8 @@ jobs:
         env:
           DOTENV: ${{ secrets.DOTENV }}
 
-      - name: Set macOS environment variables
+      - name: Set environment variables for macOS build
+        if: matrix.os.image == 'macos-latest'
         run: |
           echo "APPLE_IDENTITY=${{ secrets.APPLE_IDENTITY }}" >> $GITHUB_ENV
           echo "APPLE_ID=${{ secrets.APPLE_ID }}" >> $GITHUB_ENV
@@ -74,14 +76,14 @@ jobs:
           echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
 
       - name: Make application (x64)
-        run: yarn make
+        run: yarn make --arch x64
 
       - name: Make application (arm64)
         if: matrix.os.image == 'macos-latest'
         run: yarn make --arch arm64
 
       - name: Upload artifact (x64)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: 왁타버스 뮤직 ${{ matrix.os.name }}(x64)
           path: |
@@ -90,7 +92,7 @@ jobs:
             ./out/make/zip/win32/x64/*
 
       - name: Upload artifact (arm64)
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: 왁타버스 뮤직 ${{ matrix.os.name }}(arm64)
           path: |

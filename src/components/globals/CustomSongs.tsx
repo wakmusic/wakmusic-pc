@@ -150,7 +150,6 @@ const CustomSongs = ({
   useEffect(() => {
     // mousemove 이벤트 핸들러 등록
     if (!isMouseDown) return;
-    console.log("HANDLE");
 
     const handleMouseMove = (e: MouseEvent) => {
       if (isMouseDown) {

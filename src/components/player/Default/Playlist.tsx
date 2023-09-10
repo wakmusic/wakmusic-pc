@@ -75,10 +75,23 @@ const Playlist = ({}: PlaylistProps) => {
         ) {
           const start = Math.min(index, lastSelected);
           const end = Math.max(index, lastSelected) + 1;
-          selectCallback([
+
+          const newSelected = [
             ...selected,
             ...[...playingInfo.playlist].slice(start, end),
-          ]);
+          ];
+
+          setSelected(
+            newSelected
+              .filter(
+                (s, i) =>
+                  newSelected.findIndex((ss) => s.songId === ss.songId) === i
+              )
+              .map((item, index) => ({
+                ...item,
+                index: index,
+              }))
+          );
         } else {
           selectCallback(playingInfo.playlist[index], index);
           setLastSelected(index);

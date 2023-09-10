@@ -85,16 +85,17 @@ jobs:
       - name: Upload artifact (x64)
         uses: actions/upload-artifact@v3
         with:
-          name: 왁타버스 뮤직 ${{ matrix.os.name }}(x64)
+          name: 왁타버스 뮤직 ${{ matrix.os.name }} (x64)
           path: |
             ./out/make/*-x64.dmg
             ./out/make/zip/darwin/x64/*
             ./out/make/zip/win32/x64/*
 
       - name: Upload artifact (arm64)
+        if: matrix.os.image == 'macos-latest'
         uses: actions/upload-artifact@v3
         with:
-          name: 왁타버스 뮤직 ${{ matrix.os.name }}(arm64)
+          name: 왁타버스 뮤직 ${{ matrix.os.name }} (arm64)
           path: |
             ./out/make/*-arm64.dmg
             ./out/make/zip/darwin/arm64/*

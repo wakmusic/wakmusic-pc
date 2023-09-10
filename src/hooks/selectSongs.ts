@@ -73,7 +73,7 @@ export const useSelectSongs = (songs: Song[]) => {
   };
 
   const selectedIncludes = useCallback(
-    (song: Song) => findIndex(selected, song.songId) != -1,
+    (song: Song) => findIndex(selected, song.songId) !== -1,
     [selected]
   );
 

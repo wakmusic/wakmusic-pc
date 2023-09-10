@@ -263,7 +263,7 @@ const Playlist = ({}: PlaylistProps) => {
     }
 
     if (scroll === 0) {
-      setScrollState({ ...scrollState, isScrolling: false });
+      setScrollState({ isScrollEnabled: false, isScrolling: false });
 
       return;
     }

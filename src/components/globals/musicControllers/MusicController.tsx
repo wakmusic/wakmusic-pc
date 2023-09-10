@@ -26,7 +26,7 @@ interface MusicControllerProps {
   songs: Song[];
   selectedSongs: Song[];
 
-  dispatchSelectedSongs: (song: Song | Song[]) => void;
+  dispatchSelectedSongs: (song: Song[]) => void;
   onDelete?: (newSongs: Song[]) => void;
 }
 

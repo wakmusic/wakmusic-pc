@@ -18,7 +18,7 @@ export const useSelectSongs = (songs: Song[]) => {
       }
 
       const targetOpposite = from.length - target - 1;
-      if (targetOpposite != target && from[targetOpposite].songId === songId) {
+      if (targetOpposite !== target && from[targetOpposite].songId === songId) {
         index = targetOpposite;
         break;
       }
@@ -27,43 +27,7 @@ export const useSelectSongs = (songs: Song[]) => {
     return index;
   };
 
-  const selectCallback = (song: Song | Song[], index?: number) => {
-    if (Array.isArray(song)) {
-      const newSelected: OrderedSongType[] = [];
-
-      if (
-        song.length === songs.length &&
-        song.every((value) => findIndex(songs, value.songId) !== -1)
-      ) {
-        if (songs.length === selected.length) {
-          setSelected([]);
-          return;
-        }
-
-        setSelected(
-          songs.map((item, itemIndex) => ({
-            ...item,
-            index: itemIndex,
-          }))
-        );
-        return;
-      }
-
-      song.forEach((item) => {
-        if (selectedIncludes(item)) {
-          return;
-        }
-
-        newSelected.push({
-          ...item,
-          index: findIndex(song, item.songId),
-        });
-      });
-
-      setSelected(newSelected);
-      return;
-    }
-
+  const selectCallback = (song: Song, index?: number) => {
     if (isUndefined(index)) return;
 
     const newSelected = [...selected];
@@ -77,6 +41,31 @@ export const useSelectSongs = (songs: Song[]) => {
     } else {
       newSelected.splice(songIndex, 1);
     }
+
+    setSelected(newSelected);
+  };
+
+  const selectManyCallback = (song: Song[]) => {
+    if (
+      song.length === selected.length &&
+      song.every((value) => selectedIncludes(value))
+    ) {
+      setSelected([]);
+      return;
+    }
+
+    const newSelected = [...selected];
+
+    song.forEach((item) => {
+      if (selectedIncludes(item)) {
+        return;
+      }
+
+      newSelected.push({
+        ...item,
+        index: findIndex(songs, item.songId),
+      });
+    });
 
     setSelected(newSelected);
   };
@@ -114,5 +103,11 @@ export const useSelectSongs = (songs: Song[]) => {
     setPrevSongs(songs);
   }, [songs, prevSongs, selected]);
 
-  return { selected, setSelected, selectCallback, selectedIncludes };
+  return {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  };
 };

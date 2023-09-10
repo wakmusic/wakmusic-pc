@@ -59,8 +59,13 @@ const Chart = ({}: ChartProps) => {
     chartsIsLoading ? Array(100).fill(null) : charts ?? []
   );
 
-  const { selected, setSelected, selectCallback, selectedIncludes } =
-    useSelectSongs(charts ?? []);
+  const {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  } = useSelectSongs(charts ?? []);
 
   useScrollToTop(tab, viewportRef, setSelected);
 
@@ -123,7 +128,7 @@ const Chart = ({}: ChartProps) => {
         <MusicController
           songs={charts ?? []}
           selectedSongs={selected}
-          dispatchSelectedSongs={selectCallback}
+          dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>
     </PageLayout>

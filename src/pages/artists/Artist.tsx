@@ -98,8 +98,13 @@ const Artist = ({}: ArtistProps) => {
     return albumsData.pages.flat();
   }, [albumsData, albumsIsLoading, isFetchingNextPage]);
 
-  const { selected, setSelected, selectCallback, selectedIncludes } =
-    useSelectSongs(albums ?? []);
+  const {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  } = useSelectSongs(albums ?? []);
 
   const { viewportRef, getTotalSize, virtualMap, getVirtualItems } =
     useVirtualizer(albums ?? [], {
@@ -214,7 +219,7 @@ const Artist = ({}: ArtistProps) => {
         <MusicController
           songs={albums}
           selectedSongs={selected}
-          dispatchSelectedSongs={selectCallback}
+          dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>
     </PageLayout>

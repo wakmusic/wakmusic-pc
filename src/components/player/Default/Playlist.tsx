@@ -25,8 +25,13 @@ const Playlist = ({}: PlaylistProps) => {
   const [, setControl] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
-  const { selected, setSelected, selectCallback, selectedIncludes } =
-    useSelectSongs(playingInfo.playlist);
+  const {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  } = useSelectSongs(playingInfo.playlist);
 
   const [mouseState, setMouseState] = useState({
     isMouseDown: false,
@@ -61,7 +66,7 @@ const Playlist = ({}: PlaylistProps) => {
       const start = Math.min(index, lastSelected);
       const end = Math.max(index, lastSelected) + 1;
 
-      selectCallback([...playingInfo.playlist].slice(start, end));
+      selectManyCallback([...playingInfo.playlist].slice(start, end));
     } else {
       selectCallback(playingInfo.playlist[index], index);
       setLastSelected(index);
@@ -277,7 +282,7 @@ const Playlist = ({}: PlaylistProps) => {
       <MusicController
         songs={playingInfo.playlist}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectCallback}
+        dispatchSelectedSongs={selectManyCallback}
         player={true}
         onDelete={deleteSongs}
         features={[ControllerFeature.selectAll, ControllerFeature.addMusic]}

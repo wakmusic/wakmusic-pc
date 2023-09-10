@@ -18,7 +18,7 @@ interface CustomSongsProps {
   editMode?: boolean;
   songFeatures?: SongItemFeature[];
 
-  onSongClick: (song: Song | Song[], index: number) => void;
+  onSongClick: (song: Song, index: number) => void;
   selectedIncludes: (song: Song, index: number) => boolean;
   onEdit?: (newSongs: Song[]) => void;
 

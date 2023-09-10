@@ -35,13 +35,14 @@ interface AllProps {
 
 const All = ({ query, res, isFetching }: AllProps) => {
   const [, setSearchParams] = useSearchParams();
-  const { selected, selectCallback, selectedIncludes } = useSelectSongs(
-    isUndefined(res)
-      ? []
-      : (Object.keys(res) as Array<"song" | "artist" | "remix">)
-          .map((key) => res[key])
-          .flat()
-  );
+  const { selected, selectCallback, selectManyCallback, selectedIncludes } =
+    useSelectSongs(
+      isUndefined(res)
+        ? []
+        : (Object.keys(res) as Array<"song" | "artist" | "remix">)
+            .map((key) => res[key])
+            .flat()
+    );
 
   const resKeys = useMemo(
     () =>
@@ -118,7 +119,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
       <MusicController
         songs={resKeys.map((key) => res[key].slice(-3)).flat()}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectCallback}
+        dispatchSelectedSongs={selectManyCallback}
       />
     </PageItemContainer>
   );

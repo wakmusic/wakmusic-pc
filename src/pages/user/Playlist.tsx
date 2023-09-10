@@ -73,9 +73,8 @@ const Playlist = ({}: PlaylistProps) => {
     return (playlists ?? []).find((item) => item.key === playlistId);
   }, [playlistId, playlists, recommendList]);
 
-  const { selected, selectCallback, selectedIncludes } = useSelectSongs(
-    isUndefined(playlist) ? [] : playlist.songs
-  );
+  const { selected, selectCallback, selectManyCallback, selectedIncludes } =
+    useSelectSongs(isUndefined(playlist) ? [] : playlist.songs);
 
   const prevPlaylist = usePrevious(playlist);
   const [changePlaylist, setChangePlaylist] = useState<Song[]>([]);
@@ -176,7 +175,7 @@ const Playlist = ({}: PlaylistProps) => {
         displayDefault={false}
         songs={playlist?.songs ?? []}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectCallback}
+        dispatchSelectedSongs={selectManyCallback}
         onDelete={isEditmode ? dispatchSongs : undefined}
       />
     </Container>

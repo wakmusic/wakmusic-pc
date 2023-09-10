@@ -1,0 +1,2 @@
+name: macOS ARM64 Build
+on: workflow_dispatch

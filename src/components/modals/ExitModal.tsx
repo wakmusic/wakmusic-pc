@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as RatioSVG } from "@assets/icons/ic_24_RadioButton.svg";
 
@@ -45,7 +45,7 @@ const ExitModal = ({ popup }: ExitModalProps) => {
 
   return (
     <ModalOverlay>
-      <Container>
+      <Container $noRadius={popup}>
         <Title>앞으로 어떻게 종료할까요?</Title>
 
         <Select $selected={mode === "close"} onClick={() => setMode("close")}>
@@ -70,15 +70,25 @@ const ExitModal = ({ popup }: ExitModalProps) => {
         </HelpTextContainer>
 
         <ButtonsWrapper>
-          <TwoButton ok={resolve(true)} cancel={resolve(false)} />
+          <TwoButton
+            ok={resolve(true)}
+            cancel={resolve(false)}
+            noRadius={popup}
+          />
         </ButtonsWrapper>
       </Container>
     </ModalOverlay>
   );
 };
 
-const Container = styled(ModalContainer)`
+const Container = styled(ModalContainer)<{ $noRadius?: boolean }>`
   background: ${colors.blueGray25};
+
+  ${({ $noRadius }) =>
+    $noRadius &&
+    css`
+      border-radius: 0;
+    `}
 `;
 
 const Title = styled(T1Bold)`

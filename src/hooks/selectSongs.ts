@@ -87,8 +87,6 @@ export const useSelectSongs = (songs: Song[]) => {
   );
 
   useEffect(() => {
-    // select만 바뀐경우, songs의 곡이 삭제된 경우
-
     if (
       songs.length === prevSongs.length &&
       songs.every((value, index) => value.songId === prevSongs[index].songId)
@@ -99,12 +97,14 @@ export const useSelectSongs = (songs: Song[]) => {
     const newSelected = [...selected];
 
     if (songs.length !== prevSongs.length) {
+      // 곡이 삭제된 경우
       selected.forEach((item) => {
         if (findIndex(songs, item.songId) === -1) {
           newSelected.splice(findIndex(newSelected, item.songId), 1);
         }
       });
     } else {
+      // 곡의 순서가 변경된 경우
       newSelected.forEach((item) => {
         item.index = findIndex(songs, item.songId);
       });

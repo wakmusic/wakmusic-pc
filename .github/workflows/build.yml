@@ -88,8 +88,8 @@ jobs:
           name: 왁타버스 뮤직 ${{ matrix.os.name }} (x64)
           path: |
             ./out/make/*-x64.dmg
-            ./out/make/zip/darwin/x64/*
-            ./out/make/zip/win32/x64/*
+            ./out/make/zip/darwin/x64/*.zip
+            ./out/make/zip/win32/x64/*.zip
 
       - name: Upload artifact (arm64)
         if: matrix.os.image == 'macos-latest'
@@ -98,4 +98,4 @@ jobs:
           name: 왁타버스 뮤직 ${{ matrix.os.name }} (arm64)
           path: |
             ./out/make/*-arm64.dmg
-            ./out/make/zip/darwin/arm64/*
+            ./out/make/zip/darwin/arm64/*.zip

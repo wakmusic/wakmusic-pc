@@ -42,6 +42,7 @@ export const useSelectSongs = (songs: Song[]) => {
       newSelected.splice(songIndex, 1);
     }
 
+    newSelected.sort((a, b) => a.index - b.index);
     setSelected(newSelected);
   };
 
@@ -67,6 +68,7 @@ export const useSelectSongs = (songs: Song[]) => {
       });
     });
 
+    newSelected.sort((a, b) => a.index - b.index);
     setSelected(newSelected);
   };
 
@@ -99,7 +101,9 @@ export const useSelectSongs = (songs: Song[]) => {
       });
     }
 
+    newSelected.sort((a, b) => a.index - b.index);
     setSelected(newSelected);
+
     setPrevSongs(songs);
   }, [songs, prevSongs, selected]);
 

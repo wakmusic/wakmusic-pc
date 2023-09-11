@@ -81,22 +81,7 @@ const Playlist = ({}: PlaylistProps) => {
           const start = Math.min(index, lastSelected);
           const end = Math.max(index, lastSelected) + 1;
 
-          const newSelected = [
-            ...selected,
-            ...[...playingInfo.playlist].slice(start, end),
-          ];
-
-          setSelected(
-            newSelected
-              .filter(
-                (s, i) =>
-                  newSelected.findIndex((ss) => s.songId === ss.songId) === i
-              )
-              .map((item, index) => ({
-                ...item,
-                index: index,
-              }))
-          );
+          selectManyCallback([...playingInfo.playlist].slice(start, end));
         } else {
           selectCallback(playingInfo.playlist[index]);
           setLastSelected(index);
@@ -248,7 +233,7 @@ const Playlist = ({}: PlaylistProps) => {
     const resizeObserver = new ResizeObserver(() => {
       if (!viewportRef.current || lastSelected === null) return;
 
-      if (!playingInfo.playlist.some((song) => selectedIncludes(song))) {
+      if (!selected.length) {
         return;
       }
 
@@ -264,7 +249,7 @@ const Playlist = ({}: PlaylistProps) => {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [playingInfo, selectedIncludes, getTotalSize, lastSelected, viewportRef]);
+  }, [playingInfo, selected, getTotalSize, lastSelected, viewportRef]);
 
   useInterval(() => {
     if (!mouseState.isMoving) return;
@@ -308,11 +293,7 @@ const Playlist = ({}: PlaylistProps) => {
         scroll={onScroll}
         ref={viewportRef}
       >
-        <Wrapper
-          $appBarEnable={playingInfo.playlist.some((song) =>
-            selectedIncludes(song)
-          )}
-        >
+        <Wrapper $appBarEnable={selected.length > 0}>
           <PlaylistContainer height={getTotalSize()}>
             {virtualMap((virtualItem, item) => (
               <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
@@ -327,10 +308,8 @@ const Playlist = ({}: PlaylistProps) => {
                       item.songId ===
                       playingInfo.playlist[playingInfo.current].songId
                     }
-                    $selected={selected.some(
-                      (s) =>
-                        s.songId ===
-                        playingInfo.playlist[virtualItem.index].songId
+                    $selected={selectedIncludes(
+                      playingInfo.playlist[virtualItem.index]
                     )}
                     $ismoving={mouseState.isMoving}
                     $istarget={

@@ -1,0 +1,50 @@
+name: Build and publish web
+
+on:
+  push:
+    branches:
+      - production
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Make dotenv
+        run: echo "$DOTENV" > .env
+        env:
+          DOTENV: ${{ secrets.DOTENV }}
+
+      - name: Write commit hash
+        id: write_commit_hash
+        run: echo "VITE_COMMIT_HASH=$(echo "${{ github.sha }}" | cut -c1-7)" >> .env
+
+      - name: Build
+        run: yarn build:web
+
+      - name: Push
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.GH_TOKEN }}
+        with:
+          source-directory: dist
+          destination-repository-name: ${{ secrets.DEST_REPO }}
+          commit-message: ${{ github.sha }}
+          target-branch: main
+          destination-github-username: "wakmusic"
+          user-email: gh@wakmusic.xyz

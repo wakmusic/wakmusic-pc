@@ -2,27 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 
 import { Song } from "@templates/song";
 
+import { isNull } from "@utils/isTypes";
+
 export const useSelectSongs = (songs: Song[]) => {
   const [prevSongs, setPrevSongs] = useState(songs);
   const [selected, setSelected] = useState<Song[]>([]);
 
   const findIndex = (from: Song[], songId: string) => {
-    let index = -1;
-
-    for (let target = 0; target < Math.ceil(from.length / 2); target++) {
-      if (from[target].songId === songId) {
-        index = target;
-        break;
-      }
-
-      const targetOpposite = from.length - target - 1;
-      if (targetOpposite !== target && from[targetOpposite].songId === songId) {
-        index = targetOpposite;
-        break;
-      }
-    }
-
-    return index;
+    return from.findIndex((value) => value.songId === songId);
   };
 
   const insertSong = (to: Song[], song: Song) => {
@@ -84,7 +71,8 @@ export const useSelectSongs = (songs: Song[]) => {
   };
 
   const selectedIncludes = useCallback(
-    (song: Song) => findIndex(selected, song.songId) !== -1,
+    (song: Song) =>
+      isNull(song) ? false : findIndex(selected, song.songId) !== -1,
     [selected]
   );
 

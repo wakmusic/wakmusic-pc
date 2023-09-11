@@ -33,6 +33,8 @@ const Playlist = ({}: PlaylistProps) => {
     selectedIncludes,
   } = useSelectSongs(playingInfo.playlist);
 
+  const [selectedVisual, setSelectedVisual] = useState<Song[]>([]);
+
   const [mouseUp, setMouseUp] = useState(false);
 
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -57,6 +59,10 @@ const Playlist = ({}: PlaylistProps) => {
     { size: 24 }
   );
 
+  const updateSelectedVisual = useCallback(() => {
+    setSelectedVisual(selected);
+  }, [selected]);
+
   function onScroll() {
     if (!scrollState.isScrollEnabled) {
       setScrollState({ ...scrollState, isScrollEnabled: true });
@@ -64,6 +70,8 @@ const Playlist = ({}: PlaylistProps) => {
   }
 
   function onSongSelected(index: number, multiSelect: boolean) {
+    setSelectedVisual([...selectedVisual, playingInfo.playlist[index]]);
+
     if (clickTimer) {
       clearTimeout(clickTimer);
     }
@@ -90,6 +98,7 @@ const Playlist = ({}: PlaylistProps) => {
 
   function onSongDoubleClicked(index: number) {
     if (clickTimer) {
+      updateSelectedVisual();
       clearTimeout(clickTimer);
     }
 
@@ -167,7 +176,6 @@ const Playlist = ({}: PlaylistProps) => {
 
   function handleMouseUp() {
     setIsMouseDown(false);
-
     setMouseUp(true);
   }
 
@@ -246,6 +254,10 @@ const Playlist = ({}: PlaylistProps) => {
     };
   }, [playingInfo, selected, getTotalSize, lastSelected, viewportRef]);
 
+  useEffect(() => {
+    updateSelectedVisual();
+  }, [selected, updateSelectedVisual]);
+
   useInterval(() => {
     if (!isMoving) return;
 
@@ -303,8 +315,8 @@ const Playlist = ({}: PlaylistProps) => {
                       item.songId ===
                       playingInfo.playlist[playingInfo.current].songId
                     }
-                    $selected={selectedIncludes(
-                      playingInfo.playlist[virtualItem.index]
+                    $selected={selectedVisual.some(
+                      (s) => s.songId === item.songId
                     )}
                     $ismoving={isMoving}
                     $istarget={isMoving && targetIndex === virtualItem.index}

@@ -25,8 +25,13 @@ const Playlist = ({}: PlaylistProps) => {
   const [, setControl] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
-  const { selected, setSelected, selectCallback, selectedIncludes } =
-    useSelectSongs();
+  const {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  } = useSelectSongs(playingInfo.playlist);
 
   const [mouseUp, setMouseUp] = useState(false);
 
@@ -71,7 +76,7 @@ const Playlist = ({}: PlaylistProps) => {
           multiSelect &&
           lastSelected !== null &&
           lastSelected !== index &&
-          selectedIncludes(playingInfo.playlist[lastSelected], lastSelected)
+          selectedIncludes(playingInfo.playlist[lastSelected])
         ) {
           const start = Math.min(index, lastSelected);
           const end = Math.max(index, lastSelected) + 1;
@@ -93,7 +98,7 @@ const Playlist = ({}: PlaylistProps) => {
               }))
           );
         } else {
-          selectCallback(playingInfo.playlist[index], index);
+          selectCallback(playingInfo.playlist[index]);
           setLastSelected(index);
         }
       }, 250)
@@ -112,7 +117,7 @@ const Playlist = ({}: PlaylistProps) => {
     }));
 
     if (lastSelected === index) {
-      selectCallback(playingInfo.playlist[index], index);
+      selectCallback(playingInfo.playlist[index]);
     }
   }
 
@@ -243,7 +248,7 @@ const Playlist = ({}: PlaylistProps) => {
     const resizeObserver = new ResizeObserver(() => {
       if (!viewportRef.current || lastSelected === null) return;
 
-      if (!playingInfo.playlist.some((song, i) => selectedIncludes(song, i))) {
+      if (!playingInfo.playlist.some((song) => selectedIncludes(song))) {
         return;
       }
 
@@ -304,8 +309,8 @@ const Playlist = ({}: PlaylistProps) => {
         ref={viewportRef}
       >
         <Wrapper
-          $appBarEnable={playingInfo.playlist.some((song, i) =>
-            selectedIncludes(song, i)
+          $appBarEnable={playingInfo.playlist.some((song) =>
+            selectedIncludes(song)
           )}
         >
           <PlaylistContainer height={getTotalSize()}>
@@ -355,7 +360,7 @@ const Playlist = ({}: PlaylistProps) => {
       <MusicController
         songs={playingInfo.playlist}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectCallback}
+        dispatchSelectedSongs={selectManyCallback}
         player={true}
         onDelete={deleteSongs}
         features={[ControllerFeature.selectAll, ControllerFeature.addMusic]}

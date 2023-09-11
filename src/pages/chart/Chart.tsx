@@ -30,8 +30,6 @@ interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
   const [searchParams] = useSearchParams();
-  const { selected, setSelected, selectCallback, selectedIncludes } =
-    useSelectSongs();
   const tab = useMemo(
     () => (searchParams.get("type") ?? "hourly") as ChartType,
     [searchParams]
@@ -60,6 +58,14 @@ const Chart = ({}: ChartProps) => {
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
     chartsIsLoading ? Array(100).fill(null) : charts ?? []
   );
+
+  const {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  } = useSelectSongs(charts ?? []);
 
   useScrollToTop(tab, viewportRef, setSelected);
 
@@ -104,8 +110,7 @@ const Chart = ({}: ChartProps) => {
               <SongItem
                 rank={virtualItem.index + 1}
                 song={item}
-                index={virtualItem.index}
-                selected={selectedIncludes(item, virtualItem.index)}
+                selected={selectedIncludes(item)}
                 features={[
                   tab !== "total" ? SongItemFeature.last : undefined,
                   SongItemFeature.date,
@@ -122,7 +127,7 @@ const Chart = ({}: ChartProps) => {
         <MusicController
           songs={charts ?? []}
           selectedSongs={selected}
-          dispatchSelectedSongs={selectCallback}
+          dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>
     </PageLayout>

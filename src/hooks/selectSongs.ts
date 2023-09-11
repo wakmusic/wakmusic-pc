@@ -1,74 +1,105 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { OrderedSongType, Song } from "@templates/song";
+import { Song } from "@templates/song";
 
-import { isUndefined } from "@utils/isTypes";
+import { isNull } from "@utils/isTypes";
 
-export const useSelectSongs = () => {
-  const [selected, setSelected] = useState<OrderedSongType[]>([]);
+export const useSelectSongs = (songs: Song[]) => {
+  const [prevSongs, setPrevSongs] = useState(songs);
+  const [selected, setSelected] = useState<Song[]>([]);
 
-  const selectCallback = (song: Song | Song[], index?: number) => {
-    if (Array.isArray(song)) {
-      if (
-        selected.length === song.length &&
-        selected.every((value, index) =>
-          selectedIncludes(song[index], value.index)
-        )
-      ) {
-        setSelected([]);
-      } else {
-        const newSelected: OrderedSongType[] = song.map((item, index) => ({
-          ...item,
-          index: index,
-        }));
+  const findIndex = (from: Song[], songId: string) => {
+    return from.findIndex((value) => value.songId === songId);
+  };
 
-        setSelected(newSelected);
-      }
+  const insertSong = (to: Song[], song: Song) => {
+    const insertIndex = findIndex(songs, song.songId);
 
+    if (to.length === 0) {
+      to.push(song);
       return;
     }
 
-    if (isUndefined(index)) return;
+    for (let i = 0; i < to.length; i++) {
+      const itemIndex = findIndex(songs, to[i].songId);
 
-    const item: OrderedSongType = {
-      ...song,
-      index: index,
-    };
+      if (i === to.length - 1 && itemIndex <= insertIndex) {
+        to.push(song);
+        break;
+      }
 
-    if (selectedIncludes(song, index)) {
-      const newSelected = selected.slice();
-      let selectedIndex = -1;
+      if (itemIndex <= insertIndex) continue;
 
-      selected.forEach((value, index) => {
-        if (JSON.stringify(value) === JSON.stringify(item)) {
-          selectedIndex = index;
-        }
-      });
-
-      newSelected.splice(selectedIndex, 1);
-
-      setSelected(newSelected);
-    } else {
-      const newSelected = selected.slice();
-      newSelected.push(item);
-      newSelected.sort((a, b) => a.index - b.index);
-
-      setSelected(newSelected);
+      to.splice(i, 0, song);
+      break;
     }
   };
 
+  const selectCallback = (song: Song) => {
+    const newSelected = [...selected];
+    const songIndex = findIndex(selected, song.songId);
+
+    if (songIndex === -1) {
+      insertSong(newSelected, song);
+    } else {
+      newSelected.splice(songIndex, 1);
+    }
+
+    setSelected(newSelected);
+  };
+
+  const selectManyCallback = (song: Song[]) => {
+    if (
+      song.length === selected.length &&
+      song.every((value) => selectedIncludes(value))
+    ) {
+      setSelected([]);
+      return;
+    }
+
+    const newSelected = [...selected];
+
+    song.forEach((item) => {
+      if (selectedIncludes(item)) {
+        return;
+      }
+
+      insertSong(newSelected, item);
+    });
+
+    setSelected(newSelected);
+  };
+
   const selectedIncludes = useCallback(
-    (song: Song, index: number) =>
-      !selected.every(
-        (value) =>
-          JSON.stringify(value) !==
-          JSON.stringify({
-            ...song,
-            index: index,
-          })
-      ),
+    (song: Song) =>
+      isNull(song) ? false : findIndex(selected, song.songId) !== -1,
     [selected]
   );
 
-  return { selected, setSelected, selectCallback, selectedIncludes };
+  useEffect(() => {
+    if (
+      selected.length === 0 ||
+      (songs.length === prevSongs.length &&
+        songs.every((value, index) => value.songId === prevSongs[index].songId))
+    ) {
+      return;
+    }
+
+    if (prevSongs.length === 0) {
+      // api에서 로딩이 끝난 경우
+      setPrevSongs(songs);
+      return;
+    }
+
+    setSelected([]);
+    setPrevSongs(songs);
+  }, [songs, prevSongs, selected]);
+
+  return {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  };
 };

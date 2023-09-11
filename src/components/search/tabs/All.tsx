@@ -17,6 +17,8 @@ import { useSelectSongs } from "@hooks/selectSongs";
 
 import { SearchAllResponse } from "@templates/search.ts";
 
+import { isUndefined } from "@utils/isTypes";
+
 import NotFound from "../NotFound";
 
 enum Category {
@@ -33,6 +35,14 @@ interface AllProps {
 
 const All = ({ query, res, isFetching }: AllProps) => {
   const [, setSearchParams] = useSearchParams();
+  const { selected, selectCallback, selectManyCallback, selectedIncludes } =
+    useSelectSongs(
+      isUndefined(res)
+        ? []
+        : (Object.keys(res) as Array<"song" | "artist" | "remix">)
+            .map((key) => res[key])
+            .flat()
+    );
 
   const resKeys = useMemo(
     () =>
@@ -42,7 +52,6 @@ const All = ({ query, res, isFetching }: AllProps) => {
       ),
     [res]
   );
-  const { selected, selectCallback, selectedIncludes } = useSelectSongs();
 
   if (res && !isFetching && Object.values(res).every((i) => i.length === 0)) {
     return <NotFound />;
@@ -97,8 +106,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
               <SongItem
                 key={index}
                 song={song}
-                index={index}
-                selected={selectedIncludes(song, index)}
+                selected={selectedIncludes(song)}
                 onClick={selectCallback}
                 forceWidth={650}
               />
@@ -110,7 +118,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
       <MusicController
         songs={resKeys.map((key) => res[key].slice(-3)).flat()}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectCallback}
+        dispatchSelectedSongs={selectManyCallback}
       />
     </PageItemContainer>
   );

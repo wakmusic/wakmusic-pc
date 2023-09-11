@@ -35,7 +35,7 @@ interface AllProps {
 
 const All = ({ query, res, isFetching }: AllProps) => {
   const [, setSearchParams] = useSearchParams();
-  const { sortSelected, selectCallback, selectManyCallback, selectedIncludes } =
+  const { selected, selectCallback, selectManyCallback, selectedIncludes } =
     useSelectSongs(
       isUndefined(res)
         ? []
@@ -69,12 +69,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
               </CategoryHeader>
 
               {[...Array(3)].map((_, index) => (
-                <SongItem
-                  index={index}
-                  key={index}
-                  forceWidth={650}
-                  isLoading={isFetching}
-                />
+                <SongItem key={index} forceWidth={650} isLoading={isFetching} />
               ))}
             </CategoryContainer>
           ))}
@@ -111,7 +106,6 @@ const All = ({ query, res, isFetching }: AllProps) => {
               <SongItem
                 key={index}
                 song={song}
-                index={index}
                 selected={selectedIncludes(song)}
                 onClick={selectCallback}
                 forceWidth={650}
@@ -123,7 +117,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
 
       <MusicController
         songs={resKeys.map((key) => res[key].slice(-3)).flat()}
-        selectedSongs={sortSelected()}
+        selectedSongs={selected}
         dispatchSelectedSongs={selectManyCallback}
       />
     </PageItemContainer>

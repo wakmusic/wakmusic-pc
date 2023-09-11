@@ -47,6 +47,7 @@ const Playlist = ({}: PlaylistProps) => {
   });
 
   const [isEditmode, setEditmode] = useState(false);
+  const [hideContoller, setHideContoller] = useState(false);
   const location = useLocation();
   const playlistId = useMemo(
     () => location.pathname.split("/")[2],
@@ -73,8 +74,13 @@ const Playlist = ({}: PlaylistProps) => {
     return (playlists ?? []).find((item) => item.key === playlistId);
   }, [playlistId, playlists, recommendList]);
 
-  const { sortSelected, selectCallback, selectManyCallback, selectedIncludes } =
-    useSelectSongs(isUndefined(playlist) ? [] : playlist.songs);
+  const {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  } = useSelectSongs(isUndefined(playlist) ? [] : playlist.songs);
 
   const prevPlaylist = usePrevious(playlist);
   const [changePlaylist, setChangePlaylist] = useState<Song[]>([]);
@@ -161,6 +167,8 @@ const Playlist = ({}: PlaylistProps) => {
         onEdit={dispatchSongs}
         onSongClick={selectCallback}
         selectedIncludes={selectedIncludes}
+        setSelected={setSelected}
+        hideController={setHideContoller}
         songFeatures={[
           SongItemFeature.date,
           SongItemFeature.views,
@@ -172,8 +180,9 @@ const Playlist = ({}: PlaylistProps) => {
 
       <MusicController
         displayDefault={false}
+        hide={hideContoller}
         songs={playlist?.songs ?? []}
-        selectedSongs={sortSelected()}
+        selectedSongs={selected}
         dispatchSelectedSongs={selectManyCallback}
         onDelete={isEditmode ? dispatchSongs : undefined}
       />

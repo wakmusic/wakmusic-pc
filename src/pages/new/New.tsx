@@ -78,7 +78,7 @@ const New = ({}: NewProps) => {
     });
 
   const {
-    sortSelected,
+    selected,
     setSelected,
     selectCallback,
     selectManyCallback,
@@ -139,7 +139,6 @@ const New = ({}: NewProps) => {
                 ) : (
                   <SongItem
                     song={item}
-                    index={virtualItem.index}
                     selected={selectedIncludes(item)}
                     features={[
                       SongItemFeature.last,
@@ -157,7 +156,7 @@ const New = ({}: NewProps) => {
 
         <MusicController
           songs={songs}
-          selectedSongs={sortSelected()}
+          selectedSongs={selected}
           dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>

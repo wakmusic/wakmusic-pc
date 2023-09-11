@@ -28,7 +28,6 @@ const Playlist = ({}: PlaylistProps) => {
   const {
     selected,
     setSelected,
-    sortSelected,
     selectCallback,
     selectManyCallback,
     selectedIncludes,
@@ -99,7 +98,7 @@ const Playlist = ({}: PlaylistProps) => {
               }))
           );
         } else {
-          selectCallback(playingInfo.playlist[index], index);
+          selectCallback(playingInfo.playlist[index]);
           setLastSelected(index);
         }
       }, 250)
@@ -118,7 +117,7 @@ const Playlist = ({}: PlaylistProps) => {
     }));
 
     if (lastSelected === index) {
-      selectCallback(playingInfo.playlist[index], index);
+      selectCallback(playingInfo.playlist[index]);
     }
   }
 
@@ -360,7 +359,7 @@ const Playlist = ({}: PlaylistProps) => {
 
       <MusicController
         songs={playingInfo.playlist}
-        selectedSongs={sortSelected()}
+        selectedSongs={selected}
         dispatchSelectedSongs={selectManyCallback}
         player={true}
         onDelete={deleteSongs}

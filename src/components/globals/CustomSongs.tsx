@@ -18,9 +18,13 @@ interface CustomSongsProps {
   editMode?: boolean;
   songFeatures?: SongItemFeature[];
 
-  onSongClick: (song: Song, index: number) => void;
-  selectedIncludes: (song: Song, index: number) => boolean;
+  onSongClick: (song: Song) => void;
   onEdit?: (newSongs: Song[]) => void;
+
+  selectedIncludes: (song: Song) => boolean;
+  setSelected: React.Dispatch<React.SetStateAction<Song[]>>;
+
+  hideController: React.Dispatch<React.SetStateAction<boolean>>;
 
   children: Song[];
 }
@@ -36,8 +40,10 @@ const CustomSongs = ({
   editMode = false,
   songFeatures,
   onSongClick,
-  selectedIncludes,
   onEdit,
+  selectedIncludes,
+  setSelected,
+  hideController,
   children,
 }: CustomSongsProps) => {
   const [songs, setSongs] = useState(children);
@@ -93,12 +99,11 @@ const CustomSongs = ({
           <SongPadding style={margin} $transition={animateDrag}>
             <SongItem
               song={item}
-              index={index}
               editMode={editMode}
-              selected={selectedIncludes(item, index)}
+              selected={selectedIncludes(item)}
               features={songFeatures}
               onClick={(song) => {
-                onSongClick(song, index);
+                onSongClick(song);
               }}
               onEdit={(e) => {
                 setIsMouseDown(true);
@@ -131,6 +136,10 @@ const CustomSongs = ({
       selectedIncludes,
     ]
   );
+
+  useEffect(() => {
+    hideController(isMouseDown);
+  }, [hideController, isMouseDown]);
 
   useEffect(() => {
     // children 동기화
@@ -182,8 +191,13 @@ const CustomSongs = ({
         }
 
         setSongs(newSongs);
-        if (!newSongs.every((value, index) => value === children[index])) {
+        if (
+          !newSongs.every(
+            (value, index) => value.songId === children[index].songId
+          )
+        ) {
           onEdit(newSongs);
+          setSelected([]);
         }
 
         setDropTarget(-1);
@@ -206,6 +220,7 @@ const CustomSongs = ({
     dragTarget.song,
     dropTarget,
     onEdit,
+    setSelected,
   ]);
 
   useEffect(() => {
@@ -317,7 +332,7 @@ const CustomSongs = ({
             song={dragTarget.song}
             features={songFeatures}
             editMode={true}
-            selected={selectedIncludes(dragTarget.song, dragTarget.index)}
+            selected={selectedIncludes(dragTarget.song)}
           />
         )}
       </PseuduSongItem>

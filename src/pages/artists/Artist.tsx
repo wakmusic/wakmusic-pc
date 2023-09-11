@@ -99,7 +99,7 @@ const Artist = ({}: ArtistProps) => {
   }, [albumsData, albumsIsLoading, isFetchingNextPage]);
 
   const {
-    sortSelected,
+    selected,
     setSelected,
     selectCallback,
     selectManyCallback,
@@ -200,7 +200,6 @@ const Artist = ({}: ArtistProps) => {
                 ) : (
                   <SongItem
                     song={item}
-                    index={virtualItem.index}
                     selected={selectedIncludes(item)}
                     features={[
                       SongItemFeature.date,
@@ -218,7 +217,7 @@ const Artist = ({}: ArtistProps) => {
 
         <MusicController
           songs={albums}
-          selectedSongs={sortSelected()}
+          selectedSongs={selected}
           dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>

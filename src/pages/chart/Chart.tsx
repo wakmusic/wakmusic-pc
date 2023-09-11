@@ -60,7 +60,7 @@ const Chart = ({}: ChartProps) => {
   );
 
   const {
-    sortSelected,
+    selected,
     setSelected,
     selectCallback,
     selectManyCallback,
@@ -110,7 +110,6 @@ const Chart = ({}: ChartProps) => {
               <SongItem
                 rank={virtualItem.index + 1}
                 song={item}
-                index={virtualItem.index}
                 selected={selectedIncludes(item)}
                 features={[
                   tab !== "total" ? SongItemFeature.last : undefined,
@@ -127,7 +126,7 @@ const Chart = ({}: ChartProps) => {
 
         <MusicController
           songs={charts ?? []}
-          selectedSongs={sortSelected()}
+          selectedSongs={selected}
           dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>

@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { OrderedSongType, Song } from "@templates/song";
-
-import { isUndefined } from "@utils/isTypes";
+import { Song } from "@templates/song";
 
 export const useSelectSongs = (songs: Song[]) => {
   const [prevSongs, setPrevSongs] = useState(songs);
-  const [selected, setSelected] = useState<OrderedSongType[]>([]);
+  const [selected, setSelected] = useState<Song[]>([]);
 
-  const findIndex = (from: Song[] | OrderedSongType[], songId: string) => {
+  const findIndex = (from: Song[], songId: string) => {
     let index = -1;
 
     for (let target = 0; target < Math.ceil(from.length / 2); target++) {
@@ -27,15 +25,35 @@ export const useSelectSongs = (songs: Song[]) => {
     return index;
   };
 
-  const selectCallback = (song: Song, index?: number) => {
+  const insertSong = (to: Song[], song: Song) => {
+    const insertIndex = findIndex(songs, song.songId);
+
+    if (to.length === 0) {
+      to.push(song);
+      return;
+    }
+
+    for (let i = 0; i < to.length; i++) {
+      const itemIndex = findIndex(songs, to[i].songId);
+
+      if (i === to.length - 1 && itemIndex <= insertIndex) {
+        to.push(song);
+        break;
+      }
+
+      if (itemIndex <= insertIndex) continue;
+
+      to.splice(i, 0, song);
+      break;
+    }
+  };
+
+  const selectCallback = (song: Song) => {
     const newSelected = [...selected];
     const songIndex = findIndex(selected, song.songId);
 
     if (songIndex === -1) {
-      newSelected.push({
-        ...song,
-        index: isUndefined(index) ? findIndex(songs, song.songId) : index,
-      });
+      insertSong(newSelected, song);
     } else {
       newSelected.splice(songIndex, 1);
     }
@@ -59,10 +77,7 @@ export const useSelectSongs = (songs: Song[]) => {
         return;
       }
 
-      newSelected.push({
-        ...item,
-        index: findIndex(songs, item.songId),
-      });
+      insertSong(newSelected, item);
     });
 
     setSelected(newSelected);
@@ -73,45 +88,27 @@ export const useSelectSongs = (songs: Song[]) => {
     [selected]
   );
 
-  const sortSelected = () => {
-    const orderdSelected = [...selected];
-    orderdSelected.sort((a, b) => a.index - b.index);
-
-    return orderdSelected;
-  };
-
   useEffect(() => {
     if (
-      songs.length === prevSongs.length &&
-      songs.every((value, index) => value.songId === prevSongs[index].songId)
+      selected.length === 0 ||
+      (songs.length === prevSongs.length &&
+        songs.every((value, index) => value.songId === prevSongs[index].songId))
     ) {
       return;
     }
 
-    const newSelected = [...selected];
-
-    if (songs.length !== prevSongs.length) {
-      // 곡이 삭제된 경우
-      selected.forEach((item) => {
-        if (findIndex(songs, item.songId) === -1) {
-          newSelected.splice(findIndex(newSelected, item.songId), 1);
-        }
-      });
-    } else {
-      // 곡의 순서가 변경된 경우
-      newSelected.forEach((item) => {
-        item.index = findIndex(songs, item.songId);
-      });
+    if (prevSongs.length === 0) {
+      // api에서 로딩이 끝난 경우
+      setPrevSongs(songs);
+      return;
     }
 
-    setSelected(newSelected);
-
+    setSelected([]);
     setPrevSongs(songs);
   }, [songs, prevSongs, selected]);
 
   return {
     selected,
-    sortSelected,
     setSelected,
     selectCallback,
     selectManyCallback,

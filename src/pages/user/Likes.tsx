@@ -20,13 +20,19 @@ interface LikesProps {}
 
 const Likes = ({}: LikesProps) => {
   const [editMode] = useLikesEditState();
+  const [hideController, setHideController] = useState(false);
   const [likes, setLikes] = useLikesState();
 
   const prevLikes = usePrevious(likes);
   const [changeLikes, setChangeLikes] = useState<Song[]>([]);
 
-  const { sortSelected, selectCallback, selectManyCallback, selectedIncludes } =
-    useSelectSongs(likes);
+  const {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  } = useSelectSongs(likes);
 
   useEffect(() => {
     if (
@@ -87,7 +93,9 @@ const Likes = ({}: LikesProps) => {
         editMode={editMode}
         onEdit={dispatchLikes}
         selectedIncludes={selectedIncludes}
+        setSelected={setSelected}
         onSongClick={selectCallback}
+        hideController={setHideController}
         songFeatures={[
           SongItemFeature.date,
           SongItemFeature.views,
@@ -98,7 +106,8 @@ const Likes = ({}: LikesProps) => {
       </CustomSongs>
       <MusicController
         songs={likes}
-        selectedSongs={sortSelected()}
+        hide={hideController}
+        selectedSongs={selected}
         dispatchSelectedSongs={selectManyCallback}
         onDelete={editMode ? dispatchLikes : undefined}
       />

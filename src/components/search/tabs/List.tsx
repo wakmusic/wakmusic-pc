@@ -59,7 +59,7 @@ const List = ({ tab, query }: ListProps) => {
   }, [isFetching, isFetchingNextPage, songsData]);
 
   const {
-    sortSelected,
+    selected,
     setSelected,
     selectCallback,
     selectManyCallback,
@@ -109,7 +109,6 @@ const List = ({ tab, query }: ListProps) => {
               ) : (
                 <SongItem
                   song={item}
-                  index={virtualItem.index}
                   selected={selectedIncludes(item)}
                   features={[
                     SongItemFeature.date,
@@ -127,7 +126,7 @@ const List = ({ tab, query }: ListProps) => {
 
       <MusicController
         songs={songs}
-        selectedSongs={sortSelected()}
+        selectedSongs={selected}
         dispatchSelectedSongs={selectManyCallback}
       />
     </Container>

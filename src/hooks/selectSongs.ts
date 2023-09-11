@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { Song } from "@templates/song";
 
 import { isNull } from "@utils/isTypes";
 
 export const useSelectSongs = (songs: Song[]) => {
-  const [prevSongs, setPrevSongs] = useState(songs);
   const [selected, setSelected] = useState<Song[]>([]);
 
   const findIndex = (from: Song[], songId: string) => {

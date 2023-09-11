@@ -75,29 +75,6 @@ export const useSelectSongs = (songs: Song[]) => {
     [selected]
   );
 
-  useEffect(() => {
-    if (
-      selected.length === 0 ||
-      (songs.length === prevSongs.length &&
-        songs.every((value) => findIndex(prevSongs, value.songId) != -1))
-    ) {
-      return;
-    }
-
-    if (prevSongs.length === 0) {
-      // api에서 로딩이 끝난 경우
-      setPrevSongs(songs);
-      return;
-    }
-
-    setSelected([]);
-    setPrevSongs(songs);
-  }, [songs, prevSongs, selected]);
-
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
-
   return {
     selected,
     setSelected,

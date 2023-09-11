@@ -112,7 +112,7 @@ const MusicController = ({
                   // TODO: 플레이리스트 추가 실패
                 }
 
-                dispatchSelectedSongs([]);
+                dispatchSelectedSongs(selectedSongs);
               }}
             />
           );
@@ -121,7 +121,7 @@ const MusicController = ({
             <AddPlaylist
               onClick={() => {
                 playSongs(selectedSongs, false, false);
-                dispatchSelectedSongs([]);
+                dispatchSelectedSongs(selectedSongs);
               }}
               key={key}
             />
@@ -131,7 +131,7 @@ const MusicController = ({
             <PlayMusic
               onClick={() => {
                 playSongs(selectedSongs);
-                dispatchSelectedSongs([]);
+                dispatchSelectedSongs(selectedSongs);
               }}
               key={key}
             />
@@ -149,7 +149,7 @@ const MusicController = ({
                   );
                 });
 
-                dispatchSelectedSongs([]);
+                dispatchSelectedSongs(selectedSongs);
 
                 onDelete && onDelete(newSongs);
               }}

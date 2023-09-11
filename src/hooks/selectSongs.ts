@@ -51,7 +51,7 @@ export const useSelectSongs = (songs: Song[]) => {
   const selectManyCallback = (song: Song[]) => {
     if (
       song.length === selected.length &&
-      song.every((value) => selectedIncludes(value))
+      song.every((value, i) => value.songId === selected[i].songId)
     ) {
       setSelected([]);
       return;
@@ -71,8 +71,7 @@ export const useSelectSongs = (songs: Song[]) => {
   };
 
   const selectedIncludes = useCallback(
-    (song: Song) =>
-      isNull(song) ? false : findIndex(selected, song.songId) !== -1,
+    (song: Song) => !isNull(song) && findIndex(selected, song.songId) !== -1,
     [selected]
   );
 

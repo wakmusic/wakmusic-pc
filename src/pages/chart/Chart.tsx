@@ -60,7 +60,7 @@ const Chart = ({}: ChartProps) => {
   );
 
   const {
-    selected,
+    sortSelected,
     setSelected,
     selectCallback,
     selectManyCallback,
@@ -127,7 +127,7 @@ const Chart = ({}: ChartProps) => {
 
         <MusicController
           songs={charts ?? []}
-          selectedSongs={selected}
+          selectedSongs={sortSelected()}
           dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>

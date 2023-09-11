@@ -99,7 +99,7 @@ const Artist = ({}: ArtistProps) => {
   }, [albumsData, albumsIsLoading, isFetchingNextPage]);
 
   const {
-    selected,
+    sortSelected,
     setSelected,
     selectCallback,
     selectManyCallback,
@@ -218,7 +218,7 @@ const Artist = ({}: ArtistProps) => {
 
         <MusicController
           songs={albums}
-          selectedSongs={selected}
+          selectedSongs={sortSelected()}
           dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>

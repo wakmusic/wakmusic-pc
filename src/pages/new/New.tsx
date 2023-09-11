@@ -78,7 +78,7 @@ const New = ({}: NewProps) => {
     });
 
   const {
-    selected,
+    sortSelected,
     setSelected,
     selectCallback,
     selectManyCallback,
@@ -157,7 +157,7 @@ const New = ({}: NewProps) => {
 
         <MusicController
           songs={songs}
-          selectedSongs={selected}
+          selectedSongs={sortSelected()}
           dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>

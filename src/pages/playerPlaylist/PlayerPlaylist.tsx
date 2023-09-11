@@ -24,7 +24,7 @@ interface PlayerPlaylistProps {}
 const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
-  const { selected, selectCallback, selectManyCallback, selectedIncludes } =
+  const { sortSelected, selectCallback, selectManyCallback, selectedIncludes } =
     useSelectSongs(playingInfo.playlist);
 
   const [changePlaylist, setChangePlaylist] = useState<Song[] | null>(null);
@@ -83,7 +83,6 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
           onEdit={dispatchPlayerListInfo}
           selectedIncludes={selectedIncludes}
           onSongClick={selectCallback}
-          selectedSongs={selected}
           songFeatures={[
             SongItemFeature.date,
             SongItemFeature.views,
@@ -94,7 +93,7 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
         </CustomSongs>
         <MusicController
           songs={playingInfo.playlist}
-          selectedSongs={selected}
+          selectedSongs={sortSelected()}
           dispatchSelectedSongs={selectManyCallback}
           features={[ControllerFeature.selectAll, ControllerFeature.addMusic]}
           onDelete={dispatchPlayerListInfo}

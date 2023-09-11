@@ -28,6 +28,7 @@ const Playlist = ({}: PlaylistProps) => {
   const {
     selected,
     setSelected,
+    sortSelected,
     selectCallback,
     selectManyCallback,
     selectedIncludes,
@@ -76,7 +77,7 @@ const Playlist = ({}: PlaylistProps) => {
           multiSelect &&
           lastSelected !== null &&
           lastSelected !== index &&
-          selectedIncludes(playingInfo.playlist[lastSelected], lastSelected)
+          selectedIncludes(playingInfo.playlist[lastSelected])
         ) {
           const start = Math.min(index, lastSelected);
           const end = Math.max(index, lastSelected) + 1;
@@ -248,7 +249,7 @@ const Playlist = ({}: PlaylistProps) => {
     const resizeObserver = new ResizeObserver(() => {
       if (!viewportRef.current || lastSelected === null) return;
 
-      if (!playingInfo.playlist.some((song, i) => selectedIncludes(song, i))) {
+      if (!playingInfo.playlist.some((song) => selectedIncludes(song))) {
         return;
       }
 
@@ -359,7 +360,7 @@ const Playlist = ({}: PlaylistProps) => {
 
       <MusicController
         songs={playingInfo.playlist}
-        selectedSongs={selected}
+        selectedSongs={sortSelected()}
         dispatchSelectedSongs={selectManyCallback}
         player={true}
         onDelete={deleteSongs}

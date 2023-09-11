@@ -28,21 +28,18 @@ export const useSelectSongs = (songs: Song[]) => {
   };
 
   const selectCallback = (song: Song, index?: number) => {
-    if (isUndefined(index)) return;
-
     const newSelected = [...selected];
     const songIndex = findIndex(selected, song.songId);
 
     if (songIndex === -1) {
       newSelected.push({
         ...song,
-        index: index,
+        index: isUndefined(index) ? findIndex(songs, song.songId) : index,
       });
     } else {
       newSelected.splice(songIndex, 1);
     }
 
-    newSelected.sort((a, b) => a.index - b.index);
     setSelected(newSelected);
   };
 
@@ -68,7 +65,6 @@ export const useSelectSongs = (songs: Song[]) => {
       });
     });
 
-    newSelected.sort((a, b) => a.index - b.index);
     setSelected(newSelected);
   };
 
@@ -76,6 +72,13 @@ export const useSelectSongs = (songs: Song[]) => {
     (song: Song) => findIndex(selected, song.songId) !== -1,
     [selected]
   );
+
+  const sortSelected = () => {
+    const orderdSelected = [...selected];
+    orderdSelected.sort((a, b) => a.index - b.index);
+
+    return orderdSelected;
+  };
 
   useEffect(() => {
     if (
@@ -101,7 +104,6 @@ export const useSelectSongs = (songs: Song[]) => {
       });
     }
 
-    newSelected.sort((a, b) => a.index - b.index);
     setSelected(newSelected);
 
     setPrevSongs(songs);
@@ -109,6 +111,7 @@ export const useSelectSongs = (songs: Song[]) => {
 
   return {
     selected,
+    sortSelected,
     setSelected,
     selectCallback,
     selectManyCallback,

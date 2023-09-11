@@ -73,7 +73,7 @@ const Playlist = ({}: PlaylistProps) => {
     return (playlists ?? []).find((item) => item.key === playlistId);
   }, [playlistId, playlists, recommendList]);
 
-  const { selected, selectCallback, selectManyCallback, selectedIncludes } =
+  const { sortSelected, selectCallback, selectManyCallback, selectedIncludes } =
     useSelectSongs(isUndefined(playlist) ? [] : playlist.songs);
 
   const prevPlaylist = usePrevious(playlist);
@@ -161,7 +161,6 @@ const Playlist = ({}: PlaylistProps) => {
         onEdit={dispatchSongs}
         onSongClick={selectCallback}
         selectedIncludes={selectedIncludes}
-        selectedSongs={selected}
         songFeatures={[
           SongItemFeature.date,
           SongItemFeature.views,
@@ -174,7 +173,7 @@ const Playlist = ({}: PlaylistProps) => {
       <MusicController
         displayDefault={false}
         songs={playlist?.songs ?? []}
-        selectedSongs={selected}
+        selectedSongs={sortSelected()}
         dispatchSelectedSongs={selectManyCallback}
         onDelete={isEditmode ? dispatchSongs : undefined}
       />

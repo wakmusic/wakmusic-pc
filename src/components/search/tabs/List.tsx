@@ -59,7 +59,7 @@ const List = ({ tab, query }: ListProps) => {
   }, [isFetching, isFetchingNextPage, songsData]);
 
   const {
-    selected,
+    sortSelected,
     setSelected,
     selectCallback,
     selectManyCallback,
@@ -127,7 +127,7 @@ const List = ({ tab, query }: ListProps) => {
 
       <MusicController
         songs={songs}
-        selectedSongs={selected}
+        selectedSongs={sortSelected()}
         dispatchSelectedSongs={selectManyCallback}
       />
     </Container>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as RatioSVG } from "@assets/icons/ic_24_RadioButton.svg";
 
@@ -13,15 +13,27 @@ import HelpText from "./globals/HelpText";
 import TwoButton from "./globals/TwoButton";
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
 
-interface ExitModalProps {}
+interface ExitModalProps {
+  popup?: boolean;
+}
 
-const ExitModal = ({}: ExitModalProps) => {
+const ExitModal = ({ popup }: ExitModalProps) => {
   const [modalState, setModalState] = useExitModalState();
   const [mode, setMode] = useState<"close" | "background">(
     localStorage.getItem("exitMode") === "background" ? "background" : "close"
   );
 
   const resolve = (result: boolean) => () => {
+    if (location.pathname === "/selectExit") {
+      window.postMessage({
+        type: "resolve",
+        payload: result ? mode : null,
+      });
+      window.close();
+
+      return;
+    }
+
     if (modalState.resolve) {
       modalState.resolve(result ? mode : null);
     }
@@ -29,11 +41,11 @@ const ExitModal = ({}: ExitModalProps) => {
     return setModalState({ isOpen: false });
   };
 
-  if (!modalState.isOpen) return null;
+  if (!modalState.isOpen && !popup) return null;
 
   return (
     <ModalOverlay>
-      <Container>
+      <Container $noRadius={popup}>
         <Title>앞으로 어떻게 종료할까요?</Title>
 
         <Select $selected={mode === "close"} onClick={() => setMode("close")}>
@@ -58,22 +70,34 @@ const ExitModal = ({}: ExitModalProps) => {
         </HelpTextContainer>
 
         <ButtonsWrapper>
-          <TwoButton ok={resolve(true)} cancel={resolve(false)} />
+          <TwoButton
+            ok={resolve(true)}
+            cancel={resolve(false)}
+            noRadius={popup}
+          />
         </ButtonsWrapper>
       </Container>
     </ModalOverlay>
   );
 };
 
-const Container = styled(ModalContainer)`
+const Container = styled(ModalContainer)<{ $noRadius?: boolean }>`
   background: ${colors.blueGray25};
+
+  ${({ $noRadius }) =>
+    $noRadius &&
+    css`
+      border-radius: 0;
+    `}
 `;
 
 const Title = styled(T1Bold)`
   color: ${colors.primary900};
 
-  margin-top: 52px;
+  padding-top: 52px;
   margin-bottom: 24px;
+
+  -webkit-app-region: drag;
 `;
 
 const Select = styled.div<{ $selected: boolean }>`

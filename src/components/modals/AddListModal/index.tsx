@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 
 import { addSongToPlaylist, createPlaylist } from "@apis/playlist";
 import { fetchPlaylists } from "@apis/user";
@@ -125,7 +125,7 @@ const AddListModal = ({ popup }: AddListModalProps) => {
 
   return (
     <ModalOverlay onClick={() => resolve(undefined)}>
-      <Container onClick={(e) => e.stopPropagation()}>
+      <Container onClick={(e) => e.stopPropagation()} $noRadius={popup}>
         <Header />
         <Title>보관함에 담기</Title>
         <CloseButton onClick={() => resolve(undefined)} />
@@ -175,7 +175,7 @@ const AddListModal = ({ popup }: AddListModalProps) => {
   );
 };
 
-const Container = styled(ModalContainer)`
+const Container = styled(ModalContainer)<{ $noRadius?: boolean }>`
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   border-end-start-radius: 15px;
@@ -186,6 +186,12 @@ const Container = styled(ModalContainer)`
   justify-content: flex-start;
 
   height: 500px;
+
+  ${({ $noRadius }) =>
+    $noRadius &&
+    css`
+      border-radius: 0;
+    `}
 `;
 
 const Header = styled.div`

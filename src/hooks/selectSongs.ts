@@ -60,7 +60,7 @@ export const useSelectSongs = (songs: Song[]) => {
     const newSelected = [...selected];
 
     song.forEach((item) => {
-      if (selectedIncludes(item)) {
+      if (findIndex(newSelected, item.songId) !== -1) {
         return;
       }
 
@@ -79,7 +79,7 @@ export const useSelectSongs = (songs: Song[]) => {
     if (
       selected.length === 0 ||
       (songs.length === prevSongs.length &&
-        songs.every((value, index) => value.songId === prevSongs[index].songId))
+        songs.every((value) => findIndex(prevSongs, value.songId) != -1))
     ) {
       return;
     }
@@ -93,6 +93,10 @@ export const useSelectSongs = (songs: Song[]) => {
     setSelected([]);
     setPrevSongs(songs);
   }, [songs, prevSongs, selected]);
+
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]);
 
   return {
     selected,

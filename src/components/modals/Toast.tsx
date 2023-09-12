@@ -23,7 +23,18 @@ const Toast = ({}: ToastProps) => {
   const nextToast = useCallback(() => {
     if (toastState.length > 0) {
       const newToastState = [...toastState];
-      const nextToast = newToastState.shift();
+
+      let nextToast = newToastState.shift();
+      let count = 1;
+
+      while (nextToast === newToastState[0]) {
+        count++;
+        newToastState.shift();
+      }
+
+      if (count > 1) {
+        nextToast = `${nextToast} (x${count})`;
+      }
 
       setCurrentToast(nextToast);
       setToastState(newToastState);

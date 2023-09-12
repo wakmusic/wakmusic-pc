@@ -25,13 +25,8 @@ const Playlist = ({}: PlaylistProps) => {
   const [, setControl] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
-  const {
-    selected,
-    setSelected,
-    selectCallback,
-    selectManyCallback,
-    selectedIncludes,
-  } = useSelectSongs(playingInfo.playlist);
+  const { selected, setSelected, selectCallback, selectManyCallback } =
+    useSelectSongs(playingInfo.playlist);
 
   const [selectedVisual, setSelectedVisual] = useState<Song[]>([]);
 
@@ -69,7 +64,7 @@ const Playlist = ({}: PlaylistProps) => {
     }
   }
 
-  function onSongSelected(index: number, multiSelect: boolean) {
+  function onSongSelected(index: number, shift: boolean) {
     setSelectedVisual([...selectedVisual, playingInfo.playlist[index]]);
 
     if (clickTimer) {
@@ -78,20 +73,7 @@ const Playlist = ({}: PlaylistProps) => {
 
     setClickTimer(
       setTimeout(() => {
-        if (
-          multiSelect &&
-          lastSelected !== null &&
-          lastSelected !== index &&
-          selectedIncludes(playingInfo.playlist[lastSelected])
-        ) {
-          const start = Math.min(index, lastSelected);
-          const end = Math.max(index, lastSelected) + 1;
-
-          selectManyCallback([...playingInfo.playlist].slice(start, end));
-        } else {
-          selectCallback(playingInfo.playlist[index]);
-          setLastSelected(index);
-        }
+        selectCallback(playingInfo.playlist[index], shift);
       }, 250)
     );
   }

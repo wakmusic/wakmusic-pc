@@ -24,7 +24,7 @@ interface SongItemProps {
   features?: (SongItemFeature | undefined)[];
   selected?: boolean;
 
-  onClick?: (song: Song) => void;
+  onClick?: (song: Song, shift: boolean) => void;
   onEdit?: (event: React.MouseEvent) => void;
 
   useIncrease?: boolean;
@@ -86,7 +86,7 @@ const SongItem = ({
 
   return (
     <Container
-      onClick={() => onClick && song && onClick(song)}
+      onClick={(e) => onClick && song && onClick(song, e.shiftKey)}
       $selected={selected}
     >
       <Info>

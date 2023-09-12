@@ -3,8 +3,10 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { useAddListModal } from "@hooks/addListModal";
+import { useLoginModalOpener } from "@hooks/loginModal";
 import { usePlaySongs } from "@hooks/player";
 import { useToast } from "@hooks/toast";
+import { useUserState } from "@hooks/user";
 
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
@@ -54,16 +56,14 @@ const MusicController = ({
   );
   const [showControllerState, setShowControllerState] =
     useState(displayDefault);
-  const [popdown, setPopdown] = useState(false);
 
   const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
-
+  const [popdown, setPopdown] = useState(false);
+  const openLoginModal = useLoginModalOpener();
   const openAddListModal = useAddListModal();
-
-  const location = useLocation();
-
   const playSongs = usePlaySongs();
-
+  const location = useLocation();
+  const [user] = useUserState();
   const toast = useToast();
 
   const getControllerComponent = useCallback(
@@ -80,10 +80,17 @@ const MusicController = ({
             />
           );
         case ControllerFeature.addMusic:
+          if (!user && location.pathname === "/player") return null;
+
           return (
             <AddMusic
               key={key}
               onClick={async () => {
+                if (!user) {
+                  openLoginModal();
+                  return;
+                }
+
                 if (location.pathname === "/player") {
                   const win = open(
                     "/addList",
@@ -170,10 +177,12 @@ const MusicController = ({
       location.pathname,
       onDelete,
       openAddListModal,
+      openLoginModal,
       playSongs,
       selectedSongs,
       songs,
       toast,
+      user,
     ]
   );
 

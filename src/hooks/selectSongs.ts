@@ -98,14 +98,14 @@ export const useSelectSongs = (songs: Song[]) => {
 
   useEffect(() => {
     const keyDownHandler = (e: KeyboardEvent) => {
-      if (e.key === "Shift" && !shift) {
+      if ((e.code === "ShiftLeft" || e.code === "ShiftRight") && !shift) {
         setShift(true);
         return;
       }
     };
 
     const keyUpHandler = (e: KeyboardEvent) => {
-      if (e.key === "Shift" && shift) {
+      if ((e.code === "ShiftLeft" || e.code === "ShiftRight") && shift) {
         setShift(false);
         return;
       }

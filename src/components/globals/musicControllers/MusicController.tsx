@@ -3,7 +3,9 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { useAddListModal } from "@hooks/addListModal";
+import { useLoginModalOpener } from "@hooks/loginModal";
 import { usePlaySongs } from "@hooks/player";
+import { useUserState } from "@hooks/user";
 
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
@@ -55,11 +57,11 @@ const MusicController = ({
 
   const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
 
+  const openLoginModal = useLoginModalOpener();
   const openAddListModal = useAddListModal();
-
-  const location = useLocation();
-
   const playSongs = usePlaySongs();
+  const location = useLocation();
+  const [user] = useUserState();
 
   const getControllerComponent = useCallback(
     (feature: ControllerFeature, key: number) => {
@@ -75,10 +77,17 @@ const MusicController = ({
             />
           );
         case ControllerFeature.addMusic:
+          if (!user && location.pathname === "/player") return null;
+
           return (
             <AddMusic
               key={key}
               onClick={async () => {
+                if (!user) {
+                  openLoginModal();
+                  return;
+                }
+
                 if (location.pathname === "/player") {
                   const win = open(
                     "/addList",
@@ -163,9 +172,11 @@ const MusicController = ({
       location.pathname,
       onDelete,
       openAddListModal,
+      openLoginModal,
       playSongs,
       selectedSongs,
       songs,
+      user,
     ]
   );
 

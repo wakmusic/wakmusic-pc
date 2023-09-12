@@ -39,6 +39,10 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
     (e: KeyboardEvent) => {
       if (isSpaceDisabled || e.repeat) return;
 
+      if (e.ctrlKey) {
+        return;
+      }
+
       // 비주얼모드 토글
       if (
         e.code === "KeyF" &&
@@ -109,9 +113,7 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
         setVolumeState(newVolume < 0 ? 0 : newVolume, control.isMute);
       }
 
-      if (!e.ctrlKey) {
-        e.preventDefault();
-      }
+      e.preventDefault();
     },
     [
       control.isMute,

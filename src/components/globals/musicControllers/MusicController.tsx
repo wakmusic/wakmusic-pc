@@ -4,9 +4,12 @@ import styled from "styled-components/macro";
 
 import { useAddListModal } from "@hooks/addListModal";
 import { usePlaySongs } from "@hooks/player";
+import { useToast } from "@hooks/toast";
 
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
+
+import { isUndefined } from "@utils/isTypes";
 
 import AddMusic from "./AddMusic";
 import AddPlaylist from "./AddPlaylist";
@@ -61,6 +64,8 @@ const MusicController = ({
 
   const playSongs = usePlaySongs();
 
+  const toast = useToast();
+
   const getControllerComponent = useCallback(
     (feature: ControllerFeature, key: number) => {
       switch (feature) {
@@ -107,9 +112,11 @@ const MusicController = ({
                 const success = await openAddListModal(selectedSongs);
 
                 if (success) {
-                  // TODO: 플레이리스트 추가 성공
+                  toast(`${selectedSongs.length}곡을 추가하였습니다.`);
+                } else if (isUndefined(success)) {
+                  toast("취소되었습니다.");
                 } else {
-                  // TODO: 플레이리스트 추가 실패
+                  toast("오류가 발생하였습니다.");
                 }
 
                 dispatchSelectedSongs(selectedSongs);
@@ -166,6 +173,7 @@ const MusicController = ({
       playSongs,
       selectedSongs,
       songs,
+      toast,
     ]
   );
 

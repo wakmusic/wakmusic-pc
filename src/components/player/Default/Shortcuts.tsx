@@ -79,12 +79,12 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
       }
 
       // 이전곡
-      if (e.code === "KeyP") {
+      if (e.code === "KeyP" || e.code === "BracketLeft") {
         prevSong();
       }
 
       // 다음곡
-      if (e.code === "KeyN") {
+      if (e.code === "KeyN" || e.code === "BracketRight") {
         nextSong();
       }
 

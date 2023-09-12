@@ -7,6 +7,7 @@ import { T3Medium, T4Bold, T5Light } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useShareListModalState } from "@hooks/shareListModal";
+import { useToast } from "@hooks/toast";
 
 import HelpText from "./globals/HelpText";
 import OkButton from "./globals/OkButton";
@@ -16,6 +17,7 @@ interface LoadListModalProps {}
 
 const LoadListModal = ({}: LoadListModalProps) => {
   const [modalState, setModalState] = useShareListModalState();
+  const toast = useToast();
 
   const resolve = () => {
     if (modalState.resolve) modalState.resolve();
@@ -37,6 +39,7 @@ const LoadListModal = ({}: LoadListModalProps) => {
               onClick={() => {
                 if (!modalState.code) return;
                 navigator.clipboard.writeText(modalState.code);
+                toast("클립보드에 복사되었습니다.");
               }}
             >
               <CopySVG />

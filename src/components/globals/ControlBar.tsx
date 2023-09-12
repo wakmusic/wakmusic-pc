@@ -49,7 +49,29 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
       | null;
 
     if (isNull(mode)) {
-      mode = await openExitModal(true);
+      if (location.pathname === "/player") {
+        const openExitPopup = new Promise<"close" | "background" | null>(
+          (resolve) => {
+            const win = open(
+              "/selectExit",
+              "_blank",
+              "width=440,height=374,frame=false"
+            );
+
+            if (win) {
+              win.addEventListener("message", (e) => {
+                if (e.data.type === "resolve") {
+                  resolve(e.data.payload);
+                }
+              });
+            }
+          }
+        );
+
+        mode = await openExitPopup;
+      } else {
+        mode = await openExitModal(true);
+      }
     }
 
     if (isNull(mode)) {

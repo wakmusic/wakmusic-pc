@@ -89,12 +89,12 @@ export const useToggleIsRandomState = () => {
   const [state, setState] = useRecoilState(controlState);
   const setPlayingInfo = useSetRecoilState(playingInfoState);
 
-  return () => {
+  return (forceShuffle = false) => {
     setPlayingInfo((prev) => {
       let newPlaylist: Song[] = [];
       let current = 0;
 
-      if (!state.isRandom) {
+      if (forceShuffle || !state.isRandom) {
         const shuffledPlaylist = [...prev.original].sort(
           () => Math.random() - 0.5
         );
@@ -124,7 +124,7 @@ export const useToggleIsRandomState = () => {
       };
     });
 
-    setState({ ...state, isRandom: !state.isRandom });
+    setState({ ...state, isRandom: forceShuffle || !state.isRandom });
   };
 };
 
@@ -216,6 +216,7 @@ export const useNextSong = () => {
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
   const setProgress = useSetRecoilState(playingChangeProgress);
+  const toggleRandom = useToggleIsRandomState();
 
   const stateRef = useRef<{
     control: ControlStateType;
@@ -251,10 +252,20 @@ export const useNextSong = () => {
 
       case RepeatType.All: {
         if (playingInfo.current === playingInfo.playlist.length - 1) {
+          if (control.isRandom) {
+            toggleRandom(true);
+          }
+
           setPlayingInfo((prev) => ({
             ...prev,
-            current: 0,
+            current:
+              control.isRandom && playingInfo.playlist.length > 1 ? 1 : 0,
           }));
+
+          setProgress({
+            progress: 0,
+            force: true,
+          });
 
           break;
         }

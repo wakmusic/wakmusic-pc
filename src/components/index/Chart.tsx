@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { fetchCharts, fetchChartsUpdateTypes } from "@apis/charts";
@@ -20,6 +21,7 @@ interface ChartProps {}
 
 const Chart = ({}: ChartProps) => {
   const playSongs = usePlaySongs();
+  const navigate = useNavigate();
 
   const {
     isLoading: chartsIsLoading,
@@ -45,7 +47,13 @@ const Chart = ({}: ChartProps) => {
     <Container>
       <Header>
         <HeaderTexts>
-          <Title color={colors.primary900}>왁뮤차트 TOP100</Title>
+          <Title
+            onClick={() => {
+              navigate("/chart");
+            }}
+          >
+            왁뮤차트 TOP100
+          </Title>
           <UpdatedText
             updated={chartUpdated}
             marginTop={4}
@@ -113,7 +121,18 @@ const HeaderButtons = styled.div`
   gap: 4px;
 `;
 
-const Title = styled(T4Medium)``;
+const Title = styled(T4Medium)`
+  color: ${colors.primary900};
+
+  cursor: pointer;
+
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    font-weight: 700;
+    margin-left: -0.5px;
+  }
+`;
 
 const Items = styled.div`
   margin-top: 8px;

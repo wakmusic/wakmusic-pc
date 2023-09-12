@@ -135,8 +135,6 @@ const Playlist = ({}: PlaylistProps) => {
 
     if (targetIndex === cursorIndex || targetIndex + 1 === cursorIndex) return;
 
-    console.log(targetIndex, cursorIndex);
-
     const newPlaylist = [...playingInfo.playlist];
 
     newPlaylist.splice(targetIndex, 1);

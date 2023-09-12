@@ -43,8 +43,17 @@ export const useSelectSongs = (songs: Song[]) => {
     const songSelectedIndex = findIndex(selected, song.songId);
     const songIndex = findIndex(songs, song.songId);
 
-    if (shift && lastSelected !== -1) {
-      selectManyCallback(songs.slice(lastSelected, songIndex + 1));
+    if (
+      shift &&
+      lastSelected !== -1 &&
+      Math.abs(songIndex - lastSelected) !== 1
+    ) {
+      if (lastSelected > songIndex) {
+        selectManyCallback(songs.slice(songIndex, lastSelected + 1));
+      } else {
+        selectManyCallback(songs.slice(lastSelected, songIndex + 1));
+      }
+
       setLastSelected(songIndex);
       return;
     }
@@ -53,6 +62,7 @@ export const useSelectSongs = (songs: Song[]) => {
       setLastSelected(songIndex);
       insertSong(newSelected, song);
     } else {
+      setLastSelected(-1);
       newSelected.splice(songSelectedIndex, 1);
     }
 

@@ -22,9 +22,9 @@ export const controlState = atom<ControlStateType>({
   default: {
     volume: Number(localStorage.getItem("volume")) || 50,
     isMute: localStorage.getItem("isMute") === "true" || false,
-    repeatType: RepeatType.Off,
+    repeatType: (Number(localStorage.getItem("repeatType")) || 0) as RepeatType,
     isPlaying: false,
-    isRandom: false,
+    isRandom: localStorage.getItem("isRandom") === "true" || false,
     isLyricsOn: false,
   },
   effects: [
@@ -40,6 +40,14 @@ export const controlState = atom<ControlStateType>({
 
         if (newValue.isMute !== (oldValue as ControlStateType).isMute) {
           localStorage.setItem("isMute", newValue.isMute.toString());
+        }
+
+        if (newValue.repeatType !== (oldValue as ControlStateType).repeatType) {
+          localStorage.setItem("repeatType", newValue.repeatType.toString());
+        }
+
+        if (newValue.isRandom !== (oldValue as ControlStateType).isRandom) {
+          localStorage.setItem("isRandom", newValue.isRandom.toString());
         }
       });
     },
@@ -82,21 +90,17 @@ export const playingInfoState = atom<PlayingInfoStateType>({
     playlist: localStorage.getItem("playlist")
       ? JSON.parse(localStorage.getItem("playlist") as string)
       : [],
-    original: localStorage.getItem("playlist")
-      ? JSON.parse(localStorage.getItem("playlist") as string)
+    original: localStorage.getItem("original")
+      ? JSON.parse(localStorage.getItem("original") as string)
       : [],
     current: 0,
   },
   effects: [
     // Discord RPC
     ({ onSet }) => {
-      onSet((value, oldValue) => {
+      onSet((value) => {
         const current = value.playlist[value.current];
         ipcRenderer?.send(IPCRenderer.RPC_TRACK, current);
-
-        if (value.playlist !== (oldValue as PlayingInfoStateType).playlist) {
-          localStorage.setItem("playlist", JSON.stringify(value.playlist));
-        }
       });
     },
 
@@ -130,6 +134,19 @@ export const playingInfoState = atom<PlayingInfoStateType>({
             ...value,
             original: newOriginal,
           });
+        }
+      });
+    },
+
+    // Set Local Storage
+    ({ onSet }) => {
+      onSet((value, oldValue) => {
+        if (value.playlist !== (oldValue as PlayingInfoStateType).playlist) {
+          localStorage.setItem("playlist", JSON.stringify(value.playlist));
+        }
+
+        if (value.original !== (oldValue as PlayingInfoStateType).original) {
+          localStorage.setItem("original", JSON.stringify(value.original));
         }
       });
     },

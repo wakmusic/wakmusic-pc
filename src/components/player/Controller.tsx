@@ -73,7 +73,7 @@ const Controller = ({}: ControllerProps) => {
       <SimpleIconButton icon={NextSvg} onClick={nextSong} />
       <SimpleIconButton
         icon={controlState.isRandom ? RandomOnSvg : RandomOffSvg}
-        onClick={toggleIsRandomState}
+        onClick={() => toggleIsRandomState()}
       />
       <SimpleIconButton
         icon={controlState.isLyricsOn ? DocumentOnSvg : DocumentOffSvg}

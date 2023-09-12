@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Song } from "@templates/song";
 
@@ -6,6 +6,10 @@ import { isNull } from "@utils/isTypes";
 
 export const useSelectSongs = (songs: Song[]) => {
   const [selected, setSelected] = useState<Song[]>([]);
+
+  const [lastSelected, setLastSelected] = useState(-1);
+
+  const [shift, setShift] = useState(false);
 
   const findIndex = (from: Song[], songId: string) => {
     return from.findIndex((value) => value.songId === songId);
@@ -36,12 +40,20 @@ export const useSelectSongs = (songs: Song[]) => {
 
   const selectCallback = (song: Song) => {
     const newSelected = [...selected];
-    const songIndex = findIndex(selected, song.songId);
+    const songSelectedIndex = findIndex(selected, song.songId);
+    const songIndex = findIndex(songs, song.songId);
 
-    if (songIndex === -1) {
+    if (shift && lastSelected !== -1) {
+      selectManyCallback(songs.slice(lastSelected, songIndex + 1));
+      setLastSelected(songIndex);
+      return;
+    }
+
+    if (songSelectedIndex === -1) {
+      setLastSelected(songIndex);
       insertSong(newSelected, song);
     } else {
-      newSelected.splice(songIndex, 1);
+      newSelected.splice(songSelectedIndex, 1);
     }
 
     setSelected(newSelected);
@@ -73,6 +85,30 @@ export const useSelectSongs = (songs: Song[]) => {
     (song: Song) => !isNull(song) && findIndex(selected, song.songId) !== -1,
     [selected]
   );
+
+  useEffect(() => {
+    const keyDownHandler = (e: KeyboardEvent) => {
+      if (e.code === "ShiftLeft" && !shift) {
+        setShift(true);
+        return;
+      }
+    };
+
+    const keyUpHandler = (e: KeyboardEvent) => {
+      if (e.code === "ShiftLeft" && shift) {
+        setShift(false);
+        return;
+      }
+    };
+
+    window.addEventListener("keydown", keyDownHandler);
+    window.addEventListener("keyup", keyUpHandler);
+
+    return () => {
+      window.removeEventListener("keydown", keyDownHandler);
+      window.removeEventListener("keyup", keyUpHandler);
+    };
+  }, [shift]);
 
   return {
     selected,

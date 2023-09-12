@@ -91,7 +91,10 @@ const SchemeHandler = (): null => {
             ipcRenderer.send("user:login");
           }
 
+          const likes = await fetchLikes();
+
           setUser(user);
+          setLikes(likes);
 
           break;
         }
@@ -147,6 +150,7 @@ const SchemeHandler = (): null => {
       openLoginModal,
       prevSong,
       setControl,
+      setLikes,
       setPlayingInfo,
       setUser,
     ]

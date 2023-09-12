@@ -7,6 +7,8 @@ import { T3Medium, T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useToast } from "@hooks/toast";
+
 import HelpText from "./globals/HelpText";
 import OkButton from "./globals/OkButton";
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
@@ -15,6 +17,7 @@ interface ContactModalProps {}
 
 const ContactModal = ({}: ContactModalProps) => {
   const navigate = useNavigate();
+  const toast = useToast();
 
   return (
     <ModalOverlay>
@@ -32,6 +35,8 @@ const ContactModal = ({}: ContactModalProps) => {
                 navigator.clipboard.writeText(
                   import.meta.env.VITE_CONTACT_MAIL
                 );
+
+                toast("클립보드에 복사되었습니다.");
               }}
             >
               <CopySVG />

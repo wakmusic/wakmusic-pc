@@ -5,10 +5,13 @@ import styled from "styled-components/macro";
 import { useAddListModal } from "@hooks/addListModal";
 import { useLoginModalOpener } from "@hooks/loginModal";
 import { usePlaySongs } from "@hooks/player";
+import { useToast } from "@hooks/toast";
 import { useUserState } from "@hooks/user";
 
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
+
+import { isUndefined } from "@utils/isTypes";
 
 import AddMusic from "./AddMusic";
 import AddPlaylist from "./AddPlaylist";
@@ -53,15 +56,15 @@ const MusicController = ({
   );
   const [showControllerState, setShowControllerState] =
     useState(displayDefault);
-  const [popdown, setPopdown] = useState(false);
 
   const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
-
+  const [popdown, setPopdown] = useState(false);
   const openLoginModal = useLoginModalOpener();
   const openAddListModal = useAddListModal();
   const playSongs = usePlaySongs();
   const location = useLocation();
   const [user] = useUserState();
+  const toast = useToast();
 
   const getControllerComponent = useCallback(
     (feature: ControllerFeature, key: number) => {
@@ -116,9 +119,11 @@ const MusicController = ({
                 const success = await openAddListModal(selectedSongs);
 
                 if (success) {
-                  // TODO: 플레이리스트 추가 성공
+                  toast(`${selectedSongs.length}곡을 추가하였습니다.`);
+                } else if (isUndefined(success)) {
+                  toast("취소되었습니다.");
                 } else {
-                  // TODO: 플레이리스트 추가 실패
+                  toast("오류가 발생하였습니다.");
                 }
 
                 dispatchSelectedSongs(selectedSongs);
@@ -176,6 +181,7 @@ const MusicController = ({
       playSongs,
       selectedSongs,
       songs,
+      toast,
       user,
     ]
   );

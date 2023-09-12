@@ -29,9 +29,6 @@ interface ListProps {
 }
 
 const List = ({ tab, query }: ListProps) => {
-  const { selected, setSelected, selectCallback, selectedIncludes } =
-    useSelectSongs();
-
   const {
     data: songsData,
     isFetching,
@@ -60,6 +57,14 @@ const List = ({ tab, query }: ListProps) => {
 
     return songsData.pages.flat();
   }, [isFetching, isFetchingNextPage, songsData]);
+
+  const {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  } = useSelectSongs(songs);
 
   const { viewportRef, getTotalSize, virtualMap, getVirtualItems } =
     useVirtualizer(songs, {
@@ -104,8 +109,7 @@ const List = ({ tab, query }: ListProps) => {
               ) : (
                 <SongItem
                   song={item}
-                  index={virtualItem.index}
-                  selected={selectedIncludes(item, virtualItem.index)}
+                  selected={selectedIncludes(item)}
                   features={[
                     SongItemFeature.date,
                     SongItemFeature.views,
@@ -123,7 +127,7 @@ const List = ({ tab, query }: ListProps) => {
       <MusicController
         songs={songs}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectCallback}
+        dispatchSelectedSongs={selectManyCallback}
       />
     </Container>
   );

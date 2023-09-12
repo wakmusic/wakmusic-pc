@@ -37,8 +37,6 @@ const New = ({}: NewProps) => {
     [searchParams]
   );
 
-  const { selected, setSelected, selectCallback, selectedIncludes } =
-    useSelectSongs();
   const playSongs = usePlaySongs();
 
   const {
@@ -78,6 +76,14 @@ const New = ({}: NewProps) => {
     useVirtualizer(songs, {
       hasNextPage,
     });
+
+  const {
+    selected,
+    setSelected,
+    selectCallback,
+    selectManyCallback,
+    selectedIncludes,
+  } = useSelectSongs(songs);
 
   useScrollToTop(tab, viewportRef, setSelected);
   useInfiniteScrollHandler({
@@ -133,8 +139,7 @@ const New = ({}: NewProps) => {
                 ) : (
                   <SongItem
                     song={item}
-                    index={virtualItem.index}
-                    selected={selectedIncludes(item, virtualItem.index)}
+                    selected={selectedIncludes(item)}
                     features={[
                       SongItemFeature.last,
                       SongItemFeature.date,
@@ -152,7 +157,7 @@ const New = ({}: NewProps) => {
         <MusicController
           songs={songs}
           selectedSongs={selected}
-          dispatchSelectedSongs={selectCallback}
+          dispatchSelectedSongs={selectManyCallback}
         />
       </PageContainer>
     </PageLayout>

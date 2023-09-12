@@ -108,6 +108,8 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
         const newVolume = control.volume - 5;
         setVolumeState(newVolume < 0 ? 0 : newVolume, control.isMute);
       }
+
+      e.preventDefault();
     },
     [
       control.isMute,

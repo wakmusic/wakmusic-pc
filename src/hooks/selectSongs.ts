@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 import { Song } from "@templates/song";
 
@@ -8,8 +8,6 @@ export const useSelectSongs = (songs: Song[]) => {
   const [selected, setSelected] = useState<Song[]>([]);
 
   const [lastSelected, setLastSelected] = useState(-1);
-
-  const [shift, setShift] = useState(false);
 
   const findIndex = (from: Song[], songId: string) => {
     return from.findIndex((value) => value.songId === songId);
@@ -38,7 +36,7 @@ export const useSelectSongs = (songs: Song[]) => {
     }
   };
 
-  const selectCallback = (song: Song) => {
+  const selectCallback = (song: Song, shift = false) => {
     const newSelected = [...selected];
     const songSelectedIndex = findIndex(selected, song.songId);
     const songIndex = findIndex(songs, song.songId);
@@ -95,30 +93,6 @@ export const useSelectSongs = (songs: Song[]) => {
     (song: Song) => !isNull(song) && findIndex(selected, song.songId) !== -1,
     [selected]
   );
-
-  useEffect(() => {
-    const keyDownHandler = (e: KeyboardEvent) => {
-      if ((e.code === "ShiftLeft" || e.code === "ShiftRight") && !shift) {
-        setShift(true);
-        return;
-      }
-    };
-
-    const keyUpHandler = (e: KeyboardEvent) => {
-      if ((e.code === "ShiftLeft" || e.code === "ShiftRight") && shift) {
-        setShift(false);
-        return;
-      }
-    };
-
-    window.addEventListener("keydown", keyDownHandler);
-    window.addEventListener("keyup", keyUpHandler);
-
-    return () => {
-      window.removeEventListener("keydown", keyDownHandler);
-      window.removeEventListener("keyup", keyUpHandler);
-    };
-  }, [shift]);
 
   return {
     selected,

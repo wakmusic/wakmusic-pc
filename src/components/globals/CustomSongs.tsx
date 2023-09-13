@@ -18,7 +18,7 @@ interface CustomSongsProps {
   editMode?: boolean;
   songFeatures?: SongItemFeature[];
 
-  onSongClick: (song: Song) => void;
+  onSongClick: (song: Song, shift: boolean) => void;
   onEdit?: (newSongs: Song[]) => void;
 
   selectedIncludes: (song: Song) => boolean;
@@ -102,9 +102,7 @@ const CustomSongs = ({
               editMode={editMode}
               selected={selectedIncludes(item)}
               features={songFeatures}
-              onClick={(song) => {
-                onSongClick(song);
-              }}
+              onClick={onSongClick}
               onEdit={(e) => {
                 setIsMouseDown(true);
 

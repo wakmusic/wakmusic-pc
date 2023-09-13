@@ -110,10 +110,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
         const nowPlaylist = value.playlist;
         const oldPlaylist = (oldValue as PlayingInfoStateType).playlist;
 
-        if (
-          nowPlaylist.length !== oldPlaylist.length ||
-          nowPlaylist.some((item, i) => item.songId !== oldPlaylist[i].songId)
-        ) {
+        if (nowPlaylist.length !== value.original.length) {
           const deleted = oldPlaylist.filter(
             (item) =>
               nowPlaylist.findIndex((item2) => item.songId === item2.songId) ===

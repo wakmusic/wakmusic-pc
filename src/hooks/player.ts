@@ -369,7 +369,7 @@ export const usePlaySongs = () => {
             )
           : 0,
         playlist: newPlaylist,
-        original: [],
+        original: newPlaylist,
       };
     });
   };

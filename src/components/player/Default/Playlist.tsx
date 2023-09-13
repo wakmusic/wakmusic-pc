@@ -35,7 +35,7 @@ const Playlist = ({}: PlaylistProps) => {
 
   const [selectedVisual, setSelectedVisual] = useState<Song[]>([]);
 
-  const [prvPlaying, setPrvPlaying] = useState(-1);
+  const [prvSong, setPrvSong] = useState("");
 
   const [mouseUp, setMouseUp] = useState(false);
 
@@ -263,7 +263,9 @@ const Playlist = ({}: PlaylistProps) => {
   }, [selected, updateSelectedVisual]);
 
   useEffect(() => {
-    if (playingInfo.current !== prvPlaying) {
+    const currentSong = playingInfo.playlist[playingInfo.current].songId;
+
+    if (currentSong !== prvSong) {
       if (!viewportRef.current) return;
 
       viewportRef.current.scrollTo({
@@ -271,9 +273,9 @@ const Playlist = ({}: PlaylistProps) => {
         behavior: "smooth",
       });
 
-      setPrvPlaying(playingInfo.current);
+      setPrvSong(currentSong);
     }
-  }, [playingInfo, prvPlaying, viewportRef]);
+  }, [playingInfo, prvSong, viewportRef]);
 
   useInterval(() => {
     if (!isMoving) return;

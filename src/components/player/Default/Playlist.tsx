@@ -74,6 +74,7 @@ const Playlist = ({}: PlaylistProps) => {
     setClickTimer(
       setTimeout(() => {
         selectCallback(playingInfo.playlist[index], shift);
+        setLastSelected(index);
       }, 250)
     );
   }

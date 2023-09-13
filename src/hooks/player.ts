@@ -99,16 +99,20 @@ export const useToggleIsRandomState = () => {
           () => Math.random() - 0.5
         );
 
-        const movedCurrent = shuffledPlaylist.findIndex(
-          (item) => item.songId === prev.playlist[prev.current].songId
-        );
+        if (forceShuffle) {
+          newPlaylist = shuffledPlaylist;
+        } else {
+          const movedCurrent = shuffledPlaylist.findIndex(
+            (item) => item.songId === prev.playlist[prev.current].songId
+          );
 
-        if (movedCurrent !== -1) {
-          newPlaylist = [
-            shuffledPlaylist[movedCurrent],
-            ...shuffledPlaylist.slice(0, movedCurrent),
-            ...shuffledPlaylist.slice(movedCurrent + 1),
-          ];
+          if (movedCurrent !== -1) {
+            newPlaylist = [
+              shuffledPlaylist[movedCurrent],
+              ...shuffledPlaylist.slice(0, movedCurrent),
+              ...shuffledPlaylist.slice(movedCurrent + 1),
+            ];
+          }
         }
       } else {
         newPlaylist = [...prev.original];
@@ -258,8 +262,7 @@ export const useNextSong = () => {
 
           setPlayingInfo((prev) => ({
             ...prev,
-            current:
-              control.isRandom && playingInfo.playlist.length > 1 ? 1 : 0,
+            current: 0,
           }));
 
           setProgress({

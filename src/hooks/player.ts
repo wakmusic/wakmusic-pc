@@ -364,10 +364,10 @@ export const usePlaySongs = () => {
         ...prev,
         current: currentSong
           ? newPlaylist.findIndex(
-              (item) => item.songId === (play ? songs[0] : currentSong).songId
+              (item) =>
+                item.songId === (play ? addSongs[0] : currentSong).songId
             )
           : 0,
-
         playlist: newPlaylist,
         original: [],
       };

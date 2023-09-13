@@ -93,7 +93,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
     original: localStorage.getItem("original")
       ? JSON.parse(localStorage.getItem("original") as string)
       : [],
-    current: 0,
+    current: Number(localStorage.getItem("current")) || 0,
   },
   effects: [
     // Discord RPC
@@ -147,6 +147,10 @@ export const playingInfoState = atom<PlayingInfoStateType>({
 
         if (value.original !== (oldValue as PlayingInfoStateType).original) {
           localStorage.setItem("original", JSON.stringify(value.original));
+        }
+
+        if (value.current !== (oldValue as PlayingInfoStateType).current) {
+          localStorage.setItem("current", JSON.stringify(value.current));
         }
       });
     },

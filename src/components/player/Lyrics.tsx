@@ -168,7 +168,11 @@ const Lyrics = ({ size, isVisualMode }: LyricsProps) => {
         lyrics.map((line, i) => {
           const isCurrent = i === getIndex();
           const Line =
-            current >= lyrics[0].start && isCurrent ? CurrentLine : DefaultLine;
+            current >= lyrics[0].start &&
+            current <= lyrics[lyrics.length - 1].end &&
+            isCurrent
+              ? CurrentLine
+              : DefaultLine;
 
           return (
             <Line

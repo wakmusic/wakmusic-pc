@@ -253,6 +253,8 @@ const Playlist = ({}: PlaylistProps) => {
   }, [selected, updateSelectedVisual]);
 
   useEffect(() => {
+    if (!playingInfo.playlist.length) return;
+
     const currentSong = playingInfo.playlist[playingInfo.current].songId;
 
     if (currentSong !== prvSong && viewportRef.current) {

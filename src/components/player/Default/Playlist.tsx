@@ -265,9 +265,7 @@ const Playlist = ({}: PlaylistProps) => {
   useEffect(() => {
     const currentSong = playingInfo.playlist[playingInfo.current].songId;
 
-    if (currentSong !== prvSong) {
-      if (!viewportRef.current) return;
-
+    if (currentSong !== prvSong && viewportRef.current) {
       viewportRef.current.scrollTo({
         top: playingInfo.current * 24,
         behavior: "smooth",

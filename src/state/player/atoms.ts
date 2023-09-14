@@ -93,7 +93,7 @@ export const playingInfoState = atom<PlayingInfoStateType>({
     original: localStorage.getItem("original")
       ? JSON.parse(localStorage.getItem("original") as string)
       : [],
-    current: 0,
+    current: Number(localStorage.getItem("current")) || 0,
   },
   effects: [
     // Discord RPC
@@ -110,13 +110,17 @@ export const playingInfoState = atom<PlayingInfoStateType>({
         const nowPlaylist = value.playlist;
         const oldPlaylist = (oldValue as PlayingInfoStateType).playlist;
 
-        if (nowPlaylist.length !== oldPlaylist.length) {
+        if (nowPlaylist.length !== value.original.length) {
           const deleted = oldPlaylist.filter(
-            (item) => !nowPlaylist.includes(item)
+            (item) =>
+              nowPlaylist.findIndex((item2) => item.songId === item2.songId) ===
+              -1
           );
 
           const added = nowPlaylist.filter(
-            (item) => !oldPlaylist.includes(item)
+            (item) =>
+              oldPlaylist.findIndex((item2) => item.songId === item2.songId) ===
+              -1
           );
 
           const newOriginal = [...value.original];
@@ -147,6 +151,10 @@ export const playingInfoState = atom<PlayingInfoStateType>({
 
         if (value.original !== (oldValue as PlayingInfoStateType).original) {
           localStorage.setItem("original", JSON.stringify(value.original));
+        }
+
+        if (value.current !== (oldValue as PlayingInfoStateType).current) {
+          localStorage.setItem("current", JSON.stringify(value.current));
         }
       });
     },

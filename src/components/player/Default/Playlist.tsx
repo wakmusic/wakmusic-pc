@@ -22,7 +22,7 @@ import { addAlpha } from "@utils/utils";
 interface PlaylistProps {}
 
 const Playlist = ({}: PlaylistProps) => {
-  const [, setControl] = useControlState();
+  const [controlState, setControl] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
   const { selected, setSelected, selectCallback, selectManyCallback } =
@@ -74,6 +74,7 @@ const Playlist = ({}: PlaylistProps) => {
     setClickTimer(
       setTimeout(() => {
         selectCallback(playingInfo.playlist[index], shift);
+        setLastSelected(index);
       }, 250)
     );
   }
@@ -127,16 +128,23 @@ const Playlist = ({}: PlaylistProps) => {
     );
 
     setPlayingInfo((prev) => ({
-      ...prev,
       playlist: newPlaylist,
       current: newPlaylist.findIndex(
         (song) =>
           song.songId === playingInfo.playlist[playingInfo.current].songId
       ),
+      original: controlState.isRandom ? prev.original : newPlaylist,
     }));
     setLastSelected(null);
     setSelected([]);
-  }, [playingInfo, setPlayingInfo, targetIndex, getCursorIndex, setSelected]);
+  }, [
+    playingInfo,
+    controlState,
+    setPlayingInfo,
+    targetIndex,
+    getCursorIndex,
+    setSelected,
+  ]);
 
   const deleteSongs = useCallback(
     (newSongs: Song[]) => {

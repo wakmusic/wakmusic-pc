@@ -126,7 +126,7 @@ const AddListModal = ({ popup }: AddListModalProps) => {
   return (
     <ModalOverlay onClick={() => resolve(undefined)}>
       <Container onClick={(e) => e.stopPropagation()} $noRadius={popup}>
-        <Header />
+        <Header $popup={popup} />
         <Title>보관함에 담기</Title>
         <CloseButton onClick={() => resolve(undefined)} />
 
@@ -194,7 +194,7 @@ const Container = styled(ModalContainer)<{ $noRadius?: boolean }>`
     `}
 `;
 
-const Header = styled.div`
+const Header = styled.div<{ $popup?: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -202,7 +202,11 @@ const Header = styled.div`
   width: 440px;
   height: 60px;
 
-  -webkit-app-region: drag;
+  ${({ $popup }) =>
+    $popup &&
+    css`
+      -webkit-app-region: drag;
+    `}
 `;
 
 const Title = styled(T4Bold)`

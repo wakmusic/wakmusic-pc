@@ -46,7 +46,7 @@ const ExitModal = ({ popup }: ExitModalProps) => {
   return (
     <ModalOverlay>
       <Container $noRadius={popup}>
-        <Title>앞으로 어떻게 종료할까요?</Title>
+        <Title $popup={popup}>앞으로 어떻게 종료할까요?</Title>
 
         <Select $selected={mode === "close"} onClick={() => setMode("close")}>
           <T6Medium color={colors.gray900}>앱 완전 종료하기</T6Medium>
@@ -91,13 +91,17 @@ const Container = styled(ModalContainer)<{ $noRadius?: boolean }>`
     `}
 `;
 
-const Title = styled(T1Bold)`
+const Title = styled(T1Bold)<{ $popup?: boolean }>`
   color: ${colors.primary900};
 
   padding-top: 52px;
   margin-bottom: 24px;
 
-  -webkit-app-region: drag;
+  ${({ $popup }) =>
+    $popup &&
+    css`
+      -webkit-app-region: drag;
+    `}
 `;
 
 const Select = styled.div<{ $selected: boolean }>`

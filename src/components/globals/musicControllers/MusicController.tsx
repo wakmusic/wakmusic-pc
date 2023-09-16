@@ -11,8 +11,6 @@ import { useUserState } from "@hooks/user";
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
 
-import { isUndefined } from "@utils/isTypes";
-
 import AddMusic from "./AddMusic";
 import AddPlaylist from "./AddPlaylist";
 import DeleteMusic from "./DeleteMusic";
@@ -120,9 +118,7 @@ const MusicController = ({
 
                 if (success) {
                   toast(`${selectedSongs.length}곡을 추가하였습니다.`);
-                } else if (isUndefined(success)) {
-                  toast("취소되었습니다.");
-                } else {
+                } else if (success === false) {
                   toast("오류가 발생하였습니다.");
                 }
 

@@ -65,10 +65,17 @@ const AddListModal = ({ popup }: AddListModalProps) => {
       return;
     }
 
-    const success = await addSongToPlaylist(
-      list.key,
-      modalState.selected.map((s) => s.songId)
-    );
+    const listSongs = list.songs.map((s) => s.songId);
+    const addSongs = modalState.selected
+      .map((s) => s.songId)
+      .filter((s) => !listSongs.includes(s));
+
+    if (!addSongs.length) {
+      _resolve(true);
+      return;
+    }
+
+    const success = await addSongToPlaylist(list.key, addSongs);
 
     if (success) {
       refetch();

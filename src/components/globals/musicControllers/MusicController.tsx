@@ -55,7 +55,6 @@ const MusicController = ({
   const [showControllerState, setShowControllerState] =
     useState(displayDefault);
 
-  const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
   const [popdown, setPopdown] = useState(false);
   const openLoginModal = useLoginModalOpener();
   const openAddListModal = useAddListModal();
@@ -70,7 +69,7 @@ const MusicController = ({
         case ControllerFeature.selectAll:
           return (
             <SelectAll
-              isSelect={false}
+              isSelect={selectedSongs.length === songs.length}
               onClick={() => {
                 dispatchSelectedSongs(songs);
               }}
@@ -196,12 +195,6 @@ const MusicController = ({
   }, [showControllerState, setPopdown, displayDefault, selectedSongs, hide]);
 
   useEffect(() => {
-    if (selectedSongs.length < 1 && !displayDefault) return;
-
-    setSelectedLength(selectedSongs.length);
-  }, [displayDefault, selectedSongs.length]);
-
-  useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.code === "Escape") {
         dispatchSelectedSongs(selectedSongs);
@@ -217,7 +210,7 @@ const MusicController = ({
 
   return (
     <Container $display={showControllerState}>
-      <Controller count={selectedLength} popdown={popdown}>
+      <Controller count={selectedSongs.length} popdown={popdown}>
         {features.map(getControllerComponent)}
         {onDelete && getControllerComponent(ControllerFeature.delete, -1)}
       </Controller>

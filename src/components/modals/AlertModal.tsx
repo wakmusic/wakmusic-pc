@@ -67,6 +67,8 @@ const AlertModal = ({}: AlertModalProps) => {
 
 const Container = styled(ModalContainer)`
   background: ${colors.blueGray25};
+
+  padding: 0 32px;
 `;
 
 const Title = styled(T1Bold)`

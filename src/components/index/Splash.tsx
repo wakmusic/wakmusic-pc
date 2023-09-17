@@ -1,5 +1,5 @@
 import { motion, useAnimation } from "framer-motion";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { spalshVariants } from "src/animations/splash";
 import styled from "styled-components/macro";
 
@@ -9,7 +9,11 @@ import Lottie from "@components/globals/Lottie";
 
 import colors from "@constants/colors";
 
+import { useAlertModal } from "@hooks/alertModal";
 import { useNoticeModalState } from "@hooks/noticeModal";
+
+import { isUndefined } from "@utils/isTypes";
+import { ipcRenderer } from "@utils/modules";
 
 interface SplashProps {}
 
@@ -21,12 +25,23 @@ const Splash = ({}: SplashProps) => {
 
   const [, setIsNoticeModalOpen] = useNoticeModalState();
 
+  const alert = useAlertModal();
+
   const onCompleteHandler = useCallback(async () => {
     await controls.start("close");
 
     setDisable(true);
     setIsNoticeModalOpen(true);
   }, [controls, setIsNoticeModalOpen]);
+
+  useEffect(() => {
+    if (disable && isUndefined(ipcRenderer)) {
+      alert(
+        "웹 버전 이용 안내",
+        "현재 PC 앱을 일반 브라우저로 접속하여 이용하는 버전은 정식으로 제공하는 기능이 아닙니다. 따라서 일부 기능이 PC 앱과 다르게 작동할 수 있으니 양해 부탁드립니다."
+      );
+    }
+  }, [disable, alert]);
 
   if (disable) {
     return null;

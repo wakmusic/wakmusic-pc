@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
@@ -18,6 +19,20 @@ interface ContactModalProps {}
 const ContactModal = ({}: ContactModalProps) => {
   const navigate = useNavigate();
   const toast = useToast();
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        navigate("/mywakmu");
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [navigate]);
 
   return (
     <ModalOverlay onClick={() => navigate("/mywakmu")}>

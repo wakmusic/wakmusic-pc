@@ -71,8 +71,8 @@ const NoticeModal = ({}: NoticeModalProps) => {
   if (!isOpen || isLoading || !notices?.length) return null;
 
   return (
-    <ModalOverlay onClick={() => close()}>
-      <Container onClick={(e) => e.stopPropagation()}>
+    <ModalOverlay>
+      <Container>
         <Swiper
           modules={[Mousewheel]}
           width={375}

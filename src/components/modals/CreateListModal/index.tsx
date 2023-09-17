@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { T4Bold, T5Light } from "@components/Typography";
@@ -28,13 +28,30 @@ const CreateListModal = ({}: CreateListModalProps) => {
     }
   }, [modalState.originalTitle]);
 
-  const resolve = (cancel?: boolean) => {
-    if (modalState.resolve) modalState.resolve(cancel ? undefined : value);
-    setModalState({ ...modalState, isOpen: false });
-    setValue("");
+  const resolve = useCallback(
+    (cancel?: boolean) => {
+      if (modalState.resolve) modalState.resolve(cancel ? undefined : value);
+      setModalState({ ...modalState, isOpen: false });
+      setValue("");
 
-    setIsSpaceDisabled(false);
-  };
+      setIsSpaceDisabled(false);
+    },
+    [modalState, setIsSpaceDisabled, value, setModalState]
+  );
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        resolve(true);
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [resolve]);
 
   if (!modalState.isOpen) return null;
 

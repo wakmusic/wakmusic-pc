@@ -141,6 +141,7 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
       toggleRepeatTypeState,
       toggleSeparateMode,
       visualModeState,
+      location,
     ]
   );
 

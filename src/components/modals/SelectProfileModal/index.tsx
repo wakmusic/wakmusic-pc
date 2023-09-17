@@ -34,6 +34,24 @@ const SelectProfileModal = ({}: SelectProfileModalProps) => {
     if (modalState.profile) setProfile(modalState.profile);
   }, [modalState.profile]);
 
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        setIsSpaceDisabled(false);
+        setModalState({
+          ...modalState,
+          isOpen: false,
+        });
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [setIsSpaceDisabled, setModalState, modalState]);
+
   if (!modalState.isOpen) return null;
 
   if (isLoading) return <div>loading</div>;

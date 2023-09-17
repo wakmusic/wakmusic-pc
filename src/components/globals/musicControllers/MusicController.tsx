@@ -55,6 +55,7 @@ const MusicController = ({
   const [showControllerState, setShowControllerState] =
     useState(displayDefault);
 
+  const [selectedLength, setSelectedLength] = useState(selectedSongs.length);
   const [popdown, setPopdown] = useState(false);
   const openLoginModal = useLoginModalOpener();
   const openAddListModal = useAddListModal();
@@ -69,7 +70,7 @@ const MusicController = ({
         case ControllerFeature.selectAll:
           return (
             <SelectAll
-              isSelect={selectedSongs.length === songs.length}
+              isSelect={selectedLength === songs.length}
               onClick={() => {
                 dispatchSelectedSongs(songs);
               }}
@@ -174,12 +175,19 @@ const MusicController = ({
       openAddListModal,
       openLoginModal,
       playSongs,
+      selectedLength,
       selectedSongs,
       songs,
       toast,
       user,
     ]
   );
+
+  useEffect(() => {
+    if (selectedSongs.length < 1 && !displayDefault) return;
+
+    setSelectedLength(selectedSongs.length);
+  }, [displayDefault, selectedSongs.length]);
 
   useEffect(() => {
     // 컨트롤러 애니메이션 토글
@@ -210,7 +218,8 @@ const MusicController = ({
 
   return (
     <Container $display={showControllerState}>
-      <Controller count={selectedSongs.length} popdown={popdown}>
+      <Controller count={selectedLength} popdown={popdown}>
+        {" "}
         {features.map(getControllerComponent)}
         {onDelete && getControllerComponent(ControllerFeature.delete, -1)}
       </Controller>

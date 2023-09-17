@@ -31,8 +31,8 @@ const SetUsernameModal = ({}: SetUsernameModalProps) => {
   if (!modalState.isOpen) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay onClick={() => resolve(true)}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title>닉네임 수정</Title>
 
         <InputContainer>

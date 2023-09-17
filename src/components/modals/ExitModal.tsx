@@ -47,8 +47,8 @@ const ExitModal = ({ popup }: ExitModalProps) => {
   if (!modalState.isOpen && !popup) return null;
 
   return (
-    <ModalOverlay>
-      <Container $noRadius={popup}>
+    <ModalOverlay onClick={resolve(false)}>
+      <Container $noRadius={popup} onClick={(e) => e.stopPropagation()}>
         <Title $popup={popup}>앞으로 어떻게 종료할까요?</Title>
 
         <Select $selected={mode === "close"} onClick={() => setMode("close")}>

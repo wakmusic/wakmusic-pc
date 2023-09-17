@@ -40,8 +40,16 @@ const SelectProfileModal = ({}: SelectProfileModalProps) => {
   if (error || !profileList) return <div>error</div>;
 
   return (
-    <ModalOverlay>
-      <Modal>
+    <ModalOverlay
+      onClick={() => {
+        setIsSpaceDisabled(false);
+        setModalState({
+          ...modalState,
+          isOpen: false,
+        });
+      }}
+    >
+      <Modal onClick={(e) => e.stopPropagation()}>
         <Title>프로필을 선택해주세요</Title>
         <Profiles>
           {profileList.map((item, index) => (

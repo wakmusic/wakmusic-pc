@@ -30,8 +30,8 @@ const LoadListModal = ({}: LoadListModalProps) => {
   if (!modalState.isOpen) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay onClick={resolve}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title>리스트 공유하기</Title>
 
         <InputContainer>

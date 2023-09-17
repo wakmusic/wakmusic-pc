@@ -21,8 +21,13 @@ const ConfirmModal = ({}: ConfirmModalProps) => {
   if (!modalState.isOpen) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay
+      onClick={() => {
+        setIsSpaceDisabled(false);
+        setModalState({ ...modalState, isOpen: false, value: false });
+      }}
+    >
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title $hasChildren={!isNull(modalState.children)}>
           {modalState.title}
         </Title>

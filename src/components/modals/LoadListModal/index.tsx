@@ -21,18 +21,20 @@ const LoadListModal = ({}: LoadListModalProps) => {
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   const resolve = (cancel?: boolean) => {
-    if (modalState.resolve) modalState.resolve(cancel ? undefined : value);
-    setModalState({ ...modalState, isOpen: false });
-    setValue("");
+    if (modalState.resolve) {
+      modalState.resolve(cancel ? undefined : value);
+    }
 
     setIsSpaceDisabled(false);
+    setModalState({ ...modalState, isOpen: false });
+    setValue("");
   };
 
   if (!modalState.isOpen) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay onClick={() => resolve(true)}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title>리스트 가져오기</Title>
 
         <InputContainer>

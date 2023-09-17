@@ -39,8 +39,8 @@ const CreateListModal = ({}: CreateListModalProps) => {
   if (!modalState.isOpen) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay onClick={() => resolve(true)}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title>
           리스트 {isUndefined(modalState.originalTitle) ? "만들기" : "수정"}
         </Title>

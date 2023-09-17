@@ -20,8 +20,8 @@ const ContactModal = ({}: ContactModalProps) => {
   const toast = useToast();
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay onClick={() => navigate("/mywakmu")}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title>문의하기</Title>
 
         <InputContainer>

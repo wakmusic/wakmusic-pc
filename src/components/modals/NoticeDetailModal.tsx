@@ -36,8 +36,8 @@ const NoticeDetailModal = ({}: NoticeDetailModalProps) => {
   if (!modalState.isOpen || !notice) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay onClick={close}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <CloseButton onClick={close} />
 
         <Header>

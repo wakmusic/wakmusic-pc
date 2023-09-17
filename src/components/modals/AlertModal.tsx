@@ -21,8 +21,13 @@ const AlertModal = ({}: AlertModalProps) => {
   if (!modalState.isOpen) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay
+      onClick={() => {
+        setIsSpaceDisabled(false);
+        setModalState({ ...modalState, isOpen: false });
+      }}
+    >
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title>{modalState.title}</Title>
 
         {isString(modalState.children) ? (

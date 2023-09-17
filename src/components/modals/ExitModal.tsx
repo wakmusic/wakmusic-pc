@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as RatioSVG } from "@assets/icons/ic_24_RadioButton.svg";
@@ -25,24 +25,41 @@ const ExitModal = ({ popup }: ExitModalProps) => {
   );
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
-  const resolve = (result: boolean) => () => {
-    if (location.pathname === "/selectExit") {
-      window.postMessage({
-        type: "resolve",
-        payload: result ? mode : null,
-      });
-      window.close();
+  const resolve = useCallback(
+    (result: boolean) => () => {
+      if (location.pathname === "/selectExit") {
+        window.postMessage({
+          type: "resolve",
+          payload: result ? mode : null,
+        });
+        window.close();
 
-      return;
+        return;
+      }
+
+      if (modalState.resolve) {
+        modalState.resolve(result ? mode : null);
+      }
+
+      setIsSpaceDisabled(false);
+      return setModalState({ isOpen: false });
+    },
+    [modalState, mode, setIsSpaceDisabled, setModalState]
+  );
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        resolve(false)();
+      }
     }
 
-    if (modalState.resolve) {
-      modalState.resolve(result ? mode : null);
-    }
+    window.addEventListener("keydown", handler);
 
-    setIsSpaceDisabled(false);
-    return setModalState({ isOpen: false });
-  };
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [resolve]);
 
   if (!modalState.isOpen && !popup) return null;
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import styled, { css } from "styled-components/macro";
 
@@ -44,45 +44,48 @@ const AddListModal = ({ popup }: AddListModalProps) => {
     queryFn: fetchPlaylists,
   });
 
-  const resolve = async (list: PlaylistType | undefined) => {
-    const _resolve = (result: boolean | undefined) => {
-      if (modalState.resolve) {
-        modalState.resolve(result);
+  const resolve = useCallback(
+    async (list: PlaylistType | undefined) => {
+      const _resolve = (result: boolean | undefined) => {
+        if (modalState.resolve) {
+          modalState.resolve(result);
+        }
+
+        if (location.pathname === "/addList") {
+          window.postMessage("resolve");
+          window.close();
+        }
+
+        setModalState({ ...modalState, isOpen: false });
+        setIsSpaceDisabled(false);
+      };
+
+      if (isUndefined(list)) {
+        _resolve(undefined);
+
+        return;
       }
 
-      if (location.pathname === "/addList") {
-        window.postMessage("resolve");
-        window.close();
+      const listSongs = list.songs.map((s) => s.songId);
+      const addSongs = modalState.selected
+        .map((s) => s.songId)
+        .filter((s) => !listSongs.includes(s));
+
+      if (!addSongs.length) {
+        _resolve(true);
+        return;
       }
 
-      setModalState({ ...modalState, isOpen: false });
-      setIsSpaceDisabled(false);
-    };
+      const success = await addSongToPlaylist(list.key, addSongs);
 
-    if (isUndefined(list)) {
-      _resolve(undefined);
+      if (success) {
+        refetch();
+      }
 
-      return;
-    }
-
-    const listSongs = list.songs.map((s) => s.songId);
-    const addSongs = modalState.selected
-      .map((s) => s.songId)
-      .filter((s) => !listSongs.includes(s));
-
-    if (!addSongs.length) {
-      _resolve(true);
-      return;
-    }
-
-    const success = await addSongToPlaylist(list.key, addSongs);
-
-    if (success) {
-      refetch();
-    }
-
-    _resolve(success);
-  };
+      _resolve(success);
+    },
+    [modalState, refetch, setIsSpaceDisabled, setModalState]
+  );
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
     playlists ?? [],
@@ -127,6 +130,20 @@ const AddListModal = ({ popup }: AddListModalProps) => {
       window.removeEventListener("message", listener);
     };
   }, [setModalState]);
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        resolve(undefined);
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [resolve]);
 
   if (!modalState.isOpen && !popup) return null;
 

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { T1Bold, T5Medium } from "@components/Typography";
@@ -17,6 +18,21 @@ interface ConfirmModalProps {}
 const ConfirmModal = ({}: ConfirmModalProps) => {
   const [modalState, setModalState] = useConfirmModalState();
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        setIsSpaceDisabled(false);
+        setModalState({ ...modalState, isOpen: false, value: false });
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [modalState, setIsSpaceDisabled, setModalState]);
 
   if (!modalState.isOpen) return null;
 

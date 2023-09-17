@@ -76,6 +76,11 @@ export const useSelectSongs = (songs: Song[]) => {
       return;
     }
 
+    if (song.length === songs.length) {
+      setSelected(song);
+      return;
+    }
+
     const newSelected = [...selected];
 
     song.forEach((item) => {

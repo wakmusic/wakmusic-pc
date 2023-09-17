@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as AppleIconSVG } from "@assets/icons/ic_24_apple.svg";
@@ -25,8 +26,6 @@ const LoginModal = ({}: LoginModalProps) => {
   const [loginModalState, setLoginModalState] = useLoginModalState();
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
-  if (!loginModalState) return null;
-
   const handleLogin = (platform: LoginPlatform) => {
     // TODO: 추후 웹 환경에서도 로그인 가능하도록 패치 필요
     const openFn = openExternal || ((url: string) => open(url, "_blank"));
@@ -36,6 +35,22 @@ const LoginModal = ({}: LoginModalProps) => {
     setIsSpaceDisabled(false);
     setLoginModalState(false);
   };
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        setLoginModalState(false);
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [setLoginModalState]);
+
+  if (!loginModalState) return null;
 
   return (
     <ModalOverlay onClick={() => setLoginModalState(false)}>

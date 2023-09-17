@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as CopySVG } from "@assets/icons/ic_24_copy.svg";
@@ -21,11 +22,25 @@ const LoadListModal = ({}: LoadListModalProps) => {
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
   const toast = useToast();
 
-  const resolve = () => {
+  const resolve = useCallback(() => {
     if (modalState.resolve) modalState.resolve();
     setIsSpaceDisabled(false);
     setModalState({ isOpen: false });
-  };
+  }, [modalState, setIsSpaceDisabled, setModalState]);
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        resolve();
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [resolve]);
 
   if (!modalState.isOpen) return null;
 

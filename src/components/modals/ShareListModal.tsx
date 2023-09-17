@@ -6,6 +6,7 @@ import { T3Medium, T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useIsSpaceDisabled } from "@hooks/player";
 import { useShareListModalState } from "@hooks/shareListModal";
 import { useToast } from "@hooks/toast";
 
@@ -17,10 +18,12 @@ interface LoadListModalProps {}
 
 const LoadListModal = ({}: LoadListModalProps) => {
   const [modalState, setModalState] = useShareListModalState();
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
   const toast = useToast();
 
   const resolve = () => {
     if (modalState.resolve) modalState.resolve();
+    setIsSpaceDisabled(false);
     setModalState({ isOpen: false });
   };
 

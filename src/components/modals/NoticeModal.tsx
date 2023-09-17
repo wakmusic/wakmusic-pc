@@ -14,6 +14,7 @@ import colors from "@constants/colors";
 
 import { useNoticeDetailModal } from "@hooks/noticeDetailModal";
 import { useNoticeModalState } from "@hooks/noticeModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import { Notice } from "@templates/notice";
 
@@ -27,6 +28,7 @@ interface NoticeModalProps {}
 const NoticeModal = ({}: NoticeModalProps) => {
   const [isOpen, setIsOpen] = useNoticeModalState();
   const openNoticeDetailModal = useNoticeDetailModal();
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   const [index, setIndex] = useState(0);
   const [noShows, setNoShows] = useState<number[]>(
@@ -45,6 +47,7 @@ const NoticeModal = ({}: NoticeModalProps) => {
   };
 
   const open = (notice: Notice) => {
+    setIsSpaceDisabled(true);
     setIsOpen(false);
     openNoticeDetailModal(notice);
   };
@@ -52,6 +55,7 @@ const NoticeModal = ({}: NoticeModalProps) => {
   const close = (remove = false) => {
     if (!notices) return;
 
+    setIsSpaceDisabled(false);
     setIsOpen(false);
 
     if (remove) {

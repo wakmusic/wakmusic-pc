@@ -5,6 +5,7 @@ import { T1Bold, T5Medium } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useConfirmModalState } from "@hooks/confirmModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import { isNull, isString } from "@utils/isTypes";
 
@@ -15,6 +16,7 @@ interface ConfirmModalProps {}
 
 const ConfirmModal = ({}: ConfirmModalProps) => {
   const [modalState, setModalState] = useConfirmModalState();
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   if (!modalState.isOpen) return null;
 
@@ -34,9 +36,11 @@ const ConfirmModal = ({}: ConfirmModalProps) => {
         <ButtonsWrapper>
           <TwoButton
             ok={() => {
+              setIsSpaceDisabled(false);
               setModalState({ ...modalState, isOpen: false, value: true });
             }}
             cancel={() => {
+              setIsSpaceDisabled(false);
               setModalState({ ...modalState, isOpen: false, value: false });
             }}
           />

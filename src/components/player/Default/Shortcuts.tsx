@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import {
   useControlState,
@@ -35,9 +36,17 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
   const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
+  const location = useLocation();
+
   const shortcutHandler = useCallback(
     (e: KeyboardEvent) => {
-      if (isSpaceDisabled || e.repeat) return;
+      if (
+        e.repeat ||
+        isSpaceDisabled ||
+        location.pathname === "/support" ||
+        location.pathname === "/about"
+      )
+        return;
 
       if (e.ctrlKey) {
         return;

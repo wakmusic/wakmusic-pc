@@ -10,6 +10,7 @@ import { T4Bold, T5Light } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useLoginModalState } from "@hooks/loginModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import { LoginPlatform } from "@templates/user";
 
@@ -22,6 +23,7 @@ interface LoginModalProps {}
 
 const LoginModal = ({}: LoginModalProps) => {
   const [loginModalState, setLoginModalState] = useLoginModalState();
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   if (!loginModalState) return null;
 
@@ -31,6 +33,7 @@ const LoginModal = ({}: LoginModalProps) => {
 
     openFn(`${import.meta.env.VITE_API_URL}/auth/pc/login/${platform}`);
 
+    setIsSpaceDisabled(false);
     setLoginModalState(false);
   };
 

@@ -5,6 +5,7 @@ import { T1Bold, T5Medium } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useAlertModalState } from "@hooks/alertModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import { isString } from "@utils/isTypes";
 
@@ -15,6 +16,7 @@ interface AlertModalProps {}
 
 const AlertModal = ({}: AlertModalProps) => {
   const [modalState, setModalState] = useAlertModalState();
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   if (!modalState.isOpen) return null;
 
@@ -32,6 +34,7 @@ const AlertModal = ({}: AlertModalProps) => {
         <ButtonsWrapper>
           <OkButton
             onClick={() => {
+              setIsSpaceDisabled(false);
               setModalState({ ...modalState, isOpen: false });
             }}
           />

@@ -8,6 +8,7 @@ import { T1Bold, T6Medium } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useExitModalState } from "@hooks/exitModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import HelpText from "./globals/HelpText";
 import TwoButton from "./globals/TwoButton";
@@ -22,6 +23,7 @@ const ExitModal = ({ popup }: ExitModalProps) => {
   const [mode, setMode] = useState<"close" | "background">(
     localStorage.getItem("exitMode") === "background" ? "background" : "close"
   );
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   const resolve = (result: boolean) => () => {
     if (location.pathname === "/selectExit") {
@@ -38,6 +40,7 @@ const ExitModal = ({ popup }: ExitModalProps) => {
       modalState.resolve(result ? mode : null);
     }
 
+    setIsSpaceDisabled(false);
     return setModalState({ isOpen: false });
   };
 

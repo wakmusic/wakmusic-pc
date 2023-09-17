@@ -8,6 +8,7 @@ import { T4Bold } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useIsSpaceDisabled } from "@hooks/player";
 import { useSelectProfileModalState } from "@hooks/profileModal";
 
 import { UserProfile } from "@templates/user";
@@ -27,6 +28,7 @@ const SelectProfileModal = ({}: SelectProfileModalProps) => {
 
   const [modalState, setModalState] = useSelectProfileModalState();
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   useEffect(() => {
     if (modalState.profile) setProfile(modalState.profile);
@@ -53,6 +55,7 @@ const SelectProfileModal = ({}: SelectProfileModalProps) => {
         </Profiles>
         <TwoButton
           ok={() => {
+            setIsSpaceDisabled(false);
             setModalState({
               ...modalState,
               isOpen: false,
@@ -60,6 +63,7 @@ const SelectProfileModal = ({}: SelectProfileModalProps) => {
             });
           }}
           cancel={() => {
+            setIsSpaceDisabled(false);
             setModalState({
               ...modalState,
               isOpen: false,

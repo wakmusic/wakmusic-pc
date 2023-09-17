@@ -219,7 +219,6 @@ const MusicController = ({
   return (
     <Container $display={showControllerState}>
       <Controller count={selectedLength} popdown={popdown}>
-        {" "}
         {features.map(getControllerComponent)}
         {onDelete && getControllerComponent(ControllerFeature.delete, -1)}
       </Controller>

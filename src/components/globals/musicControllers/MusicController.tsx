@@ -208,7 +208,7 @@ const MusicController = ({
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.code === "Escape") {
-        dispatchSelectedSongs([]);
+        dispatchSelectedSongs(selectedSongs);
       }
     };
 
@@ -217,7 +217,7 @@ const MusicController = ({
     return () => {
       window.removeEventListener("keydown", handler);
     };
-  }, [dispatchSelectedSongs]);
+  }, [dispatchSelectedSongs, selectedSongs]);
 
   return (
     <Container $display={showControllerState}>

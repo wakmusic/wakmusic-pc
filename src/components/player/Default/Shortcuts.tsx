@@ -45,10 +45,11 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
         isSpaceDisabled ||
         location.pathname === "/support" ||
         location.pathname === "/about"
-      )
+      ) {
         return;
+      }
 
-      if (e.ctrlKey) {
+      if (e.ctrlKey || (!visualModeState && e.code === "Escape")) {
         return;
       }
 

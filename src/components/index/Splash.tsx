@@ -37,7 +37,7 @@ const Splash = ({}: SplashProps) => {
   }, [controls, setIsNoticeModalOpen]);
 
   useEffect(() => {
-    if (disable && !isShowAlert && !isUndefined(ipcRenderer)) {
+    if (disable && !isShowAlert && isUndefined(ipcRenderer)) {
       alert(
         "웹 버전 이용 안내",
         "현재 PC 앱을 일반 브라우저로 접속하여 이용하는 버전은 정식으로 제공하는 기능이 아닙니다. 따라서 일부 기능이 PC 앱과 다르게 작동할 수 있으니 양해 부탁드립니다."

@@ -25,13 +25,8 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [hideController, setHideController] = useState(false);
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
-  const {
-    selected,
-    setSelected,
-    selectCallback,
-    selectManyCallback,
-    selectedIncludes,
-  } = useSelectSongs(playingInfo.playlist);
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs(playingInfo.playlist);
 
   const [changePlaylist, setChangePlaylist] = useState<Song[] | null>(null);
 
@@ -103,7 +98,7 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
           hide={hideController}
           songs={playingInfo.playlist}
           selectedSongs={selected}
-          dispatchSelectedSongs={selectManyCallback}
+          setSelected={setSelected}
           features={[ControllerFeature.selectAll, ControllerFeature.addMusic]}
           onDelete={dispatchPlayerListInfo}
         />

@@ -58,13 +58,8 @@ const List = ({ tab, query }: ListProps) => {
     return songsData.pages.flat();
   }, [isFetching, isFetchingNextPage, songsData]);
 
-  const {
-    selected,
-    setSelected,
-    selectCallback,
-    selectManyCallback,
-    selectedIncludes,
-  } = useSelectSongs(songs);
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs(songs);
 
   const { viewportRef, getTotalSize, virtualMap, getVirtualItems } =
     useVirtualizer(songs, {
@@ -127,7 +122,7 @@ const List = ({ tab, query }: ListProps) => {
       <MusicController
         songs={songs}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectManyCallback}
+        setSelected={setSelected}
       />
     </Container>
   );

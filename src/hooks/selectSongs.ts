@@ -9,8 +9,8 @@ export const useSelectSongs = (songs: Song[]) => {
 
   const [lastSelected, setLastSelected] = useState(-1);
 
-  const findIndex = (from: Song[], songId: string) => {
-    return from.findIndex((value) => value.songId === songId);
+  const findIndex = (from: Song[], songId: string, start?: number) => {
+    return from.slice(start).findIndex((value) => value.songId === songId);
   };
 
   const insertSong = (to: Song[], song: Song) => {
@@ -24,7 +24,7 @@ export const useSelectSongs = (songs: Song[]) => {
     for (let i = 0; i < to.length; i++) {
       const itemIndex = findIndex(songs, to[i].songId);
 
-      if (i === to.length - 1 && itemIndex <= insertIndex) {
+      if (i === to.length - 1 && itemIndex < insertIndex) {
         to.push(song);
         break;
       }
@@ -46,13 +46,34 @@ export const useSelectSongs = (songs: Song[]) => {
       lastSelected !== -1 &&
       Math.abs(songIndex - lastSelected) !== 1
     ) {
+      let slicedSongs: Song[];
+
       if (lastSelected > songIndex) {
-        selectManyCallback(songs.slice(songIndex, lastSelected + 1));
+        slicedSongs = songs.slice(songIndex, lastSelected);
       } else {
-        selectManyCallback(songs.slice(lastSelected, songIndex + 1));
+        slicedSongs = songs.slice(lastSelected + 1, songIndex + 1);
       }
 
+      let insertIndex = 0;
+
+      for (
+        ;
+        insertIndex < selected.length &&
+        Math.min(songIndex, lastSelected + 1) >
+          findIndex(songs, selected[insertIndex].songId);
+        insertIndex++
+      ); // shift로 선택된 곡들이 삽입될 인덱스를 구함
+
+      slicedSongs.forEach((item, index) => {
+        // insertIndex 부터 순서대로 곡 삽입
+        if (findIndex(newSelected, item.songId, insertIndex + index) !== -1)
+          return;
+
+        newSelected.splice(insertIndex + index, 0, item);
+      });
+
       setLastSelected(songIndex);
+      setSelected(newSelected);
       return;
     }
 
@@ -67,33 +88,6 @@ export const useSelectSongs = (songs: Song[]) => {
     setSelected(newSelected);
   };
 
-  const selectManyCallback = (song: Song[]) => {
-    if (
-      song.length === selected.length &&
-      song.every((value, i) => value.songId === selected[i].songId)
-    ) {
-      setSelected([]);
-      return;
-    }
-
-    if (song.length === songs.length) {
-      setSelected(song);
-      return;
-    }
-
-    const newSelected = [...selected];
-
-    song.forEach((item) => {
-      if (findIndex(newSelected, item.songId) !== -1) {
-        return;
-      }
-
-      insertSong(newSelected, item);
-    });
-
-    setSelected(newSelected);
-  };
-
   const selectedIncludes = useCallback(
     (song: Song) => !isNull(song) && findIndex(selected, song.songId) !== -1,
     [selected]
@@ -103,7 +97,6 @@ export const useSelectSongs = (songs: Song[]) => {
     selected,
     setSelected,
     selectCallback,
-    selectManyCallback,
     selectedIncludes,
   };
 };

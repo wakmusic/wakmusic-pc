@@ -11,8 +11,6 @@ import { useUserState } from "@hooks/user";
 import { ControllerFeature } from "@templates/musicController";
 import { Song } from "@templates/song";
 
-import { isUndefined } from "@utils/isTypes";
-
 import AddMusic from "./AddMusic";
 import AddPlaylist from "./AddPlaylist";
 import DeleteMusic from "./DeleteMusic";
@@ -72,7 +70,7 @@ const MusicController = ({
         case ControllerFeature.selectAll:
           return (
             <SelectAll
-              isSelect={false}
+              isSelect={selectedLength === songs.length}
               onClick={() => {
                 if (songs.length === selectedSongs.length) {
                   setSelected([]);
@@ -124,9 +122,7 @@ const MusicController = ({
 
                 if (success) {
                   toast(`${selectedSongs.length}곡을 추가하였습니다.`);
-                } else if (isUndefined(success)) {
-                  toast("취소되었습니다.");
-                } else {
+                } else if (success === false) {
                   toast("오류가 발생하였습니다.");
                 }
 
@@ -182,6 +178,7 @@ const MusicController = ({
       openAddListModal,
       openLoginModal,
       playSongs,
+      selectedLength,
       selectedSongs,
       setSelected,
       songs,
@@ -189,6 +186,12 @@ const MusicController = ({
       user,
     ]
   );
+
+  useEffect(() => {
+    if (selectedSongs.length < 1 && !displayDefault) return;
+
+    setSelectedLength(selectedSongs.length);
+  }, [displayDefault, selectedSongs.length]);
 
   useEffect(() => {
     // 컨트롤러 애니메이션 토글
@@ -202,12 +205,6 @@ const MusicController = ({
       setShowControllerState(true);
     }
   }, [showControllerState, setPopdown, displayDefault, selectedSongs, hide]);
-
-  useEffect(() => {
-    if (selectedSongs.length < 1 && !displayDefault) return;
-
-    setSelectedLength(selectedSongs.length);
-  }, [displayDefault, selectedSongs.length]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {

@@ -105,7 +105,6 @@ export class App extends Component<AppProps> {
 
               <LoginModal />
               <SelectProfileModal />
-              <AlertModal />
               <ConfirmModal />
               <CreateListModal />
               <LoadListModal />
@@ -115,6 +114,7 @@ export class App extends Component<AppProps> {
               <NoticeDetailModal />
               <NoticeModal />
               <ExitModal />
+              <AlertModal />
             </ModalPortal>
           </QueryClientProvider>
         </RecoilRoot>

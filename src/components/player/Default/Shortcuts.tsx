@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 import {
   useControlState,
@@ -35,9 +36,22 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
   const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
+  const location = useLocation();
+
   const shortcutHandler = useCallback(
     (e: KeyboardEvent) => {
-      if (isSpaceDisabled || e.repeat) return;
+      if (
+        e.repeat ||
+        isSpaceDisabled ||
+        location.pathname === "/support" ||
+        location.pathname === "/about"
+      ) {
+        return;
+      }
+
+      if (e.ctrlKey || (!visualModeState && e.code === "Escape")) {
+        return;
+      }
 
       // 비주얼모드 토글
       if (
@@ -108,6 +122,8 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
         const newVolume = control.volume - 5;
         setVolumeState(newVolume < 0 ? 0 : newVolume, control.isMute);
       }
+
+      e.preventDefault();
     },
     [
       control.isMute,
@@ -125,6 +141,7 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
       toggleRepeatTypeState,
       toggleSeparateMode,
       visualModeState,
+      location,
     ]
   );
 

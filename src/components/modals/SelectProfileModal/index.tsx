@@ -8,6 +8,7 @@ import { T4Bold } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useIsSpaceDisabled } from "@hooks/player";
 import { useSelectProfileModalState } from "@hooks/profileModal";
 
 import { UserProfile } from "@templates/user";
@@ -27,10 +28,29 @@ const SelectProfileModal = ({}: SelectProfileModalProps) => {
 
   const [modalState, setModalState] = useSelectProfileModalState();
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   useEffect(() => {
     if (modalState.profile) setProfile(modalState.profile);
   }, [modalState.profile]);
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        setIsSpaceDisabled(false);
+        setModalState({
+          ...modalState,
+          isOpen: false,
+        });
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [setIsSpaceDisabled, setModalState, modalState]);
 
   if (!modalState.isOpen) return null;
 
@@ -38,8 +58,16 @@ const SelectProfileModal = ({}: SelectProfileModalProps) => {
   if (error || !profileList) return <div>error</div>;
 
   return (
-    <ModalOverlay>
-      <Modal>
+    <ModalOverlay
+      onClick={() => {
+        setIsSpaceDisabled(false);
+        setModalState({
+          ...modalState,
+          isOpen: false,
+        });
+      }}
+    >
+      <Modal onClick={(e) => e.stopPropagation()}>
         <Title>프로필을 선택해주세요</Title>
         <Profiles>
           {profileList.map((item, index) => (
@@ -53,6 +81,7 @@ const SelectProfileModal = ({}: SelectProfileModalProps) => {
         </Profiles>
         <TwoButton
           ok={() => {
+            setIsSpaceDisabled(false);
             setModalState({
               ...modalState,
               isOpen: false,
@@ -60,6 +89,7 @@ const SelectProfileModal = ({}: SelectProfileModalProps) => {
             });
           }}
           cancel={() => {
+            setIsSpaceDisabled(false);
             setModalState({
               ...modalState,
               isOpen: false,

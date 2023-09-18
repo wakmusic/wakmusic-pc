@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as AppleIconSVG } from "@assets/icons/ic_24_apple.svg";
@@ -10,6 +11,7 @@ import { T4Bold, T5Light } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useLoginModalState } from "@hooks/loginModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import { LoginPlatform } from "@templates/user";
 
@@ -22,8 +24,7 @@ interface LoginModalProps {}
 
 const LoginModal = ({}: LoginModalProps) => {
   const [loginModalState, setLoginModalState] = useLoginModalState();
-
-  if (!loginModalState) return null;
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   const handleLogin = (platform: LoginPlatform) => {
     // TODO: 추후 웹 환경에서도 로그인 가능하도록 패치 필요
@@ -31,8 +32,25 @@ const LoginModal = ({}: LoginModalProps) => {
 
     openFn(`${import.meta.env.VITE_API_URL}/auth/pc/login/${platform}`);
 
+    setIsSpaceDisabled(false);
     setLoginModalState(false);
   };
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        setLoginModalState(false);
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [setLoginModalState]);
+
+  if (!loginModalState) return null;
 
   return (
     <ModalOverlay onClick={() => setLoginModalState(false)}>

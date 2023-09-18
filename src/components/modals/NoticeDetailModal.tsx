@@ -9,6 +9,7 @@ import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 import colors from "@constants/colors";
 
 import { useNoticeDetailModalState } from "@hooks/noticeDetailModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import { formatDateAndTime } from "@utils/formatting";
 import { getNoticeImage } from "@utils/staticUtill";
@@ -20,6 +21,7 @@ interface NoticeDetailModalProps {}
 const NoticeDetailModal = ({}: NoticeDetailModalProps) => {
   const [modalState, setModalState] = useNoticeDetailModalState();
   const notice = modalState.notice;
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
   const date = useMemo(
     () => (notice ? formatDateAndTime(notice.createdAt) : []),
@@ -27,6 +29,7 @@ const NoticeDetailModal = ({}: NoticeDetailModalProps) => {
   );
 
   const close = () => {
+    setIsSpaceDisabled(false);
     setModalState({ isOpen: false });
   };
 

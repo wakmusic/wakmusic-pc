@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
@@ -19,6 +20,20 @@ const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
 
   const appVersion = import.meta.env.VITE_VERSION;
   const commitHash = import.meta.env.VITE_COMMIT_HASH ?? "dev";
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        navigate("/mywakmu");
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [navigate]);
 
   return (
     <ModalOverlay onClick={() => navigate("/mywakmu")}>

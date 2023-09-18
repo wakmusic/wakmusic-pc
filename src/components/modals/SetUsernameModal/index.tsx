@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { T4Bold, T5Light } from "@components/Typography";
@@ -20,19 +20,36 @@ const SetUsernameModal = ({}: SetUsernameModalProps) => {
 
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
-  const resolve = (cancel?: boolean) => {
-    if (modalState.resolve) modalState.resolve(cancel ? undefined : value);
-    setModalState({ ...modalState, isOpen: false });
-    setValue("");
+  const resolve = useCallback(
+    (cancel?: boolean) => {
+      if (modalState.resolve) modalState.resolve(cancel ? undefined : value);
+      setModalState({ ...modalState, isOpen: false });
+      setValue("");
 
-    setIsSpaceDisabled(false);
-  };
+      setIsSpaceDisabled(false);
+    },
+    [modalState, setModalState, setIsSpaceDisabled, value]
+  );
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        resolve(true);
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [resolve]);
 
   if (!modalState.isOpen) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay onClick={() => resolve(true)}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title>닉네임 수정</Title>
 
         <InputContainer>

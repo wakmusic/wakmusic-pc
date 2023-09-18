@@ -4,9 +4,32 @@ import { useRecoilState } from "recoil";
 
 import { addSongLike, removeSongLike } from "@apis/like";
 
+import { PlayingInfoStateType } from "@templates/player";
 import { Song } from "@templates/song";
 
 import { useLoginModalOpener } from "./loginModal";
+import { usePlayingInfoState } from "./player";
+
+const applyPlaylistLike = (
+  info: PlayingInfoStateType,
+  song: Song
+): PlayingInfoStateType => {
+  const apply = (playlist: Song[]) => {
+    return playlist.map((s) => {
+      if (s.songId === song.songId) {
+        return song;
+      }
+
+      return s;
+    });
+  };
+
+  return {
+    ...info,
+    playlist: apply(info.playlist),
+    original: apply(info.original),
+  };
+};
 
 export const useLikesEditState = () => {
   return useRecoilState(likesEditModeState);
@@ -18,6 +41,8 @@ export const useLikes = (song: Song | undefined) => {
     () => (song ? likes.find((like) => like.songId === song?.songId) : false),
     [likes, song]
   );
+
+  const [info, setInfo] = usePlayingInfoState();
 
   const openLoginModal = useLoginModalOpener();
 
@@ -32,7 +57,11 @@ export const useLikes = (song: Song | undefined) => {
       const res = await addSongLike(song.songId);
 
       if (res) {
-        setLikes([...likes, song]);
+        const updatedSong = { ...song };
+        updatedSong.like += 1;
+
+        setLikes([...likes, updatedSong]);
+        setInfo(applyPlaylistLike(info, updatedSong));
       }
     }
   };
@@ -48,7 +77,11 @@ export const useLikes = (song: Song | undefined) => {
       const res = await removeSongLike(song.songId);
 
       if (res) {
+        const updatedSong = { ...song };
+        updatedSong.like -= 1;
+
         setLikes(likes.filter((like) => like.songId !== song.songId));
+        setInfo(applyPlaylistLike(info, updatedSong));
       }
     }
   };

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { T1Bold, T5Medium } from "@components/Typography";
@@ -5,6 +6,7 @@ import { T1Bold, T5Medium } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useConfirmModalState } from "@hooks/confirmModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import { isNull, isString } from "@utils/isTypes";
 
@@ -15,12 +17,33 @@ interface ConfirmModalProps {}
 
 const ConfirmModal = ({}: ConfirmModalProps) => {
   const [modalState, setModalState] = useConfirmModalState();
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        setIsSpaceDisabled(false);
+        setModalState({ ...modalState, isOpen: false, value: false });
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [modalState, setIsSpaceDisabled, setModalState]);
 
   if (!modalState.isOpen) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay
+      onClick={() => {
+        setIsSpaceDisabled(false);
+        setModalState({ ...modalState, isOpen: false, value: false });
+      }}
+    >
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title $hasChildren={!isNull(modalState.children)}>
           {modalState.title}
         </Title>
@@ -34,9 +57,11 @@ const ConfirmModal = ({}: ConfirmModalProps) => {
         <ButtonsWrapper>
           <TwoButton
             ok={() => {
+              setIsSpaceDisabled(false);
               setModalState({ ...modalState, isOpen: false, value: true });
             }}
             cancel={() => {
+              setIsSpaceDisabled(false);
               setModalState({ ...modalState, isOpen: false, value: false });
             }}
           />

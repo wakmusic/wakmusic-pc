@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import styled, { css } from "styled-components/macro";
 
@@ -44,38 +44,48 @@ const AddListModal = ({ popup }: AddListModalProps) => {
     queryFn: fetchPlaylists,
   });
 
-  const resolve = async (list: PlaylistType | undefined) => {
-    const _resolve = (result: boolean | undefined) => {
-      if (modalState.resolve) {
-        modalState.resolve(result);
+  const resolve = useCallback(
+    async (list: PlaylistType | undefined) => {
+      const _resolve = (result: boolean | undefined) => {
+        if (modalState.resolve) {
+          modalState.resolve(result);
+        }
+
+        if (location.pathname === "/addList") {
+          window.postMessage("resolve");
+          window.close();
+        }
+
+        setModalState({ ...modalState, isOpen: false });
+        setIsSpaceDisabled(false);
+      };
+
+      if (isUndefined(list)) {
+        _resolve(undefined);
+
+        return;
       }
 
-      if (location.pathname === "/addList") {
-        window.postMessage("resolve");
-        window.close();
+      const listSongs = list.songs.map((s) => s.songId);
+      const addSongs = modalState.selected
+        .map((s) => s.songId)
+        .filter((s) => !listSongs.includes(s));
+
+      if (!addSongs.length) {
+        _resolve(true);
+        return;
       }
 
-      setModalState({ ...modalState, isOpen: false });
-      setIsSpaceDisabled(false);
-    };
+      const success = await addSongToPlaylist(list.key, addSongs);
 
-    if (isUndefined(list)) {
-      _resolve(undefined);
+      if (success) {
+        refetch();
+      }
 
-      return;
-    }
-
-    const success = await addSongToPlaylist(
-      list.key,
-      modalState.selected.map((s) => s.songId)
-    );
-
-    if (success) {
-      refetch();
-    }
-
-    _resolve(success);
-  };
+      _resolve(success);
+    },
+    [modalState, refetch, setIsSpaceDisabled, setModalState]
+  );
 
   const { viewportRef, getTotalSize, virtualMap } = useVirtualizer(
     playlists ?? [],
@@ -121,12 +131,26 @@ const AddListModal = ({ popup }: AddListModalProps) => {
     };
   }, [setModalState]);
 
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        resolve(undefined);
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [resolve]);
+
   if (!modalState.isOpen && !popup) return null;
 
   return (
     <ModalOverlay onClick={() => resolve(undefined)}>
       <Container onClick={(e) => e.stopPropagation()} $noRadius={popup}>
-        <Header />
+        <Header $popup={popup} />
         <Title>보관함에 담기</Title>
         <CloseButton onClick={() => resolve(undefined)} />
 
@@ -194,7 +218,7 @@ const Container = styled(ModalContainer)<{ $noRadius?: boolean }>`
     `}
 `;
 
-const Header = styled.div`
+const Header = styled.div<{ $popup?: boolean }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -202,7 +226,11 @@ const Header = styled.div`
   width: 440px;
   height: 60px;
 
-  -webkit-app-region: drag;
+  ${({ $popup }) =>
+    $popup &&
+    css`
+      -webkit-app-region: drag;
+    `}
 `;
 
 const Title = styled(T4Bold)`

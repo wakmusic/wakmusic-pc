@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as RatioSVG } from "@assets/icons/ic_24_RadioButton.svg";
@@ -8,6 +8,7 @@ import { T1Bold, T6Medium } from "@components/Typography";
 import colors from "@constants/colors";
 
 import { useExitModalState } from "@hooks/exitModal";
+import { useIsSpaceDisabled } from "@hooks/player";
 
 import HelpText from "./globals/HelpText";
 import TwoButton from "./globals/TwoButton";
@@ -22,31 +23,50 @@ const ExitModal = ({ popup }: ExitModalProps) => {
   const [mode, setMode] = useState<"close" | "background">(
     localStorage.getItem("exitMode") === "background" ? "background" : "close"
   );
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
-  const resolve = (result: boolean) => () => {
-    if (location.pathname === "/selectExit") {
-      window.postMessage({
-        type: "resolve",
-        payload: result ? mode : null,
-      });
-      window.close();
+  const resolve = useCallback(
+    (result: boolean) => () => {
+      if (location.pathname === "/selectExit") {
+        window.postMessage({
+          type: "resolve",
+          payload: result ? mode : null,
+        });
+        window.close();
 
-      return;
+        return;
+      }
+
+      if (modalState.resolve) {
+        modalState.resolve(result ? mode : null);
+      }
+
+      setIsSpaceDisabled(false);
+      return setModalState({ isOpen: false });
+    },
+    [modalState, mode, setIsSpaceDisabled, setModalState]
+  );
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        resolve(false)();
+      }
     }
 
-    if (modalState.resolve) {
-      modalState.resolve(result ? mode : null);
-    }
+    window.addEventListener("keydown", handler);
 
-    return setModalState({ isOpen: false });
-  };
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [resolve]);
 
   if (!modalState.isOpen && !popup) return null;
 
   return (
-    <ModalOverlay>
-      <Container $noRadius={popup}>
-        <Title>앞으로 어떻게 종료할까요?</Title>
+    <ModalOverlay onClick={resolve(false)}>
+      <Container $noRadius={popup} onClick={(e) => e.stopPropagation()}>
+        <Title $popup={popup}>앞으로 어떻게 종료할까요?</Title>
 
         <Select $selected={mode === "close"} onClick={() => setMode("close")}>
           <T6Medium color={colors.gray900}>앱 완전 종료하기</T6Medium>
@@ -91,13 +111,17 @@ const Container = styled(ModalContainer)<{ $noRadius?: boolean }>`
     `}
 `;
 
-const Title = styled(T1Bold)`
+const Title = styled(T1Bold)<{ $popup?: boolean }>`
   color: ${colors.primary900};
 
   padding-top: 52px;
   margin-bottom: 24px;
 
-  -webkit-app-region: drag;
+  ${({ $popup }) =>
+    $popup &&
+    css`
+      -webkit-app-region: drag;
+    `}
 `;
 
 const Select = styled.div<{ $selected: boolean }>`

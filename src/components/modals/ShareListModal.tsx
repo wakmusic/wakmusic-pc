@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as CopySVG } from "@assets/icons/ic_24_copy.svg";
@@ -6,6 +7,7 @@ import { T3Medium, T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useIsSpaceDisabled } from "@hooks/player";
 import { useShareListModalState } from "@hooks/shareListModal";
 import { useToast } from "@hooks/toast";
 
@@ -17,18 +19,34 @@ interface LoadListModalProps {}
 
 const LoadListModal = ({}: LoadListModalProps) => {
   const [modalState, setModalState] = useShareListModalState();
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
   const toast = useToast();
 
-  const resolve = () => {
+  const resolve = useCallback(() => {
     if (modalState.resolve) modalState.resolve();
+    setIsSpaceDisabled(false);
     setModalState({ isOpen: false });
-  };
+  }, [modalState, setIsSpaceDisabled, setModalState]);
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        resolve();
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [resolve]);
 
   if (!modalState.isOpen) return null;
 
   return (
-    <ModalOverlay>
-      <Container>
+    <ModalOverlay onClick={resolve}>
+      <Container onClick={(e) => e.stopPropagation()}>
         <Title>리스트 공유하기</Title>
 
         <InputContainer>

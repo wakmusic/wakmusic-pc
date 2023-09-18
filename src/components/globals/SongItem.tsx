@@ -7,6 +7,8 @@ import { T7_1Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { usePlaySong } from "@hooks/player";
+
 import { Song } from "@templates/song";
 import { SongItemFeature } from "@templates/songItem";
 
@@ -68,6 +70,8 @@ const SongItem = ({
   forceWidth,
   isLoading,
 }: SongItemProps) => {
+  const playSong = usePlaySong();
+
   const featureTexts = useMemo(
     () =>
       features?.map((feature) => featureBuilder(song, feature, useIncrease)) ??
@@ -86,7 +90,10 @@ const SongItem = ({
 
   return (
     <Container
-      onClick={(e) => onClick && song && onClick(song, e.shiftKey)}
+      onClick={(e) =>
+        e.detail === 1 && onClick && song && onClick(song, e.shiftKey)
+      }
+      onDoubleClick={() => song && playSong(song)}
       $selected={selected}
     >
       <Info>

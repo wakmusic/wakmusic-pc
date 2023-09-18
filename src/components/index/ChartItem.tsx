@@ -3,6 +3,8 @@ import styled from "styled-components/macro";
 import Rank from "@components/globals/Rank";
 import Track from "@components/globals/Track";
 
+import { usePlaySong } from "@hooks/player";
+
 import { Song } from "@templates/song";
 
 interface ChartItemProps {
@@ -13,8 +15,10 @@ interface ChartItemProps {
 }
 
 const ChartItem = ({ rank, item, isLoading }: ChartItemProps) => {
+  const playSong = usePlaySong();
+
   return (
-    <Container>
+    <Container onDoubleClick={() => item && playSong(item)}>
       <Rank now={rank} last={item && item.chart.last} isLoading={isLoading} />
       <Track item={item} maxWidth={220} isLoading={isLoading} />
     </Container>

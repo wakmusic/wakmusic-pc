@@ -31,7 +31,7 @@ interface MusicControllerProps {
   songs: Song[];
   selectedSongs: Song[];
 
-  dispatchSelectedSongs: (song: Song[]) => void;
+  setSelected: React.Dispatch<React.SetStateAction<Song[]>>;
   onDelete?: (newSongs: Song[]) => void;
 }
 
@@ -47,7 +47,7 @@ const MusicController = ({
   ],
   songs,
   selectedSongs,
-  dispatchSelectedSongs,
+  setSelected,
   onDelete,
 }: MusicControllerProps) => {
   const Controller = useMemo(
@@ -74,7 +74,11 @@ const MusicController = ({
             <SelectAll
               isSelect={false}
               onClick={() => {
-                dispatchSelectedSongs(songs);
+                if (songs.length === selectedSongs.length) {
+                  setSelected([]);
+                  return;
+                }
+                setSelected(songs);
               }}
               key={key}
             />
@@ -108,7 +112,7 @@ const MusicController = ({
                       }
 
                       if (e.data === "resolve") {
-                        dispatchSelectedSongs([]);
+                        setSelected([]);
                       }
                     });
                   }
@@ -126,7 +130,7 @@ const MusicController = ({
                   toast("오류가 발생하였습니다.");
                 }
 
-                dispatchSelectedSongs(selectedSongs);
+                setSelected([]);
               }}
             />
           );
@@ -135,7 +139,7 @@ const MusicController = ({
             <AddPlaylist
               onClick={() => {
                 playSongs(selectedSongs, false, false);
-                dispatchSelectedSongs(selectedSongs);
+                setSelected([]);
               }}
               key={key}
             />
@@ -145,7 +149,7 @@ const MusicController = ({
             <PlayMusic
               onClick={() => {
                 playSongs(selectedSongs);
-                dispatchSelectedSongs(selectedSongs);
+                setSelected([]);
               }}
               key={key}
             />
@@ -163,7 +167,7 @@ const MusicController = ({
                   );
                 });
 
-                dispatchSelectedSongs(selectedSongs);
+                setSelected([]);
 
                 onDelete && onDelete(newSongs);
               }}
@@ -173,13 +177,13 @@ const MusicController = ({
       }
     },
     [
-      dispatchSelectedSongs,
       location.pathname,
       onDelete,
       openAddListModal,
       openLoginModal,
       playSongs,
       selectedSongs,
+      setSelected,
       songs,
       toast,
       user,
@@ -208,7 +212,7 @@ const MusicController = ({
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.code === "Escape") {
-        dispatchSelectedSongs([]);
+        setSelected([]);
       }
     };
 
@@ -217,7 +221,7 @@ const MusicController = ({
     return () => {
       window.removeEventListener("keydown", handler);
     };
-  }, [dispatchSelectedSongs]);
+  }, [setSelected]);
 
   return (
     <Container $display={showControllerState}>

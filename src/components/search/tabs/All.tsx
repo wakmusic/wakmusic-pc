@@ -35,7 +35,7 @@ interface AllProps {
 
 const All = ({ query, res, isFetching }: AllProps) => {
   const [, setSearchParams] = useSearchParams();
-  const { selected, selectCallback, selectManyCallback, selectedIncludes } =
+  const { selected, setSelected, selectCallback, selectedIncludes } =
     useSelectSongs(
       isUndefined(res)
         ? []
@@ -118,7 +118,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
       <MusicController
         songs={resKeys.map((key) => res[key].slice(-3)).flat()}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectManyCallback}
+        setSelected={setSelected}
       />
     </PageItemContainer>
   );

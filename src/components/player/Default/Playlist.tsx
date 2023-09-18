@@ -25,8 +25,9 @@ const Playlist = ({}: PlaylistProps) => {
   const [controlState, setControl] = useControlState();
   const [playingInfo, setPlayingInfo] = usePlayingInfoState();
 
-  const { selected, setSelected, selectCallback, selectManyCallback } =
-    useSelectSongs(playingInfo.playlist);
+  const { selected, setSelected, selectCallback } = useSelectSongs(
+    playingInfo.playlist
+  );
 
   const [selectedVisual, setSelectedVisual] = useState<Song[]>([]);
 
@@ -336,7 +337,7 @@ const Playlist = ({}: PlaylistProps) => {
       <MusicController
         songs={playingInfo.playlist}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectManyCallback}
+        setSelected={setSelected}
         player={true}
         onDelete={deleteSongs}
         features={[ControllerFeature.selectAll, ControllerFeature.addMusic]}

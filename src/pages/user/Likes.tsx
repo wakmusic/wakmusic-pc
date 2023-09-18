@@ -26,13 +26,8 @@ const Likes = ({}: LikesProps) => {
   const prevLikes = usePrevious(likes);
   const [changeLikes, setChangeLikes] = useState<Song[]>([]);
 
-  const {
-    selected,
-    setSelected,
-    selectCallback,
-    selectManyCallback,
-    selectedIncludes,
-  } = useSelectSongs(likes);
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs(likes);
 
   useEffect(() => {
     if (
@@ -108,7 +103,7 @@ const Likes = ({}: LikesProps) => {
         songs={likes}
         hide={hideController}
         selectedSongs={selected}
-        dispatchSelectedSongs={selectManyCallback}
+        setSelected={setSelected}
         onDelete={editMode ? dispatchLikes : undefined}
       />
     </Container>

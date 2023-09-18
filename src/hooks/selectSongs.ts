@@ -22,7 +22,7 @@ export const useSelectSongs = (songs: Song[]) => {
     }
 
     for (let i = 0; i < to.length; i++) {
-      const itemIndex = findIndex(songs, to[i].songId);
+      const itemIndex = findIndex(songs, to[i].songId, i);
 
       if (i === to.length - 1 && itemIndex < insertIndex) {
         to.push(song);
@@ -62,13 +62,14 @@ export const useSelectSongs = (songs: Song[]) => {
         Math.min(songIndex, lastSelected + 1) >
           findIndex(songs, selected[insertIndex].songId);
         insertIndex++
-      );
+      ); // shift로 선택된 곡들이 삽입될 인덱스를 구함
 
-      slicedSongs.forEach((item) => {
-        if (findIndex(newSelected, item.songId, insertIndex) !== -1) return;
+      slicedSongs.forEach((item, index) => {
+        // insertIndex 부터 순서대로 곡 삽입
+        if (findIndex(newSelected, item.songId, insertIndex + index) !== -1)
+          return;
 
-        newSelected.splice(insertIndex, 0, item);
-        insertIndex++;
+        newSelected.splice(insertIndex + index, 0, item);
       });
 
       setLastSelected(songIndex);

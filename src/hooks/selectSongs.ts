@@ -22,7 +22,7 @@ export const useSelectSongs = (songs: Song[]) => {
     }
 
     for (let i = 0; i < to.length; i++) {
-      const itemIndex = findIndex(songs, to[i].songId, i);
+      const itemIndex = findIndex(songs, to[i].songId);
 
       if (i === to.length - 1 && itemIndex < insertIndex) {
         to.push(song);

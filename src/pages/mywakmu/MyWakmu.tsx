@@ -1,6 +1,8 @@
 import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
+import { fetchSong } from "@apis/songs";
+
 import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
 
 import { T7Medium } from "@components/Typography";
@@ -14,10 +16,13 @@ import PageLayout from "@layouts/PageLayout";
 import colors from "@constants/colors";
 import { blocks } from "@constants/myPage";
 
+import { usePlaySong } from "@hooks/player";
+
 interface MyWakmuProps {}
 
 const MyWakmu = ({}: MyWakmuProps) => {
   const location = useLocation();
+  const playSong = usePlaySong();
 
   return (
     <PageLayout>
@@ -37,7 +42,11 @@ const MyWakmu = ({}: MyWakmuProps) => {
           />
         ))}
       </Container>
-      <Buanebi>
+      <Buanebi
+        onClick={async () => {
+          fetchSong("crVqRMDNpuY").then(playSong);
+        }}
+      >
         <DotSVG />
         <T7Medium>
           왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라

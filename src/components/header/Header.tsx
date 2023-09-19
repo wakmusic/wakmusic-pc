@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled, { css } from "styled-components/macro";
+import styled, { css, keyframes } from "styled-components/macro";
 
-import { ReactComponent as Logo } from "@assets/svgs/logo.svg";
+import { ReactComponent as LogoSVG } from "@assets/svgs/logo.svg";
 
 import ControlBar from "@components/globals/ControlBar";
 import ArrowIcon from "@components/icons/Arrow";
@@ -18,6 +19,8 @@ const Header = ({}: HeaderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [easterEgg, setEasterEgg] = useState(1);
+
   return (
     <Container>
       <LogoContainer>
@@ -28,7 +31,17 @@ const Header = ({}: HeaderProps) => {
             }
 
             navigate("/");
+
+            setEasterEgg((prev) => {
+              if (prev > 3) return 1;
+
+              return prev + 0.1;
+            });
           }}
+          style={{
+            transform: `scale(${easterEgg > 2 ? easterEgg - 1 : 1})`,
+          }}
+          $running={easterEgg > 2}
         />
       </LogoContainer>
 
@@ -83,6 +96,31 @@ const LogoContainer = styled.div`
   align-items: center;
 
   cursor: pointer;
+`;
+
+const LogoEasterEgg = keyframes`
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: hue-rotate(0deg);
+  }
+
+  50% {
+    transform: scale(3) rotate(180deg);
+    filter: hue-rotate(180deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(360deg);
+    filter: hue-rotate(360deg);
+  }
+`;
+
+const Logo = styled(LogoSVG)<{ $running: boolean }>`
+  ${({ $running }) =>
+    $running &&
+    css`
+      animation: ${LogoEasterEgg} 1s linear infinite;
+    `}
 `;
 
 const Navigator = styled.div`

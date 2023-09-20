@@ -8,11 +8,12 @@ import { ReactComponent as AppIconSVG } from "@assets/svgs/AppIcon.svg";
 import { T3Medium, T5Light, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
+import { IPCMain, IPCRenderer } from "@constants/ipc";
 import { buttonList } from "@constants/myPage";
 
 import { useAlertModal } from "@hooks/alertModal";
 
-import { openExternal } from "@utils/modules";
+import { ipcRenderer, openExternal } from "@utils/modules";
 
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
 
@@ -22,10 +23,27 @@ const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
   const navigate = useNavigate();
   const alert = useAlertModal();
 
+  const [appVersion, setAppVersion] = useState<string>("WEB");
   const [easterEgg, setEasterEgg] = useState(0);
 
-  const appVersion = import.meta.env.VITE_VERSION;
   const commitHash = import.meta.env.VITE_COMMIT_HASH ?? "dev";
+
+  useEffect(() => {
+    if (!ipcRenderer) return;
+
+    ipcRenderer.send(IPCRenderer.QUERY_VERSION);
+
+    ipcRenderer.on(IPCMain.REPLY_VERSION, (_, version) => {
+      console.log("version", version);
+      setAppVersion(version);
+    });
+
+    return () => {
+      if (ipcRenderer) {
+        ipcRenderer.removeAllListeners(IPCMain.REPLY_VERSION);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     function handler(e: KeyboardEvent) {

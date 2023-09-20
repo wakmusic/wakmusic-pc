@@ -13,6 +13,7 @@ import { IPCMain, IPCRenderer } from "@constants/ipc";
 
 import { Song } from "@templates/song";
 
+import { version } from "../package.json";
 import { changePresence, setProgress, showPlaying } from "./electron/discord";
 import { schemeHandler } from "./electron/scheme";
 import { initTray } from "./electron/tray";
@@ -279,4 +280,11 @@ ipcMain.on(IPCRenderer.USER_LOGOUT, () => {
   }
 
   session.defaultSession.cookies.remove(import.meta.env.VITE_API_URL, "token");
+});
+
+ipcMain.on(IPCRenderer.QUERY_VERSION, () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  win.webContents.send(IPCMain.REPLY_VERSION, version);
 });

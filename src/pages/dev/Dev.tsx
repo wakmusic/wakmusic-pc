@@ -1,7 +1,10 @@
-import { youtubePlayerTempState } from "@state/player/atoms";
+import {
+  showYoutubePlayerState,
+  youtubePlayerTempState,
+} from "@state/player/atoms";
 import { useState } from "react";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components/macro";
 
 import { fetchSong } from "@apis/songs";
@@ -21,6 +24,7 @@ interface DevProps {}
 
 const Dev = ({}: DevProps) => {
   const setYoutubeTemp = useSetRecoilState(youtubePlayerTempState);
+  const [showYoutube, setShowYoutube] = useRecoilState(showYoutubePlayerState);
   const [error, setError] = useState<string>("");
   const playSong = usePlaySong();
 
@@ -44,7 +48,7 @@ const Dev = ({}: DevProps) => {
             setError(undefined);
           }}
         >
-          펑{error.includes("")}
+          펑~!{error.includes("")}
         </Button>
 
         <Button
@@ -52,7 +56,15 @@ const Dev = ({}: DevProps) => {
             setYoutubeTemp((prev) => prev + 1);
           }}
         >
-          유튜브 리로드
+          유튜브 재장전
+        </Button>
+
+        <Button
+          onClick={() => {
+            setShowYoutube(!showYoutube);
+          }}
+        >
+          유튜브를 {showYoutube ? "숨겨주세요" : "보여주세요"}
         </Button>
       </Container>
     </PageLayout>

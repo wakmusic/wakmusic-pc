@@ -1,7 +1,10 @@
-import { youtubePlayerTempState } from "@state/player/atoms";
+import {
+  showYoutubePlayerState,
+  youtubePlayerTempState,
+} from "@state/player/atoms";
 import { useEffect, useRef } from "react";
 import { useRecoilValue } from "recoil";
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 
 import soundBoosts from "@constants/soundBoosts";
 
@@ -32,6 +35,7 @@ const YouTube = ({
   setProgress,
 }: PlayerProviderProps) => {
   const temp = useRecoilValue(youtubePlayerTempState);
+  const show = useRecoilValue(showYoutubePlayerState);
 
   const player = useRef<YT.Player>();
   const playerState = useRef<PlayerState>({
@@ -268,11 +272,27 @@ const YouTube = ({
     player.current.seekTo(progress, true);
   }, [progress]);
 
-  return <Container id="wakmu-youtube" />;
+  return (
+    <Container $show={show}>
+      <YoutubeElement id="wakmu-youtube" />
+    </Container>
+  );
 };
 
-const Container = styled.div`
-  display: none;
+const Container = styled.div<{ $show: boolean }>`
+  visibility: hidden;
+
+  ${({ $show }) =>
+    $show &&
+    css`
+      visibility: visible;
+
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    `}
 `;
+
+const YoutubeElement = styled.div``;
 
 export default YouTube;

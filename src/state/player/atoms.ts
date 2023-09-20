@@ -61,7 +61,7 @@ export const isControlling = atom<boolean>({
 
 export const playingLength = atom<number>({
   key: "playingLength",
-  default: 240,
+  default: 118,
 });
 
 export const playingProgress = atom<number>({
@@ -174,4 +174,9 @@ export const isSpaceDisabled = atom({
 export const youtubePlayerTempState = atom<number>({
   key: "youtubePlayerTemp",
   default: 0,
+});
+
+export const showYoutubePlayerState = atom<boolean>({
+  key: "showYoutubePlayer",
+  default: false,
 });

@@ -29,12 +29,21 @@ const LoginModal = ({}: LoginModalProps) => {
   const [loginError, setLoginError] = useState(false);
 
   const handleLogin = (platform: LoginPlatform) => {
-    // TODO: 추후 웹 환경에서도 로그인 가능하도록 패치 필요
-    const openFn = loginError
-      ? (url: string) => open(url, "_blank")
-      : openExternal || ((url: string) => open(url, "_blank"));
+    // Desktop App
+    if (openExternal) {
+      const openFn = loginError
+        ? (url: string) => open(url, "_blank")
+        : openExternal;
 
-    openFn(`${import.meta.env.VITE_API_URL}/auth/pc/login/${platform}`);
+      openFn(`${import.meta.env.VITE_API_URL}/auth/pc/login/${platform}`);
+    }
+
+    // Web
+    else {
+      window.location.href = `${
+        import.meta.env.VITE_API_URL
+      }/auth/login/${platform}`;
+    }
 
     setIsSpaceDisabled(false);
     setLoginModalState(false);

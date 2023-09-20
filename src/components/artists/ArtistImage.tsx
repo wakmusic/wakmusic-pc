@@ -9,10 +9,13 @@ import { queryClient } from "src/main";
 import styled, { css } from "styled-components/macro";
 
 import { fetchArtistList } from "@apis/artist";
+import { fetchSong } from "@apis/songs";
 
 import maid from "@assets/imgs/maid.png";
 import mangnyannyan from "@assets/imgs/mangnyannyan.png";
 import gosegu from "@assets/sounds/gosegu.mp3";
+
+import { usePlaySong } from "@hooks/player";
 
 import { Artist } from "@templates/artists";
 
@@ -38,6 +41,7 @@ const editData = (func: (artist: Artist) => void) => {
 
 const ArtistImage = ({ artist, controls, scrollToTop }: ArtistImageProps) => {
   const [reverse, setReverse] = useState(false);
+  const playSong = usePlaySong();
 
   return (
     <Container
@@ -105,6 +109,10 @@ const ArtistImage = ({ artist, controls, scrollToTop }: ArtistImageProps) => {
 
         if (artist.artistId === "rusuk") {
           setReverse(!reverse);
+        }
+
+        if (artist.artistId === "ninnin") {
+          fetchSong("06al4daDPQ8").then(playSong);
         }
       }}
     >

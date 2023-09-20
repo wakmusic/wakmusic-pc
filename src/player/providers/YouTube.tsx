@@ -1,4 +1,6 @@
+import { youtubePlayerTempState } from "@state/player/atoms";
 import { useEffect, useRef } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components/macro";
 
 import soundBoosts from "@constants/soundBoosts";
@@ -29,6 +31,8 @@ const YouTube = ({
   toggleIsPlaying,
   setProgress,
 }: PlayerProviderProps) => {
+  const temp = useRecoilValue(youtubePlayerTempState);
+
   const player = useRef<YT.Player>();
   const playerState = useRef<PlayerState>({
     current: null,
@@ -189,6 +193,11 @@ const YouTube = ({
   // 유튜브 플레이어 생성
   useEffect(() => {
     const _player = new YT.Player("wakmu-youtube", {
+      playerVars: {
+        hl: "ko",
+        origin: window.location.origin,
+        enablejsapi: 1,
+      },
       events: {
         onReady: (e) => {
           player.current = e.target;
@@ -208,7 +217,7 @@ const YouTube = ({
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [temp]);
 
   useEffect(() => {
     if (!player.current) return;

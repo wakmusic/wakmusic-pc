@@ -170,3 +170,8 @@ export const isSpaceDisabled = atom({
   key: "isSpaceDisabled",
   default: false,
 });
+
+export const youtubePlayerTempState = atom<number>({
+  key: "youtubePlayerTemp",
+  default: 0,
+});

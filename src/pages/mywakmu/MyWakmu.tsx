@@ -1,4 +1,5 @@
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
 import { fetchSong } from "@apis/songs";
@@ -22,7 +23,24 @@ interface MyWakmuProps {}
 
 const MyWakmu = ({}: MyWakmuProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const playSong = usePlaySong();
+
+  const [isDevModeEnabled, setIsDevModeEnabled] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "F12") {
+        setIsDevModeEnabled((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <PageLayout>
@@ -43,7 +61,7 @@ const MyWakmu = ({}: MyWakmuProps) => {
         ))}
       </Container>
       <Buanebi
-        onClick={async () => {
+        onClick={() => {
           fetchSong("crVqRMDNpuY").then(playSong);
         }}
       >
@@ -53,6 +71,16 @@ const MyWakmu = ({}: MyWakmuProps) => {
           내가 비빈 거다)라는 모토를 가슴에 새기고 일하고 있습니다.
         </T7Medium>
       </Buanebi>
+
+      {isDevModeEnabled && (
+        <button
+          onClick={() => {
+            navigate("/dev");
+          }}
+        >
+          개발자 모드
+        </button>
+      )}
     </PageLayout>
   );
 };

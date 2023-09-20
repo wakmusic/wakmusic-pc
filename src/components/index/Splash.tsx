@@ -9,8 +9,7 @@ import Lottie from "@components/globals/Lottie";
 
 import colors from "@constants/colors";
 
-import { useAlertModal } from "@hooks/alertModal";
-import { useNoticeModalState } from "@hooks/noticeModal";
+import { useAlertModal, useNoticeModalState } from "@hooks/modal";
 
 import { isUndefined } from "@utils/isTypes";
 import { ipcRenderer } from "@utils/modules";

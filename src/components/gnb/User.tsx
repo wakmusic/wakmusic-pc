@@ -8,9 +8,11 @@ import { T6Bold, T6Medium } from "@components/Typography";
 import colors from "@constants/colors";
 import { IPCRenderer } from "@constants/ipc";
 
-import { useConfirmModal } from "@hooks/confirmModal";
-import { useExitModal } from "@hooks/exitModal";
-import { useLoginModalOpener } from "@hooks/loginModal";
+import {
+  useConfirmModal,
+  useExitModal,
+  useLoginModalOpener,
+} from "@hooks/modal";
 import { useUserState } from "@hooks/user";
 
 import { isNull } from "@utils/isTypes";

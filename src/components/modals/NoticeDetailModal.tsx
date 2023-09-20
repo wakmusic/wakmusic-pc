@@ -8,7 +8,7 @@ import DefaultScroll from "@components/globals/Scroll/DefaultScroll";
 
 import colors from "@constants/colors";
 
-import { useNoticeDetailModalState } from "@hooks/noticeDetailModal";
+import { useNoticeDetailModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import { formatDateAndTime } from "@utils/formatting";

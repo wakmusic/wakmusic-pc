@@ -10,7 +10,7 @@ import { T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useLoginModalState } from "@hooks/loginModal";
+import { useLoginModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import { LoginPlatform } from "@templates/user";

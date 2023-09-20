@@ -5,7 +5,7 @@ import Skeleton from "@components/globals/Skeleton";
 
 import colors from "@constants/colors";
 
-import { useNoticeDetailModal } from "@hooks/noticeDetailModal";
+import { useNoticeDetailModal } from "@hooks/modal";
 
 import { Notice } from "@templates/notice";
 

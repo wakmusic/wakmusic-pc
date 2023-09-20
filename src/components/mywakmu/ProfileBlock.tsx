@@ -13,10 +13,12 @@ import colors from "@constants/colors";
 import { IPCRenderer } from "@constants/ipc";
 import platforms from "@constants/platforms";
 
-import { useConfirmModal } from "@hooks/confirmModal";
-import { useLoginModalOpener } from "@hooks/loginModal";
-import { useSelectProfileModal } from "@hooks/profileModal";
-import { useSetUsernameModal } from "@hooks/setUsernameModal";
+import {
+  useConfirmModal,
+  useLoginModalOpener,
+  useSelectProfileModal,
+  useSetUsernameModal,
+} from "@hooks/modal";
 import { useUserState } from "@hooks/user";
 
 import { isNil } from "@utils/isTypes";

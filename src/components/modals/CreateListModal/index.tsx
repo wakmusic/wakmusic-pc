@@ -5,7 +5,7 @@ import { T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useCreateListModalState } from "@hooks/createListModal";
+import { useCreateListModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import { isUndefined } from "@utils/isTypes";

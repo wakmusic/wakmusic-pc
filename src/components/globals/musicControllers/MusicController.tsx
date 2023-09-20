@@ -2,8 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
-import { useAddListModal } from "@hooks/addListModal";
-import { useLoginModalOpener } from "@hooks/loginModal";
+import { useAddListModal, useLoginModalOpener } from "@hooks/modal";
 import { usePlaySongs } from "@hooks/player";
 import { useToast } from "@hooks/toast";
 import { useUserState } from "@hooks/user";

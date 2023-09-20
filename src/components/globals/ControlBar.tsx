@@ -9,7 +9,7 @@ import { ReactComponent as RestoreSVG } from "@assets/icons/ic_20_restore.svg";
 
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
-import { useExitModal } from "@hooks/exitModal";
+import { useExitModal } from "@hooks/modal";
 import { useToggleSeparateMode } from "@hooks/toggleSeparateMode";
 
 import { isNull } from "@utils/isTypes";

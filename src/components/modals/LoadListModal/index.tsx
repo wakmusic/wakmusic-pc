@@ -5,7 +5,7 @@ import { T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useLoadListModalState } from "@hooks/loadListModal";
+import { useLoadListModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import TwoButton from "../globals/TwoButton";

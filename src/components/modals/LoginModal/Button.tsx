@@ -12,9 +12,10 @@ interface ButtonProps {
   platform: LoginPlatform;
   children: ReactNode;
   onClick: (platform: LoginPlatform) => void;
+  inApp: boolean;
 }
 
-const Button = ({ platform, children, onClick }: ButtonProps) => {
+const Button = ({ platform, children, onClick, inApp }: ButtonProps) => {
   return (
     <Container
       onClick={() => {
@@ -23,7 +24,7 @@ const Button = ({ platform, children, onClick }: ButtonProps) => {
     >
       <IconContainer>{children}</IconContainer>
       <T6Medium color={colors.gray900}>
-        {platforms[platform]}로 로그인하기
+        {platforms[platform]}로 로그인하기 {inApp ? "(인 앱)" : ""}
       </T6Medium>
     </Container>
   );

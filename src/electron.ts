@@ -115,8 +115,8 @@ app.whenReady().then(() => {
     return {
       action: "allow",
       overrideBrowserWindowOptions: {
-        frame: false,
         icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
+        autoHideMenuBar: true,
       },
     };
   });

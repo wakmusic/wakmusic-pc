@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as AppleIconSVG } from "@assets/icons/ic_24_apple.svg";
@@ -26,9 +26,13 @@ const LoginModal = ({}: LoginModalProps) => {
   const [loginModalState, setLoginModalState] = useLoginModalState();
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
+  const [loginError, setLoginError] = useState(false);
+
   const handleLogin = (platform: LoginPlatform) => {
     // TODO: 추후 웹 환경에서도 로그인 가능하도록 패치 필요
-    const openFn = openExternal || ((url: string) => open(url, "_blank"));
+    const openFn = loginError
+      ? (url: string) => open(url, "_blank")
+      : openExternal || ((url: string) => open(url, "_blank"));
 
     openFn(`${import.meta.env.VITE_API_URL}/auth/pc/login/${platform}`);
 
@@ -65,18 +69,24 @@ const LoginModal = ({}: LoginModalProps) => {
         </Header>
 
         <Buttons>
-          <Button platform="naver" onClick={handleLogin}>
+          <Button platform="naver" onClick={handleLogin} inApp={loginError}>
             <NaverIconSVG />
           </Button>
 
-          <Button platform="google" onClick={handleLogin}>
+          <Button platform="google" onClick={handleLogin} inApp={loginError}>
             <GoogleIconSVG />
           </Button>
 
-          <Button platform="apple" onClick={handleLogin}>
+          <Button platform="apple" onClick={handleLogin} inApp={loginError}>
             <AppleIconSVG />
           </Button>
         </Buttons>
+
+        <LoginError onClick={() => setLoginError(!loginError)}>
+          {loginError
+            ? "기본 모드로 돌아가기"
+            : "로그인이 정상적으로 작동하지 않나요?"}
+        </LoginError>
       </Modal>
     </ModalOverlay>
   );
@@ -111,6 +121,19 @@ const Buttons = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+`;
+
+const LoginError = styled(T5Light)`
+  position: absolute;
+  bottom: 20px;
+
+  color: ${colors.down};
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  cursor: pointer;
 `;
 
 export default LoginModal;

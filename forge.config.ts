@@ -125,7 +125,8 @@ const config: ForgeConfig = {
     //     publisher: "CN=CFF2F2B0-3997-40A5-9513-E927980AC814",
     //     publisherDisplayName: "왁타버스 뮤직",
 
-    //     assets: "./build/appx",
+    //     manifest: "./build/appx/manifest.xml",
+    //     assets: "./build/appx/assets",
     //   },
     // },
     {

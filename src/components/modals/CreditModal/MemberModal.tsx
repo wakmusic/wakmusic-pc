@@ -111,6 +111,7 @@ const Contributions = styled.ul`
 
   ${T6Medium} {
     margin-left: -5px;
+    margin-bottom: 2px;
   }
 `;
 

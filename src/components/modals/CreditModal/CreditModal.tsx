@@ -45,7 +45,7 @@ const CreditModal = ({}: CreditModalProps) => {
 const Container = styled(ModalContainer)`
   width: 440px;
 
-  padding: 20px 30px 40px 30px;
+  padding: 20px 24px 40px 24px;
 
   background: ${colors.blueGray25};
   border-radius: 24px;

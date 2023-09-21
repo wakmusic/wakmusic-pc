@@ -106,6 +106,7 @@ const HelperContainer = styled.div`
 
   justify-content: start;
 
+  padding-left: 6px;
   padding-top: 30px;
 `;
 

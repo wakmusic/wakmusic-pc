@@ -22,17 +22,12 @@ interface TeamsProps {}
 const Teams = ({}: TeamsProps) => {
   const team = useTeam();
 
-  if (!team) {
-    // TODO: Skeleton
-    return null;
-  }
-
   return (
     <PageLayout>
       <Container>
         <King>
           <CrownSvg />
-          <Member king member={team?.king} />
+          {team.king && <Member king member={team?.king} />}
         </King>
         <Node1 node={Node1Svg} />
         <TeamsContainer>

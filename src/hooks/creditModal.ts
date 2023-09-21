@@ -33,6 +33,18 @@ export const useTeam = () => {
     queryFn: fetchTeam,
   });
 
+  if (!team) {
+    return {
+      king: null,
+      weekly: [],
+      pc: [[], []],
+      mobile: [[], []],
+      design: [[], []],
+      teams: [],
+      specials: [],
+    };
+  }
+
   return team;
 };
 

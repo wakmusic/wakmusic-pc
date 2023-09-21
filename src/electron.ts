@@ -13,6 +13,7 @@ import { IPCMain, IPCRenderer } from "@constants/ipc";
 
 import { Song } from "@templates/song";
 
+import { version } from "../package.json";
 import { changePresence, setProgress, showPlaying } from "./electron/discord";
 import { schemeHandler } from "./electron/scheme";
 import { initTray } from "./electron/tray";
@@ -44,9 +45,9 @@ if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
 }
 
 const server = "https://update.electronjs.org";
-const feed = `${server}/wakmusic/wakmusic-pc/${process.platform}-${
-  process.arch
-}/${app.getVersion()}`;
+const feed = `${server}/wakmusic/wakmusic-pc/${
+  process.platform
+}-universal/${app.getVersion()}`;
 
 autoUpdater.setFeedURL({
   url: feed,
@@ -114,8 +115,8 @@ app.whenReady().then(() => {
     return {
       action: "allow",
       overrideBrowserWindowOptions: {
-        frame: false,
         icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
+        autoHideMenuBar: true,
       },
     };
   });
@@ -279,4 +280,11 @@ ipcMain.on(IPCRenderer.USER_LOGOUT, () => {
   }
 
   session.defaultSession.cookies.remove(import.meta.env.VITE_API_URL, "token");
+});
+
+ipcMain.on(IPCRenderer.QUERY_VERSION, () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  win.webContents.send(IPCMain.REPLY_VERSION, version);
 });

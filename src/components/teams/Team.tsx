@@ -24,13 +24,37 @@ const Team = ({ name, special }: TeamProps) => {
   }
 
   return (
-    <Container $color={getTeamColor(name)} onClick={onClick}>
-      <T6Medium color={colors.blueGray500}>{name}</T6Medium>
+    <Container onClick={onClick}>
+      <PrettyBackground $color={getTeamColor(name)} />
+      <Text color={colors.blueGray500}>{name}</Text>
     </Container>
   );
 };
 
-const Container = styled.div<{ $color: [number, number, number] }>`
+const PrettyBackground = styled.div<{ $color: [number, number, number] }>`
+  position: relative;
+
+  height: 100%;
+  width: 100%;
+
+  opacity: 0;
+  transition: 0.5s;
+
+  ${({ $color }) => {
+    const colors = $color.join(", ");
+
+    return css`
+      background: linear-gradient(
+          180deg,
+          rgba(${colors}, 0.1) 0%,
+          rgba(${colors}, 0) 100%
+        ),
+        #fff;
+    `;
+  }}
+`;
+
+const Container = styled.div`
   width: 100%;
   height: 68px;
 
@@ -38,24 +62,22 @@ const Container = styled.div<{ $color: [number, number, number] }>`
   align-items: center;
   justify-content: center;
 
+  overflow: hidden;
+
   cursor: pointer;
   border-radius: 16px;
   background-color: ${colors.white};
+  transition: 1s;
 
   &:hover {
-    ${({ $color }) => {
-      const colors = $color.join(", ");
-
-      return css`
-        background: linear-gradient(
-            180deg,
-            rgba(${colors}, 0.1) 0%,
-            rgba(${colors}, 0) 100%
-          ),
-          #fff;
-      `;
-    }}
+    ${PrettyBackground} {
+      opacity: 1;
+    }
   }
+`;
+
+const Text = styled(T6Medium)`
+  position: absolute;
 `;
 
 export default Team;

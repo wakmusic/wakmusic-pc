@@ -27,24 +27,54 @@ const Member = ({ member, king }: MemberProps) => {
 
   if (king) {
     return (
-      <KingContainer $color={getTeamColor(member.team)} onClick={onClick}>
-        <T4Bold color={colors.gray700}>{member.name}</T4Bold>
+      <KingContainer onClick={onClick}>
+        <PrettyBackground $color={getTeamColor(member.team)} />
+        <Text>
+          <T4Bold color={colors.gray700}>{member.name}</T4Bold>
+        </Text>
       </KingContainer>
     );
   }
 
   return (
-    <Container $color={getTeamColor(member.team)} onClick={onClick}>
-      {member.role === "leader" ? (
-        <T6Bold color={colors.gray700}>{member.name}</T6Bold>
-      ) : (
-        <T6Medium color={colors.gray600}>{member.name}</T6Medium>
-      )}
+    <Container onClick={onClick}>
+      <PrettyBackground $color={getTeamColor(member.team)} />
+
+      <Text>
+        {member.role === "leader" ? (
+          <T6Bold color={colors.gray700}>{member.name}</T6Bold>
+        ) : (
+          <T6Medium color={colors.gray600}>{member.name}</T6Medium>
+        )}
+      </Text>
     </Container>
   );
 };
 
-const Container = styled.div<{ $color: [number, number, number] }>`
+const PrettyBackground = styled.div<{ $color: [number, number, number] }>`
+  position: relative;
+
+  width: 0%;
+  height: 100%;
+
+  opacity: 0;
+  transition: 0.3s;
+
+  ${({ $color }) => {
+    const colors = $color.join(", ");
+
+    return css`
+      background: linear-gradient(
+        270deg,
+        rgba(${colors}, 0) 0%,
+        rgba(${colors}, 0.1) 50%,
+        rgba(${colors}, 0) 100%
+      );
+    `;
+  }}
+`;
+
+const Container = styled.div`
   height: 32px;
 
   display: flex;
@@ -53,22 +83,17 @@ const Container = styled.div<{ $color: [number, number, number] }>`
 
   cursor: pointer;
   border-radius: 99px;
-  background-color: ${colors.white};
 
   &:hover {
-    ${({ $color }) => {
-      const colors = $color.join(", ");
-
-      return css`
-        background: linear-gradient(
-          270deg,
-          rgba(${colors}, 0) 0%,
-          rgba(${colors}, 0.1) 50%,
-          rgba(${colors}, 0) 100%
-        );
-      `;
-    }}
+    ${PrettyBackground} {
+      width: 100%;
+      opacity: 1;
+    }
   }
+`;
+
+const Text = styled.div`
+  position: absolute;
 `;
 
 const KingContainer = styled(Container)`

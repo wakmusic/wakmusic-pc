@@ -16,6 +16,8 @@ const Node = ({ node: Node, className }: NodeProps) => {
 const Container = styled.div`
   width: 100%;
 
+  position: relative;
+
   margin-top: -4px;
 
   display: flex;

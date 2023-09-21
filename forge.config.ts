@@ -6,21 +6,6 @@ import { join } from "path";
 
 dotenv.config();
 
-const availableArch = ["arm64", "x64"];
-const getTargetArch = (): string => {
-  for (const arg of process.argv) {
-    if (availableArch.includes(arg)) {
-      return arg;
-    }
-    const matches = arg.match(RegExp(`--arch=(${availableArch.join("|")})`));
-    if (matches !== null) {
-      return matches[1];
-    }
-  }
-
-  return process.arch;
-};
-
 const config: ForgeConfig = {
   packagerConfig: {
     name: "Wakmusic",
@@ -150,7 +135,7 @@ const config: ForgeConfig = {
           return [
             {
               type: "file",
-              path: `${process.cwd()}/out/Wakmusic-darwin-${getTargetArch()}/Wakmusic.app`,
+              path: `${process.cwd()}/out/Wakmusic-darwin-universal/Wakmusic.app`,
               x: 292,
               y: 290,
             },

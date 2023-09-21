@@ -45,9 +45,9 @@ if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
 }
 
 const server = "https://update.electronjs.org";
-const feed = `${server}/wakmusic/wakmusic-pc/${process.platform}-${
-  process.arch
-}/${app.getVersion()}`;
+const feed = `${server}/wakmusic/wakmusic-pc/${
+  process.platform
+}-universal/${app.getVersion()}`;
 
 autoUpdater.setFeedURL({
   url: feed,

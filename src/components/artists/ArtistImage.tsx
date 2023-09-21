@@ -190,7 +190,9 @@ const Background = styled(motion.div)<{ $color: string[][] }>`
   `}
 `;
 
-const ImageContainer = styled.div``;
+const ImageContainer = styled.div`
+  height: 180px;
+`;
 
 const CharacterImage = styled(motion.img)`
   width: 140px;

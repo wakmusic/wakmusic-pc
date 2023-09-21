@@ -1,7 +1,7 @@
 {
   "name": "wakmusic-pc",
-  "version": "0.1.1",
-  "description": "Waktaverse Music Web / Desktop App",
+  "version": "1.0.1",
+  "description": "WAKTAVERSE MUSIC Desktop App",
   "repository": "https://github.com/wakmusic/wakmusic-pc.git",
   "author": "wakmusic",
   "main": ".vite/build/electron.js",

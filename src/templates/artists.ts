@@ -24,5 +24,6 @@ export type Artist = {
     round: number;
     square: number;
     clear: number;
+    special?: string;
   };
 };

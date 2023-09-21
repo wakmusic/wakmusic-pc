@@ -26,6 +26,7 @@ import NotFound from "@pages/NotFound/NotFound";
 import Artist from "@pages/artists/Artist";
 import Artists from "@pages/artists/Artists";
 import Chart from "@pages/chart/Chart";
+import Dev from "@pages/dev/Dev";
 import Faq from "@pages/faq/Faq";
 import Index from "@pages/index/Index";
 import MyWakmu from "@pages/mywakmu/MyWakmu";
@@ -93,6 +94,8 @@ export class App extends Component<AppProps> {
 
                   <Route path="/player/playlist" element={<PlayerPlaylist />} />
 
+                  <Route path="/dev" element={<Dev />} />
+
                   <Route path="*" element={<NotFound />} />
                 </Route>
 
@@ -108,7 +111,6 @@ export class App extends Component<AppProps> {
 
               <LoginModal />
               <SelectProfileModal />
-              <AlertModal />
               <ConfirmModal />
               <CreateListModal />
               <LoadListModal />
@@ -119,6 +121,7 @@ export class App extends Component<AppProps> {
               <NoticeModal />
               <ExitModal />
               <CreditModal />
+              <AlertModal />
             </ModalPortal>
           </QueryClientProvider>
         </RecoilRoot>

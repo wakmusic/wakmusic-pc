@@ -243,6 +243,11 @@ export const useNextSong = () => {
     switch (control.repeatType) {
       case RepeatType.Off: {
         if (playingInfo.current === playingInfo.playlist.length - 1) {
+          setProgress({
+            progress: 0,
+            force: true,
+          });
+
           return;
         }
 

@@ -1,5 +1,8 @@
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
+
+import { fetchSong } from "@apis/songs";
 
 import { ReactComponent as DotSVG } from "@assets/icons/ic_16_dot.svg";
 
@@ -14,10 +17,30 @@ import PageLayout from "@layouts/PageLayout";
 import colors from "@constants/colors";
 import { blocks } from "@constants/myPage";
 
+import { usePlaySong } from "@hooks/player";
+
 interface MyWakmuProps {}
 
 const MyWakmu = ({}: MyWakmuProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const playSong = usePlaySong();
+
+  const [isDevModeEnabled, setIsDevModeEnabled] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "F12") {
+        setIsDevModeEnabled((prev) => !prev);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   return (
     <PageLayout>
@@ -37,13 +60,27 @@ const MyWakmu = ({}: MyWakmuProps) => {
           />
         ))}
       </Container>
-      <Buanebi>
+      <Buanebi
+        onClick={() => {
+          fetchSong("crVqRMDNpuY").then(playSong);
+        }}
+      >
         <DotSVG />
         <T7Medium>
           왁타버스 뮤직 팀에 속한 모든 팀원들은 부아내비 (부려먹는 게 아니라
           내가 비빈 거다)라는 모토를 가슴에 새기고 일하고 있습니다.
         </T7Medium>
       </Buanebi>
+
+      {isDevModeEnabled && (
+        <button
+          onClick={() => {
+            navigate("/dev");
+          }}
+        >
+          개발자 모드
+        </button>
+      )}
     </PageLayout>
   );
 };

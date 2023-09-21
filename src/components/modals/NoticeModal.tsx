@@ -71,8 +71,8 @@ const NoticeModal = ({}: NoticeModalProps) => {
   if (!isOpen || isLoading || !notices?.length) return null;
 
   return (
-    <ModalOverlay onClick={() => close()}>
-      <Container onClick={(e) => e.stopPropagation()}>
+    <ModalOverlay>
+      <Container>
         <Swiper
           modules={[Mousewheel]}
           width={375}
@@ -90,11 +90,13 @@ const NoticeModal = ({}: NoticeModalProps) => {
           ))}
         </Swiper>
 
-        <ProgressContainer>
-          <T6Medium color={colors.blueGray25}>
-            {index + 1} / {notices.length}
-          </T6Medium>
-        </ProgressContainer>
+        {notices.length > 1 && (
+          <ProgressContainer>
+            <T6Medium color={colors.blueGray25}>
+              {index + 1} / {notices.length}
+            </T6Medium>
+          </ProgressContainer>
+        )}
 
         <Buttons>
           <Button $color={colors.blueGray400} onClick={() => close(true)}>

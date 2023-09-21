@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
+
+  <Identity Name="55390B70E4627.1221F2615847"
+    ProcessorArchitecture="x64"
+    Publisher="CN=CFF2F2B0-3997-40A5-9513-E927980AC814"
+    Version="1.0.1.0" />
+
+  <Properties>
+    <DisplayName>왁타버스 뮤직</DisplayName>
+    <PublisherDisplayName>왁타버스 뮤직</PublisherDisplayName>
+    <Description>내 모니터에 펼쳐지는 왁타버스 음악 축제 - WAKTAVERSE MUSIC</Description>
+    <Logo>assets\SampleAppx.50x50.png</Logo>
+  </Properties>
+
+  <Resources>
+    <Resource Language="ko-kr" />
+  </Resources>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14316.0" MaxVersionTested="10.0.14316.0" />
+  </Dependencies>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust"/>
+  </Capabilities>
+
+  <Applications>
+    <Application
+      Id="wakmusic"
+      Executable="app\Wakmusic.exe"
+      EntryPoint="Windows.FullTrustApplication"
+    >
+      <uap:VisualElements
+        DisplayName="왁타버스 뮤직"
+        BackgroundColor="#FF0000"
+        Square150x150Logo="assets\SampleAppx.150x150.png"
+        Square44x44Logo="assets\SampleAppx.44x44.png"
+        Description="내 모니터에 펼쳐지는 왁타버스 음악 축제 - WAKTAVERSE MUSIC"
+      >
+        <uap:DefaultTile Wide310x150Logo="assets\SampleAppx.310x150.png" Square71x71Logo="assets\SampleAppx.150x150.png" Square310x310Logo="assets\SampleAppx.150x150.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+</Package>

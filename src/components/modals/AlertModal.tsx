@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components/macro";
 
 import { T1Bold, T5Medium } from "@components/Typography";
@@ -17,6 +18,21 @@ interface AlertModalProps {}
 const AlertModal = ({}: AlertModalProps) => {
   const [modalState, setModalState] = useAlertModalState();
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        setIsSpaceDisabled(false);
+        setModalState({ ...modalState, isOpen: false });
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [modalState, setIsSpaceDisabled, setModalState]);
 
   if (!modalState.isOpen) return null;
 
@@ -51,6 +67,8 @@ const AlertModal = ({}: AlertModalProps) => {
 
 const Container = styled(ModalContainer)`
   background: ${colors.blueGray25};
+
+  padding: 0 32px;
 `;
 
 const Title = styled(T1Bold)`

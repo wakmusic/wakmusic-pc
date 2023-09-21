@@ -77,13 +77,8 @@ const New = ({}: NewProps) => {
       hasNextPage,
     });
 
-  const {
-    selected,
-    setSelected,
-    selectCallback,
-    selectManyCallback,
-    selectedIncludes,
-  } = useSelectSongs(songs);
+  const { selected, setSelected, selectCallback, selectedIncludes } =
+    useSelectSongs(songs);
 
   useScrollToTop(tab, viewportRef, setSelected);
   useInfiniteScrollHandler({
@@ -157,7 +152,7 @@ const New = ({}: NewProps) => {
         <MusicController
           songs={songs}
           selectedSongs={selected}
-          dispatchSelectedSongs={selectManyCallback}
+          setSelected={setSelected}
         />
       </PageContainer>
     </PageLayout>

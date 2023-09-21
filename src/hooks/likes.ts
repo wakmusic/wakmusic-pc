@@ -12,13 +12,12 @@ import { usePlayingInfoState } from "./player";
 
 const applyPlaylistLike = (
   info: PlayingInfoStateType,
-  song: Song,
-  like: boolean
+  song: Song
 ): PlayingInfoStateType => {
   const apply = (playlist: Song[]) => {
     return playlist.map((s) => {
       if (s.songId === song.songId) {
-        return { ...s, like: song.like + (like ? 1 : -1) };
+        return song;
       }
 
       return s;
@@ -58,8 +57,11 @@ export const useLikes = (song: Song | undefined) => {
       const res = await addSongLike(song.songId);
 
       if (res) {
-        setLikes([...likes, song]);
-        setInfo(applyPlaylistLike(info, song, true));
+        const updatedSong = { ...song };
+        updatedSong.like += 1;
+
+        setLikes([...likes, updatedSong]);
+        setInfo(applyPlaylistLike(info, updatedSong));
       }
     }
   };
@@ -75,8 +77,11 @@ export const useLikes = (song: Song | undefined) => {
       const res = await removeSongLike(song.songId);
 
       if (res) {
+        const updatedSong = { ...song };
+        updatedSong.like -= 1;
+
         setLikes(likes.filter((like) => like.songId !== song.songId));
-        setInfo(applyPlaylistLike(info, song, false));
+        setInfo(applyPlaylistLike(info, updatedSong));
       }
     }
   };

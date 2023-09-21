@@ -11,6 +11,7 @@ import colors from "@constants/colors";
 import { useCurrentSongState } from "@hooks/player";
 
 import { formatNumber } from "@utils/formatting";
+import { openExternal } from "@utils/modules";
 
 interface ViewProps {
   isBright?: boolean;
@@ -19,6 +20,12 @@ interface ViewProps {
 const View = ({ isBright }: ViewProps) => {
   const song = useCurrentSongState();
 
+  const openYoutube = () => {
+    const openFn = openExternal || ((url: string) => open(url, "_blank"));
+
+    openFn(`https://youtu.be/${song?.songId}`);
+  };
+
   return (
     <Container>
       <ViewsPopover>
@@ -26,7 +33,10 @@ const View = ({ isBright }: ViewProps) => {
           {formatNumber(song?.views)}
         </ViewsText>
       </ViewsPopover>
-      <SimpleIconButton icon={isBright ? ViewsBrightSvg : ViewsSvg} />
+      <SimpleIconButton
+        icon={isBright ? ViewsBrightSvg : ViewsSvg}
+        onClick={openYoutube}
+      />
     </Container>
   );
 };

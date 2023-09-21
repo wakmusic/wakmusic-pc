@@ -20,8 +20,8 @@ export const characterVariants: Variants = {
     width: 140,
     height: 180,
     y: 0,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
     cursor: "auto",
   },
   round: {

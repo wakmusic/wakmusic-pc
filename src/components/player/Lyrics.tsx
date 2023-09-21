@@ -10,6 +10,7 @@ import { useInterval } from "@hooks/interval";
 import {
   useControlState,
   useLyricsState,
+  usePlayingInfoState,
   usePlayingProgressChangeState,
   usePlayingProgressState,
   useVisualModeState,
@@ -31,6 +32,7 @@ const Lyrics = ({ size, isVisualMode }: LyricsProps) => {
   const [current] = usePlayingProgressState();
   const [, setCurrent] = usePlayingProgressChangeState();
   const [control, setControl] = useControlState();
+  const [info] = usePlayingInfoState();
 
   const [visualMode] = useVisualModeState();
 
@@ -144,7 +146,7 @@ const Lyrics = ({ size, isVisualMode }: LyricsProps) => {
     };
   }, [setPosition]);
 
-  if (!current) {
+  if (info.playlist.length === 0) {
     return <NoLyricsContainer />;
   }
 

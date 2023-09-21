@@ -75,27 +75,27 @@ jobs:
           echo "APPLE_PASSWORD=${{ secrets.APPLE_PASSWORD }}" >> $GITHUB_ENV
           echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
 
-      - name: Make application (x64)
+      - name: Make application (Windows)
+        if: matrix.os.image == 'windows-latest'
         run: yarn make --arch x64
 
-      - name: Make application (arm64)
+      - name: Make application (macOS)
         if: matrix.os.image == 'macos-latest'
-        run: yarn make --arch arm64
+        run: yarn make --arch universal
 
-      - name: Upload artifact (x64)
+      - name: Upload artifact (Windows)
+        if: matrix.os.image == 'windows-latest'
         uses: actions/upload-artifact@v3
         with:
-          name: 왁타버스 뮤직 ${{ matrix.os.name }} (x64)
+          name: 왁타버스 뮤직 ${{ matrix.os.name }}
           path: |
-            ./out/make/*-x64.dmg
-            ./out/make/zip/darwin/x64/*.zip
             ./out/make/zip/win32/x64/*.zip
 
-      - name: Upload artifact (arm64)
+      - name: Upload artifact (macOS)
         if: matrix.os.image == 'macos-latest'
         uses: actions/upload-artifact@v3
         with:
-          name: 왁타버스 뮤직 ${{ matrix.os.name }} (arm64)
+          name: 왁타버스 뮤직 ${{ matrix.os.name }}
           path: |
-            ./out/make/*-arm64.dmg
-            ./out/make/zip/darwin/arm64/*.zip
+            ./out/make/*-universal.dmg
+            ./out/make/zip/darwin/universal/*.zip

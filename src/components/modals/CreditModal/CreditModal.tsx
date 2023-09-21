@@ -24,6 +24,10 @@ const CreditModal = ({}: CreditModalProps) => {
 
   if (!modalState.isOpen || !target) return null;
 
+  if (modalState.detail?.type === "special") {
+    return <SpecialModal special={modalState.detail.target} />;
+  }
+
   return (
     <ModalOverlay onClick={close}>
       <Container onClick={(e) => e.stopPropagation()}>
@@ -32,9 +36,6 @@ const CreditModal = ({}: CreditModalProps) => {
         )}
         {modalState.detail?.type === "team" && (
           <TeamModal team={modalState.detail.target} />
-        )}
-        {modalState.detail?.type === "special" && (
-          <SpecialModal special={modalState.detail.target} />
         )}
       </Container>
     </ModalOverlay>

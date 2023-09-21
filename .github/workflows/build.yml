@@ -95,7 +95,7 @@ jobs:
         if: matrix.os.image == 'macos-latest'
         uses: actions/upload-artifact@v3
         with:
-          name: 왁타버스 뮤직 ${{ matrix.os.name }} (macOS)
+          name: 왁타버스 뮤직 ${{ matrix.os.name }}
           path: |
             ./out/make/*-universal.dmg
             ./out/make/zip/darwin/universal/*.zip

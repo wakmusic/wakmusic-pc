@@ -26,3 +26,10 @@ const colors = {
 };
 
 export default colors;
+
+export const teamColors: { [name: string]: [number, number, number] } = {
+  주간왁뮤: [104, 89, 234],
+  PC: [250, 49, 104],
+  모바일: [8, 222, 247],
+  디자인: [255, 143, 12],
+};

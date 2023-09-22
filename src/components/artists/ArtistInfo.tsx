@@ -169,6 +169,8 @@ const Description = styled(T6Medium)<{ $color?: string }>`
   width: 542px;
   height: 132px;
 
+  white-space: pre-wrap;
+
   color: ${({ $color }) => $color || colors.gray900};
 
   margin-top: 4px;

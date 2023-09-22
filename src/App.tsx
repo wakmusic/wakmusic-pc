@@ -7,6 +7,7 @@ import AddListModal from "@components/modals/AddListModal";
 import AlertModal from "@components/modals/AlertModal";
 import ConfirmModal from "@components/modals/ConfirmModal";
 import CreateListModal from "@components/modals/CreateListModal";
+import CreditModal from "@components/modals/CreditModal/CreditModal";
 import ExitModal from "@components/modals/ExitModal";
 import LoadListModal from "@components/modals/LoadListModal";
 import LoginModal from "@components/modals/LoginModal";
@@ -33,6 +34,7 @@ import New from "@pages/new/New";
 import Notice from "@pages/notice/Notice";
 import PlayerPlaylist from "@pages/playerPlaylist/PlayerPlaylist";
 import Search from "@pages/search/Search";
+import Teams from "@pages/teams/Teams";
 import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
@@ -86,6 +88,7 @@ export class App extends Component<AppProps> {
                   <Route path="/mywakmu" element={<MyWakmu />} />
                   <Route path="/support" element={<MyWakmu />} />
                   <Route path="/about" element={<MyWakmu />} />
+                  <Route path="/teams" element={<Teams />} />
 
                   <Route path="/player" element={null} />
 
@@ -117,6 +120,7 @@ export class App extends Component<AppProps> {
               <NoticeDetailModal />
               <NoticeModal />
               <ExitModal />
+              <CreditModal />
               <AlertModal />
             </ModalPortal>
           </QueryClientProvider>

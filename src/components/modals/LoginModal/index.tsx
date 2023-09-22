@@ -6,7 +6,7 @@ import { ReactComponent as GoogleIconSVG } from "@assets/icons/ic_24_google.svg"
 import { ReactComponent as NaverIconSVG } from "@assets/icons/ic_24_naver.svg";
 import { ReactComponent as AppIconSVG } from "@assets/svgs/AppIcon.svg";
 
-import { T4Bold, T5Light } from "@components/Typography";
+import { T4Bold, T5Light, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
@@ -92,9 +92,7 @@ const LoginModal = ({}: LoginModalProps) => {
         </Buttons>
 
         <LoginError onClick={() => setLoginError(!loginError)}>
-          {loginError
-            ? "기본 모드로 돌아가기"
-            : "로그인이 정상적으로 작동하지 않나요?"}
+          {loginError ? "이전 화면으로 돌아가기" : "로그인이 안 되나요?"}
         </LoginError>
       </Modal>
     </ModalOverlay>
@@ -103,7 +101,11 @@ const LoginModal = ({}: LoginModalProps) => {
 
 const Modal = styled(ModalContainer)`
   height: 538px;
-  padding: 72px 50px;
+
+  padding-top: 60px;
+  padding-bottom: 56px;
+  padding-left: 50px;
+  padding-right: 50px;
 
   justify-content: space-between;
 
@@ -130,12 +132,11 @@ const Buttons = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  padding-top: 10px;
 `;
 
-const LoginError = styled(T5Light)`
-  position: absolute;
-  bottom: 20px;
-
+const LoginError = styled(T6Medium)`
   color: ${colors.down};
 
   &:hover {

@@ -1,8 +1,12 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
+
+import { T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 import { SectionData } from "@constants/gnb";
+
+import { isMyPage } from "@utils/utils";
 
 import Section from "./Section";
 import User from "./User";
@@ -11,6 +15,7 @@ interface GNB {}
 
 const GNB = ({}: GNB) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   if (location.pathname === "/player") return null;
 
@@ -30,6 +35,14 @@ const GNB = ({}: GNB) => {
       </Navigator>
 
       <User />
+
+      {isMyPage(location.pathname) && (
+        <TeamContainer>
+          <Team onClick={() => navigate("/teams")}>
+            <T6Medium color={colors.blueGray400}>왁뮤 팀 소개</T6Medium>
+          </Team>
+        </TeamContainer>
+      )}
     </Container>
   );
 };
@@ -54,6 +67,30 @@ const Navigator = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`;
+
+const TeamContainer = styled.div`
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+`;
+
+const Team = styled.div`
+  width: 104px;
+  height: 36px;
+
+  position: fixed;
+  bottom: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: ${colors.blueGray200};
+  border-radius: 99px;
+
+  cursor: pointer;
 `;
 
 export default GNB;

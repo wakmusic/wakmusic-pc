@@ -11,3 +11,6 @@ export const addAlpha = (hex: string, alpha: number) =>
 
 export const isSameArray = (a: unknown[], b: unknown[]) =>
   a.length === b.length && a.every((v, i) => v === b[i]);
+
+export const isMyPage = (path: string) =>
+  ["/mywakmu", "/about", "/support", "/teams"].includes(path);

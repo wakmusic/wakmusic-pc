@@ -24,7 +24,7 @@ const Button = ({ platform, children, onClick, inApp }: ButtonProps) => {
     >
       <IconContainer>{children}</IconContainer>
       <T6Medium color={colors.gray900}>
-        {platforms[platform]}로 로그인하기 {inApp ? "(인 앱)" : ""}
+        {platforms[platform]}로 {inApp ? "다시 시도" : "로그인"}하기
       </T6Medium>
     </Container>
   );

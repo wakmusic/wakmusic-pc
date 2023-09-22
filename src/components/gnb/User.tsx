@@ -18,6 +18,7 @@ import { useUserState } from "@hooks/user";
 import { isNull } from "@utils/isTypes";
 import { ipcRenderer } from "@utils/modules";
 import { getProfileImg } from "@utils/staticUtill";
+import { isMyPage } from "@utils/utils";
 
 interface UserProps {}
 
@@ -56,7 +57,7 @@ const User = ({}: UserProps) => {
     }
   };
 
-  if (["/mywakmu", "/about", "/support"].includes(location.pathname)) {
+  if (isMyPage(location.pathname)) {
     return (
       <>
         <Container onClick={clickUserButton}>

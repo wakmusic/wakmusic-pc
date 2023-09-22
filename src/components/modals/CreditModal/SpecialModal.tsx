@@ -6,7 +6,8 @@ import { T3Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useCreditModalState, useTeam } from "@hooks/creditModal";
+import { useTeam } from "@hooks/credit";
+import { useCreditModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 import { useToast } from "@hooks/toast";
 

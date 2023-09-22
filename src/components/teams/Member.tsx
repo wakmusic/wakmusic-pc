@@ -4,7 +4,7 @@ import { T4Bold, T6Bold, T6Medium } from "@components/Typography";
 
 import colors, { teamColors } from "@constants/colors";
 
-import { useCreditModal } from "@hooks/creditModal";
+import { useCreditModal } from "@hooks/modal";
 
 import { Member as MemberType } from "@templates/team";
 

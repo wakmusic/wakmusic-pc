@@ -4,7 +4,7 @@ import { T6Medium } from "@components/Typography";
 
 import colors, { teamColors } from "@constants/colors";
 
-import { useCreditModal } from "@hooks/creditModal";
+import { useCreditModal } from "@hooks/modal";
 
 interface TeamProps {
   name: string;

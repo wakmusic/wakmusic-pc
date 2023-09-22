@@ -3,6 +3,7 @@ import {
   alertModalState,
   confirmModalState,
   createListModalState,
+  creditModalState,
   exitModalState,
   loadListModalState,
   loginModalState,
@@ -17,6 +18,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 import { Notice } from "@templates/notice";
 import { Song } from "@templates/song";
+import { CreditModalDetail } from "@templates/team";
 import { UserProfile } from "@templates/user";
 
 import { useIsSpaceDisabled } from "./player";
@@ -262,4 +264,23 @@ export const useSelectProfileModal = () => {
 
 export const useSelectProfileModalState = () => {
   return useRecoilState(profileModalState);
+};
+
+export const useCreditModal = () => {
+  const setState = useSetRecoilState(creditModalState);
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
+
+  const openCreditModal = (detail: CreditModalDetail) => {
+    setIsSpaceDisabled(true);
+    setState({
+      isOpen: true,
+      detail,
+    });
+  };
+
+  return openCreditModal;
+};
+
+export const useCreditModalState = () => {
+  return useRecoilState(creditModalState);
 };

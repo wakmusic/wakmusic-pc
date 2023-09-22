@@ -2,6 +2,7 @@ import { atom } from "recoil";
 
 import { Notice } from "@templates/notice";
 import { Song } from "@templates/song";
+import { CreditModalDetail } from "@templates/team";
 import { UserProfile } from "@templates/user";
 
 interface AddListModalState {
@@ -182,6 +183,18 @@ interface CreateListModalState {
 
 export const createListModalState = atom<CreateListModalState>({
   key: "createListModalState",
+  default: {
+    isOpen: false,
+  },
+});
+
+interface CreditModalState {
+  isOpen: boolean;
+  detail?: CreditModalDetail;
+}
+
+export const creditModalState = atom<CreditModalState>({
+  key: "creditModalState",
   default: {
     isOpen: false,
   },

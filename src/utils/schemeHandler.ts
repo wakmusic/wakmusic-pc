@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { queryClient } from "src/main";
 
-import instance from "@apis/axios";
 import { fetchSong } from "@apis/songs";
 import { fetchLikes, fetchUser } from "@apis/user";
 
@@ -81,11 +80,6 @@ const SchemeHandler = (): null => {
         }
 
         case "login": {
-          instance.interceptors.request.use((config) => {
-            config.headers.Authorization = `Bearer ${search.get("token")}`;
-            return config;
-          });
-
           localStorage.setItem("token", search.get("token") ?? "");
 
           const user = await fetchUser();

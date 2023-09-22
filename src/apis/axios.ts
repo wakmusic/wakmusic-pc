@@ -12,6 +12,11 @@ const instance = axios.create({
   },
 });
 
+instance.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+  return config;
+});
+
 instance.interceptors.response.use(
   (response) => response,
   (error: AxiosError<AxiosError>) => {

@@ -38,7 +38,16 @@ const GNB = ({}: GNB) => {
 
       {isMyPage(location.pathname) && (
         <TeamContainer>
-          <Team onClick={() => navigate("/teams")}>
+          <Team
+            onClick={() => {
+              if (location.pathname === "/teams") {
+                navigate("mywakmu");
+                return;
+              }
+
+              navigate("/teams");
+            }}
+          >
             <T6Medium color={colors.blueGray400}>왁뮤 팀 소개</T6Medium>
           </Team>
         </TeamContainer>

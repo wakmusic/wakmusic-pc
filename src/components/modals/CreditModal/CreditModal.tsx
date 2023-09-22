@@ -1,3 +1,4 @@
+import { useCallback, useEffect } from "react";
 import styled from "styled-components/macro";
 
 import colors from "@constants/colors";
@@ -17,10 +18,24 @@ const CreditModal = ({}: CreditModalProps) => {
   const target = modalState.detail;
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
-  const close = () => {
+  const close = useCallback(() => {
     setIsSpaceDisabled(false);
     setModalState({ isOpen: false });
-  };
+  }, [setIsSpaceDisabled, setModalState]);
+
+  useEffect(() => {
+    function handler(e: KeyboardEvent) {
+      if (e.code === "Escape") {
+        close();
+      }
+    }
+
+    window.addEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
+  }, [close]);
 
   if (!modalState.isOpen || !target) return null;
 

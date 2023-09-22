@@ -5,8 +5,8 @@ import { T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useSetUsernameModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
-import { useSetUsernameModalState } from "@hooks/setUsernameModal";
 
 import Input from "../globals/Input";
 import TwoButton from "../globals/TwoButton";

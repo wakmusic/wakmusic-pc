@@ -17,8 +17,7 @@ import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 
-import { useCreateListModal } from "@hooks/createListModal";
-import { useLoadListModal } from "@hooks/loadListModal";
+import { useCreateListModal, useLoadListModal } from "@hooks/modal";
 import { useDragAndDropState, useMylistState } from "@hooks/mylist";
 import { usePrevious } from "@hooks/previous";
 import { useToast } from "@hooks/toast";

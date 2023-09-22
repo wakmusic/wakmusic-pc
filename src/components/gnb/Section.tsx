@@ -8,7 +8,7 @@ import Lottie from "@components/globals/Lottie";
 import colors from "@constants/colors";
 import { SectionData } from "@constants/gnb";
 
-import { useLoginModalOpener } from "@hooks/loginModal";
+import { useLoginModalOpener } from "@hooks/modal";
 import { useUserState } from "@hooks/user";
 
 import { isNull } from "@utils/isTypes";

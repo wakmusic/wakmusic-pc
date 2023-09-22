@@ -2,7 +2,7 @@ import styled from "styled-components/macro";
 
 import colors from "@constants/colors";
 
-import { useCreditModalState } from "@hooks/creditModal";
+import { useCreditModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import { ModalContainer, ModalOverlay } from "../globals/modalStyle";

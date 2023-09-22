@@ -7,7 +7,7 @@ import { T1Bold, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useExitModalState } from "@hooks/exitModal";
+import { useExitModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import HelpText from "./globals/HelpText";

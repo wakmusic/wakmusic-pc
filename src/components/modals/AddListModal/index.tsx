@@ -15,7 +15,7 @@ import VirtualItem from "@layouts/VirtualItem";
 
 import colors from "@constants/colors";
 
-import { useAddListModalState } from "@hooks/addListModal";
+import { useAddListModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 import useVirtualizer from "@hooks/virtualizer";
 

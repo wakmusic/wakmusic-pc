@@ -7,7 +7,7 @@ import Header from "@components/user/Header";
 import PageContainer from "@layouts/PageContainer";
 import PageLayout from "@layouts/PageLayout";
 
-import { useLoginModalOpener } from "@hooks/loginModal";
+import { useLoginModalOpener } from "@hooks/modal";
 import { useUserState } from "@hooks/user";
 
 import { isNull } from "@utils/isTypes";

@@ -4,7 +4,8 @@ import { T5Medium, T6Medium } from "@components/Typography";
 
 import colors, { teamColors } from "@constants/colors";
 
-import { useCreditModal, useMembers } from "@hooks/creditModal";
+import { useMembers } from "@hooks/credit";
+import { useCreditModal } from "@hooks/modal";
 
 import Header from "./Header";
 

@@ -15,7 +15,7 @@ import PageLayout from "@layouts/PageLayout";
 
 import colors from "@constants/colors";
 
-import { useTeam } from "@hooks/creditModal";
+import { useTeam } from "@hooks/credit";
 
 interface TeamsProps {}
 

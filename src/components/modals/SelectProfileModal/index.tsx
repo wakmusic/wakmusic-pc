@@ -8,8 +8,8 @@ import { T4Bold } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useSelectProfileModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
-import { useSelectProfileModalState } from "@hooks/profileModal";
 
 import { UserProfile } from "@templates/user";
 

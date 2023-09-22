@@ -6,9 +6,8 @@ import { fetchLikes, fetchUser } from "@apis/user";
 
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
-import { useAlertModal } from "@hooks/alertModal";
 import { useLikesState } from "@hooks/likes";
-import { useLoginModalOpener } from "@hooks/loginModal";
+import { useAlertModal, useLoginModalOpener } from "@hooks/modal";
 import {
   useControlState,
   useNextSong,

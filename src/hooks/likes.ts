@@ -7,7 +7,7 @@ import { addSongLike, removeSongLike } from "@apis/like";
 import { PlayingInfoStateType } from "@templates/player";
 import { Song } from "@templates/song";
 
-import { useLoginModalOpener } from "./loginModal";
+import { useLoginModalOpener } from "./modal";
 import { usePlayingInfoState } from "./player";
 
 const applyPlaylistLike = (

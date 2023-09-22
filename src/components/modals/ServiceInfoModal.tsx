@@ -11,7 +11,7 @@ import colors from "@constants/colors";
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 import { buttonList } from "@constants/myPage";
 
-import { useAlertModal } from "@hooks/alertModal";
+import { useAlertModal } from "@hooks/modal";
 
 import { ipcRenderer, openExternal } from "@utils/modules";
 

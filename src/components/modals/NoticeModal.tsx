@@ -12,8 +12,7 @@ import { T4Medium, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useNoticeDetailModal } from "@hooks/noticeDetailModal";
-import { useNoticeModalState } from "@hooks/noticeModal";
+import { useNoticeDetailModal, useNoticeModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import { Notice } from "@templates/notice";

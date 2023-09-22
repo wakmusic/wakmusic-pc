@@ -1,4 +1,8 @@
 import {
+  enable as enableRemote,
+  initialize as initializeRemote,
+} from "@electron/remote/main";
+import {
   BrowserWindow,
   app,
   autoUpdater,
@@ -16,7 +20,10 @@ import { Song } from "@templates/song";
 import { version } from "../package.json";
 import { changePresence, setProgress, showPlaying } from "./electron/discord";
 import { schemeHandler } from "./electron/scheme";
+import { createShortcut } from "./electron/shortcut";
 import { initTray } from "./electron/tray";
+
+initializeRemote();
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 
@@ -107,6 +114,20 @@ app.whenReady().then(() => {
 
   win.once("ready-to-show", () => {
     win.webContents.setZoomFactor(1);
+
+    enableRemote(win.webContents);
+
+    win.webContents
+      .executeJavaScript(`localStorage.getItem("shortcut")`)
+      .then((value) => {
+        if (value !== "true") {
+          createShortcut();
+
+          win.webContents.executeJavaScript(
+            `localStorage.setItem("shortcut", "true")`
+          );
+        }
+      });
 
     win.show();
   });
@@ -287,4 +308,8 @@ ipcMain.on(IPCRenderer.QUERY_VERSION, () => {
   if (!win) return;
 
   win.webContents.send(IPCMain.REPLY_VERSION, version);
+});
+
+ipcMain.on(IPCRenderer.CREATE_SHORTCUT, () => {
+  createShortcut();
 });

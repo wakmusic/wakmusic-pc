@@ -64,6 +64,8 @@ const ProfileBlock = ({}: ProfileBlockProps) => {
     if (res) {
       await removeUser();
 
+      localStorage.removeItem("token");
+
       if (ipcRenderer) {
         ipcRenderer.send(IPCRenderer.USER_LOGOUT);
       }

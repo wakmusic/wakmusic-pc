@@ -39,6 +39,7 @@ const User = ({}: UserProps) => {
 
     if (!res) return;
 
+    localStorage.removeItem("token");
     if (ipcRenderer) ipcRenderer.send(IPCRenderer.USER_LOGOUT);
 
     setUser(null);

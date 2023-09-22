@@ -91,13 +91,12 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
   }, [isMouseDown, setIsControlling]);
 
   return (
-    <Wrapper $isSeparated={isSeparated ?? false}>
-      <Container
-        ref={ref}
-        onMouseDown={handleMouseState}
-        $controlling={isMouseDown}
-        $isSeparated={isSeparated ?? false}
-      >
+    <Wrapper
+      $isSeparated={isSeparated ?? false}
+      ref={ref}
+      onMouseDown={handleMouseState}
+    >
+      <Container $controlling={isMouseDown} $isSeparated={isSeparated ?? false}>
         <Line
           $progress={displayingCurrent}
           $isSeparated={isSeparated ?? false}
@@ -190,8 +189,7 @@ const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
 `;
 
 const Wrapper = styled.div<{ $isSeparated: boolean }>`
-  height: 4px;
-  padding-bottom: 2px;
+  height: 14px;
 
   cursor: pointer;
 

@@ -44,7 +44,7 @@ const Song = ({}: SongProps) => {
 const Container = styled.div`
   height: 136px;
 
-  padding-top: 18px;
+  padding-top: 8px;
 
   display: flex;
   flex-direction: column;

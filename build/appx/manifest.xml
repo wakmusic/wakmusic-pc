@@ -36,7 +36,7 @@
     >
       <uap:VisualElements
         DisplayName="왁타버스 뮤직"
-        BackgroundColor="#FF0000"
+        BackgroundColor="#FFFFFF"
         Square150x150Logo="assets\SampleAppx.150x150.png"
         Square44x44Logo="assets\SampleAppx.44x44.png"
         Description="내 모니터에 펼쳐지는 왁타버스 음악 축제 - WAKTAVERSE MUSIC"

@@ -1,12 +1,9 @@
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as SoundOffActivateSvg } from "@assets/icons/ic_20_sound_off_activate.svg";
-import { ReactComponent as SoundOffDefaultSvg } from "@assets/icons/ic_20_sound_off_default.svg";
 import { ReactComponent as SoundOn50ActivateSvg } from "@assets/icons/ic_20_sound_on_50_activate.svg";
-import { ReactComponent as SoundOn50DefaultSvg } from "@assets/icons/ic_20_sound_on_50_default.svg";
 import { ReactComponent as SoundOn100ActivateSvg } from "@assets/icons/ic_20_sound_on_100_activate.svg";
-import { ReactComponent as SoundOn100DefaultSvg } from "@assets/icons/ic_20_sound_on_100_default.svg";
 import { ReactComponent as VolumeSvg } from "@assets/svgs/volume.svg";
 
 import { T8Medium } from "@components/Typography";
@@ -24,7 +21,6 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
   const [isChanging, setIsChanging] = useState(false);
   const [prvVolume, setPrvVolume] = useState(50);
 
-  const [isHover, setIsHover] = useState(false);
   const [isActivate, setIsActivate] = useState(false);
 
   const [indicatorPosition, setIndicatorPosition] = useState(0);
@@ -43,7 +39,9 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
   }
 
   function onContainerMouseUp(e: MouseEvent) {
-    e.stopPropagation();
+    if (isActivate) {
+      e.stopPropagation();
+    }
   }
 
   function handleGlobalMouseUp() {
@@ -77,17 +75,15 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
   }
 
   function getVolumeIcon() {
-    const activate = isHover || isActivate;
-
     if (isMute || volume === 0) {
-      return activate ? SoundOffActivateSvg : SoundOffDefaultSvg;
+      return SoundOffActivateSvg;
     }
 
     if (volume < 50) {
-      return activate ? SoundOn50ActivateSvg : SoundOn50DefaultSvg;
+      return SoundOn50ActivateSvg;
     }
 
-    return activate ? SoundOn100ActivateSvg : SoundOn100DefaultSvg;
+    return SoundOn100ActivateSvg;
   }
 
   useEffect(() => {
@@ -100,10 +96,7 @@ const Volume = ({ volume, isMute, onChange }: VolumeProps) => {
 
   return (
     <Container onMouseUp={onContainerMouseUp}>
-      <IconWrapper
-        onMouseEnter={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}
-      >
+      <IconWrapper $activate={isActivate}>
         <SimpleIconButton icon={getVolumeIcon()} onClick={onClick} />
       </IconWrapper>
       <Popover $activate={isActivate}>
@@ -134,6 +127,26 @@ const Container = styled.div`
   align-items: center;
 `;
 
+const IconWrapper = styled.div<{ $activate: boolean }>`
+  path {
+    stroke: ${colors.gray500};
+  }
+
+  &:hover {
+    path {
+      stroke: ${colors.blueGray25};
+    }
+  }
+
+  ${({ $activate }) =>
+    $activate &&
+    css`
+      path {
+        stroke: ${colors.blueGray25};
+      }
+    `}
+`;
+
 const Popover = styled.div<{ $activate: boolean }>`
   position: absolute;
   transform: translateY(-100%);
@@ -143,8 +156,6 @@ const Popover = styled.div<{ $activate: boolean }>`
 
   display: ${({ $activate }) => ($activate ? "inherit" : "none")};
 `;
-
-const IconWrapper = styled.div``;
 
 const Input = styled.input<{ value: number }>`
   position: absolute;

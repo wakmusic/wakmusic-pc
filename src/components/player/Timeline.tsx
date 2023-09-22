@@ -91,23 +91,33 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
   }, [isMouseDown, setIsControlling]);
 
   return (
-    <Container
+    <Wrapper
+      $isSeparated={isSeparated ?? false}
       ref={ref}
       onMouseDown={handleMouseState}
-      $controlling={isMouseDown}
-      $isSeparated={isSeparated ?? false}
     >
-      <Line $progress={displayingCurrent} $isSeparated={isSeparated ?? false} />
-      <HandleContainer $progress={displayingCurrent} $isSeparated={isSeparated}>
-        <Handle />
-      </HandleContainer>
-      <TimelinePopover $progress={displayingCurrent} $isSeparated={isSeparated}>
-        <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
-        <LengthText color={colors.blueGray100}>
-          {formatSecond(length)}
-        </LengthText>
-      </TimelinePopover>
-    </Container>
+      <Container $controlling={isMouseDown} $isSeparated={isSeparated ?? false}>
+        <Line
+          $progress={displayingCurrent}
+          $isSeparated={isSeparated ?? false}
+        />
+        <HandleContainer
+          $progress={displayingCurrent}
+          $isSeparated={isSeparated}
+        >
+          <Handle />
+        </HandleContainer>
+        <TimelinePopover
+          $progress={displayingCurrent}
+          $isSeparated={isSeparated}
+        >
+          <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
+          <LengthText color={colors.blueGray100}>
+            {formatSecond(length)}
+          </LengthText>
+        </TimelinePopover>
+      </Container>
+    </Wrapper>
   );
 };
 
@@ -154,11 +164,7 @@ const TimelinePopover = styled.div.attrs<{
 
 const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
   width: 100%;
-
   height: 2px;
-  margin-bottom: 2px;
-
-  cursor: pointer;
 
   ${({ $isSeparated }) =>
     $isSeparated &&
@@ -167,43 +173,10 @@ const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
       background-color: rgba(255, 255, 255, 0.1);
     `}
 
-  &:hover {
-    height: 4px;
-    margin-bottom: -2px;
-
-    ${({ $isSeparated }) =>
-      $isSeparated
-        ? css`
-            margin-top: -1px;
-            margin-bottom: -1px;
-          `
-        : css`
-            margin-bottom: 0;
-          `}
-
-    ${HandleContainer} {
-      display: inherit;
-    }
-
-    ${TimelinePopover} {
-      display: inline-flex;
-    }
-  }
-
-  ${({ $controlling, $isSeparated }) =>
+  ${({ $controlling }) =>
     $controlling &&
     css`
-      height: 4px;
-      margin-bottom: 0;
-
-      ${$isSeparated
-        ? css`
-            margin-top: -1px;
-            margin-bottom: -1px;
-          `
-        : css`
-            margin-bottom: 0;
-          `}
+      padding-bottom: 0;
 
       ${HandleContainer} {
         display: inherit;
@@ -213,6 +186,28 @@ const Container = styled.div<{ $controlling: boolean; $isSeparated: boolean }>`
         display: inline-flex;
       }
     `}
+`;
+
+const Wrapper = styled.div<{ $isSeparated: boolean }>`
+  height: 14px;
+
+  cursor: pointer;
+
+  &:hover {
+    padding-bottom: 0;
+
+    ${Container} {
+      height: 4px;
+    }
+
+    ${HandleContainer} {
+      display: inherit;
+    }
+
+    ${TimelinePopover} {
+      display: inline-flex;
+    }
+  }
 `;
 
 const Line = styled.div.attrs<{ $progress: number }>(({ $progress }) => ({

@@ -76,7 +76,7 @@ const LyricsContainer = styled.div`
 const TimelineContainer = styled.div`
   width: 100%;
 
-  margin: 62px 0 40px 0;
+  margin: 62px 0 30px 0;
   padding-top: 1px;
 `;
 

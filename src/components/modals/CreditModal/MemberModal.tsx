@@ -2,11 +2,9 @@ import styled, { css } from "styled-components/macro";
 
 import { T5Medium, T6Medium } from "@components/Typography";
 
-import colors from "@constants/colors";
+import colors, { teamColors } from "@constants/colors";
 
 import { useCreditModal, useMembers } from "@hooks/creditModal";
-
-import { getTeamColor } from "@utils/utils";
 
 import Header from "./Header";
 
@@ -45,7 +43,7 @@ const MemberModal = ({ member: name }: MemberModalProps) => {
           });
         }}
       />
-      <Title $color={getTeamColor(member.team)}>
+      <Title $color={teamColors[member.team] ?? [255, 255, 255]}>
         <T5Medium color={colors.gray700}>{member.title}</T5Medium>
       </Title>
       <ContributionContainer>

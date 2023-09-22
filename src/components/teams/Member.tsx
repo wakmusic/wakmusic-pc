@@ -2,13 +2,11 @@ import styled, { css } from "styled-components/macro";
 
 import { T4Bold, T6Bold, T6Medium } from "@components/Typography";
 
-import colors from "@constants/colors";
+import colors, { teamColors } from "@constants/colors";
 
 import { useCreditModal } from "@hooks/creditModal";
 
 import { Member as MemberType } from "@templates/team";
-
-import { getTeamColor } from "@utils/utils";
 
 interface MemberProps {
   member: MemberType;
@@ -28,7 +26,7 @@ const Member = ({ member, king }: MemberProps) => {
   if (king) {
     return (
       <KingContainer onClick={onClick}>
-        <PrettyBackground $color={getTeamColor(member.team)} />
+        <PrettyBackground $color={teamColors[member.team] ?? [255, 255, 255]} />
         <Text>
           <T4Bold color={colors.gray700}>{member.name}</T4Bold>
         </Text>
@@ -38,7 +36,7 @@ const Member = ({ member, king }: MemberProps) => {
 
   return (
     <Container onClick={onClick}>
-      <PrettyBackground $color={getTeamColor(member.team)} />
+      <PrettyBackground $color={teamColors[member.team] ?? [255, 255, 255]} />
 
       <Text>
         {member.role === "leader" ? (

@@ -2,11 +2,9 @@ import styled, { css } from "styled-components/macro";
 
 import { T6Medium } from "@components/Typography";
 
-import colors from "@constants/colors";
+import colors, { teamColors } from "@constants/colors";
 
 import { useCreditModal } from "@hooks/creditModal";
-
-import { getTeamColor } from "@utils/utils";
 
 interface TeamProps {
   name: string;
@@ -25,7 +23,7 @@ const Team = ({ name, special }: TeamProps) => {
 
   return (
     <Container onClick={onClick}>
-      <PrettyBackground $color={getTeamColor(name)} />
+      <PrettyBackground $color={teamColors[name] ?? [255, 255, 255]} />
       <Text color={colors.blueGray500}>{name}</Text>
     </Container>
   );

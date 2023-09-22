@@ -16,7 +16,7 @@ import mangnyannyan from "@assets/imgs/mangnyannyan.png";
 import chanichani from "@assets/sounds/chanichani.mp3";
 import gosegu from "@assets/sounds/gosegu.mp3";
 
-import { usePlaySong } from "@hooks/player";
+import { useControlState, usePlaySong } from "@hooks/player";
 
 import { Artist } from "@templates/artists";
 
@@ -42,6 +42,7 @@ const editData = (func: (artist: Artist) => void) => {
 
 const ArtistImage = ({ artist, controls, scrollToTop }: ArtistImageProps) => {
   const [easterEgg, setEasterEgg] = useState(0);
+  const [control] = useControlState();
   const playSong = usePlaySong();
 
   return (
@@ -51,13 +52,16 @@ const ArtistImage = ({ artist, controls, scrollToTop }: ArtistImageProps) => {
       variants={artistImageVariants}
       onClick={() => {
         if (artist.artistId === "gosegu") {
-          new Audio(gosegu).play();
+          const audio = new Audio(gosegu);
+          audio.volume = control.volume / 100;
+          audio.play();
         }
 
         if (artist.artistId === "VIichan") {
           if (easterEgg === 0) {
-            new Audio(chanichani).play();
-            setEasterEgg(1);
+            const audio = new Audio(chanichani);
+            audio.volume = control.volume / 100;
+            audio.play();
           }
 
           if (easterEgg === 1) {

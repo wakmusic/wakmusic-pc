@@ -42,7 +42,7 @@ const Song = ({}: SongProps) => {
 };
 
 const Container = styled.div`
-  height: 136px;
+  height: 126px;
 
   padding-top: 8px;
 

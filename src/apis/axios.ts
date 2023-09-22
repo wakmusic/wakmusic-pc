@@ -8,6 +8,7 @@ const instance = axios.create({
   withCredentials: true,
   headers: {
     "Access-Control-Allow-Credentials": "*",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
   },
 });
 

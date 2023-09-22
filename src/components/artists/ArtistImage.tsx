@@ -62,6 +62,8 @@ const ArtistImage = ({ artist, controls, scrollToTop }: ArtistImageProps) => {
             const audio = new Audio(chanichani);
             audio.volume = control.volume / 100;
             audio.play();
+
+            setEasterEgg(1);
           }
 
           if (easterEgg === 1) {

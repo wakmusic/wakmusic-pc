@@ -26,4 +26,6 @@ export enum IPCRenderer {
 
   QUERY_IS_SEPARATE = "query:isSeparate",
   QUERY_VERSION = "query:version",
+
+  CREATE_SHORTCUT = "create:shortcut",
 }

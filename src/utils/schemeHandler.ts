@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { queryClient } from "src/main";
 
+import instance from "@apis/axios";
 import { fetchSong } from "@apis/songs";
 import { fetchLikes, fetchUser } from "@apis/user";
 
@@ -51,8 +52,9 @@ const SchemeHandler = (): null => {
 
   const handler = useCallback(
     async (url: string) => {
-      const { protocol, pathname } = new URL(url);
+      const { protocol, pathname, search: searchRaw } = new URL(url);
       const paths = pathname.split("/").filter((x) => x);
+      const search = new URLSearchParams(searchRaw);
 
       if (protocol !== "wakmusic:") return;
 
@@ -79,6 +81,13 @@ const SchemeHandler = (): null => {
         }
 
         case "login": {
+          instance.interceptors.request.use((config) => {
+            config.headers.Authorization = `Bearer ${search.get("token")}`;
+            return config;
+          });
+
+          localStorage.setItem("token", search.get("token") ?? "");
+
           const user = await fetchUser();
 
           if (isNull(user)) {

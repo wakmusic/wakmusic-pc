@@ -83,3 +83,16 @@ export const fetchNewSongs = async (
 
   return data.map((item: RawSong) => processSong("total", item));
 };
+
+export const fetchAllSongs = async (): Promise<Song[]> => {
+  const { data } = await instance.get(`${SONGS_BASE}`);
+
+  return data.reverse().map((item: RawSong) =>
+    processSong("total", {
+      ...item,
+      remix: "",
+      reaction: "",
+      like: 0,
+    })
+  );
+};

@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { useSearchParams } from "react-router-dom";
+import { queryClient } from "src/main";
 
 import { fetchChartsUpdateTypes } from "@apis/charts";
-import { NewSongsType, fetchNewSongs } from "@apis/songs";
+import { NewSongsType, fetchAllSongs, fetchNewSongs } from "@apis/songs";
 
 import FunctionSection from "@components/globals/FunctionSection";
 import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
@@ -98,7 +99,12 @@ const New = ({}: NewProps) => {
         <FunctionSection
           tabs={newTabs}
           play={(shuffle) => {
-            playSongs(songs, shuffle);
+            queryClient
+              .fetchQuery({
+                queryKey: "allSongs",
+                queryFn: fetchAllSongs,
+              })
+              .then((songs) => playSongs(songs, shuffle));
           }}
         />
 

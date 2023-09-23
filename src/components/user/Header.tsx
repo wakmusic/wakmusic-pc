@@ -2,9 +2,9 @@ import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components/macro";
 
-import Tab from "@components/globals/Tab";
-import TabBar from "@components/globals/TabBar";
 import TextButton from "@components/globals/TextButton";
+import Tab from "@components/globals/tab/Tab";
+import TabBar from "@components/globals/tab/TabBar";
 
 import { userTabs } from "@constants/tabs";
 

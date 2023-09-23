@@ -6,8 +6,8 @@ import styled from "styled-components/macro";
 import { fetchAllNotice, fetchNoticeCategories } from "@apis/notice";
 
 import Skeleton from "@components/globals/Skeleton";
-import Tab from "@components/globals/Tab";
-import TabBar from "@components/globals/TabBar";
+import Tab from "@components/globals/tab/Tab";
+import TabBar from "@components/globals/tab/TabBar";
 import NoticeGuideBar from "@components/notice/NoticeGuideBar";
 import NoticeItem from "@components/notice/NoticeItem";
 

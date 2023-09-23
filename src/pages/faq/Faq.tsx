@@ -7,8 +7,8 @@ import { fetchAllFAQ, fetchFAQCategories } from "@apis/faq";
 
 import Section from "@components/faq/Section";
 import Skeleton from "@components/globals/Skeleton";
-import Tab from "@components/globals/Tab";
-import TabBar from "@components/globals/TabBar";
+import Tab from "@components/globals/tab/Tab";
+import TabBar from "@components/globals/tab/TabBar";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";

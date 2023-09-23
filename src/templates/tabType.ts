@@ -2,9 +2,9 @@ export interface Query {
   [key: string]: string;
 }
 
-interface tabType {
+interface TabType {
   text: string;
   to: string | Query | null;
 }
 
-export default tabType;
+export default TabType;

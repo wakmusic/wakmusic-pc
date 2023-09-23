@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
+import TabContent from "@components/globals/tab/TabContent";
 import Header from "@components/user/Header";
 
 import PageContainer from "@layouts/PageContainer";
@@ -40,10 +41,12 @@ const User = ({}: UserProps) => {
     <PageLayout>
       <Container>
         <Header />
-        <Routes>
-          <Route path="/playlists" element={<Mylist />} />
-          <Route path="/likes" element={<Likes />} />
-        </Routes>
+        <TabContent>
+          <Routes>
+            <Route path="/playlists" element={<Mylist />} />
+            <Route path="/likes" element={<Likes />} />
+          </Routes>
+        </TabContent>
       </Container>
     </PageLayout>
   );

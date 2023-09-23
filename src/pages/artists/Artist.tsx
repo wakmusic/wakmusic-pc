@@ -15,9 +15,9 @@ import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import IconButton from "@components/globals/IconButton";
 import SongItem from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
-import Tab from "@components/globals/Tab";
-import TabBar from "@components/globals/TabBar";
 import MusicController from "@components/globals/musicControllers/MusicController";
+import Tab from "@components/globals/tab/Tab";
+import TabBar from "@components/globals/tab/TabBar";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";

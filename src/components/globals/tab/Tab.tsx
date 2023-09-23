@@ -6,6 +6,8 @@ import { Pretendard } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useTabState } from "@hooks/tab";
+
 import { Query } from "@templates/tabType";
 
 import { isString } from "@utils/isTypes";
@@ -20,6 +22,8 @@ const Tab = ({ to, children, onClick }: TabProps) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
+
+  const [tabState] = useTabState();
 
   const nav = isString(to)
     ? () => {
@@ -48,6 +52,7 @@ const Tab = ({ to, children, onClick }: TabProps) => {
   return (
     <Container
       onClick={() => {
+        tabState.beforeChange && tabState.beforeChange();
         nav();
         onClick && onClick();
       }}

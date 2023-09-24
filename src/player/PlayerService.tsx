@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { queryClient } from "src/main";
 import styled from "styled-components/macro";
 
 import { requestPlaySong } from "@apis/play";
@@ -88,9 +89,14 @@ const PlayerService = ({}: PlayerServiceProps) => {
       }));
     });
 
-    getLyrics(currentSongState).then((lyrics) => {
-      setLyrics(lyrics);
-    });
+    queryClient
+      .fetchQuery({
+        queryKey: ["lyric", currentSongState.songId],
+        queryFn: async () => await getLyrics(currentSongState),
+      })
+      .then((lyrics) => {
+        setLyrics(lyrics);
+      });
   }, [
     currentSongState,
     previousSong,

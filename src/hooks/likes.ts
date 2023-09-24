@@ -87,6 +87,8 @@ export const useLikes = (song: Song | undefined) => {
   };
 
   const toggleLikes = () => {
+    if (!song) return;
+
     if (liked) {
       removeLikes();
     } else {

@@ -21,6 +21,8 @@ const View = ({ isBright }: ViewProps) => {
   const song = useCurrentSongState();
 
   const openYoutube = () => {
+    if (!song) return;
+
     const openFn = openExternal || ((url: string) => open(url, "_blank"));
 
     openFn(`https://youtu.be/${song?.songId}`);

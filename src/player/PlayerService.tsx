@@ -127,7 +127,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
   useEffect(() => {
     if (currentSongState) return;
 
-    setLength(0.1);
+    setLength(118);
     setCurrentProgress(0);
     setControl((prev) => ({
       ...prev,
@@ -145,7 +145,10 @@ const PlayerService = ({}: PlayerServiceProps) => {
     (length: number) => {
       if (!currentSong.current) return;
 
-      setLength(currentSong.current.end ?? length - currentSong.current.start);
+      setLength(
+        (currentSong.current.end === 0 ? length : currentSong.current.end) -
+          currentSong.current.start
+      );
       setCurrentProgress(currentSong.current.start);
       setControl((prev) => ({
         ...prev,

@@ -47,7 +47,7 @@ const Artists = ({}: ArtistsProps) => {
             {(artists ?? Array(20).fill(null))
               .filter((artist) => {
                 if (searchParams.get("type") === null) return true;
-                else return artist.group.en === searchParams.get("type");
+                else return artist?.group?.en === searchParams.get("type");
               })
               .map((artist, index) => (
                 <Artist key={index} artist={artist} isLoading={isLoading} />

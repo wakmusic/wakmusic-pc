@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from "react";
-import { queryClient } from "src/main";
 
 import { fetchSong } from "@apis/songs";
 import { fetchLikes, fetchUser } from "@apis/user";
@@ -11,9 +10,10 @@ import { useAlertModal, useLoginModalOpener } from "@hooks/modal";
 import {
   useControlState,
   useNextSong,
-  usePlayingInfoState,
+  usePlaySong,
   usePrevSong,
 } from "@hooks/player";
+import { useToast } from "@hooks/toast";
 import { useUserState } from "@hooks/user";
 
 import { isNull } from "./isTypes";
@@ -23,11 +23,12 @@ const SchemeHandler = (): null => {
   const [, setUser] = useUserState();
   const [, setLikes] = useLikesState();
   const [, setControl] = useControlState();
-  const [, setPlayingInfo] = usePlayingInfoState();
 
+  const toast = useToast();
   const alertModal = useAlertModal();
   const openLoginModal = useLoginModalOpener();
 
+  const playSong = usePlaySong();
   const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
@@ -63,18 +64,11 @@ const SchemeHandler = (): null => {
 
           if (!songId) return;
 
-          const song = await queryClient.fetchQuery(
-            ["song", { songId }],
-            async () => await fetchSong(songId)
-          );
-
-          if (!song) return;
-
-          setPlayingInfo((prev) => ({
-            ...prev,
-            playlist: [...prev.playlist, song],
-            current: prev.playlist.length,
-          }));
+          fetchSong(songId)
+            .then(playSong)
+            .catch(() => {
+              toast("곡을 불러오는데 실패했습니다.");
+            });
 
           break;
         }
@@ -150,11 +144,12 @@ const SchemeHandler = (): null => {
       alertModal,
       nextSong,
       openLoginModal,
+      playSong,
       prevSong,
       setControl,
       setLikes,
-      setPlayingInfo,
       setUser,
+      toast,
     ]
   );
 

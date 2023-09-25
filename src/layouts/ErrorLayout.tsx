@@ -16,13 +16,24 @@ const ErrorLayout = ({}: ErrorLayoutProps) => {
 
       <T5Medium>알 수 없는 문제가 발생하였습니다.</T5Medium>
 
-      <Button
-        onClick={() => {
-          window.location.reload();
-        }}
-      >
-        <T6Medium>새로고침</T6Medium>
-      </Button>
+      <Buttons>
+        <Button
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          <T6Medium>새로고침</T6Medium>
+        </Button>
+
+        <Button
+          onClick={() => {
+            localStorage.clear();
+            window.location.href = import.meta.env.VITE_PUBLISH_URL;
+          }}
+        >
+          <T6Medium>앱 초기화</T6Medium>
+        </Button>
+      </Buttons>
 
       <SadWakdu src={sadWakdu} />
     </Container>
@@ -41,9 +52,14 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const Button = styled.div`
+const Buttons = styled.div`
   margin-top: 20px;
 
+  display: flex;
+  gap: 8px;
+`;
+
+const Button = styled.div`
   padding: 10px 20px;
   height: 40px;
 

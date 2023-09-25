@@ -11,6 +11,7 @@ import styled, { css } from "styled-components/macro";
 import { fetchArtistList } from "@apis/artist";
 import { fetchSong } from "@apis/songs";
 
+import kungya from "@assets/imgs/kungya.png";
 import maid from "@assets/imgs/maid.png";
 import mangnyannyan from "@assets/imgs/mangnyannyan.png";
 import chanichani from "@assets/sounds/chanichani.mp3";
@@ -51,6 +52,38 @@ const ArtistImage = ({ artist, controls, scrollToTop }: ArtistImageProps) => {
       initial="square"
       variants={artistImageVariants}
       onClick={() => {
+        if (artist.artistId === "woowakgood") {
+          editData((artist) => {
+            if (artist.artistId === "woowakgood") {
+              return {
+                ...artist,
+                name: "이거",
+                description: "이거 만든새X 누구야",
+                title: {
+                  ...artist.title,
+                  web: "만든새X 누구야",
+                },
+                image: {
+                  ...artist.image,
+                  special: kungya,
+                },
+                color: {
+                  ...artist.color,
+                  card: [
+                    ["996f3b", "100", "0"],
+                    ["eccb9e", "100", "100"],
+                  ],
+                  background: [
+                    ["996f3b", "100", "0.01"],
+                    ["eccb9e", "0", "100"],
+                  ],
+                },
+              };
+            }
+            return artist;
+          });
+        }
+
         if (artist.artistId === "gosegu") {
           const audio = new Audio(gosegu);
           audio.volume = control.volume / 100;

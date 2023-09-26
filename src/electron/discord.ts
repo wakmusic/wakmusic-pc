@@ -2,6 +2,7 @@ import { Client } from "@xhayper/discord-rpc";
 
 import { Song } from "@templates/song";
 
+let isPlaying = false;
 let last: Song | undefined;
 let startTimestamp: number | undefined;
 let is_first_song = true;
@@ -46,7 +47,9 @@ export const setProgress = (progress: number) => {
   }
 };
 
-export const showPlaying = (isPlaying: boolean) => {
+export const showPlaying = (_isPlaying: boolean) => {
+  isPlaying = _isPlaying;
+
   if (isPlaying && last) {
     changePresence(last, true);
   } else {
@@ -61,11 +64,14 @@ export const changePresence = (
 ) => {
   if (!current) return;
   if (!force && current.songId === last?.songId) return;
+
   if (is_first_song) {
     is_first_song = false;
     last = current;
     return;
   }
+
+  if (!isPlaying) return;
 
   startTimestamp = timestamp ?? Date.now();
   last = current;

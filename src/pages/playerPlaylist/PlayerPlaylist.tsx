@@ -33,7 +33,7 @@ const PlayerPlaylist = ({}: PlayerPlaylistProps) => {
   const currentSong = useCurrentSongState();
 
   useEffect(() => {
-    if (!isEdit && !isNull(changePlaylist)) {
+    if (!isEdit && !isNull(changePlaylist) && changePlaylist.length > 0) {
       setPlayingInfo((prev) => ({
         ...prev,
         playlist: changePlaylist,

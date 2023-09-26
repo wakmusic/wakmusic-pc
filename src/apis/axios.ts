@@ -8,7 +8,13 @@ const instance = axios.create({
   withCredentials: true,
   headers: {
     "Access-Control-Allow-Credentials": "*",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
   },
+});
+
+instance.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+  return config;
 });
 
 instance.interceptors.response.use(

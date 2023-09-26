@@ -24,6 +24,8 @@ export function formatSecond(second: number): string {
 }
 
 export function formatNumber(num: number): string {
+  if (!num) return "0";
+
   if (num < 1000) return num.toString();
 
   if (num < 10_000) return `${parseFloat((num / 1000).toFixed(2))}천`;

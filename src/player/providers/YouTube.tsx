@@ -1,5 +1,10 @@
+import {
+  showYoutubePlayerState,
+  youtubePlayerTempState,
+} from "@state/player/atoms";
 import { useEffect, useRef } from "react";
-import styled from "styled-components/macro";
+import { useRecoilValue } from "recoil";
+import styled, { css } from "styled-components/macro";
 
 import soundBoosts from "@constants/soundBoosts";
 
@@ -29,6 +34,9 @@ const YouTube = ({
   toggleIsPlaying,
   setProgress,
 }: PlayerProviderProps) => {
+  const temp = useRecoilValue(youtubePlayerTempState);
+  const show = useRecoilValue(showYoutubePlayerState);
+
   const player = useRef<YT.Player>();
   const playerState = useRef<PlayerState>({
     current: null,
@@ -189,6 +197,11 @@ const YouTube = ({
   // 유튜브 플레이어 생성
   useEffect(() => {
     const _player = new YT.Player("wakmu-youtube", {
+      playerVars: {
+        hl: "ko",
+        origin: window.location.origin,
+        enablejsapi: 1,
+      },
       events: {
         onReady: (e) => {
           player.current = e.target;
@@ -208,7 +221,7 @@ const YouTube = ({
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [temp]);
 
   useEffect(() => {
     if (!player.current) return;
@@ -259,11 +272,27 @@ const YouTube = ({
     player.current.seekTo(progress, true);
   }, [progress]);
 
-  return <Container id="wakmu-youtube" />;
+  return (
+    <Container $show={show}>
+      <YoutubeElement id="wakmu-youtube" />
+    </Container>
+  );
 };
 
-const Container = styled.div`
-  display: none;
+const Container = styled.div<{ $show: boolean }>`
+  visibility: hidden;
+
+  ${({ $show }) =>
+    $show &&
+    css`
+      visibility: visible;
+
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    `}
 `;
+
+const YoutubeElement = styled.div``;
 
 export default YouTube;

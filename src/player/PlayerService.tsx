@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { queryClient } from "src/main";
 import styled from "styled-components/macro";
 
 import { requestPlaySong } from "@apis/play";
@@ -56,6 +57,16 @@ const PlayerService = ({}: PlayerServiceProps) => {
     if (!currentSongState || !control.isPlaying || isControlling) return;
 
     setCurrentProgress((prev) => prev + 0.25);
+
+    if (currentProgress >= length) {
+      setCurrentProgress(0);
+      setControl((prev) => ({
+        ...prev,
+        isPlaying: false,
+      }));
+
+      nextSong();
+    }
   }, 250);
 
   useEffect(() => {
@@ -78,9 +89,14 @@ const PlayerService = ({}: PlayerServiceProps) => {
       }));
     });
 
-    getLyrics(currentSongState).then((lyrics) => {
-      setLyrics(lyrics);
-    });
+    queryClient
+      .fetchQuery({
+        queryKey: ["lyric", currentSongState.songId],
+        queryFn: async () => await getLyrics(currentSongState),
+      })
+      .then((lyrics) => {
+        setLyrics(lyrics);
+      });
   }, [
     currentSongState,
     previousSong,
@@ -117,7 +133,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
   useEffect(() => {
     if (currentSongState) return;
 
-    setLength(0.1);
+    setLength(118);
     setCurrentProgress(0);
     setControl((prev) => ({
       ...prev,
@@ -135,7 +151,10 @@ const PlayerService = ({}: PlayerServiceProps) => {
     (length: number) => {
       if (!currentSong.current) return;
 
-      setLength(length - currentSong.current.start);
+      setLength(
+        (currentSong.current.end === 0 ? length : currentSong.current.end) -
+          currentSong.current.start
+      );
       setCurrentProgress(currentSong.current.start);
       setControl((prev) => ({
         ...prev,

@@ -1,4 +1,8 @@
 import {
+  enable as enableRemote,
+  initialize as initializeRemote,
+} from "@electron/remote/main";
+import {
   BrowserWindow,
   app,
   autoUpdater,
@@ -13,9 +17,13 @@ import { IPCMain, IPCRenderer } from "@constants/ipc";
 
 import { Song } from "@templates/song";
 
+import { version } from "../package.json";
 import { changePresence, setProgress, showPlaying } from "./electron/discord";
 import { schemeHandler } from "./electron/scheme";
+import { createShortcut } from "./electron/shortcut";
 import { initTray } from "./electron/tray";
+
+initializeRemote();
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 
@@ -44,9 +52,9 @@ if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
 }
 
 const server = "https://update.electronjs.org";
-const feed = `${server}/wakmusic/wakmusic-pc/${process.platform}-${
-  process.arch
-}/${app.getVersion()}`;
+const feed = `${server}/wakmusic/wakmusic-pc/${
+  process.platform
+}-universal/${app.getVersion()}`;
 
 autoUpdater.setFeedURL({
   url: feed,
@@ -107,6 +115,20 @@ app.whenReady().then(() => {
   win.once("ready-to-show", () => {
     win.webContents.setZoomFactor(1);
 
+    enableRemote(win.webContents);
+
+    win.webContents
+      .executeJavaScript(`localStorage.getItem("shortcut")`)
+      .then((value) => {
+        if (value !== "true") {
+          createShortcut();
+
+          win.webContents.executeJavaScript(
+            `localStorage.setItem("shortcut", "true")`
+          );
+        }
+      });
+
     win.show();
   });
 
@@ -114,8 +136,8 @@ app.whenReady().then(() => {
     return {
       action: "allow",
       overrideBrowserWindowOptions: {
-        frame: false,
         icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
+        autoHideMenuBar: true,
       },
     };
   });
@@ -279,4 +301,15 @@ ipcMain.on(IPCRenderer.USER_LOGOUT, () => {
   }
 
   session.defaultSession.cookies.remove(import.meta.env.VITE_API_URL, "token");
+});
+
+ipcMain.on(IPCRenderer.QUERY_VERSION, () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  win.webContents.send(IPCMain.REPLY_VERSION, version);
+});
+
+ipcMain.on(IPCRenderer.CREATE_SHORTCUT, () => {
+  createShortcut();
 });

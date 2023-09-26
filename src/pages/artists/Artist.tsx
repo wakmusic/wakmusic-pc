@@ -210,6 +210,8 @@ const Artist = ({}: ArtistProps) => {
                 </VirtualItem>
               );
             })}
+
+            {albums.length > 5 && <Padding />}
           </PageItemContainer>
         </TabContent>
 
@@ -235,6 +237,10 @@ const ButtonLayout = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+`;
+
+const Padding = styled.div`
+  padding: 300px;
 `;
 
 export default Artist;

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as AppleIconSVG } from "@assets/icons/ic_24_apple.svg";
@@ -6,11 +6,11 @@ import { ReactComponent as GoogleIconSVG } from "@assets/icons/ic_24_google.svg"
 import { ReactComponent as NaverIconSVG } from "@assets/icons/ic_24_naver.svg";
 import { ReactComponent as AppIconSVG } from "@assets/svgs/AppIcon.svg";
 
-import { T4Bold, T5Light } from "@components/Typography";
+import { T4Bold, T5Light, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useLoginModalState } from "@hooks/loginModal";
+import { useLoginModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import { LoginPlatform } from "@templates/user";
@@ -26,11 +26,24 @@ const LoginModal = ({}: LoginModalProps) => {
   const [loginModalState, setLoginModalState] = useLoginModalState();
   const [, setIsSpaceDisabled] = useIsSpaceDisabled();
 
-  const handleLogin = (platform: LoginPlatform) => {
-    // TODO: 추후 웹 환경에서도 로그인 가능하도록 패치 필요
-    const openFn = openExternal || ((url: string) => open(url, "_blank"));
+  const [loginError, setLoginError] = useState(false);
 
-    openFn(`${import.meta.env.VITE_API_URL}/auth/pc/login/${platform}`);
+  const handleLogin = (platform: LoginPlatform) => {
+    // Desktop App
+    if (openExternal) {
+      const openFn = loginError
+        ? (url: string) => open(url, "_blank")
+        : openExternal;
+
+      openFn(`${import.meta.env.VITE_API_URL}/auth/pc/login/${platform}`);
+    }
+
+    // Web
+    else {
+      window.location.href = `${
+        import.meta.env.VITE_API_URL
+      }/auth/login/${platform}`;
+    }
 
     setIsSpaceDisabled(false);
     setLoginModalState(false);
@@ -65,18 +78,22 @@ const LoginModal = ({}: LoginModalProps) => {
         </Header>
 
         <Buttons>
-          <Button platform="naver" onClick={handleLogin}>
+          <Button platform="naver" onClick={handleLogin} inApp={loginError}>
             <NaverIconSVG />
           </Button>
 
-          <Button platform="google" onClick={handleLogin}>
+          <Button platform="google" onClick={handleLogin} inApp={loginError}>
             <GoogleIconSVG />
           </Button>
 
-          <Button platform="apple" onClick={handleLogin}>
+          <Button platform="apple" onClick={handleLogin} inApp={loginError}>
             <AppleIconSVG />
           </Button>
         </Buttons>
+
+        <LoginError onClick={() => setLoginError(!loginError)}>
+          {loginError ? "이전 화면으로 돌아가기" : "로그인이 안 되나요?"}
+        </LoginError>
       </Modal>
     </ModalOverlay>
   );
@@ -84,7 +101,11 @@ const LoginModal = ({}: LoginModalProps) => {
 
 const Modal = styled(ModalContainer)`
   height: 538px;
-  padding: 72px 50px;
+
+  padding-top: 60px;
+  padding-bottom: 56px;
+  padding-left: 50px;
+  padding-right: 50px;
 
   justify-content: space-between;
 
@@ -111,6 +132,18 @@ const Buttons = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  padding-top: 10px;
+`;
+
+const LoginError = styled(T6Medium)`
+  color: ${colors.down};
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  cursor: pointer;
 `;
 
 export default LoginModal;

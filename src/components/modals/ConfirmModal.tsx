@@ -5,7 +5,7 @@ import { T1Bold, T5Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useConfirmModalState } from "@hooks/confirmModal";
+import { useConfirmModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import { isNull, isString } from "@utils/isTypes";

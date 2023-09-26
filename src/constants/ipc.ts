@@ -3,6 +3,7 @@ export enum IPCMain {
   WINDOW_UNMAXIMIZED = "window:unmaximized",
 
   REPLY_IS_SEPARATE = "reply:isSeparate",
+  REPLY_VERSION = "reply:version",
 
   SCHEME = "scheme",
 }
@@ -24,4 +25,7 @@ export enum IPCRenderer {
   USER_LOGOUT = "user:logout",
 
   QUERY_IS_SEPARATE = "query:isSeparate",
+  QUERY_VERSION = "query:version",
+
+  CREATE_SHORTCUT = "create:shortcut",
 }

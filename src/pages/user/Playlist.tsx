@@ -19,7 +19,7 @@ import Header from "@components/playlist/Header";
 
 import colors from "@constants/colors";
 
-import { useCreateListModal } from "@hooks/createListModal";
+import { useCreateListModal } from "@hooks/modal";
 import { usePrevious } from "@hooks/previous";
 import { useSelectSongs } from "@hooks/selectSongs";
 

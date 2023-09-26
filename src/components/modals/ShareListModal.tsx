@@ -7,8 +7,8 @@ import { T3Medium, T4Bold, T5Light } from "@components/Typography";
 
 import colors from "@constants/colors";
 
+import { useShareListModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
-import { useShareListModalState } from "@hooks/shareListModal";
 import { useToast } from "@hooks/toast";
 
 import HelpText from "./globals/HelpText";

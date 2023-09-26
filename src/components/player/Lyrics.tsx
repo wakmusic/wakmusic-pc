@@ -203,6 +203,8 @@ const NoLyricsContainer = styled.div`
 
 const NoLyrics = styled(T4Medium)`
   color: ${colors.blueGray25};
+
+  opacity: 0.6;
 `;
 
 const Container = styled.div`

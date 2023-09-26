@@ -52,6 +52,10 @@ export const getArtistImage = (
   artist: Artist,
   type: RoundOrSquare | "clear"
 ) => {
+  if (artist.image.special) {
+    return artist.image.special;
+  }
+
   return `${staticURL}/artist/${type}/${artist.artistId}.png?v=${artist.image[type]}`;
 };
 

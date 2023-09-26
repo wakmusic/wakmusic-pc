@@ -13,7 +13,6 @@ import { version } from "./package.json";
 export default defineConfig({
   root: "./src",
   publicDir: "./../public",
-  base: "./",
   envDir: "./../",
   build: {
     outDir: "./../dist",

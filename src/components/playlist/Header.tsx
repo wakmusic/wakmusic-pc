@@ -13,8 +13,8 @@ import TextButton from "@components/globals/TextButton";
 
 import colors from "@constants/colors";
 
+import { useShareListModal } from "@hooks/modal";
 import { usePlaySongs } from "@hooks/player";
-import { useShareListModal } from "@hooks/shareListModal";
 
 import {
   BasePlaylist,

@@ -17,10 +17,10 @@ import PageItemContainer from "@layouts/PageItemContainer";
 
 import colors from "@constants/colors";
 
-import { useCreateListModal } from "@hooks/createListModal";
-import { useLoadListModal } from "@hooks/loadListModal";
+import { useCreateListModal, useLoadListModal } from "@hooks/modal";
 import { useDragAndDropState, useMylistState } from "@hooks/mylist";
 import { usePrevious } from "@hooks/previous";
+import { useToast } from "@hooks/toast";
 
 import { PlaylistType, myListItemType } from "@templates/playlist";
 
@@ -105,6 +105,7 @@ const Mylist = ({}: MylistProps) => {
 
   const createListModal = useCreateListModal();
   const loadListModal = useLoadListModal();
+  const toast = useToast();
 
   const prevPlaylists = usePrevious(playlists);
 
@@ -260,6 +261,8 @@ const Mylist = ({}: MylistProps) => {
 
     if (success) {
       refetch();
+    } else {
+      toast("리스트를 가져오지 못했습니다.");
     }
   };
 

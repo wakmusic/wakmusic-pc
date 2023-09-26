@@ -35,6 +35,10 @@ const Input = ({
   }, [value]);
 
   const color = useMemo(() => {
+    if (value === "158") {
+      return "#8a2be2";
+    }
+
     if (value.length === 0) {
       return colors.blueGray500;
     }
@@ -44,9 +48,13 @@ const Input = ({
     }
 
     return colors.down;
-  }, [maxLength, value.length]);
+  }, [maxLength, value]);
 
   const helpText = useMemo(() => {
+    if (value === "158") {
+      return "너무 짧은 것 같아요";
+    }
+
     if (value.length > 0 && value.length <= maxLength) {
       return helpTextOk ?? "사용할 수 있는 제목입니다.";
     }
@@ -56,7 +64,7 @@ const Input = ({
     }
 
     return "";
-  }, [helpTextError, helpTextOk, maxLength, value.length]);
+  }, [helpTextError, helpTextOk, maxLength, value]);
 
   return (
     <Container>

@@ -94,6 +94,7 @@ const Container = styled.div`
 
 const Info = styled.div`
   width: 36px;
+  height: 20px;
 
   display: flex;
   align-items: center;

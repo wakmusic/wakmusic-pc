@@ -12,8 +12,7 @@ import { T4Medium, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
 
-import { useNoticeDetailModal } from "@hooks/noticeDetailModal";
-import { useNoticeModalState } from "@hooks/noticeModal";
+import { useNoticeDetailModal, useNoticeModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
 import { Notice } from "@templates/notice";
@@ -90,11 +89,13 @@ const NoticeModal = ({}: NoticeModalProps) => {
           ))}
         </Swiper>
 
-        <ProgressContainer>
-          <T6Medium color={colors.blueGray25}>
-            {index + 1} / {notices.length}
-          </T6Medium>
-        </ProgressContainer>
+        {notices.length > 1 && (
+          <ProgressContainer>
+            <T6Medium color={colors.blueGray25}>
+              {index + 1} / {notices.length}
+            </T6Medium>
+          </ProgressContainer>
+        )}
 
         <Buttons>
           <Button $color={colors.blueGray400} onClick={() => close(true)}>

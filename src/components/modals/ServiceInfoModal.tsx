@@ -1,15 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components/macro";
 
+import poop from "@assets/imgs/poop.png";
 import { ReactComponent as AppIconSVG } from "@assets/svgs/AppIcon.svg";
 
 import { T3Medium, T5Light, T6Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
+import { IPCMain, IPCRenderer } from "@constants/ipc";
 import { buttonList } from "@constants/myPage";
 
-import { openExternal } from "@utils/modules";
+import { useAlertModal } from "@hooks/modal";
+
+import { ipcRenderer, openExternal } from "@utils/modules";
 
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
 
@@ -17,9 +21,29 @@ interface ServiceInfoModalProps {}
 
 const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
   const navigate = useNavigate();
+  const alert = useAlertModal();
 
-  const appVersion = import.meta.env.VITE_VERSION;
+  const [appVersion, setAppVersion] = useState<string>("WEB");
+  const [easterEgg, setEasterEgg] = useState(0);
+
   const commitHash = import.meta.env.VITE_COMMIT_HASH ?? "dev";
+
+  useEffect(() => {
+    if (!ipcRenderer) return;
+
+    ipcRenderer.send(IPCRenderer.QUERY_VERSION);
+
+    ipcRenderer.on(IPCMain.REPLY_VERSION, (_, version) => {
+      console.log("version", version);
+      setAppVersion(version);
+    });
+
+    return () => {
+      if (ipcRenderer) {
+        ipcRenderer.removeAllListeners(IPCMain.REPLY_VERSION);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     function handler(e: KeyboardEvent) {
@@ -38,7 +62,22 @@ const ServiceInfoModal = ({}: ServiceInfoModalProps) => {
   return (
     <ModalOverlay onClick={() => navigate("/mywakmu")}>
       <Container onClick={(event) => event.stopPropagation()}>
-        <AppIcon />
+        <IconContainer
+          onClick={() => {
+            setEasterEgg(easterEgg + 1);
+
+            if (easterEgg === 1) {
+              alert("으 냄시", null);
+            }
+
+            if (easterEgg === 2) {
+              setEasterEgg(0);
+            }
+          }}
+        >
+          {easterEgg === 0 ? <AppIcon /> : <img src={poop} />}
+        </IconContainer>
+
         <Title>왁타버스 뮤직</Title>
         <Version>
           현재 버전 {appVersion} ({commitHash})
@@ -65,6 +104,11 @@ const Container = styled(ModalContainer)`
   border-radius: 24px;
 
   background-color: ${colors.blueGray25};
+`;
+
+const IconContainer = styled.div`
+  width: 100px;
+  height: 100px;
 `;
 
 const AppIcon = styled(AppIconSVG)`

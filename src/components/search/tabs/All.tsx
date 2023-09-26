@@ -45,11 +45,7 @@ const All = ({ query, res, isFetching }: AllProps) => {
     );
 
   const resKeys = useMemo(
-    () =>
-      res &&
-      (Object.keys(res) as Array<"song" | "artist" | "remix">).filter(
-        (key) => res[key].length !== 0
-      ),
+    () => res && (Object.keys(res) as Array<"song" | "artist" | "remix">),
     [res]
   );
 

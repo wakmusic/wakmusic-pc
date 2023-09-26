@@ -15,15 +15,17 @@ import { isString } from "@utils/isTypes";
 interface TabProps {
   to: string | Query | null; // 라우트 또는 쿼리 파라미터
   children: string | ReactNode;
+
+  index?: number;
   onClick?: () => void;
 }
 
-const Tab = ({ to, children, onClick }: TabProps) => {
+const Tab = ({ to, children, index, onClick }: TabProps) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
 
-  const [tabState] = useTabState();
+  const { tabState } = useTabState();
 
   const nav = isString(to)
     ? () => {
@@ -52,7 +54,10 @@ const Tab = ({ to, children, onClick }: TabProps) => {
   return (
     <Container
       onClick={() => {
+        if (tabState.currentTab === index) return;
+
         tabState.beforeChange && tabState.beforeChange();
+
         nav();
         onClick && onClick();
       }}

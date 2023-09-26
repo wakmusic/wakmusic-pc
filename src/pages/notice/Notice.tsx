@@ -8,6 +8,7 @@ import { fetchAllNotice, fetchNoticeCategories } from "@apis/notice";
 import Skeleton from "@components/globals/Skeleton";
 import Tab from "@components/globals/tab/Tab";
 import TabBar from "@components/globals/tab/TabBar";
+import TabContent from "@components/globals/tab/TabContent";
 import NoticeGuideBar from "@components/notice/NoticeGuideBar";
 import NoticeItem from "@components/notice/NoticeItem";
 
@@ -48,15 +49,17 @@ const Notice = ({}: NoticeProps) => {
           </TabBar>
         </TabContainer>
 
-        <NoticeGuideBar />
+        <TabContent>
+          <NoticeGuideBar />
 
-        <PageItemContainer height={171}>
-          {(notice || Array(3).fill(null))
-            .filter((notice) => tab === "전체" || notice.category === tab)
-            .map((notice, index) => (
-              <NoticeItem key={index} notice={notice} />
-            ))}
-        </PageItemContainer>
+          <PageItemContainer height={171}>
+            {(notice || Array(3).fill(null))
+              .filter((notice) => tab === "전체" || notice.category === tab)
+              .map((notice, index) => (
+                <NoticeItem key={index} notice={notice} />
+              ))}
+          </PageItemContainer>
+        </TabContent>
       </PageContainer>
     </PageLayout>
   );

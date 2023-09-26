@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { cloneElement, useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import styled from "styled-components/macro";
 
@@ -18,7 +18,7 @@ const TabBar = ({ children }: TabBarProps) => {
   const [indicate, setIndicater] = useState(0);
   const [searchParams] = useSearchParams();
 
-  const [, setTabState] = useTabState();
+  const { setTabState } = useTabState();
 
   const location = useLocation();
 
@@ -33,17 +33,9 @@ const TabBar = ({ children }: TabBarProps) => {
       ) {
         // 중첩 라우트인 경우
         setIndicater(index);
-        setTabState((prev) => {
-          console.log(
-            `setTabState NR, currentTab: ${index}, prevTab: ${prev.currentTab}, to: ${_props.to}`
-          );
-          return {
-            ...prev,
-            currentTab: index,
-            prevTab: prev.currentTab,
-          };
+        setTabState({
+          tab: index,
         });
-        console.log("nested route");
       } else if (isObject(_props.to)) {
         // Query Paramter인 경우
         if (isNull(_props.to) && searchParams.size !== 0) {
@@ -57,15 +49,8 @@ const TabBar = ({ children }: TabBarProps) => {
         }
 
         setIndicater(index);
-        setTabState((prev) => {
-          console.log(
-            `setTabState QP, currentTab: ${index}, prevTab: ${prev.currentTab}, to: ${_props.to}`
-          );
-          return {
-            ...prev,
-            currentTab: index,
-            prevTab: prev.currentTab,
-          };
+        setTabState({
+          tab: index,
         });
       }
     });
@@ -73,7 +58,9 @@ const TabBar = ({ children }: TabBarProps) => {
 
   return (
     <Container>
-      <TabContainer>{children}</TabContainer>
+      <TabContainer>
+        {children.map((child, index) => cloneElement(child, { index: index }))}
+      </TabContainer>
       <Indicater style={{ marginLeft: `${indicate * 54}px` }} />
     </Container>
   );

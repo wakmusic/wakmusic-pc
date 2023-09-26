@@ -1,4 +1,11 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
+import {
+  Children,
+  ReactElement,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Keyframes } from "styled-components/dist/types";
 import styled, { css, keyframes } from "styled-components/macro";
 
@@ -8,59 +15,65 @@ import { isNull } from "@utils/isTypes";
 
 interface TabContentProps {
   children: ReactElement | ReactElement[];
+  onChange?: () => void;
 }
 
-const TabContent = ({ children }: TabContentProps) => {
-  const [tabState, setTabState] = useTabState();
+const TabContent = ({ children, onChange }: TabContentProps) => {
+  const { tabState, setTabState } = useTabState();
 
   const [animation, setAnimation] = useState<Keyframes | null>(null);
+
   const [prevChildren, setPrevChildren] = useState<Node | null>(null);
 
   const animatedContainerRef = useRef<HTMLDivElement | null>(null);
+  const prevContentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setTabState((prev) => ({
-      ...prev,
+    setTabState({
       beforeChange: () => {
-        const child = animatedContainerRef.current?.firstChild;
+        const animatedContainerDOM = animatedContainerRef.current;
+        const child = animatedContainerDOM?.firstChild;
 
-        if (!child) return;
+        if (!animatedContainerDOM || !child) return;
 
-        setPrevChildren(child);
+        Children.forEach(children, (child) => {
+          if ("ref" in child && child.ref !== null) {
+            // defaultScroll 스크롤 초기화
+
+            const viewportRef = (child.ref as RefObject<HTMLDivElement>)
+              .current;
+
+            viewportRef?.scrollTo({
+              top: 0,
+            });
+          }
+        });
+
+        setPrevChildren(child.cloneNode(true));
       },
-    }));
-  }, [children, setTabState, tabState.currentTab]);
+    });
+  }, [setTabState, children]);
 
   useEffect(() => {
     if (tabState.prevTab === -1 || tabState.prevTab === tabState.currentTab) {
       setAnimation(null);
       return;
     }
-    console.log(
-      `PlayTransition prevTab: ${tabState.prevTab}, currentTab: ${tabState.currentTab}`
-    );
 
     if (tabState.prevTab - tabState.currentTab > 0) {
       setAnimation(FadeOutRight);
-      console.log("FOR");
     } else {
       setAnimation(FadeOutLeft);
-      console.log("FOL");
     }
   }, [tabState.currentTab, tabState.prevTab]);
 
   useEffect(() => {
-    console.log(prevChildren);
-    if (!animatedContainerRef.current) return;
+    const prevContentDOM = prevContentRef.current;
+    if (!prevContentDOM || !prevChildren || prevContentDOM.hasChildNodes())
+      return;
 
-    if (prevChildren) {
-      animatedContainerRef.current.replaceChildren(prevChildren);
-    }
+    prevContentDOM.appendChild(prevChildren);
   }, [prevChildren]);
-
-  useEffect(() => {
-    console.log(`animation: ${animation?.id}`);
-  }, [animation]);
 
   return (
     <Container>
@@ -69,8 +82,10 @@ const TabContent = ({ children }: TabContentProps) => {
         $animation={animation}
         onAnimationEnd={(e) => {
           if (e.animationName === animation?.name) {
-            if (prevChildren && animatedContainerRef.current) {
-              animatedContainerRef.current.removeChild(prevChildren);
+            const prevContentDom = prevContentRef.current;
+
+            if (prevChildren && prevContentDom) {
+              prevContentDom.replaceChildren();
               setPrevChildren(null);
             }
 
@@ -83,12 +98,14 @@ const TabContent = ({ children }: TabContentProps) => {
                 break;
               default:
                 setAnimation(null);
+                onChange && onChange();
                 break;
             }
           }
         }}
       >
-        {isNull(prevChildren) && <Content>{children}</Content>}
+        <Content $display={isNull(prevChildren)}>{children}</Content>
+        <PrevContent ref={prevContentRef} />
       </AnimatedContainer>
     </Container>
   );
@@ -157,6 +174,12 @@ const AnimatedContainer = styled.div<{
   animation-fill-mode: forwards;
 `;
 
-const Content = styled.div``;
+const Content = styled.div<{
+  $display: boolean;
+}>`
+  display: ${({ $display }) => ($display ? "block" : "none")};
+`;
+
+const PrevContent = styled.div``;
 
 export default TabContent;

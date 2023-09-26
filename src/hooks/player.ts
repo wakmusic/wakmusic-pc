@@ -77,7 +77,10 @@ export const useToggleIsPlayingState = () => {
             ...prev,
             playlist: chart,
           }));
-          setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
+
+          setTimeout(() => {
+            setState((prev) => ({ ...prev, isPlaying: true }));
+          }, 500);
         });
     } else {
       setState((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));

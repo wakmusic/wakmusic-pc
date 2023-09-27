@@ -26,6 +26,7 @@ const YouTube = ({
   progress,
   onProgressChange,
   onStart,
+  onLength,
   onEnd,
   onResume,
   onPause,
@@ -134,9 +135,13 @@ const YouTube = ({
       return;
 
     element.click();
+
+    setTimeout(() => playVideo(), 500);
   };
 
   const onStateChange = (e: YT.OnStateChangeEvent) => {
+    onLength(player.current?.getDuration() || 0);
+
     switch (e.data) {
       case YT.PlayerState.UNSTARTED: {
         if (

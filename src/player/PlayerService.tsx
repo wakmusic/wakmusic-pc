@@ -151,21 +151,40 @@ const PlayerService = ({}: PlayerServiceProps) => {
     setCurrentProgress(progress - currentSong.current.start);
   };
 
-  const onStart = useCallback(
+  const onLength = useCallback(
     (length: number) => {
       if (!currentSong.current) return;
+
+      console.log({
+        songStart: currentSong.current.start,
+        songEnd: currentSong.current.end,
+        length,
+        value:
+          (currentSong.current.end === 0 ? length : currentSong.current.end) -
+          currentSong.current.start,
+      });
 
       setLength(
         (currentSong.current.end === 0 ? length : currentSong.current.end) -
           currentSong.current.start
       );
+    },
+    [setLength]
+  );
+
+  const onStart = useCallback(
+    (length: number) => {
+      if (!currentSong.current) return;
+
+      onLength(length);
+
       setCurrentProgress(currentSong.current.start);
       setControl((prev) => ({
         ...prev,
         isPlaying: true,
       }));
     },
-    [setControl, setCurrentProgress, setLength]
+    [onLength, setControl, setCurrentProgress]
   );
 
   const onEnd = () => {
@@ -209,6 +228,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
         progress={playerProgress}
         onProgressChange={onProgressChange}
         onStart={onStart}
+        onLength={onLength}
         onEnd={onEnd}
         onResume={onResume}
         onPause={onPause}

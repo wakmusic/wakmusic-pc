@@ -1,6 +1,19 @@
-import { tabState } from "@state/tab/atoms";
+import { tabState as _tabState } from "@state/tab/atoms";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 
 export const useTabState = () => {
-  return useRecoilState(tabState);
+  const [tabState, setTabState] = useRecoilState(_tabState);
+
+  useEffect(() => {
+    setTabState((prev) => ({
+      currentTab: 0,
+      transitionTime: prev.transitionTime,
+    }));
+  }, [setTabState]);
+
+  return {
+    tabState,
+    setTabState,
+  };
 };

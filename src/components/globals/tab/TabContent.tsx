@@ -12,7 +12,7 @@ interface TabContentProps {
 }
 
 const TabContent = ({ children, onChange }: TabContentProps) => {
-  const [tabState, setTabState] = useTabState();
+  const { tabState, setTabState } = useTabState();
 
   const [animation, setAnimation] = useState<Keyframes | null>(null);
 

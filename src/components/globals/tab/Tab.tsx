@@ -24,7 +24,7 @@ const Tab = ({ to, children, index, onClick }: TabProps) => {
   const navigate = useNavigate();
   const [, setSearchParams] = useSearchParams();
 
-  const [tabState, setTabState] = useTabState();
+  const { tabState, setTabState } = useTabState();
 
   const nav = isString(to)
     ? () => {

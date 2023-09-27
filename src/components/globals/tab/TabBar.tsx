@@ -10,7 +10,7 @@ interface TabBarProps {
 }
 
 const TabBar = ({ children }: TabBarProps) => {
-  const [tabState] = useTabState();
+  const { tabState } = useTabState();
 
   return (
     <Container>

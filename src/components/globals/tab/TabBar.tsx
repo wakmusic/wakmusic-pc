@@ -1,67 +1,23 @@
-import { cloneElement, useEffect, useState } from "react";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { cloneElement } from "react";
 import styled from "styled-components/macro";
 
 import colors from "@constants/colors";
 
 import { useTabState } from "@hooks/tab";
 
-import { isNull, isObject, isString } from "@utils/isTypes";
-
-import { TabProps } from "./Tab";
-
 interface TabBarProps {
   children: JSX.Element[];
 }
 
 const TabBar = ({ children }: TabBarProps) => {
-  const [indicate, setIndicater] = useState(0);
-  const [searchParams] = useSearchParams();
-
-  const { setTabState } = useTabState();
-
-  const location = useLocation();
-
-  useEffect(() => {
-    children.forEach((child, index) => {
-      const _props: TabProps = child.props;
-
-      if (
-        isString(_props.to) &&
-        searchParams.size === 0 &&
-        location.pathname === _props.to
-      ) {
-        // 중첩 라우트인 경우
-        setIndicater(index);
-        setTabState({
-          tab: index,
-        });
-      } else if (isObject(_props.to)) {
-        // Query Paramter인 경우
-        if (isNull(_props.to) && searchParams.size !== 0) {
-          return;
-        }
-
-        for (const [key, value] of Object.entries(_props.to ?? {})) {
-          if (searchParams.get(key) !== value) {
-            return;
-          }
-        }
-
-        setIndicater(index);
-        setTabState({
-          tab: index,
-        });
-      }
-    });
-  }, [children, searchParams, location, setTabState]);
+  const [tabState] = useTabState();
 
   return (
     <Container>
       <TabContainer>
         {children.map((child, index) => cloneElement(child, { index: index }))}
       </TabContainer>
-      <Indicater style={{ marginLeft: `${indicate * 54}px` }} />
+      <Indicater style={{ marginLeft: `${tabState.currentTab * 54}px` }} />
     </Container>
   );
 };

@@ -2,15 +2,17 @@ import { atom } from "recoil";
 
 interface TabState {
   currentTab: number;
-  prevTab: number;
+  navTimeout?: NodeJS.Timeout;
 
-  beforeChange?: () => void;
+  beforeChange?: (currentTab: number, newTab: number) => void;
+
+  transitionTime: number;
 }
 
 export const tabState = atom<TabState>({
   key: "tabState",
   default: {
     currentTab: 0,
-    prevTab: -1,
+    transitionTime: 0.1,
   },
 });

@@ -87,6 +87,10 @@ const PlayerService = ({}: PlayerServiceProps) => {
           song.songId === upToDateSong.songId ? upToDateSong : song
         ),
       }));
+
+      gtag("event", "SongPlay", {
+        id: upToDateSong.songId,
+      });
     });
 
     queryClient

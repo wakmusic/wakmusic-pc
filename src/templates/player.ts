@@ -41,6 +41,7 @@ export type PlayerProviderProps = {
 
   onProgressChange: (progress: number) => void;
   onStart: (length: number) => void;
+  onLength: (length: number) => void;
   onEnd: () => void;
   onResume: () => void;
   onPause: () => void;

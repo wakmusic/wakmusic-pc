@@ -26,6 +26,7 @@ const YouTube = ({
   progress,
   onProgressChange,
   onStart,
+  onLength,
   onEnd,
   onResume,
   onPause,
@@ -47,16 +48,16 @@ const YouTube = ({
   const gainNode = useRef<GainNode>();
 
   const getContentWindow = (): Window | null => {
-    let contentWindow: Window | null = null;
-
     try {
       const iframe = player.current?.getIframe() as HTMLIFrameElement;
-      contentWindow = iframe.contentWindow;
-    } catch {
-      /* empty */
-    }
 
-    return contentWindow;
+      // CORS 체크하는 과정 (안되면 오류나버림)
+      iframe.contentWindow?.document;
+
+      return iframe.contentWindow;
+    } catch {
+      return null;
+    }
   };
 
   const getVideoElement = (): HTMLVideoElement | undefined => {
@@ -108,7 +109,39 @@ const YouTube = ({
     }
   };
 
+  const playVideo = () => {
+    const contentWindow = getContentWindow();
+
+    if (!contentWindow) {
+      console.warn("[Youtube] no views count!!");
+      player.current?.playVideo();
+
+      return;
+    }
+
+    const element = contentWindow.document.querySelector(
+      ".ytp-play-button.ytp-button"
+    ) as HTMLButtonElement;
+
+    const html5Player = contentWindow.document.querySelector(
+      ".html5-video-player"
+    );
+
+    if (
+      !element ||
+      !html5Player ||
+      html5Player?.classList.contains("playing-mode")
+    )
+      return;
+
+    element.click();
+
+    setTimeout(() => playVideo(), 500);
+  };
+
   const onStateChange = (e: YT.OnStateChangeEvent) => {
+    onLength(player.current?.getDuration() || 0);
+
     switch (e.data) {
       case YT.PlayerState.UNSTARTED: {
         if (
@@ -116,7 +149,7 @@ const YouTube = ({
           !playerState.current.isFirst &&
           playerState.current.current
         ) {
-          player.current?.playVideo();
+          playVideo();
         }
 
         playerState.current.isFirst = false;
@@ -235,7 +268,8 @@ const YouTube = ({
 
     if (song) {
       playerState.current.current = song;
-      player.current.loadVideoById(song.songId, song.start);
+      player.current.cueVideoById(song.songId, song.start);
+      playVideo();
     } else {
       playerState.current.current = null;
       player.current.stopVideo();
@@ -260,10 +294,12 @@ const YouTube = ({
         return;
       }
 
-      player.current.playVideo();
+      playVideo();
     } else {
       player.current.pauseVideo();
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPlaying]);
 
   useEffect(() => {

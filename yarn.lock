@@ -3206,6 +3206,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/gtag.js@npm:^0.0.14":
+  version: 0.0.14
+  resolution: "@types/gtag.js@npm:0.0.14"
+  checksum: fb269d2da04f83999502683f3f80a9245b7f0a7f71a76d6404649c3214130505d2c93fa27858b400ea94484cba50a0d1494dbce4fbcf1215f0800af5b04d7fe7
+  languageName: node
+  linkType: hard
+
 "@types/http-cache-semantics@npm:*":
   version: 4.0.1
   resolution: "@types/http-cache-semantics@npm:4.0.1"
@@ -10713,6 +10720,7 @@ __metadata:
     "@electron/remote": ^2.0.11
     "@tanstack/react-virtual": ^3.0.0-alpha.0
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
+    "@types/gtag.js": ^0.0.14
     "@types/lodash.throttle": ^4.1.7
     "@types/node": ^20.3.1
     "@types/react": ^18.2.12

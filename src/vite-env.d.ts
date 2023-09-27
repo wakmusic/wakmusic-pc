@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-svgr/client" />
 /// <reference types="youtube" />
+/// <reference types="@types/gtag.js" />
 
 export interface WAKMU {
   __setPlayingInfo?: SetterOrUpdater<PlayingInfoStateType>;

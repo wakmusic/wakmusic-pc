@@ -155,15 +155,6 @@ const PlayerService = ({}: PlayerServiceProps) => {
     (length: number) => {
       if (!currentSong.current) return;
 
-      console.log({
-        songStart: currentSong.current.start,
-        songEnd: currentSong.current.end,
-        length,
-        value:
-          (currentSong.current.end === 0 ? length : currentSong.current.end) -
-          currentSong.current.start,
-      });
-
       setLength(
         (currentSong.current.end === 0 ? length : currentSong.current.end) -
           currentSong.current.start

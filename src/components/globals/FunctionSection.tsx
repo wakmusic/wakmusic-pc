@@ -4,8 +4,8 @@ import { ReactComponent as PlayAllSVG } from "@assets/icons/ic_24_play_all.svg";
 import { ReactComponent as RandomSVG } from "@assets/icons/ic_24_random_900.svg";
 
 import IconButton from "@components/globals/IconButton";
-import Tab from "@components/globals/Tab";
-import TabBar from "@components/globals/TabBar";
+import Tab from "@components/globals/tab/Tab";
+import TabBar from "@components/globals/tab/TabBar";
 
 import tabType from "@templates/tabType";
 

@@ -12,6 +12,7 @@ import SongItem from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
 import UpdatedText from "@components/globals/UpdatedText";
 import MusicController from "@components/globals/musicControllers/MusicController";
+import TabContent from "@components/globals/tab/TabContent";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -108,52 +109,54 @@ const New = ({}: NewProps) => {
           }}
         />
 
-        <UpdatedText
-          updated={updated}
-          marginTop={12}
-          marginLeft={20}
-          isLoading={updatedIsLoading}
-        />
+        <TabContent>
+          <UpdatedText
+            updated={updated}
+            marginTop={12}
+            marginLeft={20}
+            isLoading={updatedIsLoading}
+          />
 
-        <GuideBar
-          features={[
-            GuideBarFeature.info,
-            GuideBarFeature.last,
-            GuideBarFeature.date,
-            GuideBarFeature.views,
-          ]}
-          lastText="누적 순위"
-        />
+          <GuideBar
+            features={[
+              GuideBarFeature.info,
+              GuideBarFeature.last,
+              GuideBarFeature.date,
+              GuideBarFeature.views,
+            ]}
+            lastText="누적 순위"
+          />
 
-        <PageItemContainer
-          height={209}
-          ref={viewportRef}
-          totalSize={getTotalSize()}
-        >
-          {virtualMap((virtualItem, item) => {
-            const isLoader = virtualItem.index > songs.length - 1;
+          <PageItemContainer
+            height={209}
+            ref={viewportRef}
+            totalSize={getTotalSize()}
+          >
+            {virtualMap((virtualItem, item) => {
+              const isLoader = virtualItem.index > songs.length - 1;
 
-            return (
-              <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
-                {isLoader ? (
-                  <Spinner />
-                ) : (
-                  <SongItem
-                    song={item}
-                    selected={selectedIncludes(item)}
-                    features={[
-                      SongItemFeature.last,
-                      SongItemFeature.date,
-                      SongItemFeature.views,
-                    ]}
-                    onClick={selectCallback}
-                    isLoading={songsIsLoading && !isFetchingNextPage}
-                  />
-                )}
-              </VirtualItem>
-            );
-          })}
-        </PageItemContainer>
+              return (
+                <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
+                  {isLoader ? (
+                    <Spinner />
+                  ) : (
+                    <SongItem
+                      song={item}
+                      selected={selectedIncludes(item)}
+                      features={[
+                        SongItemFeature.last,
+                        SongItemFeature.date,
+                        SongItemFeature.views,
+                      ]}
+                      onClick={selectCallback}
+                      isLoading={songsIsLoading && !isFetchingNextPage}
+                    />
+                  )}
+                </VirtualItem>
+              );
+            })}
+          </PageItemContainer>
+        </TabContent>
 
         <MusicController
           songs={songs}

@@ -5,8 +5,9 @@ import styled from "styled-components/macro";
 
 import { fetchSearchAll } from "@apis/songs";
 
-import Tab from "@components/globals/Tab";
-import TabBar from "@components/globals/TabBar";
+import Tab from "@components/globals/tab/Tab";
+import TabBar from "@components/globals/tab/TabBar";
+import TabContent from "@components/globals/tab/TabContent";
 import Result from "@components/search/Result";
 
 import PageContainer from "@layouts/PageContainer";
@@ -57,7 +58,9 @@ const Search = ({}: SearchProps) => {
           </TabBar>
         </TabBarWrapper>
 
-        <Result tab={tab} query={query} all={data} isFetching={isFetching} />
+        <TabContent>
+          <Result tab={tab} query={query} all={data} isFetching={isFetching} />
+        </TabContent>
       </Container>
     </PageLayout>
   );

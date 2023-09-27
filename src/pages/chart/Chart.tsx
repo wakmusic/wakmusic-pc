@@ -9,6 +9,7 @@ import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import SongItem from "@components/globals/SongItem";
 import UpdatedText from "@components/globals/UpdatedText";
 import MusicController from "@components/globals/musicControllers/MusicController";
+import TabContent from "@components/globals/tab/TabContent";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -77,47 +78,49 @@ const Chart = ({}: ChartProps) => {
           }}
         />
 
-        <UpdatedText
-          updated={chartUpdated}
-          marginTop={12}
-          marginLeft={20}
-          isLoading={chartUpdatedIsLoading}
-        />
+        <TabContent>
+          <UpdatedText
+            updated={chartUpdated}
+            marginTop={12}
+            marginLeft={20}
+            isLoading={chartUpdatedIsLoading}
+          />
 
-        <GuideBar
-          lastText={tab !== "total" ? lastTextMap[tab] : undefined}
-          features={[
-            GuideBarFeature.rank,
-            GuideBarFeature.info,
-            tab !== "total" ? GuideBarFeature.last : undefined,
-            GuideBarFeature.date,
-            GuideBarFeature.views,
-          ]}
-        />
+          <GuideBar
+            lastText={tab !== "total" ? lastTextMap[tab] : undefined}
+            features={[
+              GuideBarFeature.rank,
+              GuideBarFeature.info,
+              tab !== "total" ? GuideBarFeature.last : undefined,
+              GuideBarFeature.date,
+              GuideBarFeature.views,
+            ]}
+          />
 
-        <PageItemContainer
-          height={209}
-          ref={viewportRef}
-          totalSize={getTotalSize()}
-        >
-          {virtualMap((virtualItem, item) => (
-            <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
-              <SongItem
-                rank={virtualItem.index + 1}
-                song={item}
-                selected={selectedIncludes(item)}
-                features={[
-                  tab !== "total" ? SongItemFeature.last : undefined,
-                  SongItemFeature.date,
-                  SongItemFeature.views,
-                ]}
-                onClick={selectCallback}
-                useIncrease={tab !== "total"}
-                isLoading={chartsIsLoading}
-              />
-            </VirtualItem>
-          ))}
-        </PageItemContainer>
+          <PageItemContainer
+            height={209}
+            ref={viewportRef}
+            totalSize={getTotalSize()}
+          >
+            {virtualMap((virtualItem, item) => (
+              <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
+                <SongItem
+                  rank={virtualItem.index + 1}
+                  song={item}
+                  selected={selectedIncludes(item)}
+                  features={[
+                    tab !== "total" ? SongItemFeature.last : undefined,
+                    SongItemFeature.date,
+                    SongItemFeature.views,
+                  ]}
+                  onClick={selectCallback}
+                  useIncrease={tab !== "total"}
+                  isLoading={chartsIsLoading}
+                />
+              </VirtualItem>
+            ))}
+          </PageItemContainer>
+        </TabContent>
 
         <MusicController
           songs={charts ?? []}

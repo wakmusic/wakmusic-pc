@@ -7,8 +7,9 @@ import { fetchAllFAQ, fetchFAQCategories } from "@apis/faq";
 
 import Section from "@components/faq/Section";
 import Skeleton from "@components/globals/Skeleton";
-import Tab from "@components/globals/Tab";
-import TabBar from "@components/globals/TabBar";
+import Tab from "@components/globals/tab/Tab";
+import TabBar from "@components/globals/tab/TabBar";
+import TabContent from "@components/globals/tab/TabContent";
 
 import PageItemContainer from "@layouts/PageItemContainer";
 import PageLayout from "@layouts/PageLayout";
@@ -49,16 +50,18 @@ const Faq = ({}: FaqProps) => {
           </TabBar>
         </TabContainer>
 
-        <ScrollContainer>
-          <PageItemContainer>
-            {(faq || Array(20).fill(null))
-              .filter((article) => tab === "전체" || article.category === tab)
-              .reverse()
-              .map((article, index) => (
-                <Section key={tab + index} article={article} />
-              ))}
-          </PageItemContainer>
-        </ScrollContainer>
+        <TabContent>
+          <ScrollContainer>
+            <PageItemContainer>
+              {(faq || Array(20).fill(null))
+                .filter((article) => tab === "전체" || article.category === tab)
+                .reverse()
+                .map((article, index) => (
+                  <Section key={tab + index} article={article} />
+                ))}
+            </PageItemContainer>
+          </ScrollContainer>
+        </TabContent>
       </Container>
     </PageLayout>
   );

@@ -5,8 +5,9 @@ import styled from "styled-components/macro";
 import { fetchArtistList } from "@apis/artist";
 
 import Artist from "@components/artists/Artist";
-import Tab from "@components/globals/Tab";
-import TabBar from "@components/globals/TabBar";
+import Tab from "@components/globals/tab/Tab";
+import TabBar from "@components/globals/tab/TabBar";
+import TabContent from "@components/globals/tab/TabContent";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -43,16 +44,18 @@ const Artists = ({}: ArtistsProps) => {
         </TabBarWrapper>
 
         <PageItemContainer>
-          <ArtistsContainer>
-            {(artists ?? Array(20).fill(null))
-              .filter((artist) => {
-                if (searchParams.get("type") === null) return true;
-                else return artist?.group?.en === searchParams.get("type");
-              })
-              .map((artist, index) => (
-                <Artist key={index} artist={artist} isLoading={isLoading} />
-              ))}
-          </ArtistsContainer>
+          <TabContent>
+            <ArtistsContainer>
+              {(artists ?? Array(20).fill(null))
+                .filter((artist) => {
+                  if (searchParams.get("type") === null) return true;
+                  else return artist?.group?.en === searchParams.get("type");
+                })
+                .map((artist, index) => (
+                  <Artist key={index} artist={artist} isLoading={isLoading} />
+                ))}
+            </ArtistsContainer>
+          </TabContent>
         </PageItemContainer>
       </PageContainer>
     </PageLayout>

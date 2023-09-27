@@ -15,9 +15,10 @@ import GuideBar, { GuideBarFeature } from "@components/globals/GuideBar";
 import IconButton from "@components/globals/IconButton";
 import SongItem from "@components/globals/SongItem";
 import Spinner from "@components/globals/Spinner";
-import Tab from "@components/globals/Tab";
-import TabBar from "@components/globals/TabBar";
 import MusicController from "@components/globals/musicControllers/MusicController";
+import Tab from "@components/globals/tab/Tab";
+import TabBar from "@components/globals/tab/TabBar";
+import TabContent from "@components/globals/tab/TabContent";
 
 import PageContainer from "@layouts/PageContainer";
 import PageItemContainer from "@layouts/PageItemContainer";
@@ -167,50 +168,52 @@ const Artist = ({}: ArtistProps) => {
           </ButtonLayout>
         </TabBarWrapper>
 
-        <GuideBar
-          features={[
-            GuideBarFeature.info,
-            GuideBarFeature.date,
-            GuideBarFeature.views,
-            GuideBarFeature.like,
-          ]}
-        />
+        <TabContent>
+          <GuideBar
+            features={[
+              GuideBarFeature.info,
+              GuideBarFeature.date,
+              GuideBarFeature.views,
+              GuideBarFeature.like,
+            ]}
+          />
 
-        <PageItemContainer
-          height={273}
-          ref={viewportRef}
-          totalSize={getTotalSize()}
-          onScroll={throttle((e) => {
-            const { scrollTop } = e.target as HTMLDivElement;
-            setScroll(scrollTop);
-          })}
-        >
-          {virtualMap((virtualItem, item) => {
-            const isLoader = virtualItem.index > albums.length - 1;
+          <PageItemContainer
+            height={273}
+            ref={viewportRef}
+            totalSize={getTotalSize()}
+            onScroll={throttle((e) => {
+              const { scrollTop } = e.target as HTMLDivElement;
+              setScroll(scrollTop);
+            })}
+          >
+            {virtualMap((virtualItem, item) => {
+              const isLoader = virtualItem.index > albums.length - 1;
 
-            return (
-              <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
-                {isLoader ? (
-                  <Spinner />
-                ) : (
-                  <SongItem
-                    song={item}
-                    selected={selectedIncludes(item)}
-                    features={[
-                      SongItemFeature.date,
-                      SongItemFeature.views,
-                      SongItemFeature.like,
-                    ]}
-                    onClick={selectCallback}
-                    isLoading={albumsIsLoading && !isFetchingNextPage}
-                  />
-                )}
-              </VirtualItem>
-            );
-          })}
+              return (
+                <VirtualItem virtualItem={virtualItem} key={virtualItem.key}>
+                  {isLoader ? (
+                    <Spinner />
+                  ) : (
+                    <SongItem
+                      song={item}
+                      selected={selectedIncludes(item)}
+                      features={[
+                        SongItemFeature.date,
+                        SongItemFeature.views,
+                        SongItemFeature.like,
+                      ]}
+                      onClick={selectCallback}
+                      isLoading={albumsIsLoading && !isFetchingNextPage}
+                    />
+                  )}
+                </VirtualItem>
+              );
+            })}
 
-          {albums.length > 5 && <Padding />}
-        </PageItemContainer>
+            {albums.length > 5 && <Padding />}
+          </PageItemContainer>
+        </TabContent>
 
         <MusicController
           songs={albums}

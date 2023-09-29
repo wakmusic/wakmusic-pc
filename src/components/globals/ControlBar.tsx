@@ -101,13 +101,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     return (
       <Container>
         <SimpleIconButton
-          icon={
-            isVisualMode
-              ? isMax
-                ? RestoreSVG
-                : MaxSVG // 비주얼모드에만 최대화, 복구 가능
-              : DivideSVG // 그 외에는 분리만 가능
-          }
+          icon={DivideSVG}
           onClick={isVisualMode ? maximize : toggleSeparateMode}
         />
       </Container>

@@ -97,6 +97,23 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     return null;
   }
 
+  if (process.platform === "darwin") {
+    return (
+      <Container>
+        <SimpleIconButton
+          icon={
+            isVisualMode
+              ? isMax
+                ? RestoreSVG
+                : MaxSVG // 비주얼모드에만 최대화, 복구 가능
+              : DivideSVG // 그 외에는 분리만 가능
+          }
+          onClick={isVisualMode ? maximize : toggleSeparateMode}
+        />
+      </Container>
+    );
+  }
+
   return (
     <Container>
       <SimpleIconButton

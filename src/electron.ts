@@ -90,6 +90,8 @@ app.whenReady().then(() => {
     height: 714,
     minWidth: 1250,
     minHeight: 714,
+    maximizable: false,
+    titleBarStyle: "hiddenInset",
     frame: false,
     show: false,
     backgroundColor: "#FFF",
@@ -220,6 +222,20 @@ ipcMain.on(IPCRenderer.WINDOW_HIDE, () => {
   for (const win of wins) {
     win.hide();
   }
+});
+
+ipcMain.on(IPCRenderer.WINDOW_ENABLE_MAX, () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  win.setMaximizable(true);
+});
+
+ipcMain.on(IPCRenderer.WINDOW_DISABLE_MAX, () => {
+  const win = BrowserWindow.getFocusedWindow();
+  if (!win) return;
+
+  win.setMaximizable(false);
 });
 
 ipcMain.on(IPCRenderer.MODE_DEFAULT, () => {

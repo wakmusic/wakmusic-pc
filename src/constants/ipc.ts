@@ -14,6 +14,9 @@ export enum IPCRenderer {
   WINDOW_CLOSE = "window:close",
   WINDOW_HIDE = "window:hide",
 
+  WINDOW_DISABLE_MAX = "window:disableMax",
+  WINDOW_ENABLE_MAX = "window:enableMax",
+
   MODE_DEFAULT = "mode:default",
   MODE_SEPARATE = "mode:separate",
 

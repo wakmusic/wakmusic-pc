@@ -5,8 +5,11 @@ import styled, { css } from "styled-components/macro";
 
 import dummyThumbnail from "@assets/svgs/BigDummy.svg";
 
+import { IPCRenderer } from "@constants/ipc";
+
 import { useCurrentSongState, useVisualModeState } from "@hooks/player";
 
+import { ipcRenderer } from "@utils/modules";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
 
 import DefaultMode from "./DefaultMode";
@@ -50,8 +53,12 @@ const Visual = ({}: VisualProps) => {
   useEffect(() => {
     if (visualMode) {
       controls.start("active");
+
+      ipcRenderer?.send(IPCRenderer.WINDOW_ENABLE_MAX);
     } else {
       controls.set("initial");
+
+      ipcRenderer?.send(IPCRenderer.WINDOW_DISABLE_MAX);
     }
   }, [controls, visualMode]);
 

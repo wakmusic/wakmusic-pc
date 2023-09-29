@@ -1,4 +1,5 @@
-import styled from "styled-components/macro";
+import { useMemo } from "react";
+import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as ReduceSVG } from "@assets/icons/ic_20_reduce.svg";
 
@@ -12,18 +13,20 @@ interface HeaderProps {}
 const Header = ({}: HeaderProps) => {
   const toggleVisualModeState = useToggleVisualModeState();
 
+  const isMac = useMemo(() => process.platform === "darwin", []);
+
   return (
-    <Container>
+    <Container $alignRight={isMac}>
       <ReduceContainer>
         <SimpleIconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
       </ReduceContainer>
 
-      <ControlBar isVisualMode />
+      {!isMac && <ControlBar isVisualMode />}
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled.div<{ $alignRight: boolean }>`
   height: 38px;
 
   position: relative;
@@ -31,6 +34,12 @@ const Container = styled.div`
 
   display: flex;
   align-items: center;
+  ${({ $alignRight }) =>
+    $alignRight &&
+    css`
+      justify-content: flex-end;
+      padding-right: 10px;
+    `}
 
   -webkit-app-region: drag;
 

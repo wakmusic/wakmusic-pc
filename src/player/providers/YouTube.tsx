@@ -234,6 +234,7 @@ const YouTube = ({
         hl: "ko",
         origin: window.location.origin,
         enablejsapi: 1,
+        autoplay: YT.AutoPlay.NoAutoPlay,
       },
       events: {
         onReady: (e) => {

@@ -2,14 +2,23 @@ import styled from "styled-components/macro";
 
 import { ReactComponent as ReduceSVG } from "@assets/icons/ic_20_reduce.svg";
 
+import { T6Light, T6Medium } from "@components/Typography";
 import ControlBar from "@components/globals/ControlBar";
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
-import { useToggleVisualModeState } from "@hooks/player";
+import colors from "@constants/colors";
+
+import {
+  useControlState,
+  useCurrentSongState,
+  useToggleVisualModeState,
+} from "@hooks/player";
 
 interface HeaderProps {}
 
 const Header = ({}: HeaderProps) => {
+  const song = useCurrentSongState();
+  const [controlState] = useControlState();
   const toggleVisualModeState = useToggleVisualModeState();
 
   return (
@@ -17,6 +26,13 @@ const Header = ({}: HeaderProps) => {
       <ReduceContainer>
         <SimpleIconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
       </ReduceContainer>
+
+      {!controlState.isLyricsOn && (
+        <TitleContainer>
+          <ArtistText color={colors.blueGray25}>{song?.artist}</ArtistText>
+          <T6Medium color={colors.blueGray25}>{song?.title}</T6Medium>
+        </TitleContainer>
+      )}
 
       <ControlBar isVisualMode />
     </Container>
@@ -44,6 +60,19 @@ const ReduceContainer = styled.div`
 
   display: flex;
   align-items: center;
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  padding-left: 30px;
+  padding-top: 2px;
+  gap: 8px;
+`;
+
+const ArtistText = styled(T6Light)`
+  opacity: 0.6;
 `;
 
 export default Header;

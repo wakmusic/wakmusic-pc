@@ -44,15 +44,7 @@ const Header = ({}: HeaderProps) => {
             }
             startAtMiddle
           >
-            <T6Medium color={colors.blueGray25}>
-              {song?.title}
-              {song?.title}
-              {song?.title}
-              {song?.title}
-              {song?.title}
-              {song?.title}
-              {song?.title}
-            </T6Medium>
+            <T6Medium color={colors.blueGray25}>{song?.title}</T6Medium>
           </Marquee>
         </TitleContainer>
       )}
@@ -61,6 +53,18 @@ const Header = ({}: HeaderProps) => {
     </Container>
   );
 };
+
+const TitleContainer = styled.div`
+  width: calc(100% - 160px);
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: row;
+
+  padding-left: 30px;
+  padding-top: 2px;
+  gap: 8px;
+`;
 
 const Container = styled.div`
   height: 38px;
@@ -76,6 +80,10 @@ const Container = styled.div`
   & > * {
     -webkit-app-region: no-drag;
   }
+
+  & ${TitleContainer} {
+    -webkit-app-region: drag;
+  }
 `;
 
 const ReduceContainer = styled.div`
@@ -83,18 +91,6 @@ const ReduceContainer = styled.div`
 
   display: flex;
   align-items: center;
-`;
-
-const TitleContainer = styled.div`
-  width: calc(100% - 160px);
-  overflow: hidden;
-
-  display: flex;
-  flex-direction: row;
-
-  padding-left: 30px;
-  padding-top: 2px;
-  gap: 8px;
 `;
 
 const ArtistText = styled(T6Light)`

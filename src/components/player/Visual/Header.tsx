@@ -1,9 +1,11 @@
+import { useRef } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as ReduceSVG } from "@assets/icons/ic_20_reduce.svg";
 
 import { T6Light, T6Medium } from "@components/Typography";
 import ControlBar from "@components/globals/ControlBar";
+import Marquee from "@components/globals/Marquee";
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import colors from "@constants/colors";
@@ -21,6 +23,9 @@ const Header = ({}: HeaderProps) => {
   const [controlState] = useControlState();
   const toggleVisualModeState = useToggleVisualModeState();
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const artistTextRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <Container>
       <ReduceContainer>
@@ -28,9 +33,27 @@ const Header = ({}: HeaderProps) => {
       </ReduceContainer>
 
       {!controlState.isLyricsOn && (
-        <TitleContainer>
-          <ArtistText color={colors.blueGray25}>{song?.artist}</ArtistText>
-          <T6Medium color={colors.blueGray25}>{song?.title}</T6Medium>
+        <TitleContainer ref={containerRef}>
+          <ArtistText ref={artistTextRef} color={colors.blueGray25}>
+            {song?.artist}
+          </ArtistText>
+          <Marquee
+            width={
+              (containerRef.current?.clientWidth ?? 1000) -
+              (artistTextRef.current?.clientWidth ?? 0)
+            }
+            startAtMiddle
+          >
+            <T6Medium color={colors.blueGray25}>
+              {song?.title}
+              {song?.title}
+              {song?.title}
+              {song?.title}
+              {song?.title}
+              {song?.title}
+              {song?.title}
+            </T6Medium>
+          </Marquee>
         </TitleContainer>
       )}
 
@@ -63,6 +86,9 @@ const ReduceContainer = styled.div`
 `;
 
 const TitleContainer = styled.div`
+  width: calc(100% - 160px);
+  overflow: hidden;
+
   display: flex;
   flex-direction: row;
 

@@ -6,9 +6,15 @@ interface MarqueeProps {
   children: React.ReactNode;
 
   hoverOnPlay?: boolean;
+  startAtMiddle?: boolean;
 }
 
-const Marquee = ({ width, children, hoverOnPlay }: MarqueeProps) => {
+const Marquee = ({
+  width,
+  children,
+  hoverOnPlay,
+  startAtMiddle,
+}: MarqueeProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [elementWidth, setElementWidth] = useState(0);
   const running = useMemo(() => elementWidth > width, [elementWidth, width]);
@@ -21,6 +27,7 @@ const Marquee = ({ width, children, hoverOnPlay }: MarqueeProps) => {
     <Container $running={running} $hoverOnPlay={hoverOnPlay}>
       <Wrapper
         $running={running}
+        $startAtMiddle={startAtMiddle}
         style={{
           animationDuration: `${elementWidth / 30}s`,
         }}
@@ -44,7 +51,7 @@ const MarqueeKeyframes = keyframes`
   }
 `;
 
-const Wrapper = styled.div<{ $running: boolean }>`
+const Wrapper = styled.div<{ $running: boolean; $startAtMiddle?: boolean }>`
   white-space: nowrap;
 
   ${({ $running }) =>
@@ -52,6 +59,13 @@ const Wrapper = styled.div<{ $running: boolean }>`
     css`
       width: fit-content;
       animation: ${MarqueeKeyframes} 10s linear infinite;
+    `}
+
+  ${({ $running, $startAtMiddle }) =>
+    $running &&
+    $startAtMiddle &&
+    css`
+      padding-left: calc(50vw - 160px);
     `}
 `;
 

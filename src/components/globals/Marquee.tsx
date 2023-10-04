@@ -6,18 +6,16 @@ interface MarqueeProps {
   children: React.ReactNode;
 
   hoverOnPlay?: boolean;
-  startAtMiddle?: boolean;
+  alwaysRun?: boolean;
 }
 
-const Marquee = ({
-  width,
-  children,
-  hoverOnPlay,
-  startAtMiddle,
-}: MarqueeProps) => {
+const Marquee = ({ width, children, hoverOnPlay, alwaysRun }: MarqueeProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [elementWidth, setElementWidth] = useState(0);
-  const running = useMemo(() => elementWidth > width, [elementWidth, width]);
+  const running = useMemo(
+    () => alwaysRun || elementWidth > width,
+    [elementWidth, width, alwaysRun]
+  );
 
   useEffect(() => {
     setElementWidth(ref.current?.clientWidth || 0);
@@ -27,7 +25,6 @@ const Marquee = ({
     <Container $running={running} $hoverOnPlay={hoverOnPlay}>
       <Wrapper
         $running={running}
-        $startAtMiddle={startAtMiddle}
         style={{
           animationDuration: `${elementWidth / 30}s`,
         }}
@@ -51,7 +48,7 @@ const MarqueeKeyframes = keyframes`
   }
 `;
 
-const Wrapper = styled.div<{ $running: boolean; $startAtMiddle?: boolean }>`
+const Wrapper = styled.div<{ $running: boolean }>`
   white-space: nowrap;
 
   ${({ $running }) =>
@@ -60,16 +57,12 @@ const Wrapper = styled.div<{ $running: boolean; $startAtMiddle?: boolean }>`
       width: fit-content;
       animation: ${MarqueeKeyframes} 10s linear infinite;
     `}
-
-  ${({ $running, $startAtMiddle }) =>
-    $running &&
-    $startAtMiddle &&
-    css`
-      padding-left: calc(50vw - 160px);
-    `}
 `;
 
-const Container = styled.div<{ $running: boolean; $hoverOnPlay?: boolean }>`
+const Container = styled.div<{
+  $running: boolean;
+  $hoverOnPlay?: boolean;
+}>`
   overflow: hidden;
 
   ${({ $hoverOnPlay, $running }) =>

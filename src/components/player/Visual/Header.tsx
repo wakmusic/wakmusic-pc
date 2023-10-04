@@ -85,7 +85,7 @@ const TitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
 
-  padding-left: calc(50vw);
+  padding-left: 50vw;
   text-indent: 0;
 
   gap: 8px;

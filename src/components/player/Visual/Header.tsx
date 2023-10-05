@@ -31,8 +31,8 @@ const Header = ({}: HeaderProps) => {
   const [prvVisualState, setPrvVisualState] = useState(false);
 
   useEffect(() => {
-    if (song.songId !== prvSong) {
-      setPrvSong(song.songId);
+    if (song?.songId !== prvSong) {
+      setPrvSong(song?.songId);
     }
   }, [song, prvSong]);
 
@@ -49,7 +49,7 @@ const Header = ({}: HeaderProps) => {
       </ReduceContainer>
 
       {!controlState.isLyricsOn &&
-        song.songId === prvSong &&
+        song?.songId === prvSong &&
         visualMode === prvVisualState && (
           <TitleContainer ref={containerRef}>
             <Marquee

@@ -109,6 +109,7 @@ const YouTube = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const playVideo = () => {
     const contentWindow = getContentWindow();
 
@@ -149,7 +150,8 @@ const YouTube = ({
           !playerState.current.isFirst &&
           playerState.current.current
         ) {
-          playVideo();
+          // playVideo();
+          player.current?.playVideo();
         }
 
         playerState.current.isFirst = false;
@@ -268,8 +270,8 @@ const YouTube = ({
 
     if (song) {
       playerState.current.current = song;
-      player.current.cueVideoById(song.songId, song.start);
-      playVideo();
+      player.current.loadVideoById(song.songId, song.start);
+      // playVideo();
     } else {
       playerState.current.current = null;
       player.current.stopVideo();
@@ -294,7 +296,8 @@ const YouTube = ({
         return;
       }
 
-      playVideo();
+      // playVideo();
+      player.current?.playVideo();
     } else {
       player.current.pauseVideo();
     }

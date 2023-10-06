@@ -112,8 +112,8 @@ const YouTube = ({
   const playVideo = () => {
     const contentWindow = getContentWindow();
 
-    if (!contentWindow) {
-      console.warn("[Youtube] no views count!!");
+    if (!contentWindow || player.current) {
+      console.warn("[Youtube] using playVideo()");
       player.current?.playVideo();
 
       return;

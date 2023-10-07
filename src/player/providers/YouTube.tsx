@@ -231,11 +231,14 @@ const YouTube = ({
 
   // 유튜브 플레이어 생성
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const _player = new YT.Player("wakmu-youtube", {
       playerVars: {
         hl: "ko",
         origin: window.location.origin,
         enablejsapi: 1,
+        widget_referrer: window.location.origin,
       },
       events: {
         onReady: (e) => {

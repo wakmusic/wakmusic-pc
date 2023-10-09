@@ -93,19 +93,12 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     ipcRenderer?.send(IPCRenderer.WINDOW_MAX);
   };
 
-  // useEffect(() => {
-  //   window.onbeforeunload = (e) => {
-  //     close();
-
-  //     e.returnValue = false;
-  //   };
-  // }, [close]);
-
   if (!ipcRenderer) {
     return null;
   }
 
-  if (process.platform !== "darwin") {
+  if (process.platform === "darwin") {
+    console.log("hello");
     return (
       <Container>
         <SimpleIconButton

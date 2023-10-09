@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useMemo } from "react";
 import styled, { css } from "styled-components/macro";
 
 import { ReactComponent as ReduceSVG } from "@assets/icons/ic_20_reduce.svg";
 
 import { T6Light, T6Medium } from "@components/Typography";
-import ControlBar from "@components/globals/ControlBar";
 import Marquee from "@components/globals/Marquee";
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
@@ -43,10 +41,36 @@ const Header = ({}: HeaderProps) => {
     }
   }, [visualMode, prvVisualState]);
 
-  const isMac = useMemo(() => process.platform === "darwin", []);
+  if (process.platform === "darwin") {
+    return (
+      <Container $alignRight={true}>
+        {!controlState.isLyricsOn &&
+          song?.songId === prvSong &&
+          visualMode === prvVisualState && (
+            <TitleContainer ref={containerRef} $width={84}>
+              <Marquee
+                width={containerRef.current?.clientWidth ?? 1000}
+                alwaysRun
+              >
+                <TitleWrapper>
+                  <ArtistText color={colors.blueGray25}>
+                    {song?.artist}
+                  </ArtistText>
+                  <T6Medium color={colors.blueGray25}>{song?.title}</T6Medium>
+                </TitleWrapper>
+              </Marquee>
+            </TitleContainer>
+          )}
+
+        <ReduceContainer>
+          <SimpleIconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
+        </ReduceContainer>
+      </Container>
+    );
+  }
 
   return (
-    <Container $alignRight={isMac}>
+    <Container>
       <ReduceContainer>
         <SimpleIconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
       </ReduceContainer>
@@ -68,14 +92,12 @@ const Header = ({}: HeaderProps) => {
             </Marquee>
           </TitleContainer>
         )}
-
-      {!isMac && <ControlBar isVisualMode />}
     </Container>
   );
 };
 
-const TitleContainer = styled.div`
-  width: calc(100% - 160px);
+const TitleContainer = styled.div<{ $width?: number }>`
+  width: calc(100% - ${({ $width }) => ($width ? $width : 160)}px);
   overflow: hidden;
 
   padding-left: 30px;
@@ -94,7 +116,7 @@ const TitleWrapper = styled.div`
   gap: 8px;
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ $alignRight?: boolean }>`
   height: 38px;
 
   position: relative;
@@ -102,6 +124,7 @@ const Container = styled.div`
 
   display: flex;
   align-items: center;
+
   ${({ $alignRight }) =>
     $alignRight &&
     css`

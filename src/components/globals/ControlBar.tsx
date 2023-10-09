@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
@@ -42,7 +42,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     };
   }, []);
 
-  const close = async () => {
+  const close = useCallback(async () => {
     let mode = localStorage.getItem("exitMode") as
       | "close"
       | "background"
@@ -87,17 +87,25 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     if (mode === "background") {
       ipcRenderer?.send(IPCRenderer.WINDOW_HIDE);
     }
-  };
+  }, [openExitModal]);
 
   const maximize = () => {
     ipcRenderer?.send(IPCRenderer.WINDOW_MAX);
   };
 
+  // useEffect(() => {
+  //   window.onbeforeunload = (e) => {
+  //     close();
+
+  //     e.returnValue = false;
+  //   };
+  // }, [close]);
+
   if (!ipcRenderer) {
     return null;
   }
 
-  if (process.platform === "darwin") {
+  if (process.platform !== "darwin") {
     return (
       <Container>
         <SimpleIconButton

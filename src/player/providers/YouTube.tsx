@@ -109,11 +109,12 @@ const YouTube = ({
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const playVideo = () => {
     const contentWindow = getContentWindow();
 
-    if (!contentWindow) {
-      console.warn("[Youtube] no views count!!");
+    if (!contentWindow || player.current) {
+      console.warn("[Youtube] using playVideo()");
       player.current?.playVideo();
 
       return;
@@ -149,7 +150,8 @@ const YouTube = ({
           !playerState.current.isFirst &&
           playerState.current.current
         ) {
-          playVideo();
+          // playVideo();
+          player.current?.playVideo();
         }
 
         playerState.current.isFirst = false;
@@ -229,11 +231,14 @@ const YouTube = ({
 
   // 유튜브 플레이어 생성
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const _player = new YT.Player("wakmu-youtube", {
       playerVars: {
         hl: "ko",
         origin: window.location.origin,
         enablejsapi: 1,
+        widget_referrer: window.location.origin,
       },
       events: {
         onReady: (e) => {
@@ -268,8 +273,8 @@ const YouTube = ({
 
     if (song) {
       playerState.current.current = song;
-      player.current.cueVideoById(song.songId, song.start);
-      playVideo();
+      player.current.loadVideoById(song.songId, song.start);
+      // playVideo();
     } else {
       playerState.current.current = null;
       player.current.stopVideo();
@@ -294,7 +299,8 @@ const YouTube = ({
         return;
       }
 
-      playVideo();
+      // playVideo();
+      player.current?.playVideo();
     } else {
       player.current.pauseVideo();
     }

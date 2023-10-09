@@ -6,12 +6,16 @@ interface MarqueeProps {
   children: React.ReactNode;
 
   hoverOnPlay?: boolean;
+  alwaysRun?: boolean;
 }
 
-const Marquee = ({ width, children, hoverOnPlay }: MarqueeProps) => {
+const Marquee = ({ width, children, hoverOnPlay, alwaysRun }: MarqueeProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [elementWidth, setElementWidth] = useState(0);
-  const running = useMemo(() => elementWidth > width, [elementWidth, width]);
+  const running = useMemo(
+    () => alwaysRun || elementWidth > width,
+    [elementWidth, width, alwaysRun]
+  );
 
   useEffect(() => {
     setElementWidth(ref.current?.clientWidth || 0);
@@ -55,7 +59,10 @@ const Wrapper = styled.div<{ $running: boolean }>`
     `}
 `;
 
-const Container = styled.div<{ $running: boolean; $hoverOnPlay?: boolean }>`
+const Container = styled.div<{
+  $running: boolean;
+  $hoverOnPlay?: boolean;
+}>`
   overflow: hidden;
 
   ${({ $hoverOnPlay, $running }) =>

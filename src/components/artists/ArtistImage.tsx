@@ -11,6 +11,7 @@ import styled, { css } from "styled-components/macro";
 import { fetchArtistList } from "@apis/artist";
 import { fetchSong } from "@apis/songs";
 
+import hikiqueen from "@assets/imgs/hikiqueen.png";
 import kungya from "@assets/imgs/kungya.png";
 import maid from "@assets/imgs/maid.png";
 import mangnyannyan from "@assets/imgs/mangnyannyan.png";
@@ -172,6 +173,39 @@ const ArtistImage = ({ artist, controls, scrollToTop }: ArtistImageProps) => {
 
         if (artist.artistId === "ninnin") {
           fetchSong("06al4daDPQ8").then(playSong);
+        }
+
+        if (artist.artistId === "hikiking") {
+          editData((artist) => {
+            if (artist.artistId === "hikiking") {
+              return {
+                ...artist,
+                name: "히키퀸",
+                title: {
+                  ...artist.title,
+                  web: "여자가 되고 싶었던 대상현의 13",
+                },
+                description:
+                  "섹시, 큐티 그 무엇도 빼놓지 않은 매력을 가진 왁타버스의 대상현\n귀여운 외모와는 다르게 목소리는 굵다고 한다.",
+                color: {
+                  ...artist.color,
+                  card: [
+                    ["bc8ffa", "100", "0"],
+                    ["86b0fd", "100", "100"],
+                  ],
+                  background: [
+                    ["a4a9f7", "100", "0.01"],
+                    ["a4a9f7", "0", "100"],
+                  ],
+                },
+                image: {
+                  ...artist.image,
+                  special: hikiqueen,
+                },
+              };
+            }
+            return artist;
+          });
         }
       }}
     >

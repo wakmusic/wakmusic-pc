@@ -6,6 +6,8 @@ export enum IPCMain {
   REPLY_VERSION = "reply:version",
 
   SCHEME = "scheme",
+
+  APP_QUIT = "app:quit",
 }
 
 export enum IPCRenderer {

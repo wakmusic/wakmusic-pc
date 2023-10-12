@@ -163,6 +163,12 @@ app.whenReady().then(() => {
     setInterval(() => {
       autoUpdater.checkForUpdates();
     }, 1000 * 60 * 20);
+
+    win.on("close", (e) => {
+      // 네이티브 컨트롤바를 사용하는 경우에만 불러와짐
+      e.preventDefault();
+      win.webContents.send(IPCMain.APP_QUIT);
+    });
   }
 });
 
@@ -209,11 +215,8 @@ ipcMain.on(IPCRenderer.WINDOW_MAX, () => {
 });
 
 ipcMain.on(IPCRenderer.WINDOW_CLOSE, () => {
-  const wins = BrowserWindow.getAllWindows();
-
-  for (const win of wins) {
-    win.close();
-  }
+  // app.exit()은 win.on("close") 가 호출 되지 않음
+  app.exit();
 });
 
 ipcMain.on(IPCRenderer.WINDOW_HIDE, () => {

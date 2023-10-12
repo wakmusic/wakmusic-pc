@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components/macro";
 
 import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
@@ -27,22 +27,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
   const toggleSeparateMode = useToggleSeparateMode();
   const openExitModal = useExitModal();
 
-  useEffect(() => {
-    ipcRenderer?.on(IPCMain.WINDOW_MAXIMIZED, () => {
-      setIsMax(true);
-    });
-
-    ipcRenderer?.on(IPCMain.WINDOW_UNMAXIMIZED, () => {
-      setIsMax(false);
-    });
-
-    return () => {
-      ipcRenderer?.removeAllListeners(IPCMain.WINDOW_MAXIMIZED);
-      ipcRenderer?.removeAllListeners(IPCMain.WINDOW_UNMAXIMIZED);
-    };
-  }, []);
-
-  const close = async () => {
+  const close = useCallback(async () => {
     let mode = localStorage.getItem("exitMode") as
       | "close"
       | "background"
@@ -87,14 +72,45 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     if (mode === "background") {
       ipcRenderer?.send(IPCRenderer.WINDOW_HIDE);
     }
-  };
+  }, [openExitModal]);
 
   const maximize = () => {
     ipcRenderer?.send(IPCRenderer.WINDOW_MAX);
   };
 
+  useEffect(() => {
+    ipcRenderer?.on(IPCMain.WINDOW_MAXIMIZED, () => {
+      setIsMax(true);
+    });
+
+    ipcRenderer?.on(IPCMain.WINDOW_UNMAXIMIZED, () => {
+      setIsMax(false);
+    });
+
+    ipcRenderer?.on(IPCMain.APP_QUIT, () => {
+      close();
+    });
+
+    return () => {
+      ipcRenderer?.removeAllListeners(IPCMain.WINDOW_MAXIMIZED);
+      ipcRenderer?.removeAllListeners(IPCMain.WINDOW_UNMAXIMIZED);
+      ipcRenderer?.removeAllListeners(IPCMain.APP_QUIT);
+    };
+  }, [close]);
+
   if (!ipcRenderer) {
     return null;
+  }
+
+  if (process.platform === "darwin") {
+    return (
+      <Container>
+        <SimpleIconButton
+          icon={DivideSVG}
+          onClick={isVisualMode ? maximize : toggleSeparateMode}
+        />
+      </Container>
+    );
   }
 
   return (

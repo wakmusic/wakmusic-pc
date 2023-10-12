@@ -6,6 +6,8 @@ export enum IPCMain {
   REPLY_VERSION = "reply:version",
 
   SCHEME = "scheme",
+
+  APP_QUIT = "app:quit",
 }
 
 export enum IPCRenderer {
@@ -13,6 +15,9 @@ export enum IPCRenderer {
   WINDOW_MAX = "window:max",
   WINDOW_CLOSE = "window:close",
   WINDOW_HIDE = "window:hide",
+
+  WINDOW_DISABLE_MAX = "window:disableMax",
+  WINDOW_ENABLE_MAX = "window:enableMax",
 
   MODE_DEFAULT = "mode:default",
   MODE_SEPARATE = "mode:separate",

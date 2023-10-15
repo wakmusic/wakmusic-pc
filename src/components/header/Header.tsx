@@ -206,9 +206,9 @@ const Arrow = styled(ArrowIcon)<{ disabled: boolean }>`
         `}
 `;
 
-const ContainerBox = styled.div`
-  display: flex;
-  align-items: center;
-`;
+// const ContainerBox = styled.div`
+//   display: flex;
+//   align-items: center;
+// `;
 
 export default Header;

@@ -37,7 +37,7 @@ if (!gotTheLock) {
 
 app.setName("왁타버스 뮤직");
 app.commandLine.appendSwitch("disable-site-isolation-trials");
-app.commandLine.appendSwitch("lang", "en-US");
+app.commandLine.appendSwitch("lang", "ko-KR");
 
 if (process.platform === "win32") {
   app.setAppUserModelId(app.name);
@@ -54,7 +54,7 @@ if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
 const server = "https://update.electronjs.org";
 const feed = `${server}/wakmusic/wakmusic-pc/${
   process.platform
-}-universal/${app.getVersion()}`;
+}-arm64/${app.getVersion()}`;
 
 autoUpdater.setFeedURL({
   url: feed,

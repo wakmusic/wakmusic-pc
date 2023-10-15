@@ -3478,14 +3478,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xhayper/discord-rpc@npm:^1.0.21":
-  version: 1.0.21
-  resolution: "@xhayper/discord-rpc@npm:1.0.21"
+"@xhayper/discord-rpc@npm:^1.0.24":
+  version: 1.0.24
+  resolution: "@xhayper/discord-rpc@npm:1.0.24"
   dependencies:
-    axios: ^1.4.0
-    discord-api-types: ^0.37.48
-    ws: ^8.13.0
-  checksum: 85ae62cc1b8c5bc09a6b1eb6223f6ecaf8843586b80d06df5d98ff017e2e1f67a39c1e98a2d45b03fbb1a55bf2dfd4a37b7c89ebf18547ca19a4d61c02fcb0a5
+    axios: ^1.5.1
+    ws: ^8.14.2
+  checksum: 96ceabc5c05e867034562375deae63487ce98a749ed3e8da8a8fd0abf94ac99fa8ae0ea827c60056297d3f49789d5d19412a1e39544f9d49e7465527289fe856
   languageName: node
   linkType: hard
 
@@ -3851,6 +3850,17 @@ __metadata:
     form-data: ^4.0.0
     proxy-from-env: ^1.1.0
   checksum: 7fb6a4313bae7f45e89d62c70a800913c303df653f19eafec88e56cea2e3821066b8409bc68be1930ecca80e861c52aa787659df0ffec6ad4d451c7816b9386b
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "axios@npm:1.5.1"
+  dependencies:
+    follow-redirects: ^1.15.0
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: 4444f06601f4ede154183767863d2b8e472b4a6bfc5253597ed6d21899887e1fd0ee2b3de792ac4f8459fe2e359d2aa07c216e45fd8b9e4e0688a6ebf48a5a8d
   languageName: node
   linkType: hard
 
@@ -4833,13 +4843,6 @@ __metadata:
   dependencies:
     path-type: ^4.0.0
   checksum: fa05e18324510d7283f55862f3161c6759a3f2f8dbce491a2fc14c8324c498286c54282c1f0e933cb930da8419b30679389499b919122952a4f8592362ef4615
-  languageName: node
-  linkType: hard
-
-"discord-api-types@npm:^0.37.48":
-  version: 0.37.48
-  resolution: "discord-api-types@npm:0.37.48"
-  checksum: aebc89f6bd123fb810f282f83a38923918f98692c23ad203f389c9b2666ea090c86dcd397ce85e1a11595a5325d4ef1a8a0e94a93c576cece897b873402d69eb
   languageName: node
   linkType: hard
 
@@ -10729,7 +10732,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.59.11
     "@typescript-eslint/parser": ^5.59.11
     "@vitejs/plugin-react-swc": ^3.3.2
-    "@xhayper/discord-rpc": ^1.0.21
+    "@xhayper/discord-rpc": ^1.0.24
     axios: ^1.4.0
     babel-plugin-styled-components: ^2.1.4
     concurrently: ^8.2.0
@@ -10913,9 +10916,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^8.13.0":
-  version: 8.13.0
-  resolution: "ws@npm:8.13.0"
+"ws@npm:^8.14.2":
+  version: 8.14.2
+  resolution: "ws@npm:8.14.2"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ">=5.0.2"
@@ -10924,7 +10927,7 @@ __metadata:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 53e991bbf928faf5dc6efac9b8eb9ab6497c69feeb94f963d648b7a3530a720b19ec2e0ec037344257e05a4f35bd9ad04d9de6f289615ffb133282031b18c61c
+  checksum: 3ca0dad26e8cc6515ff392b622a1467430814c463b3368b0258e33696b1d4bed7510bc7030f7b72838b9fdeb8dbd8839cbf808367d6aae2e1d668ce741d4308b
   languageName: node
   linkType: hard
 

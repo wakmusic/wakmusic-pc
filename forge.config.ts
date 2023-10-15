@@ -14,25 +14,24 @@ const config: ForgeConfig = {
     appBundleId: "com.wakmusic-pc",
 
     ignore: [
-      /.github/,
-      /.vscode/,
-      /.yarn/,
-      /.dist/,
-      /public/,
-      /src/,
-      /.env/,
-      /.editorconfig/,
-      /.eslintrc/,
-      /.gitignore/,
-      /.gitmodules/,
-      /.prettierrc/,
-      /.forge.config.ts/,
-      /README.md/,
-      /tsconfig.json/,
-      /tsconfig.node.json/,
-      /vite.main.config.ts/,
-      /vite.renderer.config.ts/,
       /node_modules\/.vite/,
+      /build\/fonts/,
+      /^\/public/,
+      /^\/build/,
+      /^\/dist/,
+      /^\/src/,
+      /\.prettierrc/,
+      /\.eslintrc/,
+      /\.github/,
+      /\.vscode/,
+      /\.yarn/,
+      /\.env/,
+      /\.map/,
+      /\.ts/,
+      /git/,
+      /config/,
+      /README/,
+      /LICENSE/,
     ],
 
     afterCopy: [
@@ -43,7 +42,7 @@ const config: ForgeConfig = {
           const files = await readdir(localeDir);
 
           for (const file of files) {
-            if (file !== "en-US.pak") {
+            if (file !== "ko.pak") {
               await unlink(join(localeDir, file));
             }
           }

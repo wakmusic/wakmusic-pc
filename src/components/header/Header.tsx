@@ -21,64 +21,65 @@ const Header = ({}: HeaderProps) => {
 
   const [easterEgg, setEasterEgg] = useState(1);
 
-  if (process.platform === "darwin") {
-    return (
-      <Container>
-        <ContainerBox>
-          {location.pathname !== "/player" && (
-            <>
-              <Navigator style={{ marginLeft: "84px" }}>
-                <Arrow
-                  direction="left"
-                  disabled={window.history.state.idx === 0}
-                  onClick={() => {
-                    if (window.history.state.idx !== 0) navigate(-1);
-                  }}
-                />
-                <Arrow
-                  direction="right"
-                  disabled={
-                    window.history.length - 1 === window.history.state.idx
-                  }
-                  onClick={() => {
-                    if (window.history.length - 1 !== window.history.state.idx)
-                      navigate(1);
-                  }}
-                />
-              </Navigator>
+  // TODO
+  // if (typeof process !== "undefined" && process.platform === "darwin") {
+  //   return (
+  //     <Container>
+  //       <ContainerBox>
+  //         {location.pathname !== "/player" && (
+  //           <>
+  //             <Navigator style={{ marginLeft: "84px" }}>
+  //               <Arrow
+  //                 direction="left"
+  //                 disabled={window.history.state.idx === 0}
+  //                 onClick={() => {
+  //                   if (window.history.state.idx !== 0) navigate(-1);
+  //                 }}
+  //               />
+  //               <Arrow
+  //                 direction="right"
+  //                 disabled={
+  //                   window.history.length - 1 === window.history.state.idx
+  //                 }
+  //                 onClick={() => {
+  //                   if (window.history.length - 1 !== window.history.state.idx)
+  //                     navigate(1);
+  //                 }}
+  //               />
+  //             </Navigator>
 
-              <Search />
-            </>
-          )}
-        </ContainerBox>
+  //             <Search />
+  //           </>
+  //         )}
+  //       </ContainerBox>
 
-        <ContainerBox>
-          <LogoContainer style={{ marginRight: "10px" }}>
-            <Logo
-              onClick={() => {
-                if (ipcRenderer && location.pathname == "/player") {
-                  ipcRenderer.send("mode:default");
-                }
+  //       <ContainerBox>
+  //         <LogoContainer style={{ marginRight: "10px" }}>
+  //           <Logo
+  //             onClick={() => {
+  //               if (ipcRenderer && location.pathname == "/player") {
+  //                 ipcRenderer.send("mode:default");
+  //               }
 
-                navigate("/");
+  //               navigate("/");
 
-                setEasterEgg((prev) => {
-                  if (prev > 3) return 1;
+  //               setEasterEgg((prev) => {
+  //                 if (prev > 3) return 1;
 
-                  return prev + 0.1;
-                });
-              }}
-              style={{
-                transform: `scale(${easterEgg > 2 ? easterEgg - 1 : 1})`,
-              }}
-              $running={easterEgg > 2}
-            />
-          </LogoContainer>
-          <ControlBar />
-        </ContainerBox>
-      </Container>
-    );
-  }
+  //                 return prev + 0.1;
+  //               });
+  //             }}
+  //             style={{
+  //               transform: `scale(${easterEgg > 2 ? easterEgg - 1 : 1})`,
+  //             }}
+  //             $running={easterEgg > 2}
+  //           />
+  //         </LogoContainer>
+  //         <ControlBar />
+  //       </ContainerBox>
+  //     </Container>
+  //   );
+  // }
 
   return (
     <Container>

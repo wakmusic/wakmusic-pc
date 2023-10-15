@@ -1,6 +1,6 @@
 {
   "name": "wakmusic-pc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "WAKTAVERSE MUSIC Desktop App",
   "repository": "https://github.com/wakmusic/wakmusic-pc.git",
   "author": "wakmusic",
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@electron/remote": "^2.0.11",
-    "@xhayper/discord-rpc": "^1.0.21"
+    "@xhayper/discord-rpc": "^1.0.24"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.3.0",

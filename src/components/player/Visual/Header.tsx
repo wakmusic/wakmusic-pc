@@ -41,7 +41,7 @@ const Header = ({}: HeaderProps) => {
     }
   }, [visualMode, prvVisualState]);
 
-  if (process.platform === "darwin") {
+  if (typeof process !== "undefined" && process.platform === "darwin") {
     return (
       <Container $alignRight={true}>
         {!controlState.isLyricsOn &&

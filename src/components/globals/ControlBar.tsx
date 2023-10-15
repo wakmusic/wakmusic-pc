@@ -102,7 +102,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     return null;
   }
 
-  if (process.platform === "darwin") {
+  if (typeof process !== "undefined" && process.platform === "darwin") {
     return (
       <Container>
         <SimpleIconButton

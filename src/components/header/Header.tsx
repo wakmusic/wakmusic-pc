@@ -21,7 +21,7 @@ const Header = ({}: HeaderProps) => {
 
   const [easterEgg, setEasterEgg] = useState(1);
 
-  if (process.platform === "darwin") {
+  if (typeof process !== "undefined" && process.platform === "darwin") {
     return (
       <Container>
         <ContainerBox>

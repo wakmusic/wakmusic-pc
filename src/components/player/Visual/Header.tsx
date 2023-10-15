@@ -5,6 +5,7 @@ import { ReactComponent as ReduceSVG } from "@assets/icons/ic_20_reduce.svg";
 
 import { T6Light, T6Medium } from "@components/Typography";
 import ControlBar from "@components/globals/ControlBar";
+import ControlBar from "@components/globals/ControlBar";
 import Marquee from "@components/globals/Marquee";
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 

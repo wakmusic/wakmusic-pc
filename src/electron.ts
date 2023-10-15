@@ -167,6 +167,7 @@ app.whenReady().then(() => {
     win.on("close", (e) => {
       // 네이티브 컨트롤바를 사용하는 경우에만 불러와짐
       e.preventDefault();
+      app.dock.hide();
       win.webContents.send(IPCMain.APP_QUIT);
     });
   }

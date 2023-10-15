@@ -4,6 +4,7 @@ import {
   MenuItem,
   MenuItemConstructorOptions,
   Tray,
+  app,
   nativeImage,
 } from "electron";
 import { join } from "path";
@@ -22,6 +23,10 @@ const getWindow = (): BrowserWindow | false => {
 
 const openWindow = (type: "click" | "menu") => () => {
   if (type === "click" && process.platform === "darwin") return;
+
+  if (process.platform === "darwin") {
+    app.dock.show();
+  }
 
   const wins = BrowserWindow.getAllWindows();
 

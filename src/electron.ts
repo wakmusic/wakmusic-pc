@@ -64,6 +64,8 @@ autoUpdater.on("update-available", () => {
   console.log("update available");
 });
 
+let forceQuit = false;
+
 autoUpdater.on("update-downloaded", (_, __, releaseName) => {
   console.log("update downloaded");
   const dialogOpts: Electron.MessageBoxOptions = {
@@ -75,7 +77,10 @@ autoUpdater.on("update-downloaded", (_, __, releaseName) => {
   };
 
   dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall();
+    if (returnValue.response === 0) {
+      forceQuit = true;
+      autoUpdater.quitAndInstall();
+    }
   });
 });
 
@@ -165,6 +170,7 @@ app.whenReady().then(() => {
     }, 1000 * 60 * 20);
 
     win.on("close", (e) => {
+      if (forceQuit) return;
       // 네이티브 컨트롤바를 사용하는 경우에만 불러와짐
       e.preventDefault();
       app.dock.hide();

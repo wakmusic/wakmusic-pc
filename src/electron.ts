@@ -37,7 +37,7 @@ if (!gotTheLock) {
 
 app.setName("왁타버스 뮤직");
 app.commandLine.appendSwitch("disable-site-isolation-trials");
-app.commandLine.appendSwitch("lang", "en-US");
+app.commandLine.appendSwitch("lang", "ko-KR");
 
 if (process.platform === "win32") {
   app.setAppUserModelId(app.name);

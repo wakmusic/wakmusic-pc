@@ -43,7 +43,7 @@ const config: ForgeConfig = {
           const files = await readdir(localeDir);
 
           for (const file of files) {
-            if (file !== "en-US.pak") {
+            if (file !== "ko.pak") {
               await unlink(join(localeDir, file));
             }
           }

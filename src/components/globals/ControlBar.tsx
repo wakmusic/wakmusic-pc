@@ -102,16 +102,17 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     return null;
   }
 
-  if (typeof process !== "undefined" && process.platform === "darwin") {
-    return (
-      <Container>
-        <SimpleIconButton
-          icon={DivideSVG}
-          onClick={isVisualMode ? maximize : toggleSeparateMode}
-        />
-      </Container>
-    );
-  }
+  // TODO
+  // if (typeof process !== "undefined" && process.platform === "darwin") {
+  //   return (
+  //     <Container>
+  //       <SimpleIconButton
+  //         icon={DivideSVG}
+  //         onClick={isVisualMode ? maximize : toggleSeparateMode}
+  //       />
+  //     </Container>
+  //   );
+  // }
 
   return (
     <Container>

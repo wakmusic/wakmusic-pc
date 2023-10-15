@@ -5,7 +5,6 @@ import { ReactComponent as ReduceSVG } from "@assets/icons/ic_20_reduce.svg";
 
 import { T6Light, T6Medium } from "@components/Typography";
 import ControlBar from "@components/globals/ControlBar";
-import ControlBar from "@components/globals/ControlBar";
 import Marquee from "@components/globals/Marquee";
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
@@ -43,7 +42,7 @@ const Header = ({}: HeaderProps) => {
     }
   }, [visualMode, prvVisualState]);
 
-  if (typeof process !== "undefined" && process.platform !== "darwin") {
+  if (typeof process !== "undefined" && process.platform === "darwin") {
     return (
       <Container $alignRight={true}>
         {!controlState.isLyricsOn &&

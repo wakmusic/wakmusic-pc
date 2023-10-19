@@ -1,4 +1,5 @@
 import {
+  UpdateModalState,
   addListModalState,
   alertModalState,
   confirmModalState,
@@ -44,6 +45,27 @@ export const useAlertModal = () => {
 
 export const useAlertModalState = () => {
   return useRecoilState(alertModalState);
+};
+
+export const useUpdateModal = () => {
+  const setState = useSetRecoilState(UpdateModalState);
+  const [, setIsSpaceDisabled] = useIsSpaceDisabled();
+
+  const openUpdateModal = () => {
+    return new Promise<void>((resolve) => {
+      setIsSpaceDisabled(true);
+      setState({
+        isOpen: true,
+        resolve,
+      });
+    });
+  };
+
+  return openUpdateModal;
+};
+
+export const useUpdateModalState = () => {
+  return useRecoilState(UpdateModalState);
 };
 
 export const useConfirmModal = () => {

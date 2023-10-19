@@ -10,6 +10,7 @@ import {
   ipcMain,
   nativeImage,
   session,
+  shell,
 } from "electron";
 import { join, resolve } from "path";
 
@@ -51,6 +52,8 @@ if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
   app.setAsDefaultProtocolClient("wakmusic");
 }
 
+let isAppQuitting = false;
+
 const server = "https://update.electronjs.org";
 const feed = `${server}/wakmusic/wakmusic-pc/${
   process.platform
@@ -75,7 +78,10 @@ autoUpdater.on("update-downloaded", (_, __, releaseName) => {
   };
 
   dialog.showMessageBox(dialogOpts).then((returnValue) => {
-    if (returnValue.response === 0) autoUpdater.quitAndInstall();
+    if (returnValue.response === 0) {
+      isAppQuitting = true;
+      autoUpdater.quitAndInstall();
+    }
   });
 });
 
@@ -164,10 +170,15 @@ app.whenReady().then(() => {
       autoUpdater.checkForUpdates();
     }, 1000 * 60 * 20);
 
-    win.on("close", (e) => {
-      // 네이티브 컨트롤바를 사용하는 경우에만 불러와짐
-      e.preventDefault();
-      win.webContents.send(IPCMain.APP_QUIT);
+    app.on("before-quit", function (_) {
+      isAppQuitting = true;
+    });
+
+    win.on("close", function (evt) {
+      if (!isAppQuitting) {
+        evt.preventDefault();
+        win.webContents.send(IPCMain.APP_QUIT);
+      }
     });
   }
 });
@@ -331,4 +342,8 @@ ipcMain.on(IPCRenderer.QUERY_VERSION, () => {
 
 ipcMain.on(IPCRenderer.CREATE_SHORTCUT, () => {
   createShortcut();
+});
+
+ipcMain.on(IPCRenderer.BROWSER_OPEN, (_event, url: string) => {
+  shell.openExternal(url);
 });

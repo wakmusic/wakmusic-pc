@@ -17,6 +17,7 @@ import SelectProfileModal from "@components/modals/SelectProfileModal";
 import SetUsernameModal from "@components/modals/SetUsernameModal";
 import ShareListModal from "@components/modals/ShareListModal";
 import Toast from "@components/modals/Toast";
+import UpdateModal from "@components/modals/UpdateModal";
 import ModalPortal from "@components/modals/globals/ModalPortal";
 
 import ErrorLayout from "@layouts/ErrorLayout";
@@ -122,6 +123,7 @@ export class App extends Component<AppProps> {
               <ExitModal />
               <CreditModal />
               <AlertModal />
+              <UpdateModal />
             </ModalPortal>
           </QueryClientProvider>
         </RecoilRoot>

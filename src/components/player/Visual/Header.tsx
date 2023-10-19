@@ -42,34 +42,33 @@ const Header = ({}: HeaderProps) => {
     }
   }, [visualMode, prvVisualState]);
 
-  // TODO
-  // if (typeof process !== "undefined" && process.platform === "darwin") {
-  //   return (
-  //     <Container $alignRight={true}>
-  //       {!controlState.isLyricsOn &&
-  //         song?.songId === prvSong &&
-  //         visualMode === prvVisualState && (
-  //           <TitleContainer ref={containerRef} $width={84}>
-  //             <Marquee
-  //               width={containerRef.current?.clientWidth ?? 1000}
-  //               alwaysRun
-  //             >
-  //               <TitleWrapper>
-  //                 <ArtistText color={colors.blueGray25}>
-  //                   {song?.artist}
-  //                 </ArtistText>
-  //                 <T6Medium color={colors.blueGray25}>{song?.title}</T6Medium>
-  //               </TitleWrapper>
-  //             </Marquee>
-  //           </TitleContainer>
-  //         )}
+  if (typeof process !== "undefined" && process.platform === "darwin") {
+    return (
+      <Container $alignRight={true}>
+        {!controlState.isLyricsOn &&
+          song?.songId === prvSong &&
+          visualMode === prvVisualState && (
+            <TitleContainer ref={containerRef} $width={84}>
+              <Marquee
+                width={containerRef.current?.clientWidth ?? 1000}
+                alwaysRun
+              >
+                <TitleWrapper>
+                  <ArtistText color={colors.blueGray25}>
+                    {song?.artist}
+                  </ArtistText>
+                  <T6Medium color={colors.blueGray25}>{song?.title}</T6Medium>
+                </TitleWrapper>
+              </Marquee>
+            </TitleContainer>
+          )}
 
-  //       <ReduceContainer>
-  //         <SimpleIconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
-  //       </ReduceContainer>
-  //     </Container>
-  //   );
-  // }
+        <ReduceContainer>
+          <SimpleIconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
+        </ReduceContainer>
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -94,7 +93,6 @@ const Header = ({}: HeaderProps) => {
             </Marquee>
           </TitleContainer>
         )}
-
       <ControlBar isVisualMode />
     </Container>
   );

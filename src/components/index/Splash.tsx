@@ -28,8 +28,8 @@ const isHigherVersion = (current: string, compare: string): boolean => {
     const compareInt = parseInt(compareArray[i]);
 
     if (currInt === compareInt) continue;
-    if (currInt > compareInt) return false;
-    if (currInt < compareInt) return true;
+    if (currInt < compareInt) return false;
+    if (currInt > compareInt) return true;
   }
 
   return false;

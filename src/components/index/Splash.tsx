@@ -72,7 +72,7 @@ const Splash = ({}: SplashProps) => {
       process.platform === "darwin" &&
       !isShowAlert &&
       appVersion !== "WEB" &&
-      appVersion === "1.0.4"
+      appVersion !== "1.0.4"
     ) {
       openUpdateModal();
 

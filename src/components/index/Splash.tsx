@@ -19,6 +19,22 @@ import {
 import { isUndefined } from "@utils/isTypes";
 import { ipcRenderer } from "@utils/modules";
 
+const isHigherVersion = (current: string, compare: string): boolean => {
+  const currArray = current.split(".");
+  const compareArray = compare.split(".");
+
+  for (let i = 0; i < 3; i++) {
+    const currInt = parseInt(currArray[i]);
+    const compareInt = parseInt(compareArray[i]);
+
+    if (currInt === compareInt) continue;
+    if (currInt > compareInt) return false;
+    if (currInt < compareInt) return true;
+  }
+
+  return false;
+};
+
 interface SplashProps {}
 
 const Splash = ({}: SplashProps) => {
@@ -72,7 +88,8 @@ const Splash = ({}: SplashProps) => {
       process.platform === "darwin" &&
       !isShowAlert &&
       appVersion !== "WEB" &&
-      appVersion !== "1.0.4"
+      appVersion !== "1.0.4" &&
+      !isHigherVersion(appVersion, "1.0.4")
     ) {
       openUpdateModal();
 

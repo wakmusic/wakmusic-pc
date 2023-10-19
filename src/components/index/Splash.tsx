@@ -8,8 +8,13 @@ import splashLottie from "@assets/lotties/SplashLogo.json";
 import Lottie from "@components/globals/Lottie";
 
 import colors from "@constants/colors";
+import { IPCMain, IPCRenderer } from "@constants/ipc";
 
-import { useAlertModal, useNoticeModalState } from "@hooks/modal";
+import {
+  useAlertModal,
+  useNoticeModalState,
+  useUpdateModal,
+} from "@hooks/modal";
 
 import { isUndefined } from "@utils/isTypes";
 import { ipcRenderer } from "@utils/modules";
@@ -27,6 +32,9 @@ const Splash = ({}: SplashProps) => {
   const [, setIsNoticeModalOpen] = useNoticeModalState();
 
   const alert = useAlertModal();
+  const openUpdateModal = useUpdateModal();
+
+  const [appVersion, setAppVersion] = useState<string>("WEB");
 
   const onCompleteHandler = useCallback(async () => {
     await controls.start("close");
@@ -36,6 +44,22 @@ const Splash = ({}: SplashProps) => {
   }, [controls, setIsNoticeModalOpen]);
 
   useEffect(() => {
+    if (!ipcRenderer) return;
+
+    ipcRenderer.send(IPCRenderer.QUERY_VERSION);
+
+    ipcRenderer.on(IPCMain.REPLY_VERSION, (_, version) => {
+      setAppVersion(version);
+    });
+
+    return () => {
+      if (ipcRenderer) {
+        ipcRenderer.removeAllListeners(IPCMain.REPLY_VERSION);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (disable && !isShowAlert && isUndefined(ipcRenderer)) {
       alert(
         "웹 버전 이용 안내",
@@ -43,8 +67,18 @@ const Splash = ({}: SplashProps) => {
       );
 
       setIsShowAlert(true);
+    } else if (
+      process &&
+      process.platform === "darwin" &&
+      !isShowAlert &&
+      appVersion !== "WEB" &&
+      appVersion === "1.0.4"
+    ) {
+      openUpdateModal();
+
+      setIsShowAlert(true);
     }
-  }, [disable, alert, isShowAlert]);
+  }, [disable, alert, isShowAlert, appVersion, openUpdateModal]);
 
   if (disable) {
     return null;

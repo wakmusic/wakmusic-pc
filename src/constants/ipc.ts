@@ -33,4 +33,6 @@ export enum IPCRenderer {
   QUERY_VERSION = "query:version",
 
   CREATE_SHORTCUT = "create:shortcut",
+
+  BROWSER_OPEN = "browser:open",
 }

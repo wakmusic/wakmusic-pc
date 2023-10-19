@@ -10,8 +10,8 @@ import { join } from "path";
 
 import { IPCMain } from "@constants/ipc";
 
-const getWindow = (): BrowserWindow | false => {
-  const win = BrowserWindow.getAllWindows()[0];
+const getWindow = (windowId: number): BrowserWindow | false => {
+  const win = BrowserWindow.fromId(windowId);
 
   if (!win) return false;
 
@@ -20,19 +20,19 @@ const getWindow = (): BrowserWindow | false => {
   return win;
 };
 
-const openWindow = (type: "click" | "menu") => () => {
+const openWindow = (windowId: number, type: "click" | "menu") => () => {
   if (type === "click" && process.platform === "darwin") return;
 
-  const wins = BrowserWindow.getAllWindows();
+  const win = BrowserWindow.fromId(windowId);
 
-  for (const win of wins) {
+  if (win) {
     win.show();
     win.focus();
   }
 };
 
-const processLogin = (menu: MenuItem) => {
-  const win = getWindow();
+const processLogin = (windowId: number) => (menu: MenuItem) => {
+  const win = getWindow(windowId);
 
   if (!win) return;
 
@@ -47,8 +47,8 @@ const processLogin = (menu: MenuItem) => {
   }
 };
 
-const controlSong = (menu: MenuItem) => {
-  const win = getWindow();
+const controlSong = (windowId: number) => (menu: MenuItem) => {
+  const win = getWindow(windowId);
 
   if (!win) return;
 
@@ -63,63 +63,63 @@ const controlSong = (menu: MenuItem) => {
   }
 };
 
-const prevSong = () => {
-  const win = getWindow();
+const prevSong = (windowId: number) => () => {
+  const win = getWindow(windowId);
 
   if (win) {
     win.webContents.send(IPCMain.SCHEME, "wakmusic://prevSong/");
   }
 };
 
-const nextSong = () => {
-  const win = getWindow();
+const nextSong = (windowId: number) => () => {
+  const win = getWindow(windowId);
 
   if (win) {
     win.webContents.send(IPCMain.SCHEME, "wakmusic://nextSong/");
   }
 };
 
-const template: MenuItemConstructorOptions[] = [
-  {
-    label: "열기",
-    click: openWindow("menu"),
-  },
-  {
-    label: "로그인",
-    click: processLogin,
-  },
-  {
-    type: "separator",
-  },
-  {
-    label: "재생",
-    click: controlSong,
-  },
-  {
-    label: "이전 곡",
-    click: prevSong,
-  },
-  {
-    label: "다음 곡",
-    click: nextSong,
-  },
-  {
-    type: "separator",
-  },
-  {
-    role: "quit",
-    label: "종료",
-  },
-];
-
-export const initTray = () => {
+export const initTray = (windowId: number) => {
   const image = nativeImage.createFromPath(join(__dirname, "appicon.png"));
   const trayIcon = image.resize({ width: 16 });
   const tray = new Tray(trayIcon);
 
+  const template: MenuItemConstructorOptions[] = [
+    {
+      label: "열기",
+      click: openWindow(windowId, "menu"),
+    },
+    {
+      label: "로그인",
+      click: processLogin(windowId),
+    },
+    {
+      type: "separator",
+    },
+    {
+      label: "재생",
+      click: controlSong(windowId),
+    },
+    {
+      label: "이전 곡",
+      click: prevSong(windowId),
+    },
+    {
+      label: "다음 곡",
+      click: nextSong(windowId),
+    },
+    {
+      type: "separator",
+    },
+    {
+      role: "quit",
+      label: "종료",
+    },
+  ];
+
   const contextMenu = Menu.buildFromTemplate(template);
 
-  tray.on("click", openWindow("click"));
+  tray.on("click", openWindow(windowId, "click"));
   tray.setContextMenu(contextMenu);
   tray.setToolTip("왁타버스 뮤직");
 

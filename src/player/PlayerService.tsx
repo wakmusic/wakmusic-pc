@@ -23,7 +23,7 @@ import { Song } from "@templates/song";
 
 import { applyHook } from "@utils/consoleApi";
 
-import YouTube from "./providers/YouTube";
+import YouTubeWeb from "./providers/YouTubeWeb";
 
 interface PlayerServiceProps {}
 
@@ -212,7 +212,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
 
   return (
     <Container>
-      <YouTube
+      <YouTubeWeb
         song={currentSongState}
         isPlaying={control.isPlaying}
         volume={control.isMute ? 0 : control.volume}

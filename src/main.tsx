@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { QueryClient } from "react-query";
 
 import "@utils/consoleApi";
+import "@utils/youtube";
 
 import { App } from "./App";
 import "./index.css";

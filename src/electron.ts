@@ -23,11 +23,15 @@ import { schemeHandler } from "./electron/scheme";
 import { createShortcut } from "./electron/shortcut";
 import { initTray } from "./electron/tray";
 
+// #region init
+
 initializeRemote();
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
 
 let tray: ((type: "login" | "play", label: string) => void) | null = null;
+let mainWindow: number | undefined;
+let youtubeWindow: number | undefined;
 
 const gotTheLock = app.requestSingleInstanceLock();
 
@@ -50,6 +54,10 @@ if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
 } else {
   app.setAsDefaultProtocolClient("wakmusic");
 }
+
+// #endregion
+
+// #region auto update
 
 const server = "https://update.electronjs.org";
 const feed = `${server}/wakmusic/wakmusic-pc/${
@@ -84,6 +92,9 @@ autoUpdater.on("error", (message) => {
   console.error(message);
 });
 
+// #endregion
+
+// init windows
 app.whenReady().then(() => {
   const win = new BrowserWindow({
     width: 1250,
@@ -104,7 +115,21 @@ app.whenReady().then(() => {
     },
   });
 
-  tray = initTray();
+  const youtubeWin = new BrowserWindow({
+    icon: nativeImage.createFromPath(join(__dirname, "/favicon.ico")),
+    autoHideMenuBar: true,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+  });
+
+  mainWindow = win.id;
+  youtubeWindow = youtubeWin.id;
+
+  youtubeWin.loadURL("https://youtube.com");
+
+  tray = initTray(mainWindow);
 
   win.setMenuBarVisibility(false);
 
@@ -172,10 +197,28 @@ app.whenReady().then(() => {
   }
 });
 
-app.on("activate", () => {
-  const wins = BrowserWindow.getAllWindows();
+// #region functions
 
-  for (const win of wins) {
+const getWindow = (isYoutubeWindow = false): BrowserWindow | null => {
+  if (isYoutubeWindow && youtubeWindow) {
+    return BrowserWindow.fromId(youtubeWindow);
+  }
+
+  if (mainWindow) {
+    return BrowserWindow.fromId(mainWindow);
+  }
+
+  return null;
+};
+
+// #endregion
+
+// #region app event
+
+app.on("activate", () => {
+  const win = getWindow();
+
+  if (win) {
     win.show();
     win.focus();
   }
@@ -186,9 +229,9 @@ app.on("open-url", function (_, url) {
 });
 
 app.on("second-instance", (_, argv, __) => {
-  const wins = BrowserWindow.getAllWindows();
+  const win = getWindow();
 
-  for (const win of wins) {
+  if (win) {
     win.show();
     win.focus();
   }
@@ -198,13 +241,20 @@ app.on("second-instance", (_, argv, __) => {
   }
 });
 
+// #endregion
+
+// #region ipc event
+
 ipcMain.on(IPCRenderer.WINDOW_LEAST, () => {
-  const win = BrowserWindow.getFocusedWindow();
-  if (win) win.minimize();
+  const win = getWindow();
+
+  if (win) {
+    win.minimize();
+  }
 });
 
 ipcMain.on(IPCRenderer.WINDOW_MAX, () => {
-  const win = BrowserWindow.getFocusedWindow();
+  const win = getWindow();
 
   if (win)
     if (win.isMaximized()) {
@@ -220,76 +270,81 @@ ipcMain.on(IPCRenderer.WINDOW_CLOSE, () => {
 });
 
 ipcMain.on(IPCRenderer.WINDOW_HIDE, () => {
-  const wins = BrowserWindow.getAllWindows();
+  const win = getWindow();
 
-  for (const win of wins) {
+  if (win) {
     win.hide();
   }
 });
 
 ipcMain.on(IPCRenderer.WINDOW_ENABLE_MAX, () => {
-  const win = BrowserWindow.getFocusedWindow();
-  if (!win) return;
+  const win = getWindow();
 
-  win.setMaximizable(true);
+  if (win) {
+    win.setMaximizable(true);
+  }
 });
 
 ipcMain.on(IPCRenderer.WINDOW_DISABLE_MAX, () => {
-  const win = BrowserWindow.getFocusedWindow();
-  if (!win) return;
+  const win = getWindow();
 
-  win.setMaximizable(false);
+  if (win) {
+    win.setMaximizable(false);
+  }
 });
 
 ipcMain.on(IPCRenderer.MODE_DEFAULT, () => {
-  const win = BrowserWindow.getFocusedWindow();
-  if (!win) return;
+  const win = getWindow();
 
-  win.setMaximumSize(10000, 10000);
-  win.setMinimumSize(1250, 714);
+  if (win) {
+    win.setMaximumSize(10000, 10000);
+    win.setMinimumSize(1250, 714);
 
-  const beforeBounds = win.getBounds();
+    const beforeBounds = win.getBounds();
 
-  win.setSize(1250, 714);
+    win.setSize(1250, 714);
 
-  const afterBounds = win.getBounds();
+    const afterBounds = win.getBounds();
 
-  win.setPosition(
-    beforeBounds.x + (beforeBounds.width - afterBounds.width),
-    beforeBounds.y
-  );
+    win.setPosition(
+      beforeBounds.x + (beforeBounds.width - afterBounds.width),
+      beforeBounds.y
+    );
+  }
 });
 
 ipcMain.on(IPCRenderer.MODE_SEPARATE, () => {
-  const win = BrowserWindow.getFocusedWindow();
-  if (!win) return;
+  const win = getWindow();
 
-  if (win.isMaximized()) {
-    win.unmaximize();
+  if (win) {
+    if (win.isMaximized()) {
+      win.unmaximize();
+    }
+
+    win.setMaximumSize(290, 10000);
+    win.setMinimumSize(290, 714);
+
+    const beforeBounds = win.getBounds();
+
+    win.setSize(290, 714);
+
+    const afterBounds = win.getBounds();
+
+    win.setPosition(
+      beforeBounds.x + (beforeBounds.width - afterBounds.width),
+      beforeBounds.y
+    );
   }
-
-  win.setMaximumSize(290, 10000);
-  win.setMinimumSize(290, 714);
-
-  const beforeBounds = win.getBounds();
-
-  win.setSize(290, 714);
-
-  const afterBounds = win.getBounds();
-
-  win.setPosition(
-    beforeBounds.x + (beforeBounds.width - afterBounds.width),
-    beforeBounds.y
-  );
 });
 
 ipcMain.on(IPCRenderer.QUERY_IS_SEPARATE, () => {
-  const win = BrowserWindow.getFocusedWindow();
-  if (!win) return;
+  const win = getWindow();
 
-  const [width] = win.getMinimumSize();
+  if (win) {
+    const [width] = win.getMinimumSize();
 
-  win.webContents.send(IPCMain.REPLY_IS_SEPARATE, width === 290);
+    win.webContents.send(IPCMain.REPLY_IS_SEPARATE, width === 290);
+  }
 });
 
 ipcMain.on(IPCRenderer.RPC_PROGRESS, (_event, progress: number) => {
@@ -323,12 +378,80 @@ ipcMain.on(IPCRenderer.USER_LOGOUT, () => {
 });
 
 ipcMain.on(IPCRenderer.QUERY_VERSION, () => {
-  const win = BrowserWindow.getFocusedWindow();
-  if (!win) return;
+  const win = getWindow();
 
-  win.webContents.send(IPCMain.REPLY_VERSION, version);
+  if (win) {
+    win.webContents.send(IPCMain.REPLY_VERSION, version);
+  }
 });
 
 ipcMain.on(IPCRenderer.CREATE_SHORTCUT, () => {
   createShortcut();
 });
+
+ipcMain.on(IPCRenderer.YOUTUBE, (_event, data) => {
+  const win = getWindow();
+
+  if (win) {
+    win.webContents.send(IPCMain.YOUTUBE, {
+      type: data.type,
+      value: data.value,
+      key: null,
+    });
+  }
+});
+
+ipcMain.on(IPCRenderer.YOUTUBE_PLAY, async (_event, id: string) => {
+  const youtubeWin = getWindow(true);
+
+  if (youtubeWin) {
+    const loadVideo = async () => {
+      try {
+        await youtubeWin.loadURL(`https://youtube.com/watch?v=${id}`, {
+          httpReferrer: "https://app.wakmusic.xyz",
+        });
+      } catch (e) {
+        await loadVideo();
+        return;
+      }
+
+      youtubeWin.webContents.executeJavaScript(`
+        player = document.getElementById("movie_player");
+
+        require("electron").ipcRenderer.send("youtube", {
+          type: "play",
+          value: {
+            video_id: player.getVideoData().video_id,
+            duration: player.getDuration(),
+          },
+        });
+
+        player.addEventListener("onStateChange", (state) => {
+          console.log("state", state);
+        });
+      `);
+    };
+
+    await loadVideo();
+  }
+});
+
+ipcMain.on(
+  IPCRenderer.YOUTUBE_SCRIPT,
+  (_event, key: string, script: string) => {
+    const win = getWindow();
+    const youtubeWin = getWindow(true);
+
+    if (win && youtubeWin) {
+      youtubeWin.webContents.executeJavaScript(script).then((value) => {
+        win.webContents.send(IPCMain.YOUTUBE, {
+          type: "script",
+          key,
+          value,
+        });
+      });
+    }
+  }
+);
+
+// #endregion

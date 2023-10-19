@@ -6,6 +6,7 @@ export enum IPCMain {
   REPLY_VERSION = "reply:version",
 
   SCHEME = "scheme",
+  YOUTUBE = "youtube",
 
   APP_QUIT = "app:quit",
 }
@@ -33,4 +34,8 @@ export enum IPCRenderer {
   QUERY_VERSION = "query:version",
 
   CREATE_SHORTCUT = "create:shortcut",
+
+  YOUTUBE = "youtube",
+  YOUTUBE_PLAY = "youtube:play",
+  YOUTUBE_SCRIPT = "youtube:script",
 }

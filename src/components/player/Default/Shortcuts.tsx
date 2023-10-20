@@ -49,6 +49,10 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
         return;
       }
 
+      if (e.metaKey || e.altKey || e.shiftKey || e.ctrlKey) {
+        return;
+      }
+
       if (e.ctrlKey || (!visualModeState && e.code === "Escape")) {
         return;
       }

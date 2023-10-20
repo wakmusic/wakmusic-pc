@@ -7,6 +7,6 @@
 ## Downloads
 
 [![image](https://raw.githubusercontent.com/wakmusic/wakmusic-pc/develop/.github/assets/windows.svg)](https://apps.microsoft.com/store/detail/왁타버스-뮤직/9PHHCC0FBF9K?hl=ko-kr&gl=kr&rtc=1)
-[![image](https://raw.githubusercontent.com/wakmusic/wakmusic-pc/develop/.github/assets/mac.svg)](https://static.wakmusic.xyz/static/release/pc/1.0.3/Wakmusic-1.0.3-universal.dmg)
+[![image](https://raw.githubusercontent.com/wakmusic/wakmusic-pc/develop/.github/assets/mac.svg)](https://cdn.wakmusic.xyz/static/release/pc/1.0.4/Wakmusic-1.0.4-universal.dmg)
 
-[Microsoft Store가 작동하지 않을 때를 위한 윈도우 포터블 버전](https://static.wakmusic.xyz/static/release/pc/1.0.3/Wakmusic-win.zip)
+[Microsoft Store가 작동하지 않을 때를 위한 윈도우 포터블 버전](https://cdn.wakmusic.xyz/static/release/pc/1.0.4/Wakmusic-win.zip)

@@ -7,8 +7,6 @@ import "@utils/consoleApi";
 import { App } from "./App";
 import "./index.css";
 
-localStorage.removeItem("shortcut");
-
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

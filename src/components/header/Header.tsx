@@ -128,7 +128,7 @@ const Header = ({}: HeaderProps) => {
         </>
       )}
 
-      <ControlBar isVisualMode />
+      <ControlBar />
     </Container>
   );
 };

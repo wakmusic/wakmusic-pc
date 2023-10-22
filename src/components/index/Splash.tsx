@@ -85,7 +85,6 @@ const Splash = ({}: SplashProps) => {
       setIsShowAlert(true);
     } else if (
       typeof process !== "undefined" &&
-      process.platform === "darwin" &&
       !isShowAlert &&
       appVersion !== "WEB" &&
       appVersion !== "1.0.4" &&

@@ -5,11 +5,14 @@ import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
 import { ReactComponent as DivideSVG } from "@assets/icons/ic_20_divide.svg";
 import { ReactComponent as LeastSVG } from "@assets/icons/ic_20_least.svg";
 import { ReactComponent as MaxSVG } from "@assets/icons/ic_20_max.svg";
+import { ReactComponent as PinOffSVG } from "@assets/icons/ic_20_pin_off.svg";
+import { ReactComponent as PinOnSVG } from "@assets/icons/ic_20_pin_on.svg";
 import { ReactComponent as RestoreSVG } from "@assets/icons/ic_20_restore.svg";
 
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
 import { useExitModal } from "@hooks/modal";
+import { useToast } from "@hooks/toast";
 import { useToggleSeparateMode } from "@hooks/toggleSeparateMode";
 
 import { isNull } from "@utils/isTypes";
@@ -23,9 +26,11 @@ interface ControlBarProps {
 
 const ControlBar = ({ isVisualMode }: ControlBarProps) => {
   const [isMax, setIsMax] = useState(false);
+  const [isTop, setIsTop] = useState(false);
 
   const toggleSeparateMode = useToggleSeparateMode();
   const openExitModal = useExitModal();
+  const toast = useToast();
 
   const close = useCallback(async () => {
     let mode = localStorage.getItem("exitMode") as
@@ -78,6 +83,28 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     ipcRenderer?.send(IPCRenderer.WINDOW_MAX);
   };
 
+  const toggleTop = () => {
+    let ok = false;
+
+    if (window.require) {
+      try {
+        const remote = window.require("@electron/remote");
+
+        if (remote && remote.BrowserWindow) {
+          remote.BrowserWindow.getFocusedWindow()?.setAlwaysOnTop(!isTop);
+          setIsTop(!isTop);
+          ok = true;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    if (!ok) {
+      toast("v1.0.4 이상의 업데이트가 필요합니다.");
+    }
+  };
+
   useEffect(() => {
     ipcRenderer?.on(IPCMain.WINDOW_MAXIMIZED, () => {
       setIsMax(true);
@@ -106,6 +133,10 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     return (
       <Container>
         <SimpleIconButton
+          icon={isTop ? PinOnSVG : PinOffSVG}
+          onClick={toggleTop}
+        />
+        <SimpleIconButton
           icon={DivideSVG}
           onClick={isVisualMode ? maximize : toggleSeparateMode}
         />
@@ -115,6 +146,10 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
 
   return (
     <Container>
+      <SimpleIconButton
+        icon={isTop ? PinOnSVG : PinOffSVG}
+        onClick={toggleTop}
+      />
       <SimpleIconButton
         icon={LeastSVG}
         onClick={() => {

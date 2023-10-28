@@ -59,15 +59,15 @@ const Circle1 = styled(motion.div)`
   top: 352.5px;
   left: 17.5px;
 
-  width: 187.636px;
-  height: 187.636px;
+  width: 188px;
+  height: 188px;
   transform: rotate(67.211deg);
   border-radius: 187.636px;
 
   background: linear-gradient(
-    127deg,
-    rgba(56, 230, 255, 0.35) 0%,
-    rgba(244, 255, 129, 0.4) 100%
+    210deg,
+    rgba(244, 255, 129, 0) 14.42%,
+    #ffd859 106.09%
   );
 
   filter: blur(12.5px);
@@ -83,10 +83,11 @@ const Circle2 = styled(motion.div)`
   transform: rotate(46.442deg);
   border-radius: 282.499px;
   background: linear-gradient(
-    133deg,
-    rgba(56, 230, 255, 0) 0%,
-    rgba(0, 200, 210, 0.8) 100%
+    180deg,
+    rgba(236, 244, 195, 0) 14.69%,
+    #f0af4d 61.48%
   );
+
   filter: blur(12.5px);
 `;
 
@@ -98,7 +99,12 @@ const Circle3 = styled(motion.div)`
   width: 211.25px;
   height: 211.25px;
   border-radius: 211.25px;
-  background: linear-gradient(127deg, rgba(244, 255, 129, 0) 0%, #f4ff81 100%);
+  background: linear-gradient(
+    127deg,
+    rgba(128, 143, 60, 0) 14.42%,
+    #b7cf3b 106.09%
+  );
+
   filter: blur(12.5px);
 `;
 

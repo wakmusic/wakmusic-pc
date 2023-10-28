@@ -4,12 +4,11 @@ import styled from "styled-components/macro";
 import { T1Bold, T5Medium } from "@components/Typography";
 
 import colors from "@constants/colors";
-import { IPCRenderer } from "@constants/ipc";
 
 import { useUpdateModalState } from "@hooks/modal";
 import { useIsSpaceDisabled } from "@hooks/player";
 
-import { ipcRenderer } from "@utils/modules";
+import { openExternal } from "@utils/modules";
 
 import TwoButton from "./globals/TwoButton";
 import { ModalContainer, ModalOverlay } from "./globals/modalStyle";
@@ -57,10 +56,9 @@ const UpdateModal = ({}: UpdateModalState) => {
         <ButtonsWrapper>
           <TwoButton
             ok={() => {
-              ipcRenderer?.send(
-                IPCRenderer.BROWSER_OPEN,
-                "https://cafe.naver.com/steamindiegame/12969738"
-              );
+              if (openExternal) {
+                openExternal("https://cafe.naver.com/steamindiegame/12969738");
+              }
 
               setIsSpaceDisabled(false);
               setModalState({ ...modalState, isOpen: false });

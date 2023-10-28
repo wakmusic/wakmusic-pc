@@ -10,7 +10,6 @@ import {
   ipcMain,
   nativeImage,
   session,
-  shell,
 } from "electron";
 import { join, resolve } from "path";
 
@@ -342,8 +341,4 @@ ipcMain.on(IPCRenderer.QUERY_VERSION, () => {
 
 ipcMain.on(IPCRenderer.CREATE_SHORTCUT, () => {
   createShortcut();
-});
-
-ipcMain.on(IPCRenderer.BROWSER_OPEN, (_event, url: string) => {
-  shell.openExternal(url);
 });

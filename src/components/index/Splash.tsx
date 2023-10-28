@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { spalshVariants } from "src/animations/splash";
 import styled from "styled-components/macro";
 
-import splashLottie from "@assets/lotties/SplashLogo.json";
+import splashLottie from "@assets/lotties/Waktaverse_Music_Halloween.json";
 
 import Lottie from "@components/globals/Lottie";
 
@@ -121,7 +121,7 @@ const Container = styled(motion.div)`
   width: 100vw;
   height: 100vh;
 
-  background-color: ${colors.white};
+  background-color: ${colors.gray900};
 
   z-index: 1000;
 

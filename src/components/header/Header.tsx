@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled, { css, keyframes } from "styled-components/macro";
 
-import { ReactComponent as LogoSVG } from "@assets/svgs/logo.svg";
+// import { ReactComponent as LogoSVG } from "@assets/svgs/logo.svg";
+import { ReactComponent as LogoSVG } from "@assets/svgs/logo_halloween.svg";
 
 import ControlBar from "@components/globals/ControlBar";
 import ArrowIcon from "@components/icons/Arrow";

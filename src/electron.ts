@@ -279,11 +279,11 @@ ipcMain.on(IPCRenderer.MODE_SEPARATE, () => {
   }
 
   win.setMaximumSize(290, 10000);
-  win.setMinimumSize(290, 714);
+  win.setMinimumSize(290, 375);
 
   const beforeBounds = win.getBounds();
 
-  win.setSize(290, 714);
+  win.setSize(290, 375);
 
   const afterBounds = win.getBounds();
 

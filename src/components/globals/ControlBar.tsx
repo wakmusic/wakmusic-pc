@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 
 import { ReactComponent as CloseSVG } from "@assets/icons/ic_20_close.svg";
 import { ReactComponent as DivideSVG } from "@assets/icons/ic_20_divide.svg";
+import { ReactComponent as MiniSvg } from "@assets/icons/ic_20_divide_mini.svg";
 import { ReactComponent as LeastSVG } from "@assets/icons/ic_20_least.svg";
 import { ReactComponent as MaxSVG } from "@assets/icons/ic_20_max.svg";
 import { ReactComponent as PinOffSVG } from "@assets/icons/ic_20_pin_off.svg";
@@ -13,7 +14,7 @@ import { IPCMain, IPCRenderer } from "@constants/ipc";
 
 import { useExitModal } from "@hooks/modal";
 import { useToast } from "@hooks/toast";
-import { useToggleSeparateMode } from "@hooks/toggleSeparateMode";
+import { SeparateMode, useToggleSeparateMode } from "@hooks/toggleSeparateMode";
 
 import { isNull } from "@utils/isTypes";
 import { ipcRenderer } from "@utils/modules";
@@ -28,7 +29,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
   const [isMax, setIsMax] = useState(false);
   const [isTop, setIsTop] = useState(false);
 
-  const toggleSeparateMode = useToggleSeparateMode();
+  const { separateMode, toggleSeparateMode } = useToggleSeparateMode();
   const openExitModal = useExitModal();
   const toast = useToast();
 
@@ -105,6 +106,25 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
     }
   };
 
+  const getMiddleIcon = () => {
+    if (isVisualMode) {
+      if (isMax) {
+        return RestoreSVG;
+      }
+
+      return MaxSVG;
+    }
+
+    switch (separateMode) {
+      case SeparateMode.Default:
+        return DivideSVG;
+      case SeparateMode.Separate:
+        return MiniSvg;
+      case SeparateMode.Mini:
+        return RestoreSVG;
+    }
+  };
+
   useEffect(() => {
     ipcRenderer?.on(IPCMain.WINDOW_MAXIMIZED, () => {
       setIsMax(true);
@@ -137,7 +157,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
           onClick={toggleTop}
         />
         <SimpleIconButton
-          icon={DivideSVG}
+          icon={getMiddleIcon()}
           onClick={isVisualMode ? maximize : toggleSeparateMode}
         />
       </Container>
@@ -157,13 +177,7 @@ const ControlBar = ({ isVisualMode }: ControlBarProps) => {
         }}
       />
       <SimpleIconButton
-        icon={
-          isVisualMode
-            ? isMax
-              ? RestoreSVG
-              : MaxSVG // 비주얼모드에만 최대화, 복구 가능
-            : DivideSVG // 그 외에는 분리만 가능
-        }
+        icon={getMiddleIcon()}
         onClick={isVisualMode ? maximize : toggleSeparateMode}
       />
       <SimpleIconButton icon={CloseSVG} onClick={close} />

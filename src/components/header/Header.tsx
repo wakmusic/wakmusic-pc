@@ -52,7 +52,7 @@ const Header = ({}: HeaderProps) => {
           )}
         </ContainerBox>
 
-        <ContainerBox>
+        <ContainerBox $right>
           <LogoContainer style={{ marginRight: "10px" }}>
             <Logo
               onClick={() => {
@@ -204,9 +204,15 @@ const Arrow = styled(ArrowIcon)<{ disabled: boolean }>`
         `}
 `;
 
-const ContainerBox = styled.div`
+const ContainerBox = styled.div<{ $right?: boolean }>`
   display: flex;
   align-items: center;
+
+  ${({ $right }) =>
+    $right &&
+    css`
+      margin-left: auto;
+    `}
 `;
 
 export default Header;

@@ -13,7 +13,7 @@ import {
   useToggleRepeatTypeState,
   useVisualModeState,
 } from "@hooks/player";
-import { useToggleSeparateMode } from "@hooks/toggleSeparateMode";
+import { SeparateMode, useToggleSeparateMode } from "@hooks/toggleSeparateMode";
 
 interface ShortcutsProps {
   openVisualMode: () => Promise<void>;
@@ -31,7 +31,7 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
   const toggleIsPlayingState = useToggleIsPlayingState();
   const toggleIsRandomState = useToggleIsRandomState();
   const toggleIsLyricsOnState = useToggleIsLyricsOnState();
-  const toggleSeparateMode = useToggleSeparateMode();
+  const { setSeparateMode, toggleSeparateMode } = useToggleSeparateMode();
 
   const prevSong = usePrevSong();
   const nextSong = useNextSong();
@@ -66,6 +66,7 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
           setVisualMode(false);
         } else {
           openVisualMode();
+          setSeparateMode(SeparateMode.Default);
         }
 
         setLastFCall(Date.now());
@@ -128,22 +129,23 @@ const Shortcuts = ({ openVisualMode }: ShortcutsProps): null => {
       }
     },
     [
-      control.isMute,
-      control.volume,
       isSpaceDisabled,
-      lastFCall,
-      nextSong,
-      openVisualMode,
-      prevSong,
-      setVisualMode,
-      setVolumeState,
-      toggleIsLyricsOnState,
-      toggleIsPlayingState,
-      toggleIsRandomState,
-      toggleRepeatTypeState,
-      toggleSeparateMode,
+      location.pathname,
       visualModeState,
-      location,
+      lastFCall,
+      setVisualMode,
+      openVisualMode,
+      setSeparateMode,
+      toggleIsPlayingState,
+      toggleIsLyricsOnState,
+      toggleSeparateMode,
+      setVolumeState,
+      control.volume,
+      control.isMute,
+      prevSong,
+      nextSong,
+      toggleRepeatTypeState,
+      toggleIsRandomState,
     ]
   );
 

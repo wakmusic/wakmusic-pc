@@ -270,7 +270,7 @@ ipcMain.on(IPCRenderer.MODE_DEFAULT, () => {
   );
 });
 
-ipcMain.on(IPCRenderer.MODE_SEPARATE, () => {
+const separate = (mini: boolean) => {
   const win = BrowserWindow.getFocusedWindow();
   if (!win) return;
 
@@ -279,11 +279,11 @@ ipcMain.on(IPCRenderer.MODE_SEPARATE, () => {
   }
 
   win.setMaximumSize(290, 10000);
-  win.setMinimumSize(290, 375);
+  win.setMinimumSize(290, mini ? 375 : 714);
 
   const beforeBounds = win.getBounds();
 
-  win.setSize(290, 375);
+  win.setSize(290, mini ? 375 : 714);
 
   const afterBounds = win.getBounds();
 
@@ -291,6 +291,14 @@ ipcMain.on(IPCRenderer.MODE_SEPARATE, () => {
     beforeBounds.x + (beforeBounds.width - afterBounds.width),
     beforeBounds.y
   );
+};
+
+ipcMain.on(IPCRenderer.MODE_SEPARATE, () => {
+  separate(false);
+});
+
+ipcMain.on(IPCRenderer.MODE_MINI, () => {
+  separate(true);
 });
 
 ipcMain.on(IPCRenderer.QUERY_IS_SEPARATE, () => {

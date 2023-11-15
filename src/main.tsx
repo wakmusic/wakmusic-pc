@@ -7,7 +7,16 @@ import "@utils/consoleApi";
 import { App } from "./App";
 import "./index.css";
 
-localStorage.removeItem("shortcut");
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const remote = require("@electron/remote");
+  remote.session.defaultSession.cookies.remove(
+    "https://wakmusic.xyz/api",
+    "token"
+  );
+} catch (e) {
+  /* empty */
+}
 
 export const queryClient = new QueryClient({
   defaultOptions: {

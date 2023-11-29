@@ -23,6 +23,7 @@ import {
 import { Song } from "@templates/song";
 
 import { isNil } from "@utils/isTypes";
+import shuffleArray from "@utils/shuffle";
 
 export const usePlayingLengthState = () => {
   return useRecoilState(playingLength);
@@ -359,9 +360,11 @@ export const usePlaySongs = () => {
   const setPlayingInfo = useSetRecoilState(playingInfoState);
 
   return (songs: Song[], shuffle = false, play = true) => {
-    const addSongs = shuffle
-      ? [...songs].sort(() => Math.random() - 0.5)
-      : songs;
+    const addSongs = [...songs];
+
+    if (shuffle) {
+      shuffleArray(addSongs);
+    }
 
     setPlayingInfo((prev) => {
       const oldPlaylist = [...prev.playlist];

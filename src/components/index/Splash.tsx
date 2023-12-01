@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { spalshVariants } from "src/animations/splash";
 import styled from "styled-components/macro";
 
-import splashLottie from "@assets/lotties/SplashLogo.json";
+import splashLottie from "@assets/lotties/Christmas.json";
 
 import Lottie from "@components/globals/Lottie";
 
@@ -105,7 +105,7 @@ const Splash = ({}: SplashProps) => {
       <LottieContainer>
         <Lottie
           animationData={splashLottie}
-          renderer="canvas"
+          renderer="svg"
           onCompleteHandler={onCompleteHandler}
         />
       </LottieContainer>

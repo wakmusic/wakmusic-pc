@@ -40,6 +40,7 @@ import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
 import SchemeHandler from "@utils/schemeHandler";
+import makeShortcut from "@utils/shortcut";
 
 interface AppProps {
   queryClient: QueryClient;
@@ -56,6 +57,10 @@ export class App extends Component<AppProps> {
     this.state = {
       hasError: false,
     };
+  }
+
+  componentDidMount() {
+    makeShortcut();
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {

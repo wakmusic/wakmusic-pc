@@ -18,14 +18,18 @@ export default () => {
 
         fs.writeFile(icoPath, chunk, console.error);
 
-        remote.shell.writeShortcutLink(
-          path.join(remote.app.getPath("desktop"), "왁타버스 뮤직.lnk"),
-          {
-            target: process.execPath,
-            icon: icoPath,
-            iconIndex: 0,
-          }
+        const shortcutPath = path.join(
+          remote.app.getPath("desktop"),
+          "왁타버스 뮤직.lnk"
         );
+
+        fs.unlinkSync(shortcutPath);
+
+        remote.shell.writeShortcutLink(shortcutPath, {
+          target: process.execPath,
+          icon: icoPath,
+          iconIndex: 0,
+        });
       });
     });
 

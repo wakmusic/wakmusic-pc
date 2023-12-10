@@ -69,7 +69,7 @@ export const initApp = () => {
     state.mainWindow = makeMainWindow();
     state.youtubeWindow = makeYoutubeWindow();
 
-    state.tray = initTray(state.mainWindow);
+    state.tray = initTray();
   });
 };
 

@@ -4,6 +4,7 @@ import {
   MenuItem,
   MenuItemConstructorOptions,
   Tray,
+  app,
   nativeImage,
 } from "electron";
 import { join } from "path";
@@ -112,8 +113,8 @@ export const initTray = (windowId: number) => {
       type: "separator",
     },
     {
-      role: "quit",
       label: "종료",
+      click: () => app.exit(),
     },
   ];
 

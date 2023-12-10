@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
+import { useInterval } from "@hooks/interval";
+import { useAdState } from "@hooks/player";
+
 import { PlayerProviderProps } from "@templates/player";
 import { Song } from "@templates/song";
 
@@ -11,7 +14,10 @@ const YouTubeWeb = ({
   volume,
   progress,
   onStart,
+  setCurrentProgress,
 }: PlayerProviderProps) => {
+  const [ad, setAd] = useAdState();
+
   const [current, setCurrent] = useState<Song | null>(null);
 
   const yt = useRef<YouTube | null>(null);
@@ -35,7 +41,7 @@ const YouTubeWeb = ({
       }
 
       (async () => {
-        const duration = await yt.current?.play(song?.songId);
+        const duration = await yt.current?.play(song);
 
         if (duration) {
           onStart(duration);
@@ -48,6 +54,7 @@ const YouTubeWeb = ({
 
   useEffect(() => {
     console.log(`[YouTubeWeb] volume: ${volume}`);
+    yt.current?.setVolume(volume);
   }, [volume]);
 
   useEffect(() => {
@@ -64,6 +71,31 @@ const YouTubeWeb = ({
     console.log(`[YouTubeWeb] progress: ${progress}`);
     yt.current?.seekTo(progress);
   }, [progress]);
+
+  useInterval(() => {
+    if (!yt.current || !setCurrentProgress || !song) return;
+
+    yt.current.getCurrentInfo().then((info) => {
+      if (info) {
+        setCurrentProgress(info.currentTime - song.start);
+
+        setAd({
+          isAd: info.isAd,
+          current: info.currentTime,
+          duration: info.duration,
+          canSkip: info.canSkip,
+          skip: 0,
+        });
+      }
+    });
+  }, 250);
+
+  useEffect(() => {
+    if (ad.skip === 0) return;
+
+    yt.current?.skipAd();
+    console.log(`[YouTubeWeb] skipAd`);
+  }, [ad.skip]);
 
   return null;
 };

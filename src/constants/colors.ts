@@ -19,6 +19,7 @@ const colors = {
   yellow: "#FF8F0C",
   point: "#08DEF7",
   sub: "#2760F4",
+  sub2: "#fdd124",
   up: "#FA3168",
   down: "#00A3FF",
 

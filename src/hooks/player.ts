@@ -8,6 +8,7 @@ import {
   playingLength,
   playingProgress,
   visualModeState,
+  youtubeAdState,
 } from "@state/player/atoms";
 import { useRef } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -394,4 +395,8 @@ export const usePlaySongs = () => {
       };
     });
   };
+};
+
+export const useAdState = () => {
+  return useRecoilState(youtubeAdState);
 };

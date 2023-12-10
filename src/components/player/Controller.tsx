@@ -10,11 +10,13 @@ import { ReactComponent as RepeatOffSvg } from "@assets/icons/ic_20_repeat_off.s
 import { ReactComponent as RepeatOn1Svg } from "@assets/icons/ic_20_repeat_on_1.svg";
 import { ReactComponent as RepeatOnAllSvg } from "@assets/icons/ic_20_repeat_on_all.svg";
 import { ReactComponent as PlaySvg } from "@assets/icons/ic_30_play_25_point.svg";
+import { ReactComponent as PlayAdSvg } from "@assets/icons/ic_30_play_25_sub2.svg";
 import { ReactComponent as StopSvg } from "@assets/icons/ic_30_stop.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import {
+  useAdState,
   useControlState,
   useNextSong,
   usePrevSong,
@@ -43,6 +45,8 @@ const Controller = ({}: ControllerProps) => {
   const prevSong = usePrevSong();
   const nextSong = useNextSong();
 
+  const [ad] = useAdState();
+
   function getRepeatIcon() {
     switch (controlState.repeatType) {
       case RepeatType.All:
@@ -67,7 +71,7 @@ const Controller = ({}: ControllerProps) => {
       />
       <SimpleIconButton icon={PrevSvg} onClick={prevSong} />
       <SimpleIconButton
-        icon={controlState.isPlaying ? StopSvg : PlaySvg}
+        icon={controlState.isPlaying ? StopSvg : ad.isAd ? PlayAdSvg : PlaySvg}
         onClick={toggleIsPlayingState}
       />
       <SimpleIconButton icon={NextSvg} onClick={nextSong} />

@@ -6,6 +6,7 @@ import { T8Medium } from "@components/Typography";
 import colors from "@constants/colors";
 
 import {
+  useAdState,
   useIsControllingState,
   usePlayingLengthState,
   usePlayingProgressChangeState,
@@ -19,8 +20,19 @@ interface TimelineProps {
 }
 
 const Timeline = ({ isSeparated }: TimelineProps) => {
-  const [length] = usePlayingLengthState();
-  const [progress] = usePlayingProgressState();
+  const [ad] = useAdState();
+
+  const [_length] = usePlayingLengthState();
+  const [_progress] = usePlayingProgressState();
+
+  const length = useMemo(() => {
+    return ad.isAd ? ad.duration : _length;
+  }, [ad.isAd, ad.duration, _length]);
+
+  const progress = useMemo(() => {
+    return ad.isAd ? ad.current : _progress;
+  }, [ad, _progress]);
+
   const [change, setChange] = usePlayingProgressChangeState();
 
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -52,6 +64,8 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
 
   const handleMouseState = useCallback(
     (e: MouseEvent | React.MouseEvent<HTMLDivElement>) => {
+      if (ad.isAd) return;
+
       if (e.type !== "mousedown") {
         setIsMouseDown(false);
 
@@ -64,7 +78,7 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
         changeProgressPosition(e);
       }
     },
-    [changeProgressPosition]
+    [ad.isAd, changeProgressPosition]
   );
 
   const handleMouseMove = useCallback(
@@ -101,18 +115,21 @@ const Timeline = ({ isSeparated }: TimelineProps) => {
         <Line
           $progress={displayingCurrent}
           $isSeparated={isSeparated ?? false}
+          $isAd={ad.isAd}
         />
         <HandleContainer
           $progress={displayingCurrent}
           $isSeparated={isSeparated}
         >
-          <Handle />
+          <Handle $isAd={ad.isAd} />
         </HandleContainer>
         <TimelinePopover
           $progress={displayingCurrent}
           $isSeparated={isSeparated}
         >
-          <T8Medium color={colors.point}>{formatSecond(current)}</T8Medium>
+          <T8Medium color={ad.isAd ? colors.sub2 : colors.point}>
+            {formatSecond(current)}
+          </T8Medium>
           <LengthText color={colors.blueGray100}>
             {formatSecond(length)}
           </LengthText>
@@ -229,14 +246,16 @@ const Wrapper = styled.div<{ $isSeparated: boolean; $controlling: boolean }>`
   }
 `;
 
-const Line = styled.div.attrs<{ $progress: number }>(({ $progress }) => ({
-  style: {
-    width: `${$progress}%`,
-  },
-}))<{ $isSeparated: boolean }>`
+const Line = styled.div.attrs<{ $progress: number; $isAd: boolean }>(
+  ({ $progress }) => ({
+    style: {
+      width: `${$progress}%`,
+    },
+  })
+)<{ $isSeparated: boolean }>`
   height: 100%;
 
-  background-color: ${colors.point};
+  background-color: ${({ $isAd }) => ($isAd ? colors.sub2 : colors.point)};
 
   ${({ $isSeparated }) =>
     $isSeparated &&
@@ -245,7 +264,7 @@ const Line = styled.div.attrs<{ $progress: number }>(({ $progress }) => ({
     `}
 `;
 
-const Handle = styled.div`
+const Handle = styled.div<{ $isAd: boolean }>`
   height: 12px;
   width: 12px;
 
@@ -253,7 +272,7 @@ const Handle = styled.div`
   top: -8px;
 
   border-radius: 50%;
-  background-color: ${colors.point};
+  background-color: ${({ $isAd }) => ($isAd ? colors.sub2 : colors.point)};
 `;
 
 const LengthText = styled(T8Medium)`

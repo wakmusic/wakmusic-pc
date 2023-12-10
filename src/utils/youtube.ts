@@ -1,5 +1,7 @@
 import { IPCMain, IPCRenderer } from "@constants/ipc";
 
+import { Song } from "@templates/song";
+
 import { isNull } from "./isTypes";
 import { ipcRenderer } from "./modules";
 
@@ -52,11 +54,11 @@ export class YouTube {
     }
   }
 
-  async play(id: string): Promise<number> {
-    ipcRenderer?.send(IPCRenderer.YOUTUBE_PLAY, id);
+  async play(song: Song): Promise<number> {
+    ipcRenderer?.send(IPCRenderer.YOUTUBE_PLAY, song);
 
     return new Promise<number>((resolve) => {
-      this.promises.set(id, resolve);
+      this.promises.set(song.songId, resolve);
     });
   }
 
@@ -104,6 +106,33 @@ export class YouTube {
   }
 
   seekTo(seconds: number) {
+    ipcRenderer?.send(
+      IPCRenderer.YOUTUBE_SCRIPT,
+      null,
+      `
+      player = document.getElementById("movie_player");
+      player.seekTo(${seconds});
+      `
+    );
+  }
+
+  setVolume(volume: number) {
+    ipcRenderer?.send(
+      IPCRenderer.YOUTUBE_SCRIPT,
+      null,
+      `
+      player = document.getElementById("movie_player");
+      player.setVolume(${volume});
+      `
+    );
+  }
+
+  async getCurrentInfo(): Promise<{
+    isAd: boolean;
+    currentTime: number;
+    duration: number;
+    canSkip: boolean;
+  }> {
     const key = crypto.randomUUID();
 
     ipcRenderer?.send(
@@ -111,7 +140,28 @@ export class YouTube {
       key,
       `
       player = document.getElementById("movie_player");
-      player.seekTo(${seconds});
+      stream = document.querySelector(".video-stream");
+
+      ({
+        isAd: player.getVideoStats().prerolls === "ad",
+        currentTime: stream.currentTime,
+        duration: stream.duration,
+        canSkip: document.querySelector(".ytp-ad-skip-button-modern") !== null,
+      })
+      `
+    );
+
+    return new Promise((resolve) => {
+      this.promises.set(key, resolve);
+    });
+  }
+
+  skipAd() {
+    ipcRenderer?.send(
+      IPCRenderer.YOUTUBE_SCRIPT,
+      null,
+      `
+      document.querySelector(".ytp-ad-skip-button-modern").click();
       `
     );
   }

@@ -3,12 +3,18 @@ import styled, { css } from "styled-components/macro";
 
 import dummyThumbnail from "@assets/svgs/BigDummy.svg";
 
+import { T4Medium, T6Medium } from "@components/Typography";
+
+import colors from "@constants/colors";
+
 import {
+  useAdState,
   useControlState,
   useCurrentSongState,
   useToggleVisualModeState,
 } from "@hooks/player";
 
+import { formatSecond } from "@utils/formatting";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
 
 import Controller from "../Controller";
@@ -23,10 +29,15 @@ const DefaultMode = ({}: DefaultModeProps) => {
   const toggleVisualModeState = useToggleVisualModeState();
   const [controlState] = useControlState();
 
+  const [ad] = useAdState();
+
   const song = useCurrentSongState();
   const img = useMemo(
-    () => (song?.songId ? getYoutubeHQThumbnail(song.songId) : dummyThumbnail),
-    [song?.songId]
+    () =>
+      !ad.isAd && song?.songId
+        ? getYoutubeHQThumbnail(song.songId)
+        : dummyThumbnail,
+    [ad.isAd, song?.songId]
   );
 
   return (
@@ -40,7 +51,20 @@ const DefaultMode = ({}: DefaultModeProps) => {
         <Thumbnail src={img} onClick={toggleVisualModeState} />
 
         <LyricsContainer>
-          <Lyrics size="large" isVisualMode={true} />
+          {ad.isAd ? (
+            <>
+              <T4Medium color={colors.blueGray25}>
+                {ad.isAd ? "~ 광고 중 ~" : song?.title}
+              </T4Medium>
+              <AdSecondsText color={colors.blueGray25}>
+                {ad.isAd
+                  ? formatSecond(ad.duration - ad.current)
+                  : song?.artist}
+              </AdSecondsText>
+            </>
+          ) : (
+            <Lyrics size="large" isVisualMode={true} />
+          )}
         </LyricsContainer>
 
         <TimelineContainer>
@@ -98,6 +122,15 @@ const LyricsContainer = styled.div`
   height: 90px;
 
   margin: 24px 0 44px 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const AdSecondsText = styled(T6Medium)`
+  opacity: 0.6;
 `;
 
 const TimelineContainer = styled.div`

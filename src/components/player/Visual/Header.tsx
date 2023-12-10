@@ -11,6 +11,7 @@ import SimpleIconButton from "@components/globals/SimpleIconButton";
 import colors from "@constants/colors";
 
 import {
+  useAdState,
   useControlState,
   useCurrentSongState,
   useToggleVisualModeState,
@@ -29,6 +30,8 @@ const Header = ({}: HeaderProps) => {
 
   const [prvSong, setPrvSong] = useState("");
   const [prvVisualState, setPrvVisualState] = useState(false);
+
+  const [ad] = useAdState();
 
   useEffect(() => {
     if (song?.songId !== prvSong) {
@@ -77,7 +80,8 @@ const Header = ({}: HeaderProps) => {
         <SimpleIconButton icon={ReduceSVG} onClick={toggleVisualModeState} />
       </ReduceContainer>
 
-      {!controlState.isLyricsOn &&
+      {!ad.isAd &&
+        !controlState.isLyricsOn &&
         song?.songId === prvSong &&
         visualMode === prvVisualState && (
           <TitleContainer ref={containerRef}>

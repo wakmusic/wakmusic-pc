@@ -5,7 +5,13 @@ import Marquee from "@components/globals/Marquee";
 
 import colors from "@constants/colors";
 
-import { useControlState, useCurrentSongState } from "@hooks/player";
+import {
+  useAdState,
+  useControlState,
+  useCurrentSongState,
+} from "@hooks/player";
+
+import { formatSecond } from "@utils/formatting";
 
 import Controller from "../Controller";
 import Lyrics from "../Lyrics";
@@ -15,6 +21,7 @@ interface LyricsModeProps {}
 
 const LyricsMode = ({}: LyricsModeProps) => {
   const [controlState] = useControlState();
+  const [ad] = useAdState();
 
   const song = useCurrentSongState();
 
@@ -22,11 +29,15 @@ const LyricsMode = ({}: LyricsModeProps) => {
     <Container $on={controlState.isLyricsOn}>
       <TitleContainer>
         <Marquee width={419}>
-          <T4Medium color={colors.blueGray25}>{song?.title}</T4Medium>
+          <T4Medium color={colors.blueGray25}>
+            {ad.isAd ? "~ 광고 중 ~" : song?.title}
+          </T4Medium>
         </Marquee>
 
         <Marquee width={419}>
-          <T5Light color={colors.blueGray100}>{song?.artist}</T5Light>
+          <T5Light color={colors.blueGray100}>
+            {ad.isAd ? formatSecond(ad.duration - ad.current) : song?.artist}
+          </T5Light>
         </Marquee>
       </TitleContainer>
 

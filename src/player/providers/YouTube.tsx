@@ -121,7 +121,7 @@ const YouTube = ({
     }
 
     const element = contentWindow.document.querySelector(
-      ".ytp-play-button.ytp-button"
+      ".ytp-ad-skip-button-modern"
     ) as HTMLButtonElement;
 
     const html5Player = contentWindow.document.querySelector(

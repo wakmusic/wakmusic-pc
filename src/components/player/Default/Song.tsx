@@ -5,7 +5,9 @@ import Marquee from "@components/globals/Marquee";
 
 import colors from "@constants/colors";
 
-import { useCurrentSongState } from "@hooks/player";
+import { useAdState, useCurrentSongState } from "@hooks/player";
+
+import { formatSecond } from "@utils/formatting";
 
 import Controller from "../Controller";
 import Like from "../Like";
@@ -15,6 +17,7 @@ interface SongProps {}
 
 const Song = ({}: SongProps) => {
   const song = useCurrentSongState();
+  const [ad] = useAdState();
 
   return (
     <Container>
@@ -23,12 +26,16 @@ const Song = ({}: SongProps) => {
 
         <TitleContainer>
           <Marquee width={200}>
-            <TitleText>{song?.title || "왁뮤차트 TOP100"} </TitleText>
+            <TitleText>
+              {ad.isAd ? "~ 광고 중 ~" : song?.title || "왁뮤차트 TOP100"}
+            </TitleText>
           </Marquee>
 
           <Marquee width={200}>
             <ArtistText>
-              {song?.artist || "재생 버튼을 클릭해보세요."}
+              {ad.isAd
+                ? formatSecond(ad.duration - ad.current)
+                : song?.artist || "재생 버튼을 클릭해보세요."}
             </ArtistText>
           </Marquee>
         </TitleContainer>

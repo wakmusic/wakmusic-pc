@@ -180,3 +180,20 @@ export const showYoutubePlayerState = atom<boolean>({
   key: "showYoutubePlayer",
   default: false,
 });
+
+export const youtubeAdState = atom<{
+  isAd: boolean;
+  current: number;
+  duration: number;
+  canSkip: boolean;
+  skip: number;
+}>({
+  key: "youtubeAd",
+  default: {
+    isAd: false,
+    current: 0,
+    duration: 0,
+    canSkip: false,
+    skip: 0,
+  },
+});

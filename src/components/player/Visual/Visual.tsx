@@ -7,7 +7,11 @@ import dummyThumbnail from "@assets/svgs/BigDummy.svg";
 
 import { IPCRenderer } from "@constants/ipc";
 
-import { useCurrentSongState, useVisualModeState } from "@hooks/player";
+import {
+  useAdState,
+  useCurrentSongState,
+  useVisualModeState,
+} from "@hooks/player";
 
 import { ipcRenderer } from "@utils/modules";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
@@ -22,9 +26,14 @@ const Visual = ({}: VisualProps) => {
   const [visualMode] = useVisualModeState();
   const song = useCurrentSongState();
 
+  const [ad] = useAdState();
+
   const img = useMemo(
-    () => (song?.songId ? getYoutubeHQThumbnail(song.songId) : dummyThumbnail),
-    [song?.songId]
+    () =>
+      !ad.isAd && song?.songId
+        ? getYoutubeHQThumbnail(song.songId)
+        : dummyThumbnail,
+    [ad.isAd, song?.songId]
   );
 
   const controls = useAnimation();

@@ -56,7 +56,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
   useInterval(() => {
     if (!currentSongState || !control.isPlaying || isControlling) return;
 
-    setCurrentProgress((prev) => prev + 0.25);
+    // setCurrentProgress((prev) => prev + 0.25);
 
     if (currentProgress >= length) {
       setCurrentProgress(0);
@@ -227,6 +227,7 @@ const PlayerService = ({}: PlayerServiceProps) => {
         prevSong={prevSong}
         toggleIsPlaying={toggleIsPlaying}
         setProgress={setProgress}
+        setCurrentProgress={setCurrentProgress}
       />
     </Container>
   );

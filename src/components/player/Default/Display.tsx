@@ -16,6 +16,7 @@ import dummyThumbnail from "@assets/svgs/MediumDummy.svg";
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
 import {
+  useAdState,
   useControlState,
   useCurrentSongState,
   useVisualModeState,
@@ -25,6 +26,7 @@ import { ipcRenderer } from "@utils/modules";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
 
 import Lyrics from "../Lyrics";
+import SkipAd from "../SkipAd";
 import Shortcuts from "./Shortcuts";
 
 interface DisplayProps {}
@@ -33,10 +35,15 @@ const Display = ({}: DisplayProps) => {
   const [controlState] = useControlState();
   const [visualModeState, setVisualModeState] = useVisualModeState();
 
+  const [ad] = useAdState();
+
   const song = useCurrentSongState();
   const img = useMemo(
-    () => (song?.songId ? getYoutubeHQThumbnail(song.songId) : dummyThumbnail),
-    [song?.songId]
+    () =>
+      !ad.isAd && song?.songId
+        ? getYoutubeHQThumbnail(song.songId)
+        : dummyThumbnail,
+    [song?.songId, ad.isAd]
   );
 
   const navigate = useNavigate();
@@ -86,6 +93,8 @@ const Display = ({}: DisplayProps) => {
         initial="initial"
       >
         <Grid>
+          <SkipAd />
+
           <ExpansionButtonContainer
             animate={controls}
             variants={buttonVariants}
@@ -149,6 +158,8 @@ const Container = styled.div`
 const InnerContainer = styled(motion.div)<{ $image?: string }>`
   width: 100%;
   height: 200px;
+
+  position: relative;
 
   background-position: center;
   background-size: 150%;

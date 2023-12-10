@@ -50,4 +50,5 @@ export type PlayerProviderProps = {
   prevSong?: () => void;
   toggleIsPlaying?: () => void;
   setProgress?: (progress: number) => void;
+  setCurrentProgress?: (progress: number) => void;
 };

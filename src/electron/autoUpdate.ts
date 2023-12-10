@@ -1,5 +1,7 @@
 import { app, autoUpdater, dialog } from "electron";
 
+export let isAppQuitting = false;
+
 export default () => {
   const server = "https://update.electronjs.org";
   const feed = `${server}/wakmusic/wakmusic-pc/${
@@ -25,12 +27,19 @@ export default () => {
     };
 
     dialog.showMessageBox(dialogOpts).then((returnValue) => {
-      if (returnValue.response === 0) autoUpdater.quitAndInstall();
+      if (returnValue.response === 0) {
+        isAppQuitting = true;
+        autoUpdater.quitAndInstall();
+      }
     });
   });
 
   autoUpdater.on("error", (message) => {
     console.error("There was a problem updating the application");
     console.error(message);
+  });
+
+  app.on("before-quit", function (_) {
+    isAppQuitting = true;
   });
 };

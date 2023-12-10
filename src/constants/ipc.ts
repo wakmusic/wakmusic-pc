@@ -22,6 +22,7 @@ export enum IPCRenderer {
 
   MODE_DEFAULT = "mode:default",
   MODE_SEPARATE = "mode:separate",
+  MODE_MINI = "mode:mini",
 
   RPC_PROGRESS = "rpc:progress",
   RPC_PLAYING = "rpc:playing",

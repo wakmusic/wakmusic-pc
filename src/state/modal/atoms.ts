@@ -47,6 +47,29 @@ export const alertModalState = atom<AlertModalState>({
   ],
 });
 
+interface UpdateModalState {
+  isOpen: boolean;
+
+  resolve?: () => void;
+}
+
+export const UpdateModalState = atom<UpdateModalState>({
+  key: "updateModalState",
+  default: {
+    isOpen: false,
+  },
+  effects: [
+    ({ onSet, setSelf }) => {
+      onSet((value) => {
+        if (!value.isOpen && value.resolve) {
+          value.resolve();
+          setSelf({ isOpen: false });
+        }
+      });
+    },
+  ],
+});
+
 interface ConfirmModalState {
   isOpen: boolean;
 

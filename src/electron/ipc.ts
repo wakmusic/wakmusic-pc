@@ -78,28 +78,35 @@ export default () => {
     }
   });
 
-  ipcMain.on(IPCRenderer.MODE_SEPARATE, () => {
+  const separate = (mini: boolean) => {
     const win = getWindow();
+    if (!win) return;
 
-    if (win) {
-      if (win.isMaximized()) {
-        win.unmaximize();
-      }
-
-      win.setMaximumSize(290, 10000);
-      win.setMinimumSize(290, 714);
-
-      const beforeBounds = win.getBounds();
-
-      win.setSize(290, 714);
-
-      const afterBounds = win.getBounds();
-
-      win.setPosition(
-        beforeBounds.x + (beforeBounds.width - afterBounds.width),
-        beforeBounds.y
-      );
+    if (win.isMaximized()) {
+      win.unmaximize();
     }
+
+    win.setMaximumSize(290, 10000);
+    win.setMinimumSize(290, mini ? 375 : 714);
+
+    const beforeBounds = win.getBounds();
+
+    win.setSize(290, mini ? 375 : 714);
+
+    const afterBounds = win.getBounds();
+
+    win.setPosition(
+      beforeBounds.x + (beforeBounds.width - afterBounds.width),
+      beforeBounds.y
+    );
+  };
+
+  ipcMain.on(IPCRenderer.MODE_SEPARATE, () => {
+    separate(false);
+  });
+
+  ipcMain.on(IPCRenderer.MODE_MINI, () => {
+    separate(true);
   });
 
   ipcMain.on(IPCRenderer.QUERY_IS_SEPARATE, () => {
@@ -185,13 +192,15 @@ export default () => {
       const youtubeWin = getWindow(true);
 
       if (win && youtubeWin) {
-        youtubeWin.webContents.executeJavaScript(script).then((value) => {
-          win.webContents.send(IPCMain.YOUTUBE, {
-            type: "script",
-            key,
-            value,
+        youtubeWin.webContents
+          .executeJavaScript(script)
+          .then((value: string) => {
+            win.webContents.send(IPCMain.YOUTUBE, {
+              type: "script",
+              key,
+              value,
+            });
           });
-        });
       }
     }
   );

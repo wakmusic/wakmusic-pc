@@ -28,6 +28,18 @@ const ErrorLayout = ({}: ErrorLayoutProps) => {
         <Button
           onClick={() => {
             localStorage.clear();
+
+            try {
+              // eslint-disable-next-line @typescript-eslint/no-var-requires
+              const remote = require("@electron/remote");
+              remote.session.defaultSession.cookies.remove(
+                "https://wakmusic.xyz/api",
+                "token"
+              );
+            } catch (e) {
+              /* empty */
+            }
+
             window.location.href = import.meta.env.VITE_PUBLISH_URL;
           }}
         >

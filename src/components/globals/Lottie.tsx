@@ -45,6 +45,10 @@ const Lottie = ({
 const LottieContainer = styled.div`
   width: 100%;
   height: 100%;
+
+  & > svg {
+    transform: none !important;
+  }
 `;
 
 export default Lottie;

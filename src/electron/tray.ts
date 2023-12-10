@@ -21,17 +21,20 @@ const getWindow = (windowId: number): BrowserWindow | false => {
   return win;
 };
 
-const openWindow = (windowId: number, type: "click" | "menu") => () => {
+const openWindow = (type: "click" | "menu") => () => {
   if (type === "click" && process.platform === "darwin") return;
 
-  const win = BrowserWindow.fromId(windowId);
+  if (process.platform === "darwin") {
+    app.dock.show();
+  }
 
-  if (win) {
+  const wins = BrowserWindow.getAllWindows();
+
+  for (const win of wins) {
     win.show();
     win.focus();
   }
 };
-
 const processLogin = (windowId: number) => (menu: MenuItem) => {
   const win = getWindow(windowId);
 

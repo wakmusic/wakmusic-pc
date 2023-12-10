@@ -5,7 +5,7 @@ import { getWindow, loadVideo, state } from "src/electron";
 
 import { IPCMain } from "@constants/ipc";
 
-import autoUpdate from "./autoUpdate";
+import autoUpdate, { isAppQuitting } from "./autoUpdate";
 import ipc from "./ipc";
 import { schemeHandler } from "./scheme";
 import { createShortcut } from "./shortcut";
@@ -129,6 +129,13 @@ export const makeMainWindow = () => {
         autoHideMenuBar: true,
       },
     };
+  });
+
+  win.on("close", function (evt) {
+    if (!isAppQuitting) {
+      evt.preventDefault();
+      win.webContents.send(IPCMain.APP_QUIT);
+    }
   });
 
   win.on("maximize", () => {

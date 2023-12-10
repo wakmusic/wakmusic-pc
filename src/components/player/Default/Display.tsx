@@ -15,12 +15,15 @@ import dummyThumbnail from "@assets/svgs/MediumDummy.svg";
 
 import SimpleIconButton from "@components/globals/SimpleIconButton";
 
+import { IPCRenderer } from "@constants/ipc";
+
 import {
   useAdState,
   useControlState,
   useCurrentSongState,
   useVisualModeState,
 } from "@hooks/player";
+import { SeparateMode, useToggleSeparateMode } from "@hooks/toggleSeparateMode";
 
 import { ipcRenderer } from "@utils/modules";
 import { getYoutubeHQThumbnail } from "@utils/staticUtill";
@@ -34,6 +37,7 @@ interface DisplayProps {}
 const Display = ({}: DisplayProps) => {
   const [controlState] = useControlState();
   const [visualModeState, setVisualModeState] = useVisualModeState();
+  const { setSeparateMode } = useToggleSeparateMode();
 
   const [ad] = useAdState();
 
@@ -70,7 +74,8 @@ const Display = ({}: DisplayProps) => {
 
     if (ipcRenderer && location.pathname == "/player") {
       navigate(-1);
-      ipcRenderer.send("mode:default");
+      ipcRenderer.send(IPCRenderer.MODE_DEFAULT);
+      setSeparateMode(SeparateMode.Default);
 
       setTimeout(() => {
         animate();
@@ -80,7 +85,13 @@ const Display = ({}: DisplayProps) => {
     }
 
     animate();
-  }, [controls, location.pathname, navigate, setVisualModeState]);
+  }, [
+    controls,
+    location.pathname,
+    navigate,
+    setSeparateMode,
+    setVisualModeState,
+  ]);
 
   return (
     <Container>

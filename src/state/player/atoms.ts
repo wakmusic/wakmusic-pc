@@ -101,11 +101,16 @@ export const playingInfoState = atom<PlayingInfoStateType>({
       onSet((value) => {
         const current = value.playlist[value.current];
 
-        ipcRenderer?.send(IPCRenderer.RPC_TRACK, {
-          ...current,
-          title: current.title.padEnd(3, "\u200b"),
-          artist: current.artist.padEnd(3, "\u200b"),
-        });
+        ipcRenderer?.send(
+          IPCRenderer.RPC_TRACK,
+          current
+            ? {
+                ...current,
+                title: current.title.padEnd(3, "\u200b"),
+                artist: current.artist.padEnd(3, "\u200b"),
+              }
+            : null
+        );
       });
     },
 

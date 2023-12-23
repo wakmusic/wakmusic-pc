@@ -65,6 +65,8 @@ const Wrapper = styled.div<{ $popdown: boolean }>`
   right: 0;
   bottom: 40px;
 
+  z-index: 1000;
+
   animation: ${({ $popdown }) => ($popdown ? Popdown : Popup)} 0.25s ease-out
     forwards;
 `;

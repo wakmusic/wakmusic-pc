@@ -23,6 +23,8 @@ import ModalPortal from "@components/modals/globals/ModalPortal";
 import ErrorLayout from "@layouts/ErrorLayout";
 import Root from "@layouts/Root";
 
+import { IPCRenderer } from "@constants/ipc";
+
 import NotFound from "@pages/NotFound/NotFound";
 import Artist from "@pages/artists/Artist";
 import Artists from "@pages/artists/Artists";
@@ -39,6 +41,7 @@ import Teams from "@pages/teams/Teams";
 import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
+import { ipcRenderer } from "@utils/modules";
 import SchemeHandler from "@utils/schemeHandler";
 import makeShortcut from "@utils/shortcut";
 
@@ -49,6 +52,10 @@ interface AppProps {
 export class App extends Component<AppProps> {
   state: {
     hasError: boolean;
+    noRender?: {
+      title: string;
+      description: string;
+    };
   };
 
   constructor(props: AppProps) {
@@ -61,6 +68,19 @@ export class App extends Component<AppProps> {
 
   componentDidMount() {
     makeShortcut();
+
+    fetch("https://wakmusic.xyz/api/app/check?os=android&version=9.9.9")
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.flag === 2) {
+          return this.setState({
+            noRender: {
+              title: res.title,
+              description: res.description,
+            },
+          });
+        }
+      });
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
@@ -69,6 +89,41 @@ export class App extends Component<AppProps> {
   }
 
   render(): ReactNode {
+    if (this.state.noRender) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            height: "100vh",
+          }}
+        >
+          <h1>{this.state.noRender.title}</h1>
+          <p
+            style={{
+              marginTop: "10px",
+            }}
+          >
+            {this.state.noRender.description}
+          </p>
+
+          <button
+            style={{
+              marginTop: "10px",
+              padding: "5px 10px",
+            }}
+            onClick={() => {
+              ipcRenderer?.send(IPCRenderer.WINDOW_CLOSE);
+            }}
+          >
+            닫기
+          </button>
+        </div>
+      );
+    }
+
     if (this.state.hasError) {
       return <ErrorLayout />;
     }

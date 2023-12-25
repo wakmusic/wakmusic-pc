@@ -118,7 +118,7 @@ export class App extends Component<AppProps> {
               ipcRenderer?.send(IPCRenderer.WINDOW_CLOSE);
             }}
           >
-            닫기
+            확인
           </button>
         </div>
       );

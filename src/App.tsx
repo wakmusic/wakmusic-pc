@@ -41,9 +41,8 @@ import Teams from "@pages/teams/Teams";
 import Playlist from "@pages/user/Playlist";
 import User from "@pages/user/User";
 
-import { ipcRenderer, openExternal } from "@utils/modules";
+import { ipcRenderer } from "@utils/modules";
 import SchemeHandler from "@utils/schemeHandler";
-import makeShortcut from "@utils/shortcut";
 
 interface AppProps {
   queryClient: QueryClient;
@@ -67,8 +66,6 @@ export class App extends Component<AppProps> {
   }
 
   componentDidMount() {
-    makeShortcut();
-
     fetch("https://wakmusic.xyz/api/app/check?os=android&version=9.9.9")
       .then((res) => res.json())
       .then((res) => {
@@ -107,21 +104,6 @@ export class App extends Component<AppProps> {
             }}
           >
             {this.state.noRender.description}
-          </p>
-
-          <p
-            style={{
-              textDecoration: "underline",
-              color: "blue",
-              cursor: "pointer",
-            }}
-            onClick={() => {
-              if (openExternal) {
-                openExternal("https://forms.gle/zK5bp9UfUZZD2etZ9");
-              }
-            }}
-          >
-            왁뮤의 미래를 위한 1분짜리 설문조사 (꼭 부탁드립니다)
           </p>
 
           <button

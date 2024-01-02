@@ -20,6 +20,8 @@ import colors from "@constants/colors";
 
 import { usePlaySong } from "@hooks/player";
 
+import makeShortcut from "@utils/shortcut";
+
 interface DevProps {}
 
 const Dev = ({}: DevProps) => {
@@ -65,6 +67,14 @@ const Dev = ({}: DevProps) => {
           }}
         >
           유튜브를 {showYoutube ? "숨겨주세요" : "보여주세요"}
+        </Button>
+
+        <Button
+          onClick={() => {
+            makeShortcut();
+          }}
+        >
+          숏컷 생성
         </Button>
       </Container>
     </PageLayout>
